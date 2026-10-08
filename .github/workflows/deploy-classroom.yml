@@ -7,6 +7,7 @@ on:
       - 'scripts/setup-cloud.mjs'
       - 'scripts/deployment-db.mjs'
       - 'scripts/check-cloud.mjs'
+      - 'scripts/check-ai.mjs'
       - 'supabase/functions/**'
       - 'supabase/migrations/**'
       - 'supabase/config.toml'
@@ -26,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
+      LEDGER_AI_API_KEY: ${{ secrets.LEDGER_AI_API_KEY }}
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_PROJECT_REF: eaahwjgdpmvaasgtjpaq
       APP_ORIGIN: https://tommyhouser1705-boop.github.io
@@ -56,7 +58,13 @@ jobs:
         run: node scripts/setup-cloud.mjs
       - name: Configure website origin
         run: supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "APP_ORIGIN=$APP_ORIGIN"
+      - name: Connect assignment generation
+        if: env.LEDGER_AI_API_KEY != ''
+        run: supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "LEDGER_AI_API_KEY=$LEDGER_AI_API_KEY"
       - name: Deploy authenticated classroom server
         run: supabase functions deploy classroom --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt --use-api
+      - name: Check original assignment generation
+        if: env.LEDGER_AI_API_KEY != ''
+        run: node scripts/check-ai.mjs
       - name: Check server responds to website
         run: node scripts/check-cloud.mjs

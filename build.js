@@ -19,11 +19,13 @@ fs.copyFileSync(path.join(root,'lesson-engine.js'),path.join(root,'supabase/func
 const service=fs.readFileSync(path.join(root,'supabase/functions/classroom/service.mjs'),'utf8');
 const handler=fs.readFileSync(path.join(root,'supabase/functions/classroom/index.ts'),'utf8')
   .replace("import './lesson-engine.js';",'')
-  .replace("import { handleAction } from './service.mjs';",'');
+  .replace("import { handleAction } from './service.mjs';",'')
+ .replace("import {generateCourseAssignment} from './generator.mjs';",'');
 // Preserve JavaScript module semantics in the single-file TypeScript editor
 // entry point. The typed request handler is still checked as TypeScript.
 const embedded="import 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'lesson-engine.js'),'utf8')).toString('base64')+"';\n"
-  +"import {handleAction} from 'data:text/javascript;base64,"+Buffer.from(service).toString('base64')+"';\n";
+  +"import {generateCourseAssignment} from 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'supabase/functions/classroom/generator.mjs'),'utf8')).toString('base64')+"';\n"
+ +"import {handleAction} from 'data:text/javascript;base64,"+Buffer.from(service).toString('base64')+"';\n";
 fs.writeFileSync(path.join(root,'docs/classroom-function.ts'),embedded+handler);
 fs.copyFileSync(path.join(root,'supabase/migrations/202610080001_classroom.sql'),path.join(root,'docs/database.sql'));
 fs.copyFileSync(path.join(root,'account-setup.html'),path.join(root,'docs/account-setup.html'));

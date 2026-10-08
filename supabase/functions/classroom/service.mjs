@@ -6,10 +6,10 @@ const email=x=>{const s=String(x||'').trim().toLowerCase();if(s.length>254||! /^
 const uuid=x=>{if(typeof x!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x))fail('Invalid record ID.');return x;};
 export function changeRun(L,old,action,p){
  const r=structuredClone(old),s=r.scenario;
- if(action==='advance'){if(r.assignment.version===2){r.stage=Math.min(2,(r.stage||0)+1);r.advanced=r.stage===2;}else r.advanced=true;}
+ if(action==='advance'){if(r.assignment.version>=2){r.stage=Math.min(2,(r.stage||0)+1);r.advanced=r.stage===2;}else r.advanced=true;}
  else if(action==='entry'){
   const e=s.events.find(e=>e.id===p.record);if(!e||!L.availableEvents(r).some(x=>x.id===e.id))fail('This document is not available yet.');
-  if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=L.validateRows(p.rows);if(error)fail(error);
+  if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=L.validateRows(p.rows,s.accountList||L.accounts);if(error)fail(error);
   if(typeof p.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(p.date)||Number.isNaN(Date.parse(p.date)))fail('Enter a valid journal-entry date.');
   const rows=p.rows.map(x=>({account:x.account,debit:Number(x.debit||0),credit:Number(x.credit||0)}));
   r.first[p.record]??=L.assess(rows,p.date,e);r.entries[p.record]={date:p.date,rows};r.completed=false;
@@ -61,6 +61,7 @@ export async function handleAction(store,L,user,action,p={}){
   await store.upsert('demo_invitations',{class_id:c.id,email:target});return {ok:true};
  }
  if(action==='remove-student'){requireTeacher();await classAccess(p.classId);await store.remove('demo_invitations',{class_id:p.classId,email:email(p.email)});return {ok:true};}
+ if(action==='generate'){requireTeacher();const notes=p.notes;if(typeof notes!=='string'||notes.trim().length<40||notes.length>30000)fail('Upload or paste 40–30,000 characters of course notes.');if(!store.generate)fail('Assignment generation is not connected yet. The demo owner needs to configure the AI service.',503);return await store.generate({...p,notes,actor:user.id});}
  if(action==='publish'){
   requireTeacher();const c=await classAccess(p.classId);if(!L.checkAssignment(p.assignment))fail('Invalid assignment settings.');
   const id=crypto.randomUUID(),definition={...p.assignment,id,published:true,origin:c.name};return await store.insert('demo_assignments',{id,class_id:c.id,definition});
@@ -86,7 +87,7 @@ export async function handleAction(store,L,user,action,p={}){
   if(action==='start'){
    if(saved)fail('This assignment has already started.',409);if(!profile.business)fail('Create your business first.');
    const choices=p.choice||{}, index=x=>Number.isInteger(x)&&x>=0&&x<=2;
-   const valid=a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
+   const valid=a.definition.version===3?index(choices.plan):a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
    if(!valid)fail('Choose valid business options.');
    let scenario;try{scenario=L.expected(a.definition,choices,profile.business);}catch{fail('Choose valid business options.');}
    state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);

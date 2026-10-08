@@ -1,12 +1,15 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.57.4';
 import './lesson-engine.js';
 import { handleAction } from './service.mjs';
+import {generateCourseAssignment} from './generator.mjs';
+const generationTimes=new Map<string,number>();
 const url=Deno.env.get('SUPABASE_URL')!, secret=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const db=createClient(url,secret,{auth:{persistSession:false,autoRefreshToken:false}});
 const origin=Deno.env.get('APP_ORIGIN');
 function headers(request:Request){return {'Access-Control-Allow-Origin':request.headers.get('origin')===origin?origin!:'null','Access-Control-Allow-Headers':'authorization,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS','Vary':'Origin','Content-Type':'application/json'};}
 const check=(result:any)=>{if(result.error)throw result.error;return result.data;};
 const store={
+ async generate(input:any){const previous=generationTimes.get(input.actor)||0;if(Date.now()-previous<60000){const error:any=Error('Please wait a minute before creating another AI draft.');error.status=429;throw error;}generationTimes.set(input.actor,Date.now());if(generationTimes.size>10000)generationTimes.clear();return await generateCourseAssignment((globalThis as any).Lessons,input,{key:Deno.env.get('LEDGER_AI_API_KEY')});},
  async one(table:string,filter:object){return check(await db.from(table).select('*').match(filter).maybeSingle());},
  async list(table:string,filter:object){return check(await db.from(table).select('*').match(filter).limit(1000));},
  async insert(table:string,row:object){return check(await db.from(table).insert(row).select().single());},
