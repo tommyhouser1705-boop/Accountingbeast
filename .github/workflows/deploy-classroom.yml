@@ -47,7 +47,7 @@ jobs:
         run: npm test
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: '2.120.0'
       - name: Prepare database and owner account
         run: node scripts/setup-cloud.mjs
       - name: Configure website origin
