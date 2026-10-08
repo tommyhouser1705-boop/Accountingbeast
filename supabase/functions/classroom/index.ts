@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.57.4';
+import './business-decisions.js';
 import './lesson-engine.js';
 import { handleAction } from './service.mjs';
 import {generateCourseAssignment} from './generator.mjs';

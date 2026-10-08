@@ -26,7 +26,7 @@ export function changeRun(L,old,action,p){
  } else fail('Unsupported submission.');
  r.serverGrade=L.grade(r);return r;
 }
-export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;delete v.conceptCheck.correct;delete v.conceptCheck.feedback;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
+export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;if(v.interactive)delete v.interactive.events;delete v.conceptCheck.correct;delete v.conceptCheck.feedback;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
 export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);if(state.prediction===undefined){delete s.scenario.prediction.correct;delete s.scenario.prediction.feedback;}for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
@@ -89,7 +89,7 @@ export async function handleAction(store,L,user,action,p={}){
   if(action==='start'){
    if(saved)fail('This assignment has already started.',409);if(!profile.business)fail('Create your business first.');
    const choices=p.choice||{}, index=x=>Number.isInteger(x)&&x>=0&&x<=2;
-   const valid=a.definition.version===3?index(choices.plan):a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
+   const valid=a.definition.interactive?L.decisions.validChoice(a.definition,choices,profile.business):a.definition.version===3?index(choices.plan):a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
    if(!valid)fail('Choose valid business options.');
    let scenario;try{scenario=L.expected(a.definition,choices,profile.business);}catch{fail('Choose valid business options.');}
    state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);
