@@ -6,9 +6,9 @@ const email=x=>{const s=String(x||'').trim().toLowerCase();if(s.length>254||! /^
 const uuid=x=>{if(typeof x!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x))fail('Invalid record ID.');return x;};
 export function changeRun(L,old,action,p){
  const r=structuredClone(old),s=r.scenario;
- if(action==='advance'){r.advanced=true;}
+ if(action==='advance'){if(r.assignment.version===2){r.stage=Math.min(2,(r.stage||0)+1);r.advanced=r.stage===2;}else r.advanced=true;}
  else if(action==='entry'){
-  const e=s.events.find(e=>e.id===p.record);if(!e||(!r.advanced&&e!==s.events[0]))fail('This document is not available yet.');
+  const e=s.events.find(e=>e.id===p.record);if(!e||!L.availableEvents(r).some(x=>x.id===e.id))fail('This document is not available yet.');
   if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=L.validateRows(p.rows);if(error)fail(error);
   if(typeof p.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(p.date)||Number.isNaN(Date.parse(p.date)))fail('Enter a valid journal-entry date.');
   const rows=p.rows.map(x=>({account:x.account,debit:Number(x.debit||0),credit:Number(x.credit||0)}));
@@ -67,9 +67,9 @@ export async function handleAction(store,L,user,action,p={}){
  }
  if(action==='business'){
   if(grant.role!=='student')fail('Only students have a business profile.',403);const v=p.business;
-  if(!v||typeof v.name!=='string'||!v.name.trim()||v.name.trim().length>45||!['Coffee shop','Design studio','Bike repair'].includes(v.type)||!['sage','terracotta','blue'].includes(v.color))fail('Check the business name, type, and color.');
+  let business;try{business=L.normalizeBusiness(v);}catch(error){fail(error.message);}
   const runs=await store.list('demo_runs',{student_id:user.id});if(runs.length&&profile.business?.type!==v.type)fail('Business type cannot change after starting assignments.');
-  const business={name:v.name.trim(),type:v.type,color:v.color};await store.update('demo_profiles',{id:user.id},{business});return {business};
+  await store.update('demo_profiles',{id:user.id},{business});return {business};
  }
  if(action==='gradebook'){
   requireTeacher();await classAccess(p.classId);const invitations=await store.list('demo_invitations',{class_id:p.classId}),assignments=await store.list('demo_assignments',{class_id:p.classId});
@@ -86,9 +86,9 @@ export async function handleAction(store,L,user,action,p={}){
   if(action==='start'){
    if(saved)fail('This assignment has already started.',409);if(!profile.business)fail('Create your business first.');
    const choices=p.choice||{}, index=x=>Number.isInteger(x)&&x>=0&&x<=2;
-   const valid=a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
+   const valid=a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
    if(!valid)fail('Choose valid business options.');
-   let scenario;try{scenario=L.expected(a.definition,choices);}catch{fail('Choose valid business options.');}
+   let scenario;try{scenario=L.expected(a.definition,choices,profile.business);}catch{fail('Choose valid business options.');}
    state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);
   }else{if(!saved)fail('Start the assignment first.');state=changeRun(L,saved.state,action,p);}
   return await store.commit(user.id,a.id,p.revision,state,action,p);

@@ -28,3 +28,8 @@ fs.writeFileSync(path.join(root,'docs/classroom-function.ts'),embedded+handler);
 fs.copyFileSync(path.join(root,'supabase/migrations/202610080001_classroom.sql'),path.join(root,'docs/database.sql'));
 fs.copyFileSync(path.join(root,'account-setup.html'),path.join(root,'docs/account-setup.html'));
 fs.copyFileSync(path.join(root,'cloud-config.js'),path.join(root,'docs/cloud-config.js'));
+
+// Ship document readers locally so professor uploads need no third-party endpoint.
+for(const dir of ['assets','docs/assets']){fs.mkdirSync(path.join(root,dir),{recursive:true});for(const [source,target] of [['pdfjs-dist/build/pdf.mjs','pdf.mjs'],['pdfjs-dist/build/pdf.worker.mjs','pdf.worker.mjs'],['mammoth/mammoth.browser.min.js','mammoth.browser.min.js']])fs.copyFileSync(path.join(root,'node_modules',source),path.join(root,dir,target));}
+
+for(const dir of ['assets','docs/assets'])for(const packageName of ['pdfjs-dist','mammoth'])fs.copyFileSync(path.join(root,'node_modules',packageName,'LICENSE'),path.join(root,dir,packageName+'-LICENSE.txt'));
