@@ -19,7 +19,7 @@ export function safeErrorDetail(body,token,owner){
 export function setupQuery(tables,seed,migration){
  const existing=requiredTables.filter(t=>tables.includes(t));
  if(existing.length&&existing.length!==requiredTables.length)throw Error('Only part of the classroom database exists. Setup stopped to preserve existing work; ask for help repairing the partial setup.');
- return 'begin;\n'+(existing.length?'':migration)+'\n'+seed+'\ncommit;';
+ return 'begin read write;\nset transaction read write;\n'+(existing.length?'':migration)+'\n'+seed+'\ncommit;';
 }
 export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  if(!token)throw Error('SUPABASE_ACCESS_TOKEN is missing from GitHub repository secrets.');
