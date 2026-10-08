@@ -39,11 +39,11 @@ export async function handleAction(store,L,user,action,p={}){
  const requireTeacher=()=>{if(!teacher)fail('Professor access is required.',403);};
  const classAccess=async id=>{const c=await store.one('demo_classes',{id:uuid(id)});if(!c)fail('Class not found.',404);if(grant.role!=='owner'&&c.professor_id!==user.id)fail('This class belongs to another professor.',403);return c;};
  const studentClasses=async()=>{const inv=await store.list('demo_invitations',{email:address});return (await Promise.all(inv.map(i=>store.one('demo_classes',{id:i.class_id})))).filter(Boolean);};
- const studentAssignment=async id=>{if(grant.role!=='student')fail('Student access is required.',403);const a=await store.one('demo_assignments',{id:uuid(id)});if(!a||!await store.one('demo_invitations',{class_id:a.class_id,email:address}))fail('This assignment is not in your class.',403);return a;};
+ const studentAssignment=async id=>{if(grant.role!=='student')fail('Student access is required.',403);const a=await store.one('demo_assignments',{id:uuid(id)});if(!a||a.definition.deleted||!await store.one('demo_invitations',{class_id:a.class_id,email:address}))fail('This assignment is not in your class.',403);return a;};
  if(action==='bootstrap'){
   const classes=teacher?await store.list('demo_classes',grant.role==='owner'?{}:{professor_id:user.id}):await studentClasses();
-  const assignments=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat();
-  const runs=grant.role==='student'?await store.list('demo_runs',{student_id:user.id}):[];
+  const allAssignments=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat(),assignments=teacher?allAssignments:allAssignments.filter(a=>!a.definition.deleted);
+  const runs=grant.role==='student'?(await store.list('demo_runs',{student_id:user.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)):[];
   return {user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments:grant.role==='student'?assignments.map(a=>({...a,definition:studentDefinition(a.definition)})):assignments,runs:runs.map(r=>({...r,state:studentRun(L,r.state)}))};
  }
  if(action==='access-list'){if(grant.role!=='owner')fail('Owner access required.',403);return await store.list('demo_access',{});}
@@ -64,6 +64,11 @@ export async function handleAction(store,L,user,action,p={}){
  }
  if(action==='remove-student'){requireTeacher();await classAccess(p.classId);await store.remove('demo_invitations',{class_id:p.classId,email:email(p.email)});return {ok:true};}
  if(action==='generate'){requireTeacher();if(p.phase&&!['draft','review'].includes(p.phase))fail('Choose a valid generation step.');if(p.phase==='review'&&(!p.draft||typeof p.draft!=='object'||JSON.stringify(p.draft).length>100000))fail('The saved draft is missing or too large.');const notes=p.notes;if(typeof notes!=='string'||notes.trim().length<40||notes.length>30000)fail('Upload or paste 40–30,000 characters of course notes.');if(!store.generate)fail('Assignment generation is not connected yet. The demo owner needs to configure the AI service.',503);return await store.generate({...p,notes,actor:user.id});}
+ if(['delete-assignment','restore-assignment'].includes(action)){
+  requireTeacher();const a=await store.one('demo_assignments',{id:uuid(p.assignmentId)});if(!a)fail('Assignment not found.',404);await classAccess(a.class_id);
+  const definition={...a.definition,deleted:action==='delete-assignment',deletedAt:action==='delete-assignment'?new Date().toISOString():null};
+  await store.update('demo_assignments',{id:a.id},{definition});return {ok:true};
+ }
  if(action==='publish'){
   requireTeacher();const c=await classAccess(p.classId);if(!L.checkAssignment(p.assignment))fail('Invalid assignment settings.');
   const id=crypto.randomUUID(),definition={...p.assignment,id,published:true,origin:c.name};return await store.insert('demo_assignments',{id,class_id:c.id,definition});
