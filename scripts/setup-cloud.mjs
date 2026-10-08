@@ -30,6 +30,15 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
   if(!response.ok){const detail=safeErrorDetail(await response.text(),token,owner);const hint=[401,403].includes(response.status)?'Check token permissions and project access.':'The database request was rejected; see the Supabase message below.';throw Error(`${stage}: HTTP ${response.status}. ${hint} Supabase: ${detail}`);}
   return await response.json();
  };
+ // Verify the real database identity used by a writable management request.
+ // This distinguishes API/session behavior from token or schema permissions.
+ const access=await query("select current_user as database_role, session_user as connection_role, current_setting('transaction_read_only') as transaction_read_only, has_schema_privilege(current_user,'public','CREATE') as can_create_tables",'Check database deployment identity',false);
+ const identity=access?.[0];
+ if(identity&&typeof identity.database_role==='string'){
+  const detail=JSON.stringify(identity);
+  console.log('Deployment database identity: '+detail);
+  if(process.env.GITHUB_ACTIONS==='true')console.log('::notice title=Database deployment identity::'+detail.replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A'));
+ }
  // Automatic runs locate only the designated, already registered owner.
  // A fingerprint keeps the owner's email out of the public workflow file.
  if(!owner){
