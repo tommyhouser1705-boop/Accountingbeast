@@ -1,0 +1,29 @@
+import {readFileSync} from 'node:fs';
+export function ownerSeed(value){
+ const address=String(value||'').trim().toLowerCase();
+ if(address.length>254||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address))throw Error('Enter your owner email in the Run workflow form.');
+ return "insert into public.demo_access(email,role,active) values ('"+address.replaceAll("'","''")+"','owner',true) on conflict(email) do update set role='owner',active=true;";
+}
+export const requiredTables=['demo_access','demo_profiles','demo_classes','demo_invitations','demo_assignments','demo_runs','demo_attempts'];
+export function setupQuery(tables,seed,migration){
+ const existing=requiredTables.filter(t=>tables.includes(t));
+ if(existing.length&&existing.length!==requiredTables.length)throw Error('Only part of the classroom database exists. Setup stopped to preserve existing work; ask for help repairing the partial setup.');
+ return 'begin;\n'+(existing.length?'':migration)+'\n'+seed+'\ncommit;';
+}
+export async function setup({token,project,owner,fetcher=fetch}){
+ if(!token)throw Error('SUPABASE_ACCESS_TOKEN is missing from GitHub repository secrets.');
+ if(!/^[a-z]{20}$/.test(project||''))throw Error('Invalid Supabase project reference.');
+ const seed=ownerSeed(owner),endpoint='https://api.supabase.com/v1/projects/'+project+'/database/query';
+ const query=async sql=>{const response=await fetcher(endpoint,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({query:sql})});if(!response.ok)throw Error(`Supabase database setup returned HTTP ${response.status}. Check the token and project access. No credentials are printed.`);return await response.json();};
+ const tables=await query("select tablename from pg_tables where schemaname='public' and tablename like 'demo_%'");
+ if(!Array.isArray(tables))throw Error('Unexpected database response. Setup stopped.');
+ const migration=readFileSync(new URL('../supabase/migrations/202610080001_classroom.sql',import.meta.url),'utf8');
+ await query(setupQuery(tables.map(t=>t.tablename),seed,migration));
+ // Verify the atomic-save RPC required by grading, including existing databases.
+ const check=await query("select to_regprocedure('public.demo_commit_run(uuid,uuid,integer,jsonb,text,jsonb)') is not null as ready");
+ if(check?.[0]?.ready!==true)throw Error('The atomic-save function is missing. Ask for help repairing the database before deploying.');
+ console.log('Classroom database is ready; designated owner email is approved.');
+}
+if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
+ try{await setup({token:process.env.SUPABASE_ACCESS_TOKEN,project:process.env.SUPABASE_PROJECT_REF,owner:process.env.OWNER_EMAIL});}catch(e){console.error(e.message);process.exitCode=1;}
+}

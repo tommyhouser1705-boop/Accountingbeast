@@ -2,6 +2,10 @@
 
 The static website remains on GitHub Pages; Supabase hosts authentication, the database, and the `classroom` Edge Function. Browser configuration contains only a project URL and publishable key. All mutations and grading run in the authenticated Edge Function. No secret is committed.
 
+## GitHub setup action
+
+The manual workflow `.github/workflows/deploy-classroom.yml` installs the database if missing, preserves existing complete databases, approves the owner email entered in the run form, sets APP_ORIGIN, deploys `classroom`, and checks CORS/authentication readiness. Add a Supabase personal management token privately as the repository Actions secret `SUPABASE_ACCESS_TOKEN`; run **Set up Ledger Lane accounts** on main with your owner email. The token is used by the runner, never committed or printed. No database password is needed. A partial schema stops setup instead of replacing data. This workflow is manual; linking GitHub in Supabase does not run it automatically or supply the token.
+
 ## Dashboard setup (no CLI required)
 
 Use the published `account-setup.html` guide. It generates the migration plus an owner email seed and provides a single-file server (`docs/classroom-function.ts`). Run the SQL once in a new project. Create/deploy `classroom` from the dashboard editor; disable platform Verify JWT because the function verifies tokens with Auth `getUser()` itself. Set Edge Function secret `APP_ORIGIN=https://tommyhouser1705-boop.github.io` (origin only). Supabase supplies `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` to the function automatically.

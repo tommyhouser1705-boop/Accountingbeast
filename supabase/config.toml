@@ -1,3 +1,5 @@
+project_id = "Accountingbeast"
+
 [functions.classroom]
 # Publishable keys are not JWTs. The function verifies every user token using
 # Supabase Auth getUser() instead of accepting role metadata from the browser.
