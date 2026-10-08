@@ -26,7 +26,7 @@ The business opens September 1, 2026 and runs through December. Business-specifi
 
 The account system is implemented in `cloud.js`, `cloud-client.js`, and `supabase/`. Owners approve professor/student emails; professors create classes, invite students, publish reviewed assignments, and inspect a server gradebook and submission history. Students save business profiles and submitted work to their account. Server grading and atomic revisions protect first attempts and prevent stale overwrites.
 
-Live account hosting is not configured until `cloud-config.js` contains a Supabase project URL and public publishable key, and the migration/Edge Function are deployed. Until then, Sign in shows an accurate setup notice and browser practice stays available. See [the setup guide](account-setup.html) and [backend setup details](supabase/README.md). Do not put a secret key in browser configuration.
+The Supabase project URL and public browser key are configured. Live accounts require the migration, owner approval seed, and Edge Function to be deployed in the project. Sign in is available; live backend connectivity remains unverified. Browser practice stays available. See [the setup guide](account-setup.html) and [backend setup details](supabase/README.md). Do not put a secret key in browser configuration.
 
 ## Practice-mode limits
 

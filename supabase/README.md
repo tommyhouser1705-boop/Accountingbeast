@@ -8,7 +8,7 @@ Use the published `account-setup.html` guide. It generates the migration plus an
 
 Set Authentication Site URL and allowed Redirect URL to `https://tommyhouser1705-boop.github.io/Accountingbeast/`. Enable email confirmations and minimum 12-character passwords. Configure custom SMTP for multiple pilot testers; Supabase's built-in email provider has delivery/recipient/rate limits. Never share the database password, personal access token, or service-role key.
 
-Put the project URL and public publishable key in `cloud-config.js`, then `npm run build` and publish `docs/`. In the current delivery, config fields are intentionally blank until the owner provides a project. The website accurately shows that accounts are not connected.
+Put the project URL and public publishable key in `cloud-config.js`, then `npm run build` and publish `docs/`. The project URL and public key are now configured for `eaahwjgdpmvaasgtjpaq`. The migration, owner seed, and function still require deployment in that project. Live connectivity has not been verified from this environment; use the guide’s browser connection check.
 
 ## CLI alternative
 

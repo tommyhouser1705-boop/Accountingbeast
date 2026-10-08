@@ -27,3 +27,4 @@ const embedded="import 'data:text/javascript;base64,"+Buffer.from(fs.readFileSyn
 fs.writeFileSync(path.join(root,'docs/classroom-function.ts'),embedded+handler);
 fs.copyFileSync(path.join(root,'supabase/migrations/202610080001_classroom.sql'),path.join(root,'docs/database.sql'));
 fs.copyFileSync(path.join(root,'account-setup.html'),path.join(root,'docs/account-setup.html'));
+fs.copyFileSync(path.join(root,'cloud-config.js'),path.join(root,'docs/cloud-config.js'));
