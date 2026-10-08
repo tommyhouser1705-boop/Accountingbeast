@@ -63,7 +63,7 @@ export async function handleAction(store,L,user,action,p={}){
   await store.upsert('demo_invitations',{class_id:c.id,email:target});return {ok:true};
  }
  if(action==='remove-student'){requireTeacher();await classAccess(p.classId);await store.remove('demo_invitations',{class_id:p.classId,email:email(p.email)});return {ok:true};}
- if(action==='generate'){requireTeacher();const notes=p.notes;if(typeof notes!=='string'||notes.trim().length<40||notes.length>30000)fail('Upload or paste 40–30,000 characters of course notes.');if(!store.generate)fail('Assignment generation is not connected yet. The demo owner needs to configure the AI service.',503);return await store.generate({...p,notes,actor:user.id});}
+ if(action==='generate'){requireTeacher();if(p.phase&&!['draft','review'].includes(p.phase))fail('Choose a valid generation step.');if(p.phase==='review'&&(!p.draft||typeof p.draft!=='object'||JSON.stringify(p.draft).length>100000))fail('The saved draft is missing or too large.');const notes=p.notes;if(typeof notes!=='string'||notes.trim().length<40||notes.length>30000)fail('Upload or paste 40–30,000 characters of course notes.');if(!store.generate)fail('Assignment generation is not connected yet. The demo owner needs to configure the AI service.',503);return await store.generate({...p,notes,actor:user.id});}
  if(action==='publish'){
   requireTeacher();const c=await classAccess(p.classId);if(!L.checkAssignment(p.assignment))fail('Invalid assignment settings.');
   const id=crypto.randomUUID(),definition={...p.assignment,id,published:true,origin:c.name};return await store.insert('demo_assignments',{id,class_id:c.id,definition});

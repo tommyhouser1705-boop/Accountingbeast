@@ -9,7 +9,7 @@ const origin=Deno.env.get('APP_ORIGIN');
 function headers(request:Request){return {'Access-Control-Allow-Origin':request.headers.get('origin')===origin?origin!:'null','Access-Control-Allow-Headers':'authorization,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS','Vary':'Origin','Content-Type':'application/json'};}
 const check=(result:any)=>{if(result.error)throw result.error;return result.data;};
 const store={
- async generate(input:any){const previous=generationTimes.get(input.actor)||0;if(Date.now()-previous<60000){const error:any=Error('Please wait a minute before creating another AI draft.');error.status=429;throw error;}generationTimes.set(input.actor,Date.now());if(generationTimes.size>10000)generationTimes.clear();return await generateCourseAssignment((globalThis as any).Lessons,input,{key:Deno.env.get('LEDGER_AI_API_KEY')});},
+ async generate(input:any){const previous=generationTimes.get(input.actor+':'+(input.phase||'complete'))||0;if(Date.now()-previous<60000){const error:any=Error('Please wait a minute before creating another AI draft.');error.status=429;throw error;}generationTimes.set(input.actor+':'+(input.phase||'complete'),Date.now());if(generationTimes.size>10000)generationTimes.clear();return await generateCourseAssignment((globalThis as any).Lessons,input,{key:Deno.env.get('LEDGER_AI_API_KEY')});},
  async one(table:string,filter:object){return check(await db.from(table).select('*').match(filter).maybeSingle());},
  async list(table:string,filter:object){return check(await db.from(table).select('*').match(filter).limit(1000));},
  async insert(table:string,row:object){return check(await db.from(table).insert(row).select().single());},
@@ -26,7 +26,7 @@ Deno.serve(async request=>{
  try{
   const token=request.headers.get('authorization')?.replace(/^Bearer /i,'');if(!token)return new Response(JSON.stringify({error:'Sign in to continue.'}),{status:401,headers:h});
   const {data,error}=await db.auth.getUser(token);if(error||!data.user)return new Response(JSON.stringify({error:'Session expired. Sign in again.'}),{status:401,headers:h});
-  const raw=await request.text();if(raw.length>150000)return new Response(JSON.stringify({error:'Request is too large.'}),{status:413,headers:h});
+  const raw=await request.text();if(raw.length>200000)return new Response(JSON.stringify({error:'Request is too large.'}),{status:413,headers:h});
   const body=JSON.parse(raw);const result=await handleAction(store,(globalThis as any).Lessons,data.user,body.action,body.payload||{});
   return new Response(JSON.stringify(result),{status:200,headers:h});
  }catch(e){const err=e as any;const conflict=String(err.message).includes('CONFLICT:');const status=err.status||(conflict?409:500);if(status===500)console.error('classroom error',err.code||'internal');return new Response(JSON.stringify({error:status===500?'The server could not save this request. Retry or contact the demo owner.':err.message}),{status,headers:h});}
