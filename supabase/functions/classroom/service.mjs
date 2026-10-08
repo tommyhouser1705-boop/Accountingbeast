@@ -9,7 +9,7 @@ export function changeRun(L,old,action,p){
  if(action==='advance'){if(r.assignment.version>=2){r.stage=Math.min(2,(r.stage||0)+1);r.advanced=r.stage===2;}else r.advanced=true;}
  else if(action==='entry'){
   const e=s.events.find(e=>e.id===p.record);if(!e||!L.availableEvents(r).some(x=>x.id===e.id))fail('This document is not available yet.');
-  if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=L.validateRows(p.rows,s.accountList||L.accounts);if(error)fail(error);
+  if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=r.assignment.version===3&&p.rows.length===0?null:L.validateRows(p.rows,s.accountList||L.accounts);if(error)fail(error);
   if(typeof p.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(p.date)||Number.isNaN(Date.parse(p.date)))fail('Enter a valid journal-entry date.');
   const rows=p.rows.map(x=>({account:x.account,debit:Number(x.debit||0),credit:Number(x.credit||0)}));
   r.first[p.record]??=L.assess(rows,p.date,e);r.entries[p.record]={date:p.date,rows};r.completed=false;
@@ -26,6 +26,8 @@ export function changeRun(L,old,action,p){
  } else fail('Unsupported submission.');
  r.serverGrade=L.grade(r);return r;
 }
+export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
+export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
  const address=email(user.email),grant=await store.one('demo_access',{email:address});
@@ -42,7 +44,7 @@ export async function handleAction(store,L,user,action,p={}){
   const classes=teacher?await store.list('demo_classes',grant.role==='owner'?{}:{professor_id:user.id}):await studentClasses();
   const assignments=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat();
   const runs=grant.role==='student'?await store.list('demo_runs',{student_id:user.id}):[];
-  return {user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments,runs};
+  return {user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments:grant.role==='student'?assignments.map(a=>({...a,definition:studentDefinition(a.definition)})):assignments,runs:runs.map(r=>({...r,state:studentRun(L,r.state)}))};
  }
  if(action==='access-list'){if(grant.role!=='owner')fail('Owner access required.',403);return await store.list('demo_access',{});}
  if(action==='authorize'){
@@ -92,7 +94,7 @@ export async function handleAction(store,L,user,action,p={}){
    let scenario;try{scenario=L.expected(a.definition,choices,profile.business);}catch{fail('Choose valid business options.');}
    state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);
   }else{if(!saved)fail('Start the assignment first.');state=changeRun(L,saved.state,action,p);}
-  return await store.commit(user.id,a.id,p.revision,state,action,p);
+  const committed=await store.commit(user.id,a.id,p.revision,state,action,p);return {...committed,state:studentRun(L,committed.state)};
  }
  fail('Unknown classroom action.',404);
 }
