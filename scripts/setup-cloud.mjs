@@ -10,7 +10,7 @@ export function safeErrorDetail(body,token,owner){
  let value;
  try{const parsed=JSON.parse(body);value=typeof parsed==='string'?parsed:parsed.message||parsed.error?.message||parsed.error||parsed.msg;}catch{value=body;}
  if(typeof value!=='string')return 'No detailed error was returned.';
- for(const secret of [token,owner,owner?.toLowerCase()].filter(Boolean))value=value.replaceAll(secret,'[redacted]');
+ for(const secret of [token,owner,owner?.trim(),owner?.trim().toLowerCase()].filter(Boolean))value=value.replaceAll(secret,'[redacted]');
  return value.replace(/Bearer\s+\S+/gi,'Bearer [redacted]')
   .replace(/\b(?:sbp_|sb_secret_)[A-Za-z0-9_-]+\b/g,'[redacted]')
   .replace(/\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g,'[redacted]')
@@ -52,5 +52,9 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  console.log('Classroom database is ready; designated owner email is approved.');
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
- try{await setup({token:process.env.SUPABASE_ACCESS_TOKEN,project:process.env.SUPABASE_PROJECT_REF,owner:process.env.OWNER_EMAIL,ownerHash:process.env.OWNER_EMAIL_SHA256});}catch(e){console.error(e.message);process.exitCode=1;}
+ try{await setup({token:process.env.SUPABASE_ACCESS_TOKEN,project:process.env.SUPABASE_PROJECT_REF,owner:process.env.OWNER_EMAIL,ownerHash:process.env.OWNER_EMAIL_SHA256});}catch(e){
+  console.error(e.message);
+  if(process.env.GITHUB_ACTIONS==='true')console.error('::error title=Classroom database setup::'+e.message.replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A'));
+  process.exitCode=1;
+ }
 }
