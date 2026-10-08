@@ -4,7 +4,7 @@ The static website remains on GitHub Pages; Supabase hosts authentication, the d
 
 ## GitHub setup action
 
-The manual workflow `.github/workflows/deploy-classroom.yml` installs the database if missing, preserves existing complete databases, approves the owner email entered in the run form, sets APP_ORIGIN, deploys `classroom`, and checks CORS/authentication readiness. Add a Supabase personal management token privately as the repository Actions secret `SUPABASE_ACCESS_TOKEN`; run **Set up Ledger Lane accounts** on main with your owner email. The token is used by the runner, never committed or printed. No database password is needed. A partial schema stops setup instead of replacing data. This workflow is manual; linking GitHub in Supabase does not run it automatically or supply the token.
+The manual workflow `.github/workflows/deploy-classroom.yml` installs the database if missing, preserves existing complete databases, approves the owner email entered in the run form, sets APP_ORIGIN, deploys `classroom`, and checks CORS/authentication readiness. Add a Supabase personal management token privately as the repository Actions secret `SUPABASE_ACCESS_TOKEN`; run **Set up Ledger Lane accounts** on main with your owner email. The token is used by the runner, never committed or printed. No database password is needed. A partial schema stops setup instead of replacing data. The workflow also starts automatically for backend/deployment changes pushed to main. Automatic runs locate the designated existing owner by an email fingerprint; they never select an arbitrary registered user. The owner email can still be supplied through the manual form. Linking GitHub in Supabase does not supply the deployment token.
 
 ## Dashboard setup (no CLI required)
 

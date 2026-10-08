@@ -1,5 +1,14 @@
 name: Set up Ledger Lane accounts
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-classroom.yml'
+      - 'scripts/setup-cloud.mjs'
+      - 'scripts/check-cloud.mjs'
+      - 'supabase/functions/**'
+      - 'supabase/migrations/**'
+      - 'supabase/config.toml'
   workflow_dispatch:
     inputs:
       owner_email:
@@ -20,6 +29,7 @@ jobs:
       SUPABASE_PROJECT_REF: eaahwjgdpmvaasgtjpaq
       APP_ORIGIN: https://tommyhouser1705-boop.github.io
       OWNER_EMAIL: ${{ inputs.owner_email }}
+      OWNER_EMAIL_SHA256: e3737fdb130002ebe421ac0d76f084e608bacfa90684068284b9a482359d48b3
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,6 +41,8 @@ jobs:
             echo "Add SUPABASE_ACCESS_TOKEN in repository Settings > Secrets and variables > Actions, then run this workflow again."
             exit 1
           fi
+      - name: Report code version
+        run: git log -1 --format='%h %s'
       - name: Test accounting and access controls
         run: npm test
       - uses: supabase/setup-cli@v1

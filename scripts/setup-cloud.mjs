@@ -1,4 +1,5 @@
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 export function ownerSeed(value){
  const address=String(value||'').trim().toLowerCase();
  if(address.length>254||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address))throw Error('Enter your owner email in the Run workflow form.');
@@ -20,15 +21,24 @@ export function setupQuery(tables,seed,migration){
  if(existing.length&&existing.length!==requiredTables.length)throw Error('Only part of the classroom database exists. Setup stopped to preserve existing work; ask for help repairing the partial setup.');
  return 'begin;\n'+(existing.length?'':migration)+'\n'+seed+'\ncommit;';
 }
-export async function setup({token,project,owner,fetcher=fetch}){
+export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  if(!token)throw Error('SUPABASE_ACCESS_TOKEN is missing from GitHub repository secrets.');
  if(!/^[a-z]{20}$/.test(project||''))throw Error('Invalid Supabase project reference.');
- const seed=ownerSeed(owner),endpoint='https://api.supabase.com/v1/projects/'+project+'/database/query';
+ const endpoint='https://api.supabase.com/v1/projects/'+project+'/database/query';
  const query=async(sql,stage)=>{
   const response=await fetcher(endpoint,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({query:sql}),signal:AbortSignal.timeout(60000)});
   if(!response.ok){const detail=safeErrorDetail(await response.text(),token,owner);const hint=[401,403].includes(response.status)?'Check token permissions and project access.':'The database request was rejected; see the Supabase message below.';throw Error(`${stage}: HTTP ${response.status}. ${hint} Supabase: ${detail}`);}
   return await response.json();
  };
+ // Automatic runs locate only the designated, already registered owner.
+ // A fingerprint keeps the owner's email out of the public workflow file.
+ if(!owner){
+  if(!/^[a-f0-9]{64}$/.test(ownerHash||''))throw Error('Automatic deployment needs the designated owner fingerprint.');
+  const matches=await query("select email from auth.users where encode(sha256(convert_to(lower(email),'UTF8')),'hex')='"+ownerHash+"'",'Locate registered owner');
+  if(!Array.isArray(matches)||matches.length!==1||createHash('sha256').update(String(matches[0].email).toLowerCase()).digest('hex')!==ownerHash)throw Error('The designated owner account was not found. Use Run workflow and enter the owner email.');
+  owner=matches[0].email;
+ }
+ const seed=ownerSeed(owner);
  console.log('Checking existing classroom tables.');
  const tables=await query("select tablename from pg_tables where schemaname='public' and tablename like 'demo_%'",'Inspect existing database');
  if(!Array.isArray(tables))throw Error('Unexpected database response. Setup stopped.');
@@ -42,5 +52,5 @@ export async function setup({token,project,owner,fetcher=fetch}){
  console.log('Classroom database is ready; designated owner email is approved.');
 }
 if(process.argv[1]&&import.meta.url===new URL('file://'+process.argv[1]).href){
- try{await setup({token:process.env.SUPABASE_ACCESS_TOKEN,project:process.env.SUPABASE_PROJECT_REF,owner:process.env.OWNER_EMAIL});}catch(e){console.error(e.message);process.exitCode=1;}
+ try{await setup({token:process.env.SUPABASE_ACCESS_TOKEN,project:process.env.SUPABASE_PROJECT_REF,owner:process.env.OWNER_EMAIL,ownerHash:process.env.OWNER_EMAIL_SHA256});}catch(e){console.error(e.message);process.exitCode=1;}
 }
