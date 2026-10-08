@@ -25,8 +25,8 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  if(!token)throw Error('SUPABASE_ACCESS_TOKEN is missing from GitHub repository secrets.');
  if(!/^[a-z]{20}$/.test(project||''))throw Error('Invalid Supabase project reference.');
  const endpoint='https://api.supabase.com/v1/projects/'+project+'/database/query';
- const query=async(sql,stage)=>{
-  const response=await fetcher(endpoint,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({query:sql}),signal:AbortSignal.timeout(60000)});
+ const query=async(sql,stage,readOnly=true)=>{
+  const response=await fetcher(endpoint,{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({query:sql,read_only:readOnly}),signal:AbortSignal.timeout(60000)});
   if(!response.ok){const detail=safeErrorDetail(await response.text(),token,owner);const hint=[401,403].includes(response.status)?'Check token permissions and project access.':'The database request was rejected; see the Supabase message below.';throw Error(`${stage}: HTTP ${response.status}. ${hint} Supabase: ${detail}`);}
   return await response.json();
  };
@@ -45,7 +45,7 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  const migration=readFileSync(new URL('../supabase/migrations/202610080001_classroom.sql',import.meta.url),'utf8');
  const sql=setupQuery(tables.map(t=>t.tablename),seed,migration);
  console.log('Preparing classroom schema and owner approval.');
- await query(sql,'Install database and approve owner');
+ await query(sql,'Install database and approve owner',false);
  // Verify the atomic-save RPC required by grading, including existing databases.
  const check=await query("select to_regprocedure('public.demo_commit_run(uuid,uuid,integer,jsonb,text,jsonb)') is not null as ready",'Verify atomic-save function');
  if(check?.[0]?.ready!==true)throw Error('The atomic-save function is missing. Ask for help repairing the database before deploying.');
