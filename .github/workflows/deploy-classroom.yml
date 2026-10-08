@@ -36,6 +36,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      # Retry deployment after the repository token permissions were updated.
       - name: Check deployment access
         run: |
           if [ -z "$SUPABASE_ACCESS_TOKEN" ]; then
