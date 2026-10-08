@@ -35,6 +35,8 @@ jobs:
       OWNER_EMAIL_SHA256: e3737fdb130002ebe421ac0d76f084e608bacfa90684068284b9a482359d48b3
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -63,8 +65,18 @@ jobs:
         run: supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "LEDGER_AI_API_KEY=$LEDGER_AI_API_KEY"
       - name: Deploy authenticated classroom server
         run: supabase functions deploy classroom --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt --use-api
+      - name: Detect changes to AI generation
+        id: ai-changes
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || ! git rev-parse HEAD^ >/dev/null 2>&1; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          elif [ -n "$(git diff --name-only HEAD^ HEAD -- supabase/functions/classroom/generator.mjs supabase/functions/classroom/generation-schema.mjs lesson-engine.js scripts/check-ai.mjs)" ]; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+          fi
       - name: Check original assignment generation
-        if: env.LEDGER_AI_API_KEY != ''
+        if: env.LEDGER_AI_API_KEY != '' && steps.ai-changes.outputs.changed == 'true'
         run: node scripts/check-ai.mjs
       - name: Check server responds to website
         run: node scripts/check-cloud.mjs

@@ -26,8 +26,8 @@ export function changeRun(L,old,action,p){
  } else fail('Unsupported submission.');
  r.serverGrade=L.grade(r);return r;
 }
-export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
-export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
+export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;delete v.conceptCheck.correct;delete v.conceptCheck.feedback;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
+export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);if(state.prediction===undefined){delete s.scenario.prediction.correct;delete s.scenario.prediction.feedback;}for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
  const address=email(user.email),grant=await store.one('demo_access',{email:address});
