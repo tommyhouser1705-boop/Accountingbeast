@@ -1,1 +1,1 @@
-{"name":"accountingbeast","version":"0.1.0","private":true,"scripts":{"start":"node server.js","test":"node --test","build":"node build.js"}}
+{"name":"accountingbeast","version":"0.1.0","private":true,"scripts":{"start":"node server.js","test":"node --test","build":"node build.js"},"devDependencies":{"pg":"8.16.3"}}

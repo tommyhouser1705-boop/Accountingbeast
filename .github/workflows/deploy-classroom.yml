@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/deploy-classroom.yml'
       - 'scripts/setup-cloud.mjs'
+      - 'scripts/deployment-db.mjs'
       - 'scripts/check-cloud.mjs'
       - 'supabase/functions/**'
       - 'supabase/migrations/**'
@@ -43,6 +44,8 @@ jobs:
           fi
       - name: Report code version
         run: git log -1 --format='%h %s'
+      - name: Install deployment dependencies
+        run: npm ci
       - name: Test accounting and access controls
         run: npm test
       - uses: supabase/setup-cli@v1
