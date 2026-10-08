@@ -38,6 +38,7 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
   const detail=JSON.stringify(identity);
   console.log('Deployment database identity: '+detail);
   if(process.env.GITHUB_ACTIONS==='true')console.log('::notice title=Database deployment identity::'+detail.replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A'));
+  if(identity.can_create_tables===false)throw Error('The token currently saved in GitHub connects as '+identity.database_role+' and cannot create classroom tables. No schema changes were attempted. Database Write access is required.');
  }
  // Automatic runs locate only the designated, already registered owner.
  // A fingerprint keeps the owner's email out of the public workflow file.
