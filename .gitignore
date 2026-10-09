@@ -3,3 +3,5 @@ node_modules/
 supabase/.temp/
 
 /assets/
+
+student-test-results/

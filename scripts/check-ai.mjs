@@ -1,3 +1,4 @@
+import {checkStudentBrowser} from './check-student-browser.mjs';
 import {createRequire} from 'node:module';
 import {changeRun,studentRun,businessResult} from '../supabase/functions/classroom/service.mjs';
 import {generateCourseAssignment} from '../supabase/functions/classroom/generator.mjs';
@@ -22,6 +23,8 @@ try{
  if(chapterAssignment.interactive.events.some(e=>e.lines.some(l=>/depreciation|income tax|interest expense|interest payable|supplies expense|prepaid/i.test(l.account))))throw Error('Chapter-two classification names incorrectly created advanced or untaught adjustments.');
  if(!chapterAssignment.blueprint.opening.some(x=>x.account==='Common Stock'&&x.credit>0))throw Error('Corporate transaction practice needs consistent Common Stock opening equity.');
  for(const type of ['Coffee shop','Cleaning service']){const business={name:'Chapter Two Business',type},choice=L.decisions.defaultChoice(chapterAssignment,business),scenario=L.expected(chapterAssignment,choice,business),entries=Object.fromEntries(scenario.events.map(e=>[e.id,{date:e.date,rows:e.lines}])),trial=L.trialBalance(scenario,entries);if(!trial.balanced||Math.abs(trial.assets-trial.liabilities-trial.equity)>.01||!scenario.operations.some(x=>x.revenue>0&&!x.autoPosted))throw Error('Chapter-two business activity, revenue or trial balance is inconsistent.');}
+ await checkStudentBrowser(revised,'monthly-supplies');
+ await checkStudentBrowser(chapterAssignment,'chapter-two');
  console.log('Chapter-two practice scope passed: ordinary transactions, corporate equity, customer revenue and calculated trial balance; no invented adjustments from account classification tables.');
  console.log('AI student walkthrough passed for coffee shops and cleaning services: decisions, dated journals, monthly sales, automatic bookkeeping and completion.');
  console.log('AI professor revision passed: unpublished draft, follow-up payment date and at least 75% topic coverage.');
