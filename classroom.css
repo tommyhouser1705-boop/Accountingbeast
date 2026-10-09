@@ -24,3 +24,7 @@ a.brand{text-decoration:none}.class-home{max-width:1080px;margin:50px auto}.clas
 .business-summary{border:1px solid #d8e1d1;border-radius:8px;background:#f3f6ef;padding:14px 18px;margin:18px 0}.business-summary-bar{display:flex;align-items:center;gap:24px;flex-wrap:wrap;font-size:13px}.business-summary-bar strong{font-variant-numeric:tabular-nums}.business-summary details>summary{font-size:12px;color:#546d53;cursor:pointer;margin-top:10px}.business-summary .business-dashboard{margin:14px 0 0}.guided-task-heading{scroll-margin-top:22px}.guided-next{scroll-margin-top:22px}
 
 .supplies-order-guide{padding:14px 16px;background:#f3f6ef;border-left:3px solid #71926e;margin:14px 0}.supplies-order-guide p{font-size:13px;line-height:1.6;margin:8px 0}
+
+/* The in-assignment results bar is a normal section, not the setup sidebar. */
+.guided-path + .business-summary{position:static;max-width:none}
+.books-review{margin:24px 0}.books-review>p{max-width:760px}

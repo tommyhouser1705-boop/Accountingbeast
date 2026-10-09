@@ -9,7 +9,9 @@ const assignment=L.enableSimulation(await generateCourseAssignment(L,{notes:'Sup
 const count=assignment.interactive.events.find(e=>e.id==='supplies-count');
 count.document.fields.push({label:'Supplies used during month (cost)',value:'{{money:decision1*.6}}'});
 count.lines=[{account:'Supplies',side:'debit',formula:'decision1*.6'},{account:'Cash',side:'credit',formula:'decision1*.6'}];
+assignment.interactive.events.push({id:'evt5',title:'Trial Balance Prepared',date:'2026-09-30',stage:2,document:{layout:'schedule',issuer:'{{business}}',status:'CONFIRMED',fields:[{label:'Trial balance includes all account balances after posting',value:''},{label:'All debits and credits should match',value:''},{label:'Check Cash, Supplies and Common Stock totals',value:''}]},lines:[{account:'Cash',side:'debit',formula:'500'},{account:'Sales Revenue',side:'credit',formula:'500'}]});
 const business={name:"Tommy's Coffee",type:'Coffee shop'},choice=L.decisions.defaultChoice(assignment,business);choice.decision1={beans:10,cups:8,filters:10};
 const corrected=L.expected(assignment,choice,business).events.find(e=>e.id===count.id);
+assert.ok(!L.expected(assignment,choice,business).events.some(e=>e.id==='evt5'));
 assert.deepEqual(corrected.lines,[{account:'Supplies Expense',debit:404.4,credit:0},{account:'Supplies',debit:0,credit:404.4}]);
 await checkStudentBrowser(assignment,'count-key-regression');

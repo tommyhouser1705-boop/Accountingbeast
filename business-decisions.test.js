@@ -60,3 +60,12 @@ test('saved count submissions are checked against the printed consumption cost, 
  const saved=changeRun(L,state,'entry',{record:e.id,date:e.date,rows});assert.equal(studentRun(L,saved).assessments[e.id].correct,true);assert.equal(saved.first[e.id].correct,true);
  const wrong=changeRun(L,state,'entry',{record:e.id,date:e.date,rows:e.lines});assert.equal(studentRun(L,wrong).assessments[e.id].correct,false);
 });
+
+test('an old AI trial-balance event cannot create money, cost points, or prevent completion',async()=>{
+ const a=L.enableSimulation(await assignment()),{changeRun,studentRun,businessResult}=await import('./supabase/functions/classroom/service.mjs'),business={name:"Tommy's Coffee",type:'Coffee shop'},choice=L.decisions.defaultChoice(a,business),before=L.expected(a,choice,business);
+ a.interactive.events.push({id:'evt5',title:'Trial Balance Prepared',date:'2026-09-30',stage:2,document:{layout:'schedule',issuer:'{{business}}',status:'CONFIRMED',fields:[{label:'Trial balance includes all balances after journal entries',value:''},{label:'Debits and credits should match',value:''},{label:'Check Cash and Supplies totals',value:''}]},lines:[{account:'Cash',side:'debit',formula:'500'},{account:'Sales Revenue',side:'credit',formula:'500'}]});
+ const scenario=L.expected(a,choice,business);assert.ok(!scenario.events.some(e=>e.id==='evt5'));assert.deepEqual(scenario.operations,before.operations);
+ const entries=Object.fromEntries(scenario.events.map(e=>[e.id,{date:e.date,rows:e.lines}])),state={assignment:a,business,choice,scenario,stage:2,advanced:true,entries,first:{}};
+ const completed=changeRun(L,state,'complete',{});assert.equal(completed.completed,true);assert.equal(studentRun(L,completed).serverGrade.journal,100);assert.equal(businessResult(L,completed).cash,businessResult(L,{...state,assignment:{...a,interactive:{...a.interactive,events:a.interactive.events.filter(e=>e.id!=='evt5')}},scenario:before}).cash);
+ assert.throws(()=>changeRun(L,state,'entry',{record:'evt5',date:'2026-09-30',rows:[]}),/not available/);
+});

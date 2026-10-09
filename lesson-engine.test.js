@@ -25,3 +25,12 @@ test('count grading never treats physical units, a purchase or unrelated expense
  e.document.fields=[{label:'Supplies used during month (cost)',value:'$0.00'}];assert.deepEqual(L.decisions.suppliesCountLines(e),[]);assert.equal(L.assess([],e.date,e).correct,true);
  e.document.layout='invoice';assert.equal(L.decisions.suppliesCountLines(e),null);
 });
+
+test('reports are book-review tools, not transactions, points, or required journal submissions',()=>{
+ for(const title of ['Trial Balance Prepared','Prepare financial statements','Posting to T accounts','Review general ledger','January balance sheet','Income statement prepared'])assert.equal(L.isReportEvent({title}),true,title);
+ for(const title of ['Supplies count','Month-end rent adjustment','Correcting entry after trial balance error','Closing entries for income statement accounts','Customer sales report','Supplier quotation'])assert.equal(L.isReportEvent({title}),false,title);
+ const report={id:'evt5',title:'Trial Balance Prepared',date:'2026-01-31',stage:2,lines:[{account:'Cash',debit:5,credit:0},{account:'Common Stock',debit:0,credit:5}]},transaction={id:'purchase',title:'Supplies delivered',date:'2026-01-02',stage:0,lines:[{account:'Supplies',debit:100,credit:0},{account:'Cash',debit:0,credit:100}]};
+ const scenario={accountList:['Cash','Common Stock','Supplies'],accountDefinitions:[{name:'Cash',type:'asset'},{name:'Common Stock',type:'equity'},{name:'Supplies',type:'asset'}],openingBalances:[{account:'Cash',debit:1000,credit:0},{account:'Common Stock',debit:0,credit:1000}],events:[transaction,report]},run={assignment:{version:3},scenario,stage:2,entries:{purchase:{date:transaction.date,rows:transaction.lines}},first:{}};
+ assert.equal(L.grade(run).journal,100);assert.deepEqual(L.availableEvents(run).map(e=>e.id),['purchase']);
+ L.expandAccountChoices(scenario);assert.deepEqual(scenario.events.map(e=>e.id),['purchase']);assert.deepEqual(scenario.reviewRecordIds,['evt5']);run.entries.evt5={date:report.date,rows:report.lines};assert.equal(L.balances(scenario,run.entries).Cash,900);
+});
