@@ -1,6 +1,12 @@
 // Supabase Auth REST + the protected classroom Edge Function. No secret keys.
 (function(root){
 class CloudClient {
+ static revisionChanges(previous,next){
+  const stable=value=>JSON.stringify(value,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])):v);
+  const sections=[['Assignment title',a=>a.title],['Student instructions',a=>a.instructions],['Learning goals',a=>a.objectives],['Dates and timeline',a=>[a.year,a.month,a.periodMonths]],['Business decisions',a=>a.interactive?.controls],['Source documents and entries',a=>a.interactive?.events||a.blueprint?.paths],['Chart of accounts',a=>a.blueprint?.accounts],['Topic coverage',a=>a.topicCoverage]];
+  return sections.filter(([,read])=>stable(read(previous))!==stable(read(next))).map(([label])=>label);
+ }
+
  constructor(config,storage=root.sessionStorage,fetcher=root.fetch.bind(root)){
   this.config=config;this.storage=storage;this.fetcher=fetcher;this.session=null;
   this.redirectUrl=config.redirectUrl||(root.location?new URL('.',root.location.href).href:'');
