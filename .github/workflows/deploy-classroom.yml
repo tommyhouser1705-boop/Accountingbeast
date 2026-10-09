@@ -9,6 +9,7 @@ on:
       - 'scripts/check-cloud.mjs'
       - 'scripts/check-ai.mjs'
       - 'scripts/check-student-browser.mjs'
+      - 'scripts/check-count-browser.mjs'
       - 'classroom.js'
       - 'cloud.js'
       - 'classroom.css'
@@ -72,6 +73,9 @@ jobs:
       - name: Install student-test browser
         if: env.LEDGER_AI_API_KEY != ''
         run: npx playwright install --with-deps chromium
+      - name: Check supplies-count grading as a student
+        if: env.LEDGER_AI_API_KEY != ''
+        run: node scripts/check-count-browser.mjs
       - name: Detect changes to AI generation
         id: ai-changes
         run: |

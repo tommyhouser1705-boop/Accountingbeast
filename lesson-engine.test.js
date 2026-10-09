@@ -7,3 +7,21 @@ test('depreciation is noncash and uses selected useful life',()=>{const s=L.expe
 test('episodes reset their balances instead of carrying earlier work',()=>{const x=L.expected(a('capital'),{investment:0,ad:2}),y=L.expected(a('prepaid'),{location:0,months:3});assert.equal(L.balances(x,journal(x)).Cash,2800);assert.equal(y.opening,8000);assert.equal(L.balances(y,{}).Cash,8000);});
 test('assessment separates date, account choice, amounts and corrections',()=>{const s=L.expected(a('prepaid'),{location:0,months:3}),e=s.events[0],rows=journal(s)[e.id].rows;assert.equal(L.assess(rows,'2026-09-02',e).date,false);assert.equal(L.assess(rows,e.date,e).correct,true);const wrong=[{account:'Rent Expense',debit:450,credit:0},{account:'Cash',debit:0,credit:450}];assert.equal(L.validateRows(wrong),null);assert.equal(L.assess(wrong,e.date,e).account,false);const run={scenario:s,first:{payment:L.assess(wrong,e.date,e),adjustment:L.assess(journal(s).adjustment.rows,s.events[1].date,s.events[1])},predictionFirst:0,effectsFirst:{expense:150,remaining:300,cash:7550}};assert.equal(L.grade(run).journal,53);assert.equal(L.grade(run).effects,15);});
 test('imports reject unsupported topics, dates and oversized material',()=>{assert.equal(L.checkAssignment(a('prepaid')),true);assert.equal(L.checkAssignment({...a('prepaid'),month:13}),false);assert.equal(L.checkAssignment({...a('prepaid'),topic:'made-up'}),false);assert.equal(L.checkAssignment({...a('prepaid'),topic:'constructor'}),false);assert.equal(L.checkAssignment({...a('prepaid'),id:''}),false);assert.equal(L.checkAssignment({...a('prepaid'),notes:'x'.repeat(30001)}),false);});
+
+test('the reported supplies count grades the supported entry even when an old AI key names the wrong accounts',()=>{
+ const e={id:'evt2',date:'2026-01-31',document:{layout:'count',fields:[{label:'Supplies on hand at month-end (cost)',value:'$269.60'},{label:'Supplies used during month (cost)',value:'$404.40'},{label:'Original supplies purchased (cost)',value:'$674.00'}]},lines:[{account:'Supplies',debit:404.4,credit:0},{account:'Cash',debit:0,credit:404.4}]};
+ const rows=[{account:'Supplies Expense',debit:404.4,credit:0},{account:'Supplies',debit:0,credit:404.4}];
+ assert.equal(L.assess(rows,e.date,e).correct,true);
+ assert.equal(L.assess(e.lines,e.date,e).correct,false);
+ assert.equal(L.assess(rows,'2026-01-30',e).correct,false);
+ assert.equal(L.assess(rows.map(r=>({...r,debit:r.debit?269.6:0,credit:r.credit?269.6:0})),e.date,e).correct,false);
+ const s={accountList:['Cash','Supplies'],accountDefinitions:[{name:'Cash',type:'asset'},{name:'Supplies',type:'asset'}],openingBalances:[{account:'Supplies',debit:674,credit:0},{account:'Owner Capital',debit:0,credit:674}],events:[e]};
+ L.expandAccountChoices(s);assert.deepEqual(e.lines,rows);
+ const t=L.trialBalance(s,{evt2:{rows,date:e.date}});assert.equal(t.balanced,true);assert.equal(t.assets,269.6);assert.equal(t.equity,269.6);
+});
+test('count grading never treats physical units, a purchase or unrelated expense as supplies used',()=>{
+ const e={date:'2026-01-31',document:{layout:'count',fields:[{label:'Supplies used during month (quantity)',value:'404'}]},lines:[]};
+ assert.equal(L.decisions.suppliesCountLines(e),null);
+ e.document.fields=[{label:'Supplies used during month (cost)',value:'$0.00'}];assert.deepEqual(L.decisions.suppliesCountLines(e),[]);assert.equal(L.assess([],e.date,e).correct,true);
+ e.document.layout='invoice';assert.equal(L.decisions.suppliesCountLines(e),null);
+});
