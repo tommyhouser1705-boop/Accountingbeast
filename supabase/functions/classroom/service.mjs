@@ -6,7 +6,7 @@ const email=x=>{const s=String(x||'').trim().toLowerCase();if(s.length>254||! /^
 const uuid=x=>{if(typeof x!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x))fail('Invalid record ID.');return x;};
 export function changeRun(L,old,action,p){
  const r=structuredClone(old),s=r.scenario;
- if(action==='advance'){if(r.assignment.version>=2){r.stage=Math.min(2,(r.stage||0)+1);r.advanced=r.stage===2;}else r.advanced=true;}
+ if(action==='advance'){if(r.assignment.version>=2){r.stage=Math.min(L.finalStage(r.assignment),(r.stage||0)+1);r.advanced=r.stage===L.finalStage(r.assignment);}else r.advanced=true;}
  else if(action==='entry'){
   const e=s.events.find(e=>e.id===p.record);if(!e||!L.availableEvents(r).some(x=>x.id===e.id))fail('This document is not available yet.');
   if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=r.assignment.version===3&&p.rows.length===0?null:L.validateRows(p.rows,s.accountList||L.accounts);if(error)fail(error);

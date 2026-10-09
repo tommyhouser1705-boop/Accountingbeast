@@ -37,10 +37,10 @@ renderProfessor=function(){localProfessor();if(!cloudAccount)return;
   Q('#teacher-notes').addEventListener('input',saveTeacherWorkspace);Q('#teacher-form').addEventListener('input',saveTeacherWorkspace);
   const localFile=Q('#notes-file').onchange;Q('#notes-file').onchange=async e=>{await localFile(e);saveTeacherWorkspace();};
   let pending;try{pending=JSON.parse(sessionStorage.getItem('ledger-generation-'+cloudAccount.id));}catch{}
-  if(pending?.draft&&pending.input.notes===teacherDraft.notes.trim()){button.textContent='Continue creating saved assignment';Q('#generation-status').textContent='The accounting topics are saved. Continue creating the assignment from those topics.';}
+  if(pending?.draft&&pending.input.notes===teacherDraft.notes.trim()){button.textContent='Continue creating assignment';Q('#generation-status').textContent='The accounting topics are saved. Continue creating the assignment from those topics.';}
   button.onclick=()=>{
    const notes=Q('#teacher-notes').value.trim();if(notes.length<40){const status=Q('#generation-status');status.className='generation-error';status.textContent='Add a notes file or at least a few sentences of course material first.';return;}
-   const input={notes,request:Q('#generation-request').value,depth:Q('#episode-depth').value,year:teacherDraft.year,month:teacherDraft.month,course:teacherDraft.course,report:teacherDraft.report,support:teacherDraft.support};
+   const input={notes,request:Q('#generation-request').value,depth:Q('#episode-depth').value,year:teacherDraft.year,month:teacherDraft.month,timelineMode:teacherDraft.timelineMode||'auto',course:teacherDraft.course,report:teacherDraft.report,support:teacherDraft.support};
    saveTeacherWorkspace();cloudTask(async()=>{
     const controls=[...document.querySelectorAll('.studio-layout input,.studio-layout select,.studio-layout textarea,#new-draft')];controls.forEach(el=>el.disabled=true);
     try{
@@ -53,8 +53,8 @@ renderProfessor=function(){localProfessor();if(!cloudAccount)return;
      teacherDraft=await cloud.call('generate',{...input,phase:'review',draft:saved.draft});teacherDraft.depth=input.depth;teacherDraft.request=input.request;saveTeacherWorkspace();sessionStorage.removeItem('ledger-generation-'+cloudAccount.id);
      reviewPlan=0;reviewDecision=null;notice='Assignment created. Try the student decisions and review the records and answers before publishing.';render();Q('.draft-preview')?.scrollIntoView({behavior:'smooth',block:'center'});
     }catch(error){
-     const status=Q('#generation-status');if(status){status.className='generation-error';status.innerHTML=`<strong>We couldn’t finish this draft.</strong><p>${safe(error.message)}</p><small>Your notes are saved. ${sessionStorage.getItem('ledger-generation-'+cloudAccount.id)?'The first draft is saved too. Click below to check it again.':'Try again when you’re ready.'}</small>`;status.scrollIntoView({behavior:'smooth',block:'center'});}
-     if(sessionStorage.getItem('ledger-generation-'+cloudAccount.id))button.textContent='Retry creating saved assignment';
+     const status=Q('#generation-status');if(status){status.className='generation-error';status.innerHTML=`<strong>We couldn’t finish this draft.</strong><p>${safe(error.message)}</p><small>Your notes are saved. ${sessionStorage.getItem('ledger-generation-'+cloudAccount.id)?'The topics from your notes are saved too. Click below to try again.':'Try again when you’re ready.'}</small>`;status.scrollIntoView({behavior:'smooth',block:'center'});}
+     if(sessionStorage.getItem('ledger-generation-'+cloudAccount.id))button.textContent='Try again';
      if([401,403].includes(error.status))accountError(error);
     }finally{controls.forEach(el=>el.disabled=false);}
    });
