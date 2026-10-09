@@ -59,7 +59,10 @@ Give each control a decisionStage: stage 0 means the first choice, stage 1 means
  if(!teachesNoEntry)made.events=made.events.filter(e=>e.lines.length||!(/quote|proposal|quotation/i.test(e.title+' '+e.document.status))||made.controls.some(c=>new RegExp('\\b'+c.id+'\\b').test(JSON.stringify(e.document))));
  // Build real follow-up payment choices before checking monthly coverage.
  // A later supplier payment can fill its month's missing choice automatically.
- const prepareChoices=()=>{reconcileAccounts(made.accounts,made.events);const prepared=prepareGuidedAssignment({year,month,periodMonths,interactive:{controls:made.controls,events:made.events}});made.controls=prepared.interactive.controls;made.events=prepared.interactive.events;
+ const prepareChoices=()=>{
+  // An order form must start with a nonempty, valid suggestion. Students still edit quantities.
+  for(const c of made.controls)if(c.kind==='basket'&&c.defaultValue===0&&c.min===0&&Number.isInteger(c.step)&&c.step>0&&c.step<=c.max)c.defaultValue=c.step;
+  reconcileAccounts(made.accounts,made.events);const prepared=prepareGuidedAssignment({year,month,periodMonths,interactive:{controls:made.controls,events:made.events}});made.controls=prepared.interactive.controls;made.events=prepared.interactive.events;
   // Do not ask for the settlement percentage on the order form before the bill exists.
   for(const c of made.controls.filter(c=>c.kind!=='basket'&&c.kind!=='date'&&/pay|settle/i.test(c.label))){const payment=made.events.find(e=>e.lines.some(l=>l.account==='Accounts Payable'&&l.side==='debit'&&new RegExp('\\b'+c.id+'\\b').test(l.formula)));if(!payment)continue;const purchase=made.events.find(e=>e.date<payment.date&&e.lines.some(l=>l.account==='Accounts Payable'&&l.side==='credit'));if(!purchase||made.events.some(e=>e.date<payment.date&&new RegExp('\\b'+c.id+'\\b').test(JSON.stringify({lines:e.lines,document:e.document}))))continue;const offset=Number(payment.date.slice(5,7))-month;c.monthOffset=offset;c.decisionStage=periodMonths>1?offset*2+(purchase.date.slice(0,7)===payment.date.slice(0,7)?1:0):1;if(/percent/i.test(c.label)){c.label='What percent of this bill will you pay?';c.purpose='Choose how much of the invoice to settle. The rest remains owed to the supplier.';}}
 
