@@ -57,7 +57,7 @@ Give each control a decisionStage: stage 0 means the first choice, stage 1 means
  const prepareChoices=()=>{const prepared=prepareGuidedAssignment({year,month,periodMonths,interactive:{controls:made.controls,events:made.events}});made.controls=prepared.interactive.controls;made.events=prepared.interactive.events;
   // Control timing is metadata. Derive it from the first record it actually changes,
   // so a payment in October cannot remain labeled as a September-only choice.
-  if(periodMonths>1)for(const c of made.controls){const affected=made.events.filter(e=>new RegExp('\\b'+c.id+'\\b').test(JSON.stringify({lines:e.lines,document:e.document,dateControl:e.dateControl})));if(!affected.length)continue;const firstOffset=Math.min(...affected.map(e=>Number(e.date.slice(5,7))-month));if(firstOffset>=0&&firstOffset<periodMonths&&(c.monthOffset||0)!==firstOffset){c.monthOffset=firstOffset;c.decisionStage=firstOffset*2+(c.kind==='date'?1:0);}}
+  if(periodMonths>1)for(const c of made.controls){if(c.kind!=='date')continue;const affected=made.events.filter(e=>new RegExp('\\b'+c.id+'\\b').test(JSON.stringify({lines:e.lines,document:e.document,dateControl:e.dateControl})));if(!affected.length)continue;const firstOffset=Math.min(...affected.map(e=>Number(e.date.slice(5,7))-month));if(firstOffset>=0&&firstOffset<periodMonths&&(c.monthOffset||0)!==firstOffset){c.monthOffset=firstOffset;c.decisionStage=firstOffset*2+(c.kind==='date'?1:0);}}
  };
  const missingDecisionMonths=()=>periodMonths<2?[]:Array.from({length:periodMonths},(_,i)=>i).filter(offset=>!made.controls.some(c=>(c.monthOffset||0)===offset&&made.events.some(e=>new RegExp('\\b'+c.id+'\\b').test(JSON.stringify({lines:e.lines,document:e.document,dateControl:e.dateControl})))));
  prepareChoices();
