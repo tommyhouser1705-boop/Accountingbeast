@@ -6,7 +6,8 @@ const email=x=>{const s=String(x||'').trim().toLowerCase();if(s.length>254||! /^
 const uuid=x=>{if(typeof x!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x))fail('Invalid record ID.');return x;};
 export function changeRun(L,old,action,p){
  const r=structuredClone(old),s=r.scenario;
- if(action==='advance'){if(r.assignment.version>=2){r.stage=Math.min(L.finalStage(r.assignment),(r.stage||0)+1);r.advanced=r.stage===L.finalStage(r.assignment);}else r.advanced=true;}
+ if(action==='decide'){const m=L.pendingMonth(r);if(m===null)fail('There is no new monthly decision to make.');const controls=r.assignment.interactive.controls.filter(c=>c.monthOffset===m),ids=controls.map(c=>c.id);if(!p.choice||Object.keys(p.choice).length!==ids.length||Object.keys(p.choice).some(id=>!ids.includes(id)))fail('Change only the current month’s business choices.');const choice={...r.choice,...p.choice};if(!L.decisions.validChoice(r.assignment,choice,r.business))fail('Check your quantities and amounts.');const next=L.expected(r.assignment,choice,r.business);for(const oldEvent of s.events.filter(e=>e.stage<m*2)){const nextEvent=next.events.find(e=>e.id===oldEvent.id);if(JSON.stringify(oldEvent)!==JSON.stringify(nextEvent))fail('This choice would change earlier records. Ask your professor to review the draft.');}r.choice=choice;r.scenario=next;r.decidedMonths=[...(r.decidedMonths||[0]),m];}
+ else if(action==='advance'){if(L.pendingMonth(r)!==null)fail('Make this month’s business decision before continuing.');if(r.assignment.version>=2){r.stage=Math.min(L.finalStage(r.assignment),(r.stage||0)+1);r.advanced=r.stage===L.finalStage(r.assignment);}else r.advanced=true;}
  else if(action==='entry'){
   const e=s.events.find(e=>e.id===p.record);if(!e||!L.availableEvents(r).some(x=>x.id===e.id))fail('This document is not available yet.');
   if(!Array.isArray(p.rows)||p.rows.some(x=>!x||typeof x!=='object'))fail('Journal lines are required.');const error=r.assignment.version===3&&p.rows.length===0?null:L.validateRows(p.rows,s.accountList||L.accounts);if(error)fail(error);
@@ -14,6 +15,7 @@ export function changeRun(L,old,action,p){
   const rows=p.rows.map(x=>({account:x.account,debit:Number(x.debit||0),credit:Number(x.credit||0)}));
   r.first[p.record]??=L.assess(rows,p.date,e);r.entries[p.record]={date:p.date,rows};r.completed=false;
  }
+ else if(action==='complete'){if(r.assignment.version!==3)fail('This assignment uses a different finish step.');if(!r.advanced)fail('Continue until all records are available.');if(!s.events.every(e=>r.entries[e.id]&&L.assess(r.entries[e.id].rows,r.entries[e.id].date,e).correct))fail('Check the records marked Needs another look before finishing.');r.completed=true;}
  else if(action==='prediction'){
   if(!r.advanced)fail('Continue the episode first.');if(r.prediction!==undefined)fail('Your prediction was already submitted.');
   if(!Number.isInteger(p.answer)||p.answer<0||p.answer>=s.prediction.options.length)fail('Select a prediction.');
@@ -27,7 +29,7 @@ export function changeRun(L,old,action,p){
  r.serverGrade=L.grade(r);return r;
 }
 export function studentDefinition(a){if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;if(v.interactive)delete v.interactive.events;delete v.conceptCheck.correct;delete v.conceptCheck.feedback;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
-export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);if(state.prediction===undefined){delete s.scenario.prediction.correct;delete s.scenario.prediction.feedback;}for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
+export function studentRun(L,state){if(state.assignment.version!==3)return state;const s=structuredClone(state);s.publicRun=true;s.serverGrade=L.grade(state);s.assessments=Object.fromEntries(state.scenario.events.map(e=>[e.id,state.entries[e.id]?L.assess(state.entries[e.id].rows,state.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment);if(state.prediction===undefined){delete s.scenario.prediction.correct;delete s.scenario.prediction.feedback;}for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
  const address=email(user.email),grant=await store.one('demo_access',{email:address});
@@ -43,7 +45,7 @@ export async function handleAction(store,L,user,action,p={}){
  if(action==='bootstrap'){
   const classes=teacher?await store.list('demo_classes',grant.role==='owner'?{}:{professor_id:user.id}):await studentClasses();
   const allAssignments=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat(),assignments=teacher?allAssignments:allAssignments.filter(a=>!a.definition.deleted);
-  const runs=grant.role==='student'?(await store.list('demo_runs',{student_id:user.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)):[];
+  const runs=grant.role==='student'?(await store.list('demo_runs',{student_id:user.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[];
   return {user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments:grant.role==='student'?assignments.map(a=>({...a,definition:studentDefinition(a.definition)})):assignments,runs:runs.map(r=>({...r,state:studentRun(L,r.state)}))};
  }
  if(action==='access-list'){if(grant.role!=='owner')fail('Owner access required.',403);return await store.list('demo_access',{});}
@@ -81,13 +83,13 @@ export async function handleAction(store,L,user,action,p={}){
  }
  if(action==='gradebook'){
   requireTeacher();await classAccess(p.classId);const invitations=await store.list('demo_invitations',{class_id:p.classId}),assignments=await store.list('demo_assignments',{class_id:p.classId});
-  const students=await Promise.all(invitations.map(async i=>{const s=await store.one('demo_profiles',{email:i.email});return {email:i.email,business:s?.business||null,runs:s?(await store.list('demo_runs',{student_id:s.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)):[]};}));return {assignments,students};
+  const students=await Promise.all(invitations.map(async i=>{const s=await store.one('demo_profiles',{email:i.email});return {email:i.email,business:s?.business||null,runs:s?(await store.list('demo_runs',{student_id:s.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[]};}));return {assignments,students};
  }
  if(action==='attempts'){
   requireTeacher();const a=await store.one('demo_assignments',{id:uuid(p.assignmentId)});if(!a)fail('Assignment not found.',404);await classAccess(a.class_id);
   return await store.list('demo_attempts',{student_id:uuid(p.studentId),assignment_id:a.id});
  }
- if(['start','advance','entry','prediction','effects'].includes(action)){
+ if(['start','advance','entry','prediction','effects','complete','decide'].includes(action)){
   const a=await studentAssignment(p.assignmentId),saved=await store.one('demo_runs',{student_id:user.id,assignment_id:a.id});
   if(!Number.isInteger(p.revision)||p.revision!==(saved?.revision||0))fail('Work changed in another tab. Refresh your classroom before submitting.',409);
   let state;
@@ -97,7 +99,7 @@ export async function handleAction(store,L,user,action,p={}){
    const valid=a.definition.interactive?L.decisions.validChoice(a.definition,choices,profile.business):a.definition.version===3?index(choices.plan):a.definition.version===2?L.validEpisodeChoice(a.definition,choices):a.definition.topic==='prepaid'?index(choices.location)&&[1,3,6].includes(choices.months):a.definition.topic==='receivables'?index(choices.order)&&index(choices.collection):a.definition.topic==='equipment'?index(choices.level)&&index(choices.life):index(choices.investment)&&index(choices.ad);
    if(!valid)fail('Choose valid business options.');
    let scenario;try{scenario=L.expected(a.definition,choices,profile.business);}catch{fail('Choose valid business options.');}
-   state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);
+   state={assignment:a.definition,business:profile.business,choice:p.choice,scenario,decidedMonths:[0],entries:{},first:{},advanced:false,completed:false};state.serverGrade=L.grade(state);
   }else{if(!saved)fail('Start the assignment first.');state=changeRun(L,saved.state,action,p);}
   const committed=await store.commit(user.id,a.id,p.revision,state,action,p);return {...committed,state:studentRun(L,committed.state)};
  }
