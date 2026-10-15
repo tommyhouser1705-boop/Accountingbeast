@@ -50,8 +50,9 @@ test('preview switch updates the illustration, record, label and pressed state t
   assert.equal(nodes['#preview-business-name'].textContent, 'Sunday Bakery');
   assert.equal(buttons[1].attributes['aria-pressed'], 'true');
   assert.equal(buttons[0].attributes['aria-pressed'], 'false');
+  c.location = {href: ''};
   nodes['#explore-studio'].onclick();
-  assert.equal(c.role, 'professor');
+  assert.equal(c.location.href, 'play.html#instructor');
   c.cloudAccount = {role: 'professor'};
   c.wireWelcome();
   assert.equal(nodes['#instructor-demo'].hidden, true);
