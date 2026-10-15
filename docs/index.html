@@ -130,6 +130,520 @@ header .mode-switch button.on{background:var(--green);color:#fff}
  header .header-tools{width:100%;justify-content:flex-end;flex-wrap:wrap;gap:4px}
  header .mode-switch{margin-left:auto}
 }
+</style><style>/* Ledger Lane: a colorful business classroom. Shared tokens also skin cloud views. */
+:root {
+  --ink: #202941;
+  --muted: #62697b;
+  --line: #dce0ed;
+  --paper: #fff;
+  --green: #5145bd;
+  --violet: #5145bd;
+  --orange: #f78054;
+  --navy: #202941;
+  --shadow: 0 8px 28px #20294108;
+  color: var(--ink);
+  background: #f3f4fa;
+  font-family: "Avenir Next", "Segoe UI", Arial, sans-serif;
+}
+body { background: #f3f4fa; color: var(--ink); }
+body[data-screen=welcome] { background: #fffaf2; }
+* { box-sizing: border-box; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button, a.button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--violet); color: #fff; border: 1px solid transparent;
+  border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 700;
+  min-height: 42px; line-height: 1.4; transition: background .18s, transform .18s, box-shadow .18s;
+}
+button:hover, a.button:hover { background: #3f339f; filter: none; }
+button:active, a.button:active { transform: translateY(1px); }
+button:disabled { background: #e4e6f0; color: #72788d; opacity: 1; cursor: not-allowed; transform: none; }
+.secondary, .quiet, a.button.quiet { color: var(--ink); background: #fff; border-color: var(--line); }
+.secondary:hover, .quiet:hover, a.button.quiet:hover { background: #eeebfc; border-color: #c2bcec; }
+.quiet { background: transparent; border-color: transparent; }
+a { color: var(--violet); }
+p { color: var(--muted); line-height: 1.65; }
+h1, h2, h3, h4, .brand { color: var(--ink); font-family: inherit; }
+h1, h2 { font-weight: 800; letter-spacing: -1.1px; }
+h3 { font-weight: 750; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, summary:focus-visible, label:has(input:focus-visible) {
+  outline: 3px solid #7e6ce3; outline-offset: 4px;
+}
+input, select, textarea {
+  background: #fcfcff; border: 1px solid #cdd2e2; border-radius: 8px;
+  padding: 12px; color: var(--ink); font-size: 14px;
+}
+input:disabled, select:disabled, textarea:disabled { background: #eceef5; color: #747b8e; }
+.field { color: #424d67; font-size: 13px; font-weight: 700; }
+.field textarea { line-height: 1.65; }
+.tag { color: #685caa; font-size: 10px; letter-spacing: 1.3px; font-weight: 800; }
+.card { background: #fff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 26px; }
+.message { background: #eeebfc; border: 1px solid #d9d2f6; color: #413a76; border-radius: 9px; }
+.foot, .classroom-foot { color: var(--muted); }
+.shell { max-width: 1440px; padding: 0 48px 30px; }
+.shell > .app-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 24px 0; margin-bottom: 0; border-bottom: 1px solid var(--line);
+}
+.brand { font-size: 25px; letter-spacing: -1.2px; font-weight: 850; flex-shrink: 0; }
+.brand .brand-mark {
+  background: var(--violet); width: 43px; height: 43px; border-radius: 13px;
+  box-shadow: 3px 3px 0 #cabff3; color: #fff;
+}
+.brand > span:last-child { display: flex; flex-direction: column; gap: 5px; }
+.brand small { font-size: 8px; font-weight: 750; color: #72748a; letter-spacing: 1.75px; line-height: 1; }
+.app-header .header-tools { display: flex; align-items: center; gap: 2px; }
+.app-header .header-tools button { font-weight: 650; min-height: 38px; }
+.app-header .header-tools #cloud-login { background: var(--ink); border: none; border-radius: 8px; color: #fff; padding: 10px 18px; }
+.app-header .mode-switch { border: 0; padding: 4px; background: #e7e8f2; border-radius: 10px; margin-left: 24px; }
+.app-header .mode-switch button { border-radius: 7px; color: #5e627a; min-height: 32px; }
+.app-header .mode-switch button.on { color: #fff; background: var(--violet); box-shadow: 0 2px 6px #33245a20; }
+.link-button { color: #524982!important; text-underline-offset: 4px; min-height: 32px; }
+[hidden] { display: none!important; }
+
+/* The public neighborhood. */
+.play-hero { display: grid; grid-template-columns: .88fr 1.12fr; align-items: center; gap: 40px; padding: 66px 0 64px; }
+.play-eyebrow { display: flex; align-items: center; gap: 8px; color: #645b70; font-size: 9px; font-weight: 800; letter-spacing: 1.6px; }
+.play-dot { display: inline-block; width: 7px; height: 7px; background: #e47d50; border-radius: 50%; }
+.play-hero h1 { font-size: clamp(54px, 5.5vw, 83px); line-height: 1.01; letter-spacing: -4.5px; font-weight: 850; margin: 23px 0; }
+.play-hero h1 > span { color: var(--violet); position: relative; white-space: nowrap; }
+.play-hero h1 > span::after { content: ""; display: block; position: absolute; height: 7px; background: #ffc777; width: 95%; left: 2%; bottom: -3px; border-radius: 50%; transform: rotate(-4deg); z-index: -1; }
+.play-hero-copy > p { color: #5d6074; font-size: 17px; line-height: 1.7; margin-bottom: 25px; }
+.play-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 30px; }
+.play-actions > button { font-size: 12px; min-height: 48px; padding: 13px 17px; box-shadow: 0 4px 0 #33246e; }
+.play-actions #instructor-demo { background: transparent; color: var(--ink); border: 1px solid #c9c4c4; box-shadow: none; }
+.play-actions #instructor-demo:hover { background: #eeebfc; border-color: #b4a9df; }
+.play-demo-note { margin-top: 20px; color: #6e6d7c; font-size: 11px; line-height: 1.8; }
+.play-demo-note .link-button { display: inline-flex; padding-left: 0!important; font-size: 10px!important; }
+.play-world { position: relative; min-width: 0; padding: 15px; background: #e7eaff; border: 1px solid #cecfee; border-radius: 25px; box-shadow: 8px 10px 0 #e6dff9; transform: rotate(1.2deg); }
+.world-label { display: flex; justify-content: space-between; align-items: center; font-size: 8px; font-weight: 800; letter-spacing: 1.5px; color: #535f83; padding: 1px 5px 13px; }
+.world-label > span:first-child { display: inline-flex; align-items: center; gap: 6px; }
+.play-world .lane-scene { padding: 0 0 72px; }
+.play-world .lane-art { display: block; width: 100%; height: auto; border: 1px solid #bbc8e9; border-radius: 17px; background: #d9e5ff; }
+.play-world .lane-paper { position: absolute; background: #fff; padding: 19px 22px; width: 67%; right: 20px; bottom: 0; border: 1px solid #d9d9e6; border-radius: 12px; box-shadow: 0 10px 24px #25395b20; transform: rotate(-4deg); font-size: 11px; }
+.lane-paper-type { display: flex; align-items: center; gap: 5px; font-size: 8px; letter-spacing: 1px; font-weight: 800; color: #7c718e; }
+.play-world .lane-paper > strong { display: block; margin: 9px 0 15px; color: var(--ink); font-size: 15px; }
+.play-world .lane-paper > div { display: flex; justify-content: space-between; gap: 10px; border-top: 1px dashed #ccc; border-bottom: 1px dashed #ccc; padding: 10px 0; margin: 0; }
+.play-world .lane-paper > div b { color: var(--violet); }
+.play-world .lane-paper small { display: block; margin-top: 10px; font-size: 9px; color: #686779; }
+.lane-business-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 19px 4px 3px; border: 0; background: none; }
+.lane-business-controls > div:first-child { min-width: 0; }
+.lane-business-controls strong { display: block; font-size: 13px; color: var(--ink); }
+.lane-business-controls span { font-size: 9px; color: #65708b; display: block; margin-top: 4px; }
+.lane-business-controls > div[role=group] { display: flex; gap: 4px; }
+.lane-business-controls button { font-size: 9px; color: #555e7b; padding: 7px 10px; min-height: 32px; border: 0; border-radius: 7px; background: #f5f5ff; }
+.lane-business-controls button.selected { color: #fff; background: var(--violet); box-shadow: 0 2px 4px #33246e20; }
+.world-sticker { display: flex; align-items: center; justify-content: center; flex-direction: column; width: 100px; height: 100px; border-radius: 50%; background: #ffd17c; color: #35304b; font-size: 11px; line-height: 1.4; text-align: center; position: absolute; left: -27px; bottom: 54px; transform: rotate(-10deg); box-shadow: 3px 4px 0 #d5a156; border: 2px solid #fff4df; }
+.world-sticker svg { margin-bottom: 3px; }
+.world-sticker strong { font-size: 16px; }
+.play-ribbon { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 22px; padding: 22px 8px; border-top: 1px solid #e3dcd6; border-bottom: 1px solid #e3dcd6; font-size: 11px; font-weight: 650; color: #686172; }
+.play-ribbon > span { display: flex; align-items: center; gap: 10px; }
+.play-ribbon svg { color: #8a6cbd; }
+.play-how { padding: 65px 0; }
+.play-section-heading { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 28px; }
+.play-section-heading h2 { font-size: clamp(24px, 2.5vw, 36px); line-height: 1.15; margin: 14px 0 0; }
+.play-section-heading > p { font-size: 12px; line-height: 1.8; }
+.play-feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+.play-feature { border: 1px solid #e5ddd4; background: #fffdf8; border-radius: 16px; padding: 14px 14px 20px; overflow: hidden; }
+.feature-visual { position: relative; display: flex; justify-content: center; align-items: center; height: 168px; border-radius: 10px; overflow: hidden; }
+.peach .feature-visual { background: #ffe2cc; }
+.lilac .feature-visual { background: #e4dffa; }
+.blue .feature-visual { background: #dce9ff; }
+.feature-number { position: absolute; top: 12px; left: 12px; font-size: 10px; font-weight: 800; color: #4c4763; border: 1px solid #aaa0b7; padding: 4px 6px; border-radius: 5px; }
+.play-feature h3 { margin: 21px 10px 7px; font-size: 21px; letter-spacing: -.65px; }
+.play-feature p { margin: 0 10px; font-size: 12px; color: #666479; }
+.mini-store { color: #80432b; display: flex; flex-direction: column; align-items: center; gap: 7px; transform: rotate(-5deg); background: #fff5e3; padding: 17px 30px 14px; border: 2px solid #bb775a; box-shadow: 5px 5px 0 #e7b294; border-radius: 14px 14px 4px 4px; }
+.mini-store > span { font-size: 8px; font-weight: 800; letter-spacing: 1px; }
+.feature-doodle { position: absolute; right: 33px; top: 17px; color: #cf7147; font-size: 35px; }
+.mini-receipt { background: #fff; width: 210px; padding: 16px; transform: rotate(5deg); border: 1px solid #b6a8d3; border-radius: 6px; box-shadow: 5px 6px 0 #c4b9e8; font-size: 9px; color: #706781; }
+.mini-receipt > span, .mini-ledger > span { font-size: 8px; letter-spacing: .8px; color: #706781; }
+.mini-receipt > strong { display: block; font-size: 12px; color: var(--ink); margin: 10px 0; }
+.mini-receipt > div { display: flex; justify-content: space-between; border-top: 1px dashed #ccc; padding-top: 7px; margin-top: 7px; }
+.mini-receipt b { color: var(--violet); }
+.mini-ledger { width: 230px; background: #fff; padding: 15px; border: 1px solid #a6bce0; box-shadow: 4px 5px 0 #becfec; border-radius: 6px; transform: rotate(-3deg); }
+.mini-ledger > div { display: grid; grid-template-columns: 1.5fr 1fr 1fr; border-bottom: 1px solid #e5e4eb; padding: 7px 0; color: #647087; font-size: 9px; }
+.mini-ledger small { display: flex; gap: 4px; align-items: center; color: #356c63; font-size: 8px; margin-top: 9px; }
+.play-teach { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 70px; padding: 48px; border-radius: 22px; background: #252c49; position: relative; overflow: hidden; }
+.play-teach .play-eyebrow { color: #c9c2ef; font-size: 8px; }
+.play-teach h2 { font-size: clamp(28px, 3vw, 43px); line-height: 1.1; color: #fff7e8; margin: 20px 0; }
+.play-teach h2 span { color: #ffba83; }
+.play-teach p { color: #c4c7db; font-size: 13px; margin-bottom: 22px; }
+.play-teach button { color: var(--ink); background: #ffbd87; border: 0; box-shadow: 0 4px 0 #a7674d; }
+.play-teach button:hover { background: #ffd0a7; }
+.play-teach small { display: block; font-size: 10px; color: #b1b6d0; margin-top: 16px; }
+.teach-diagram { padding: 0 15px 0 0; position: relative; }
+.teach-note, .teach-assignment { border-radius: 12px; padding: 25px; box-shadow: 0 12px 24px #11172c40; }
+.teach-note { transform: rotate(-4deg); background: #fff9e8; width: 85%; }
+.teach-note > span, .teach-assignment > span { display: flex; align-items: center; gap: 6px; font-size: 8px; font-weight: 800; letter-spacing: 1px; color: #7b6387; }
+.teach-note h3, .teach-assignment h3 { font-size: 18px; margin: 16px 0 10px; letter-spacing: -.4px; }
+.teach-note p, .teach-assignment p { color: #65637b; font-size: 11px; margin-bottom: 10px; }
+.note-lines { height: 15px; border-top: 2px solid #e2d9cc; border-bottom: 2px solid #e2d9cc; width: 75%; }
+.teach-arrow { position: absolute; top: 105px; right: -9px; font-size: 55px; color: #ffbd87; transform: rotate(15deg); }
+.teach-assignment { background: #e6deff; position: relative; margin: -10px 0 0 15%; transform: rotate(3deg); }
+.teach-assignment > div { display: flex; gap: 5px; margin-top: 18px; flex-wrap: wrap; }
+.teach-assignment > div span { font-size: 8px; background: #fff9; color: #615179; border-radius: 4px; padding: 5px; }
+.play-footer { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 36px 0 12px; color: #797187; font-size: 10px; }
+.play-footer strong { display: inline-block; color: var(--ink); font-size: 18px; margin-right: 14px; letter-spacing: -.7px; }
+.play-footer a { font-size: 10px; color: #685a84; }
+
+/* Business HQ and assignment cards. */
+.intro { padding: 35px 0 25px; }
+.intro h1 { font-size: 36px; font-weight: 800; }
+.intro p { font-size: 13px; }
+.student-heading #import { display: inline-flex; gap: 8px; }
+.tabs { gap: 6px; border: 1px solid var(--line); background: #fff; padding: 5px; border-radius: 12px; margin-bottom: 25px; width: fit-content; max-width: 100%; overflow-x: auto; }
+.tabs button { display: flex; align-items: center; gap: 8px; padding: 10px 19px; white-space: nowrap; border-radius: 7px; color: #6a6f82; background: none; border: 0; min-height: 40px; font-size: 12px; font-weight: 650; }
+.tabs button.selected { color: var(--violet); background: #eeebfc; border: 0; font-weight: 750; }
+.tabs button:hover { background: #f2f0fc; }
+.dashboard-banner { display: flex; justify-content: space-between; align-items: center; padding: 32px 42px; border-radius: 18px; overflow: hidden; background: #e5defb; border: 1px solid #d3c8f5; }
+.dashboard-banner h2 { font-size: 36px; margin: 13px 0 12px; line-height: 1.12; }
+.dashboard-banner h2 > span { color: var(--violet); }
+.dashboard-banner p { color: #605875; font-size: 13px; margin-bottom: 0; }
+.dashboard-art { width: 270px; height: 180px; position: relative; display: flex; align-items: center; justify-content: center; margin-right: 25px; color: #5145a4; }
+.dashboard-art > svg { z-index: 1; background: #fff9e9; width: 145px; height: 145px; padding: 25px; border-radius: 30px; transform: rotate(-7deg); box-shadow: 6px 7px 0 #c1b3eb; }
+.art-orbit { position: absolute; width: 245px; height: 100px; border: 1px dashed #9e8bcf; border-radius: 50%; transform: rotate(-20deg); }
+.art-note { position: absolute; display: flex; align-items: center; gap: 6px; z-index: 2; background: #ffd797; border-radius: 8px; padding: 10px 14px; bottom: 0; right: 0; transform: rotate(6deg); color: #68441e; font-size: 11px; font-weight: 750; box-shadow: 3px 3px 0 #cbac85; }
+.art-spark { position: absolute; right: 13px; top: 0; font-size: 40px; color: #f18759; }
+.dashboard-stats { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; margin: 20px 0 32px; }
+.dashboard-stats > div { display: flex; gap: 13px; align-items: center; border: 1px solid var(--line); border-radius: 13px; padding: 18px 22px; background: #fff; }
+.stat-icon { display: grid; place-items: center; width: 43px; height: 43px; flex-shrink: 0; border-radius: 12px; }
+.stat-icon.lilac { background: #eee7fe; color: #6b51bb; }
+.stat-icon.peach { background: #ffe7d8; color: #ad5734; }
+.stat-icon.blue { background: #e3eeff; color: #496ca7; }
+.dashboard-stats p { margin: 0; line-height: 1.4; }
+.dashboard-stats strong { font-size: 23px; display: block; color: var(--ink); }
+.dashboard-stats p > span { font-size: 11px; display: block; margin-top: 3px; }
+.dashboard-layout { display: grid; grid-template-columns: minmax(0,1fr) 290px; gap: 26px; align-items: start; }
+.dashboard-section-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 17px; }
+.dashboard-section-title h2 { font-size: 21px; letter-spacing: -.5px; margin: 0; }
+.dashboard-section-title > span { font-size: 8px; font-weight: 750; letter-spacing: 1px; color: #777d91; }
+.dashboard-assignments .assignment-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.assignment-card { display: flex; flex-direction: column; padding: 23px; margin: 0; position: relative; border-top: 4px solid #bdb0ee; }
+.assignment-card:nth-child(even) { border-top-color: #f1ac85; }
+.assignment-card h2 { font-size: 23px; font-weight: 800; margin: 12px 0; line-height: 1.2; }
+.assignment-card p { font-size: 12px; line-height: 1.75; flex: 1; }
+.assignment-card .tag { font-size: 8px; letter-spacing: .8px; margin-top: 16px; }
+.assignment-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.assignment-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: #eee9ff; color: #6650b7; }
+.assignment-card:nth-child(even) .assignment-icon { background: #ffecdf; color: #b7653e; }
+.assignment-status { font-size: 9px; font-weight: 700; color: #73778a; padding: 5px 9px; background: #f0f1f6; border-radius: 20px; }
+.assignment-status.is-active { background: #eee7fc; color: #6550aa; }
+.assignment-status.is-complete { background: #e1f0e9; color: #256b57; }
+.assignment-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 13px 0 16px; }
+.assignment-meta span { background: #f2f3f9; color: #73768c; padding: 6px 8px; border-radius: 5px; font-size: 9px; }
+.assignment-card button { width: 100%; margin-top: 14px; justify-content: space-between; border-radius: 8px; }
+.assignment-card .card-progress { margin-top: 0; }
+.meter { height: 7px; background: #e9e8f3; }
+.meter span { background: #7763cf; }
+.card-progress small { font-size: 10px; color: #75778d; }
+.business-summary { margin-top: 39px; text-align: center; padding: 20px; background: #fffaf2; border-color: #e9dfcd; box-shadow: none; }
+.business-summary > .tag { display: block; color: #8c795d; font-size: 8px; margin-bottom: 18px; }
+.business-summary .class-shop { margin: 0 auto 19px; }
+.business-summary h3 { font-size: 19px; letter-spacing: -.5px; margin-bottom: 5px; }
+.business-summary > p { font-size: 10px; color: #89795f; margin-top: 0; }
+.business-tip { display: flex; gap: 9px; align-items: flex-start; text-align: left; padding: 15px 0; margin: 15px 0; border-top: 1px solid #e8dfd0; border-bottom: 1px solid #e8dfd0; }
+.business-tip svg { color: #9b7b42; flex-shrink: 0; }
+.business-tip p { margin: 0; font-size: 11px; font-weight: 700; color: #736347; }
+.business-tip p > span { display: block; font-size: 10px; font-weight: 400; margin-top: 6px; line-height: 1.65; }
+.business-summary button { font-size: 10px; background: transparent; width: 100%; border-color: #dcd1bb; }
+.class-shop { border-radius: 12px; background: #dce7ff; border: 1px solid #bfd0ed; }
+.class-shop .shop-sign { border-radius: 5px; }
+.class-shop .district-line { color: #61739a; font-size: 8px; letter-spacing: .7px; }
+.class-shop .class-awning { background: repeating-linear-gradient(90deg,var(--brand) 0 24px,#fff2d4 24px 48px); height: 23px; border-radius: 3px 3px 0 0; }
+.class-shop .class-windows { background: #f0c49b; gap: 11px; margin-inline: 18px; }
+.class-shop .class-windows > span { background: #89a8d1; border-color: #fff0d2; color: #fff3d9; }
+.class-shop .class-windows .shop-door { background: var(--brand); color: #fff; }
+.class-shop.modern .class-awning { background: var(--brand); height: 9px; }
+.class-shop.modern .class-windows { background: #d4def3; }
+.class-shop.garden .class-windows { border-color: #4e8f7c; }
+.designer-heading { padding: 34px 0 8px; }
+.designer-heading h1 { font-weight: 850; font-size: 38px; letter-spacing: -1.5px; }
+.business-designer { gap: 30px; margin-top: 20px; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); }
+.business-designer > section:first-child { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+.business-designer h2 { font-size: 24px; }
+.business-picker { gap: 11px; }
+.business-tile { border-radius: 11px; border: 1px solid #dce0ed; background: #fafaff; padding: 17px; transition: border-color .15s, background .15s, transform .15s; }
+.business-tile:hover { background: #f1edff; border-color: #b4a5e4; transform: translateY(-2px); }
+.business-tile.chosen { border: 2px solid var(--violet); background: #f0ebff; padding: 16px; box-shadow: 0 3px 9px #5145bd0c; }
+.business-icon { color: var(--violet); background: #e5defb; border-radius: 9px; }
+.business-tile:nth-child(3n+2) .business-icon { background: #ffe4d3; color: #ab5b37; }
+.business-tile:nth-child(3n) .business-icon { background: #dceafb; color: #4c6caa; }
+.business-tile strong { font-size: 13px; }
+.business-tile small { color: #6f7489; font-size: 10px; }
+.designer-preview { background: #fffaf3; border-color: #ebdfcf; }
+.designer-preview button[type=submit], .designer-preview > button { width: 100%; }
+
+/* The workbench: colorful wayfinding, quiet documents, clear states. */
+.ws { margin-top: 24px; gap: 22px; }
+.ws-top > button { color: #67608d; border-color: #dbd5ef; padding-left: 12px; }
+.ws-head { border: 0; padding: 0; margin: 0; background: none; flex-wrap: nowrap; }
+.ws-head h1 { font-size: 34px; font-weight: 850; letter-spacing: -1px; }
+.ws-head .assignment-overview { color: #74778d; font-size: 12px; }
+.ws-meter { background: #fff; padding: 15px 18px; min-width: 195px; border-radius: 12px; border: 1px solid var(--line); }
+.ws-meter strong { color: var(--violet); font-size: 29px; }
+.ws-meter small { font-size: 10px; }
+.ws-steps { background: #e5e6f0; padding: 5px; gap: 4px; border-radius: 12px; }
+.ws-steps li { background: transparent; color: #73778e; border-radius: 8px; padding: 13px 15px; font-size: 12px; }
+.ws-steps li > span { color: #6b648c; background: #f4f3fb; width: 25px; height: 25px; }
+.ws-steps li.current { color: #fff; background: var(--violet); box-shadow: 0 3px 8px #5145bd20; }
+.ws-steps li.current > span { color: var(--violet); }
+.ws-steps li.done { background: #e0eee8; color: #326a59; }
+.ws-steps li.done > span { background: #357663; }
+.ws-list { background: #fbfaff; padding: 18px 12px; border-color: #dcd7ee; border-radius: 14px; }
+.ws-list h3 { padding: 0 8px 12px; margin-bottom: 0; border-bottom: 1px solid #e7e2f2; font-size: 14px; }
+.ws-list h4 { margin: 20px 10px 9px; color: #8a809d; font-size: 9px; letter-spacing: 1.1px; }
+.ws-record { border-radius: 8px; padding: 12px 9px; color: #5c5a77; }
+.ws-record:hover { background: #efebfb; }
+.ws-record.active { border-color: #aa99df; background: #eeebfc; box-shadow: inset 3px 0 0 #7660c2; color: #4f4389; }
+.ws-record strong { font-size: 11px; line-height: 1.5; }
+.ws-record small { font-size: 9px; color: #7a748b; margin-top: 4px; }
+.ws-dot { border-color: #cbc5df; height: 19px; width: 19px; margin-top: 3px; }
+.ws-record.done .ws-dot { background: #357663; border-color: #357663; }
+.ws-record.retry .ws-dot { background: #ae6234; border-color: #ae6234; }
+.ws-task { padding: 24px; }
+.ws-task-head { padding-bottom: 16px; margin-bottom: 22px; border-bottom: 1px solid #e7e8f0; }
+.ws-task-head h2 { font-size: 25px; margin-top: 8px; letter-spacing: -.8px; }
+.ws-task-head p { font-size: 12px; }
+.ws-chip { background: #f0edf7; color: #7a6c8e; font-size: 10px; padding: 6px 12px; }
+.ws-chip.done { background: #e2f1e9; color: #2f755d; }
+.ws-chip.retry { background: #ffebd8; color: #9c5c2e; }
+.guided-workspace { gap: 22px; }
+.guided-task-heading { background: #ede8fc; color: var(--violet); border-color: #d6cdef; border-radius: 8px; }
+.guided-task-heading h3 { color: #524184; }
+.bookkeeper { background: #f8f7fe; border-color: #e0dcf0; border-radius: 10px; }
+.source-document { background: #fffefa; border: 1px solid #e5dece; border-radius: 6px; box-shadow: 3px 4px 0 #efece3; }
+.document-type { color: #786548; }
+.document-paper { background: #fffefa; }
+.entry-form h3 { color: #4d3e88; }
+.entry-table select, .entry-table input { background: #fff; padding: 8px; font-size: 12px; }
+.entry-feedback { border-radius: 9px; }
+.correct, .entry-feedback.correct { background: #e7f3ec; color: #2f6b53; border-color: #bcdcc9; }
+.incorrect, .entry-feedback.incorrect { background: #fff0df; color: #945728; border-color: #efcc9d; }
+.ws-next { background: #e9e3fc; border-color: #d2c6f3; padding: 23px; border-radius: 13px; }
+.ws-next h3 { color: #51418a; font-size: 21px; letter-spacing: -.5px; }
+.ws-next p { color: #796d96; font-size: 11px; }
+.ws-next .tag { color: #8472ac; }
+.ws-next.ready { background: #e5f1eb; border-color: #bbd7c9; }
+.ws-next-record { background: #36304f; }
+.ws-journal { padding: 20px 24px; overflow-x: auto; }
+.ws-journal summary { color: #645585; font-size: 12px; }
+th { color: #6b6181; background: #f5f2fb; }
+td { border-bottom-color: #e7e5ee; }
+.plan-option { border: 1px solid #d8d5e7; border-radius: 12px; background: #fff; }
+.plan-option:has(input:checked) { border-color: #9781cf; background: #f3efff; box-shadow: inset 3px 0 0 #8671c4; }
+.episode-strip, .episode-scene, .start-guide { background: #eeebfc; color: #5c5084; border-color: #dbd2f1; border-radius: 12px; }
+.start-guide strong { color: #514184; }
+.guided-path span { color: #746494; background: #eee8fc; }
+.guided-path span.current { background: var(--violet); color: #fff; }
+.t-account { border-color: #d0c6e5; background: #fff; border-radius: 8px; }
+.t-account h4 { color: #5a4b7c; }
+
+/* Instructor studio. */
+.studio-heading { background: #252c49; border-radius: 18px; padding: 32px; margin: 28px 0; position: relative; overflow: hidden; }
+.studio-heading .tag { color: #c1b4f2; }
+.studio-heading h1 { color: #fff7e8; font-size: 39px; font-weight: 800; }
+.studio-heading p { color: #bdc3da; font-size: 13px; }
+.studio-heading > #new-draft { background: #ffbd87; color: #33304b; border-color: #ffbd87; }
+.studio-roadmap { border-radius: 13px; border-color: #dbd9ea; background: #fff; margin-bottom: 26px; }
+.studio-roadmap li { border-color: #e3dff0; color: #8a809c; padding: 19px 22px; }
+.studio-roadmap li > span { border-color: #cec6e1; color: #8d80a5; }
+.studio-roadmap .current { background: #eeebfc; color: #57438c; }
+.studio-roadmap .current > span { background: var(--violet); border-color: var(--violet); color: #fff; }
+.studio-roadmap .done > span { background: #ddd3f4; color: #5e498a; }
+.studio-roadmap strong { font-weight: 750; }
+.studio-source, .studio-settings { padding: 25px!important; border-radius: 15px; }
+.studio-source { border-top: 4px solid #a08bd5; }
+.studio-settings { background: #fffaf3; border-color: #e8ddcb; border-top: 4px solid #e7a87c; }
+.studio-section-title h2 { font-size: 23px; font-weight: 800; }
+.studio-section-title p { font-size: 12px; }
+.studio-options { border-color: #e7dccb; }
+.studio-options summary { color: #785f40; }
+.studio-options summary span { color: #91806a; }
+.studio-settings #edit-draft-notes { color: #786298; }
+.upload-zone, .dropzone { background: #f5f2fc; border-color: #bfb1df; border-radius: 10px; }
+.record-batch { border-radius: 13px; border-color: #dcd5ec; }
+.professor-summary { color: #574484; background: #eee8fb; border-color: #d0c3e7; }
+#use-sample-notes { color: #634994; background: #eee8fc; border-color: #d0c3ed; min-height: 38px; font-size: 11px; }
+.draft-preview { border-radius: 10px; }
+dialog, #lesson-dialog { color: var(--ink); background: #fff; border-radius: 18px; border: 1px solid #c7bade; box-shadow: 0 24px 100px #1c173d40; }
+dialog::backdrop { background: #22223b77; backdrop-filter: blur(3px); }
+
+@media (min-width: 1600px) { .shell { max-width: 1440px; } }
+@media (max-width: 1150px) {
+  .shell { padding-inline: 32px; }
+  .play-hero { gap: 28px; padding: 50px 0; }
+  .play-hero h1 { font-size: 65px; letter-spacing: -3.5px; }
+  .play-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .play-actions > button { min-width: 210px; }
+  .play-world .lane-paper { width: 76%; padding: 16px; right: 8px; }
+  .lane-business-controls { flex-direction: column; align-items: flex-start; }
+  .world-sticker { width: 85px; height: 85px; left: -20px; bottom: 95px; font-size: 9px; }
+  .play-teach { padding: 36px; gap: 36px; }
+  .dashboard-layout { grid-template-columns: minmax(0,1fr) 260px; gap: 20px; }
+  .dashboard-assignments .assignment-list { grid-template-columns: 1fr; }
+  .dashboard-stats > div { padding: 16px; }
+}
+@media (max-width: 850px) {
+  .shell { padding-inline: 24px; }
+  .play-hero { grid-template-columns: 1fr; gap: 38px; padding: 40px 0 46px; }
+  .play-hero h1 { font-size: clamp(57px, 10vw, 78px); letter-spacing: -3px; }
+  .play-hero h1 br:last-of-type { display: none; }
+  .play-hero-copy { max-width: 620px; }
+  .play-actions { flex-direction: row; }
+  .play-actions > button { min-width: 0; }
+  .play-world { width: 100%; max-width: 610px; margin: 0 auto; transform: none; }
+  .lane-business-controls { flex-direction: row; align-items: center; }
+  .play-world .lane-paper { width: 67%; right: 20px; padding: 19px; }
+  .world-sticker { bottom: 65px; left: 8px; }
+  .play-section-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .play-feature-grid { gap: 12px; }
+  .play-feature { padding: 10px 10px 18px; }
+  .feature-visual { height: 145px; }
+  .mini-store { padding: 15px; }
+  .mini-ledger, .mini-receipt { width: 90%; padding: 12px; }
+  .feature-number { top: 7px; left: 7px; z-index: 1; font-size: 8px; }
+  .feature-doodle { right: 8px; top: 3px; }
+  .play-teach { gap: 35px; grid-template-columns: 1fr; }
+  .teach-diagram { max-width: 460px; width: 100%; margin: 0 auto; }
+  .dashboard-banner { padding: 28px; }
+  .dashboard-banner h2 { font-size: 31px; }
+  .dashboard-art { width: 190px; margin-right: 0; }
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .dashboard-assignments .assignment-list { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .business-summary { margin-top: 0; }
+  .business-summary .class-shop { max-width: 280px; }
+  .dashboard-stats { gap: 10px; }
+  .dashboard-stats > div { gap: 9px; }
+  .dashboard-stats p > span { font-size: 9px; }
+  .stat-icon { width: 33px; height: 33px; border-radius: 9px; }
+  .dashboard-stats strong { font-size: 20px; }
+  .business-designer { grid-template-columns: 1fr; }
+  .ws-body { grid-template-columns: 1fr; }
+  .ws-list { position: static; max-height: none; }
+  .ws-list ul { flex-direction: row; overflow-x: auto; padding: 8px 0; }
+  .ws-list li { flex: none; width: 210px; }
+  .ws-head { flex-direction: column; align-items: stretch; }
+  .ws-meter { text-align: left; min-width: 0; }
+  .app-header .mode-switch { margin-left: auto; }
+}
+@media (max-width: 600px) {
+  .shell { padding-inline: 18px; }
+  .shell > .app-header { padding: 18px 0; flex-wrap: wrap; column-gap: 10px; row-gap: 14px; }
+  .brand { font-size: 23px; gap: 9px; }
+  .brand .brand-mark { width: 38px; height: 38px; border-radius: 11px; }
+  .brand small { font-size: 6px; letter-spacing: 1.4px; }
+  .app-header .header-tools { width: 100%; justify-content: flex-end; border-top: 1px solid #e1dfea; padding-top: 10px; gap: 1px; }
+  body[data-screen=welcome] .app-header .header-tools { width: auto; border: 0; padding: 0; }
+  .app-header .header-tools button { font-size: 10px; padding: 8px 10px; }
+  .app-header .header-tools #cloud-login { padding: 8px 12px; }
+  .app-header .mode-switch { margin: 0 0 0 auto; }
+  .app-header .mode-switch button { font-size: 10px; padding: 7px 10px; }
+  .play-hero { padding-top: 32px; gap: 32px; }
+  .play-eyebrow { font-size: 7px; letter-spacing: 1.2px; }
+  .play-hero h1 { font-size: 56px; letter-spacing: -3px; line-height: 1.02; margin: 20px 0; }
+  .play-hero h1 br:last-of-type { display: block; }
+  .play-hero-copy > p { font-size: 14px; }
+  .play-actions { gap: 13px; margin-top: 22px; }
+  .play-actions > button { width: 100%; font-size: 13px; min-height: 48px; }
+  .play-demo-note { font-size: 10px; }
+  .play-world { padding: 10px; border-radius: 18px; box-shadow: 4px 6px 0 #e6dff9; }
+  .world-label { font-size: 6px; letter-spacing: 1px; }
+  .play-world .lane-scene { padding-bottom: 88px; }
+  .play-world .lane-paper { width: 79%; right: 0; padding: 13px; }
+  .play-world .lane-paper > strong { font-size: 13px; margin: 8px 0; }
+  .play-world .lane-paper-type { font-size: 6px; letter-spacing: .65px; }
+  .play-world .lane-paper small { font-size: 7px; }
+  .world-sticker { width: 65px; height: 65px; left: 4px; bottom: 104px; font-size: 7px; }
+  .world-sticker strong { font-size: 11px; }
+  .world-sticker svg { height: 14px; }
+  .lane-business-controls { gap: 12px; flex-wrap: wrap; }
+  .lane-business-controls strong { font-size: 12px; }
+  .lane-business-controls button { padding: 8px 10px; min-height: 36px; font-size: 9px; }
+  .play-ribbon { flex-direction: column; gap: 15px; padding: 23px 0; font-size: 11px; }
+  .play-how { padding: 40px 0; }
+  .play-section-heading h2 { font-size: 26px; letter-spacing: -.85px; }
+  .play-section-heading > p { font-size: 11px; }
+  .play-feature-grid { grid-template-columns: 1fr; gap: 17px; }
+  .play-feature { padding: 12px 12px 23px; }
+  .feature-visual { height: 170px; }
+  .mini-ledger, .mini-receipt { width: 225px; padding: 16px; }
+  .mini-store { padding: 16px 40px; }
+  .feature-number { top: 12px; left: 12px; font-size: 10px; }
+  .feature-doodle { top: 15px; right: 35px; }
+  .play-feature h3 { font-size: 24px; }
+  .play-feature p { font-size: 13px; }
+  .play-teach { padding: 30px 22px; gap: 40px; border-radius: 16px; }
+  .play-teach .play-eyebrow { font-size: 6px; letter-spacing: .8px; }
+  .play-teach h2 { font-size: 34px; }
+  .play-teach p { font-size: 12px; }
+  .play-teach button { font-size: 11px; width: 100%; }
+  .teach-diagram { padding: 0 7px 0 0; }
+  .teach-note, .teach-assignment { padding: 20px; }
+  .teach-note h3, .teach-assignment h3 { font-size: 16px; }
+  .teach-note p, .teach-assignment p { font-size: 10px; }
+  .teach-arrow { font-size: 36px; right: -8px; top: 115px; }
+  .play-footer { flex-direction: column; align-items: flex-start; padding-top: 25px; }
+  .play-footer > span { display: flex; flex-direction: column; gap: 7px; }
+  .intro { padding-top: 27px; gap: 15px; }
+  .intro h1 { font-size: 29px; }
+  .intro p { font-size: 11px; }
+  .student-heading { align-items: flex-start; flex-direction: column; }
+  .student-heading #import { font-size: 10px; min-height: 36px; }
+  .tabs { width: 100%; gap: 2px; }
+  .tabs button { font-size: 10px; padding: 8px 12px; gap: 6px; }
+  .tabs button svg { width: 14px; height: 14px; }
+  .dashboard-banner { padding: 26px 23px; position: relative; }
+  .dashboard-banner h2 { font-size: 28px; }
+  .dashboard-banner .tag { font-size: 7px; letter-spacing: 1px; }
+  .dashboard-banner p { font-size: 11px; }
+  .dashboard-art { display: none; }
+  .dashboard-stats { grid-template-columns: 1fr; gap: 9px; margin: 15px 0 26px; }
+  .dashboard-stats > div { padding: 11px 15px; gap: 12px; }
+  .dashboard-stats p { display: flex; align-items: center; gap: 12px; }
+  .dashboard-stats p > span { font-size: 10px; margin: 0; }
+  .dashboard-stats strong { font-size: 22px; min-width: 20px; }
+  .dashboard-section-title h2 { font-size: 20px; }
+  .dashboard-section-title > span { font-size: 6px; }
+  .dashboard-assignments .assignment-list { grid-template-columns: 1fr; }
+  .assignment-card { padding: 23px; }
+  .assignment-card h2 { font-size: 25px; }
+  .assignment-card p { font-size: 13px; }
+  .card { padding: 22px; }
+  .business-designer > section:first-child { padding: 22px 16px; }
+  .business-tile { padding: 13px; }
+  .business-tile.chosen { padding: 12px; }
+  .business-tile small { font-size: 10px; }
+  .designer-heading h1 { font-size: 30px; }
+  .ws { gap: 18px; }
+  .ws-head h1 { font-size: 29px; }
+  .ws-top { gap: 9px; }
+  .ws-top button { font-size: 10px; padding: 9px 11px; min-height: 36px; }
+  .ws-tools { flex-wrap: wrap; }
+  .ws-steps { overflow-x: auto; padding: 5px; }
+  .ws-steps li { flex: none; font-size: 11px; padding: 10px; }
+  .ws-task { padding: 18px 14px; }
+  .ws-task-head { gap: 10px; flex-wrap: wrap; }
+  .ws-task-head h2 { font-size: 23px; }
+  .ws-task-head p { font-size: 11px; }
+  .ws-chip { font-size: 9px; }
+  .ws-next { padding: 20px; }
+  .ws-next button { white-space: normal; }
+  .source-document { overflow-x: auto; }
+  .entry-table { min-width: 0; }
+  .entry-table select, .entry-table input { min-width: 0; padding: 8px 4px; font-size: 10px; }
+  .studio-heading { padding: 27px 23px; margin-top: 20px; }
+  .studio-heading h1 { font-size: 31px; }
+  .studio-heading p { font-size: 12px; }
+  .studio-heading > #new-draft { margin-top: 8px; }
+  .studio-roadmap { grid-template-columns: 1fr; }
+  .studio-roadmap li { padding: 14px 17px; border-right: 0; }
+  .studio-source, .studio-settings { padding: 21px!important; }
+  .studio-section-title h2 { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none!important; transition: none!important; scroll-behavior: auto!important; }
+}
 </style></head><body><div id="classroom"></div><script>(function(root){
 let definitions={};
 const cents=n=>Math.round((n+Number.EPSILON)*100)/100;
@@ -332,12 +846,133 @@ function generatedScenario(a,choice,business={name:'Your business',type:'Coffee 
 
 const api={isReportEvent,journalEvents,expandAccountChoices,trialBalance,enableSimulation,withBusinessActivity,neutralizeBusinessText,syncBusinessEntries,pendingDecision,decisionControls,pendingMonth,finalStage,finalDate,personalize,personalizeDocument,decisions:D,generatedIssues,validGenerated,generatedScenario,topic,businesses,colors,styles,districts,normalizeBusiness,concepts,analyzeNotes,generateAssignment,episodeChoices,defaultEpisodeChoice,validEpisodeChoice,availableEvents,topics,accounts,checkAssignment,suggestTopic,expected,validateRows,assess,balances,grade,day,end};if(typeof module!=='undefined')module.exports=api;else root.Lessons=api;
 })(globalThis);
-</script><script>// Original storefront artwork and the public product introduction.
-let previewBusiness='coffee';
-const previewBusinesses={coffee:{name:'Tommy’s Coffee',type:'Coffee shop',sign:'TOMMY’S COFFEE',color:'#264e42',window:'COFFEE · EVERY DAY',item:'Coffee and pastries',invoice:'Harbor Coffee Supply',amount:'$420.00'},bakery:{name:'Sunday Bakery',type:'Bakery',sign:'SUNDAY BAKERY',color:'#a65f43',window:'BREAD · BAKED HERE',item:'Bread and baked goods',invoice:'Miller Baking Supply',amount:'$360.00'},flowers:{name:'Field & Stem',type:'Flower studio',sign:'FIELD & STEM',color:'#647452',window:'FLOWERS · FOR EVERY DAY',item:'Flowers and arrangements',invoice:'Greenhouse Wholesale',amount:'$285.00'}};
-function storefrontArt(b){return `<svg class="lane-art" viewBox="0 0 680 470" role="img" aria-label="${safe(b.name)} on a neighborhood shopping street"><defs><pattern id="brick-lines" width="38" height="22" patternUnits="userSpaceOnUse"><path d="M0 22H38M19 0v11M0 11H38M0 11v11M38 11v11" fill="none" stroke="#8b806f" stroke-width=".5" opacity=".28"/></pattern><linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#769087"/><stop offset=".5" stop-color="#b6c6b8"/><stop offset="1" stop-color="#59756b"/></linearGradient><pattern id="awning-stripes" width="32" height="30" patternUnits="userSpaceOnUse"><rect width="32" height="30" fill="#efebda"/><rect width="16" height="30" fill="${b.color}"/></pattern></defs><rect width="680" height="470" fill="#e4e8dd"/><path d="M0 95H680M0 150H680" stroke="#d5dccf" stroke-width=".6"/><circle cx="560" cy="80" r="40" fill="#f4efd9"/><path d="M0 367h680v103H0Z" fill="#d7d6c9"/><path d="M0 412h680v58H0Z" fill="#b1b8aa"/><path d="M0 437h680" stroke="#e5e6d6" stroke-width="2" stroke-dasharray="38 25"/><path d="M15 369h650M0 405h680" stroke="#f7f5e8" stroke-width="4"/><g opacity=".7"><rect x="12" y="190" width="143" height="175" fill="#c9baa3"/><rect x="12" y="190" width="143" height="175" fill="url(#brick-lines)"/><path d="M4 184h158v12H4Z" fill="#b5aa92"/><rect x="29" y="210" width="111" height="26" fill="#f3e9d5"/><text x="84" y="227" font-size="9" text-anchor="middle" fill="#807960" font-family="Arial" letter-spacing="2">THE BOOK ROOM</text><rect x="30" y="250" width="52" height="97" fill="#8fa399"/><rect x="90" y="250" width="44" height="112" fill="#bfb297"/><path d="M33 274h45M33 302h45M33 330h45" stroke="#d7d6bb" stroke-width="3"/><rect x="538" y="165" width="140" height="200" fill="#d1bdac"/><rect x="538" y="165" width="140" height="200" fill="url(#brick-lines)"/><path d="M530 160h150v12H530Z" fill="#b5a18e"/><rect x="554" y="195" width="111" height="32" fill="#b88a6d"/><text x="610" y="215" fill="#f6efdf" font-family="Arial" font-size="9" text-anchor="middle" letter-spacing="2">CORNER STUDIO</text><rect x="555" y="248" width="99" height="100" fill="#91a19a"/><path d="M605 248v100" stroke="#d5ccbb" stroke-width="5"/></g><g><path d="M158 352h372l15 20H143Z" fill="#929888" opacity=".24"/><rect x="171" y="126" width="344" height="232" fill="#ded2ba"/><rect x="171" y="126" width="344" height="232" fill="url(#brick-lines)"/><path d="M162 121h362v13H162Z" fill="#bab197"/><path d="M169 135h348v5H169Z" fill="#f4eedf"/><rect x="185" y="153" width="316" height="51" rx="1" fill="${b.color}"/><rect x="192" y="160" width="302" height="37" fill="none" stroke="#f2e7ce" stroke-width=".7" opacity=".5"/><text x="343" y="183" text-anchor="middle" fill="#f9f2df" font-size="20" font-family="Georgia,serif" letter-spacing="2">${safe(b.sign)}</text><path d="M181 210h324l16 33H165Z" fill="url(#awning-stripes)"/><path d="M165 243h356v11H165Z" fill="url(#awning-stripes)"/><path d="M169 254h348" stroke="#243d31" stroke-width="3" opacity=".2"/><rect x="190" y="267" width="96" height="77" fill="url(#glass)" stroke="#f7efdf" stroke-width="7"/><rect x="400" y="267" width="96" height="77" fill="url(#glass)" stroke="#f7efdf" stroke-width="7"/><path d="M202 274l60 60M212 274l60 60M412 274l60 60M422 274l60 60" stroke="#eaf0e4" stroke-width="10" opacity=".15"/><path d="M238 267v77M448 267v77" stroke="#f7efdf" stroke-width="3"/><rect x="306" y="261" width="74" height="97" fill="${b.color}"/><rect x="314" y="269" width="58" height="60" fill="url(#glass)" stroke="#d9d3bd" stroke-width="3"/><rect x="324" y="293" width="38" height="17" rx="1" fill="#f4eddc"/><text x="343" y="305" text-anchor="middle" fill="${b.color}" font-family="Arial" font-size="8" letter-spacing="1">OPEN</text><path d="M366 337v9" stroke="#dfcea5" stroke-width="3"/><path d="M176 352h334v8H176Z" fill="#c0b49b"/><text x="237" y="305" text-anchor="middle" fill="#fff8e8" font-family="Arial" font-size="6" letter-spacing=".7">${safe(b.window)}</text><rect x="433" y="314" width="31" height="19" fill="#e7d8bd"/><path d="M437 314c-5-18 5-25 12-17 9-19 17-8 10 17" fill="#728362"/></g><g><rect x="526" y="307" width="4" height="73" fill="#797b62"/><path d="M515 320h31v39h-31Z" fill="#f5ecda" stroke="#797b62" stroke-width="2"/><text x="530" y="336" font-family="Georgia" font-size="7" fill="#5b7053" text-anchor="middle">Welcome</text><path d="M521 345h18M524 350h12" stroke="#a5aa8d" stroke-width="1"/><rect x="112" y="326" width="3" height="53" fill="#8b8168"/><path d="M97 336h34l-2 4H99Z" fill="#c3b598"/><path d="M103 339v35M126 339v35" stroke="#847b65" stroke-width="2"/><path d="M53 360v28M54 215v145" stroke="#817f67" stroke-width="5"/><path d="M43 215h22l-3-29H46Z" fill="#f2e9cd" stroke="#817f67" stroke-width="2"/><path d="M53 186v-10" stroke="#817f67" stroke-width="2"/><rect x="587" y="369" width="47" height="7" fill="#83907a"/><path d="M591 376v11M631 376v11" stroke="#707b65" stroke-width="3"/><path d="M588 359h46v7h-46Z" fill="#83907a"/></g><g><path d="M650 273v110" stroke="#8b886b" stroke-width="6"/><ellipse cx="650" cy="249" rx="32" ry="56" fill="#98a582"/><ellipse cx="626" cy="265" rx="27" ry="41" fill="#a8b392"/><ellipse cx="667" cy="278" rx="27" ry="36" fill="#8f9e7b"/><path d="M649 274v81m0-31-13-14m13-6 13-18" stroke="#8b886b" stroke-width="2"/><rect x="10" y="346" width="22" height="27" rx="2" fill="#bba186"/><path d="M21 349c-30-24-7-52 1-33 17-34 31-2 5 21 14-15 21 4-6 12" fill="#7e8e68"/></g></svg>`;}
-function publicWelcome(){const b=previewBusinesses[previewBusiness];return `<section class="lane-welcome"><div class="lane-kicker"><span class="status-dot"></span>A classroom built around your business</div><div class="lane-hero"><div class="lane-hero-copy"><h1>Small business.<br><em>Big accounting<br> lessons.</em></h1><p>Open a coffee shop. Take a customer’s order. Read the invoice. Work out the entry.</p><p class="lane-hero-detail">A business simulation for financial accounting, with assignments shaped by your professor’s notes.</p><div class="lane-hero-actions"><button id="student">Try it as a student <span aria-hidden="true">→</span></button><button id="instructor-demo" class="secondary">Try it as an instructor <span aria-hidden="true">→</span></button></div><div class="lane-demo-note">No account needed. Both demos run in your browser. <button id="professor" class="link-button">Instructor sign in</button></div></div><div class="lane-business-preview"><div class="lane-preview-top"><span>YOUR BUSINESS, ALL SEMESTER</span><span>01 / 04</span></div><div class="lane-scene" id="welcome-scene">${storefrontArt(b)}<div class="lane-paper"><span class="lane-paper-type">SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>Read the record. Decide what belongs in the accounts.</small></div></div><div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id,x])=>`<button class="${previewBusiness===id?'selected':''}" data-preview-business="${id}" aria-pressed="${previewBusiness===id}">${id==='coffee'?'Coffee':id==='bakery'?'Bakery':'Flowers'}</button>`).join('')}</div></div></div></div><div class="lane-bottom-line"><span>MAKE THE DECISION.</span><span>READ THE RECORDS.</span><span>UNDERSTAND THE ENTRY.</span><a href="#how-ledger-works">See how it works ↓</a></div></section><section class="lane-how" id="how-ledger-works"><div class="lane-how-heading"><span class="lane-section-label">THE CLASSROOM</span><h2>The same business.<br>A fresh challenge each lesson.</h2><p>Your business stays with you. Each assignment starts with its own balances, so one mistake doesn’t follow you all semester.</p></div><div class="lane-how-steps"><article><span>01</span><div><h3>Make it yours</h3><p>Choose your business, name it, and design your storefront.</p></div></article><article><span>02</span><div><h3>Make a real choice</h3><p>Decide what your business does. Your choices create invoices, receipts, and reports.</p></div></article><article><span>03</span><div><h3>Keep the books</h3><p>Write dated entries, check your T accounts, and prepare the assigned reports. No “make sales” button.</p></div></article></div></section><section class="lane-instructor"><div><span class="lane-section-label">FOR INSTRUCTORS</span><h2>Teach from your notes.<br>Assign work that fits.</h2><p>Upload the material you’ve covered. Get a new business scenario, source documents, and an answer key to review. Publish it when you’re happy with the work.</p></div><div class="lane-note-stack"><div class="lane-notes-header"><span>Your course notes</span><span>PDF / DOCX / TEXT</span></div><div class="lane-notes-body"><span>PREPAID EXPENSES</span><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p></div><div class="lane-notes-result"><span>↓</span><p><strong>A lease for your student’s business</strong><br>Student decisions · source records · dated entries</p></div></div></section><footer class="lane-public-footer"><span>ledger lane <small>Financial accounting, put into practice.</small></span><a href="capstone.html">Explore the four-month simulation →</a></footer>`;}
-function wireWelcome(){if(Q('#instructor-demo')){if(typeof cloudAccount!=='undefined'&&cloudAccount)Q('#instructor-demo').hidden=true;Q('#instructor-demo').onclick=()=>{role='professor';notice='';render();};}document.querySelectorAll('[data-preview-business]').forEach(button=>button.onclick=()=>{previewBusiness=button.dataset.previewBusiness;const b=previewBusinesses[previewBusiness];Q('#welcome-scene').innerHTML=storefrontArt(b)+`<div class="lane-paper"><span class="lane-paper-type">SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>Read the record. Decide what belongs in the accounts.</small></div>`;Q('#preview-business-name').textContent=b.name;Q('#preview-business-item').textContent=b.item;document.querySelectorAll('[data-preview-business]').forEach(el=>{el.classList.toggle('selected',el===button);el.setAttribute('aria-pressed',String(el===button));});});}
+</script><script>// Original illustrations and product introduction. No external assets required.
+let previewBusiness = 'coffee';
+const previewBusinesses = {
+  coffee: { name: 'Tommy’s Coffee', type: 'Coffee shop', sign: 'TOMMY’S COFFEE', color: '#5b50d6', window: 'COFFEE & GOOD COMPANY', item: 'Coffee and pastries', invoice: 'Harbor Coffee Supply', amount: '$420.00' },
+  bakery: { name: 'Sunday Bakery', type: 'Bakery', sign: 'SUNDAY BAKERY', color: '#d34f35', window: 'BAKED WITH A LITTLE JOY', item: 'Bread and baked goods', invoice: 'Miller Baking Supply', amount: '$360.00' },
+  flowers: { name: 'Field & Stem', type: 'Plant shop', sign: 'FIELD & STEM', color: '#176e65', window: 'A LITTLE MORE COLOR', item: 'Plants and arrangements', invoice: 'Greenhouse Wholesale', amount: '$285.00' },
+};
+
+function laneIcon(name, size = 22) {
+  const paths = {
+    shop: '<path d="M3 10h18l-2-6H5l-2 6ZM4 10v10h16V10M9 20v-6h6v6M3 10c0 3 4 3 4 0 0 3 5 3 5 0 0 3 5 3 5 0 0 3 4 3 4 0"/>',
+    book: '<path d="M4 3h14a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V3Zm0 14h16M8 7h8M8 11h5"/>',
+    chart: '<path d="M4 3v17h17M8 15v-4M13 15V6M18 15V9"/>',
+    spark: '<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/>',
+    arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    check: '<path d="m5 12 4 4L19 6"/>',
+    coffee: '<path d="M5 8h12v7a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Zm12 1h2a3 3 0 0 1 0 6h-2M8 3v2m5-2v2M3 22h17"/>',
+    notes: '<path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h5"/>',
+    people: '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/>',
+  };
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.spark}</svg>`;
+}
+
+function storefrontArt(b) {
+  return `<svg class="lane-art" viewBox="0 0 680 470" role="img" aria-label="${safe(b.name)} on a colorful neighborhood street">
+  <rect width="680" height="470" rx="24" fill="#d9e5ff"/>
+  <circle cx="568" cy="82" r="42" fill="#ffd369"/>
+  <path d="M50 90h90m-45-15h80M430 46h58" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+  <path d="M0 340h680v130H0Z" fill="#bfc8ef"/><path d="M0 402h680v68H0Z" fill="#28334f"/>
+  <path d="M0 435h680" stroke="#f5cf77" stroke-width="3" stroke-dasharray="30 24"/>
+  <path d="M0 396h680" stroke="#fff" stroke-width="6"/>
+  <g stroke="#26324f" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M12 174 92 153l80 21v176H12Z" fill="#f6a27a"/>
+    <path d="M20 184h144v163H20Z" fill="#ffc69d"/>
+    <path d="M37 208h110v28H37Z" fill="#fff6db"/>
+    <path d="M37 253h43v85H37Zm59 0h51v85H96Z" fill="#707db7"/>
+    <path d="M37 274h43m16 15h51" stroke="#d7e3ff"/>
+    <path d="M534 139h134v211H534Z" fill="#a69de4"/>
+    <path d="M542 151h118v194H542Z" fill="#beb5f6"/>
+    <path d="M554 175h95v33h-95Z" fill="#fff5da"/>
+    <path d="M555 227h41v111h-41Zm54 0h40v111h-40Z" fill="#6b80b1"/>
+    <path d="M555 255h41m13 20h40" stroke="#d7e3ff"/>
+    <path d="M165 132h365v226H165Z" fill="#fdf4d8"/>
+    <path d="M154 123h387v15H154Z" fill="#ffcb6a"/>
+    <path d="M179 152h337v54H179Z" fill="${b.color}"/>
+    <path d="M180 215h335l17 38H163Z" fill="#fff4d9"/>
+    <path d="m204 215-8 38h27l5-38m32 0-2 38h28v-38m31 0 2 38h28l-4-38m32 0 7 38h28l-10-38m32 0 12 38h28l-15-38" fill="${b.color}" stroke="none"/>
+    <path d="M163 253v10c0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 33 12 33 0v-10Z" fill="${b.color}"/>
+    <path d="M184 281h106v65H184Zm219 0h107v65H403Z" fill="#809ed1"/>
+    <path d="M301 277h92v81h-92Z" fill="${b.color}"/>
+    <path d="M312 286h70v49h-70Z" fill="#afc9ef"/>
+    <path d="m198 284 47 59m179-59 47 59" stroke="#cde0ff" stroke-width="12"/>
+    <path d="M375 341v9" stroke="#ffcb6a" stroke-width="4"/>
+    <rect x="327" y="299" width="40" height="19" rx="4" fill="#fff5da"/>
+    <path d="M160 358h376v12H160Z" fill="#ffcb6a"/>
+    <path d="M562 331v50m-11-35h23" stroke="#26324f" stroke-width="4"/>
+    <path d="M546 331h36l-4 39h-28Z" fill="#ff9b72"/>
+    <path d="M583 330v-70" stroke="#26324f" stroke-width="5"/>
+    <ellipse cx="584" cy="248" rx="27" ry="42" fill="#3b9c85"/>
+    <ellipse cx="610" cy="267" rx="21" ry="30" fill="#7fc09c"/>
+    <path d="M582 274v75m0-50 20-18"/>
+    <path d="M121 330h27v37h-27Z" fill="#c47b63"/><path d="M134 330v-34m0 17-17-13m17 5 16-19" stroke="#287a66" stroke-width="7"/>
+    <path d="m54 361 13-33h36l12 33Z" fill="#fff5da"/><path d="M67 341h36m-39 10h42"/>
+  </g>
+  <g font-family="Arial,sans-serif" text-anchor="middle" font-weight="700">
+    <text x="347" y="185" font-size="22" fill="#fff">${safe(b.sign)}</text>
+    <text x="92" y="226" font-size="8" fill="#26324f" letter-spacing="1">THE BOOK ROOM</text>
+    <text x="602" y="195" font-size="9" fill="#26324f" letter-spacing="1">THE STUDIO</text>
+    <text x="347" y="312" font-size="9" fill="#26324f">OPEN</text>
+  </g>
+  <g fill="#26324f"><circle cx="237" cy="314" r="12"/><path d="M226 309h22v10c0 12-22 12-22 0Zm22 2h5v10h-5" fill="#fff0c6"/><path d="M231 302v-6m9 6v-6" stroke="#fff0c6" stroke-width="2"/></g>
+  <g fill="#ffe099"><path d="m461 295 4 8 9 2-7 6 1 10-7-5-8 5 2-10-7-6 9-2Z"/></g>
+  <ellipse cx="355" cy="383" rx="166" ry="5" fill="#26324f" opacity=".12"/>
+  </svg>`;
+}
+
+function previewRecord(b) {
+  return `<div class="lane-paper"><span class="lane-paper-type">${laneIcon('notes', 15)} SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>One business choice. A real accounting question.</small></div>`;
+}
+
+function publicWelcome() {
+  const b = previewBusinesses[previewBusiness];
+  return `<section class="play-hero">
+    <div class="play-hero-copy">
+      <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
+      <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
+      <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
+      <div class="play-actions"><button id="student">Try it as a student ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Try it as an instructor</button></div>
+      <div class="play-demo-note">No sign-up. No pressure. Just jump in.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
+    </div>
+    <div class="play-world">
+      <div class="world-label"><span>${laneIcon('shop', 16)} YOUR NEXT BIG IDEA</span><span>STARTS SMALL.</span></div>
+      <div class="lane-scene" id="welcome-scene">${storefrontArt(b)}${previewRecord(b)}</div>
+      <div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${id === 'coffee' ? 'Coffee' : id === 'bakery' ? 'Bakery' : 'Flowers'}</button>`).join('')}</div></div>
+      <div class="world-sticker">${laneIcon('spark', 20)} Learn it by<br><strong>living it.</strong></div>
+    </div>
+  </section>
+  <div class="play-ribbon"><span>${laneIcon('shop')} 10 business types. Make one yours.</span><span>${laneIcon('notes')} Realistic records, not random quizzes.</span><span>${laneIcon('check')} Feedback that helps it click.</span></div>
+  <section class="play-how" id="how-ledger-works">
+    <div class="play-section-heading"><div><span class="tag">FROM “WHAT?” TO “I GET IT.”</span><h2>You’re not just doing homework.<br>You’re running the place.</h2></div><p>The same business. A new challenge each lesson.<br>Every assignment starts with fresh books.</p></div>
+    <div class="play-feature-grid">
+      <article class="play-feature peach"><div class="feature-visual"><span class="feature-number">01</span><div class="mini-store">${laneIcon('shop', 64)}<span>YOUR NAME HERE</span></div><span class="feature-doodle">✳</span></div><h3>Make it yours.</h3><p>Coffee shop? Design studio? Neighborhood bakery? Name it, style it, and open your doors.</p></article>
+      <article class="play-feature lilac"><div class="feature-visual"><span class="feature-number">02</span><div class="mini-receipt"><span>BUSINESS DECISION</span><strong>Stock up for the month.</strong><div>Supplies ordered <b>✓</b></div><div>Invoice received <b>→</b></div></div></div><h3>Call the shots.</h3><p>Choose what to buy, when to pay, and what happens next. Your decisions create the records.</p></article>
+      <article class="play-feature blue"><div class="feature-visual"><span class="feature-number">03</span><div class="mini-ledger"><span>YOUR JOURNAL</span><div><strong>Account</strong><strong>Debit</strong><strong>Credit</strong></div><div><span>Supplies</span><b>420</b><span>—</span></div><div><span>Cash</span><span>—</span><b>420</b></div><small>${laneIcon('check', 14)} Balanced. Now it makes sense.</small></div></div><h3>Connect the dots.</h3><p>Read the document, write the entry, and see the impact. Get useful feedback, then try again.</p></article>
+    </div>
+  </section>
+  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>Your course notes.<br>Their <span>next chapter.</span></h2><p>Turn what you’ve taught into a business challenge. Review the decisions, documents, and answer key before sharing with your class.</p><button id="explore-studio">Explore the instructor demo ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
+  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="capstone.html">Explore the four-month simulation →</a></footer>`;
+}
+
+function wireWelcome() {
+  const signedIn = typeof cloudAccount !== 'undefined' && cloudAccount;
+  const openStudio = () => { role = 'professor'; notice = ''; render(); };
+  if (Q('#instructor-demo')) { Q('#instructor-demo').hidden = !!signedIn; Q('#instructor-demo').onclick = openStudio; }
+  if (Q('#explore-studio')) { Q('#explore-studio').hidden = !!signedIn; Q('#explore-studio').onclick = openStudio; }
+  document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
+    previewBusiness = button.dataset.previewBusiness;
+    const b = previewBusinesses[previewBusiness];
+    Q('#welcome-scene').innerHTML = storefrontArt(b) + previewRecord(b);
+    Q('#preview-business-name').textContent = b.name;
+    Q('#preview-business-item').textContent = b.item;
+    document.querySelectorAll('[data-preview-business]').forEach((el) => {
+      el.classList.toggle('selected', el === button);
+      el.setAttribute('aria-pressed', String(el === button));
+    });
+  }));
+}
 </script><script>// Guided student workspace, demo helpers and shared shell pieces.
 // Loaded before classroom.js; relies on its globals (Q, safe, cash, data, role, record, Lessons...) at call time.
 
@@ -466,7 +1101,7 @@ function appHeader() {
   const switcher = practice && inApp
     ? `<div class="mode-switch" role="group" aria-label="Demo view"><button class="${role === 'student' ? 'on' : ''}" data-demo-role="student" aria-pressed="${role === 'student'}">Student</button><button class="${role === 'professor' ? 'on' : ''}" data-demo-role="professor" aria-pressed="${role === 'professor'}">Instructor</button></div>`
     : '';
-  return `<header><a href="#" class="brand" id="brand-home"><span class="brand-mark" aria-hidden="true">L<span>∕</span></span>ledger lane</a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
+  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">${laneIcon('shop', 25)}</span><span>ledger lane<small>THE BUSINESS CLASSROOM</small></span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
 }
 
 function wireAppHeader() {
@@ -500,6 +1135,20 @@ function addSampleNotes() {
   };
   notes.insertAdjacentElement('afterend', b);
 }
+
+function studentDashboard() {
+  const assignments = data.assignments.filter((a) => a.published && !a.deleted);
+  const runs = assignments.map((a) => data.runs[a.id]).filter(Boolean);
+  const completed = runs.filter((r) => r.completed).length;
+  const recorded = runs.reduce((sum, r) => sum + workspaceProgress(r).done, 0);
+  return `<section class="dashboard-banner"><div><span class="tag">YOUR BUSINESS. YOUR NEXT CHAPTER.</span><h2>Big plans.<br><span>One entry at a time.</span></h2><p>Choose a challenge, make a business decision,<br>and put your accounting skills to work.</p></div><div class="dashboard-art" aria-hidden="true"><span class="art-orbit"></span>${laneIcon('shop', 102)}<span class="art-note">${laneIcon('check', 18)} Open for learning</span><span class="art-spark">✳</span></div></section>
+  <div class="dashboard-stats" aria-label="Your learning progress"><div><span class="stat-icon lilac">${laneIcon('book')}</span><p><strong>${assignments.length}</strong><span>Assignments available</span></p></div><div><span class="stat-icon peach">${laneIcon('notes')}</span><p><strong>${recorded}</strong><span>Records checked correctly</span></p></div><div><span class="stat-icon blue">${laneIcon('check')}</span><p><strong>${completed}</strong><span>Assignments completed</span></p></div></div>
+  <div class="dashboard-layout"><section class="dashboard-assignments"><div class="dashboard-section-title"><h2>Your next challenge</h2><span>${isPracticeMode() ? 'PRACTICE CLASSROOM' : 'YOUR CLASSROOM'}</span></div><div class="assignment-list">${assignments.map((a, index) => {
+    const r = data.runs[a.id];
+    const records = a.interactive ? a.interactive.controls.length + ' decisions · ' + Lessons.journalEvents({events:a.blueprint.paths[0].events}).length + ' records' : a.version === 3 ? 'Business plan · ' + Lessons.journalEvents({events:a.blueprint.paths[0].events}).length + ' records' : a.version === 2 ? a.concepts.length + ' decisions · ' + Lessons.expected(a, Lessons.defaultEpisodeChoice(a), data.profile).events.length + ' records' : 'One decision · two records';
+    return `<article class="card assignment-card"><div class="assignment-card-top"><span class="assignment-icon">${laneIcon(index % 2 ? 'chart' : 'coffee', 27)}</span><span class="assignment-status ${r?.completed ? 'is-complete' : r ? 'is-active' : ''}">${r?.completed ? 'Completed' : r ? 'In progress' : 'Ready to start'}</span></div><div class="tag">${safe(a.origin || a.course)} · ${safe(Lessons.topic(a).name)}</div><h2>${safe(businessText(a.title))}</h2><p>${safe(businessText(a.instructions))}</p><div class="assignment-meta"><span>${month(a)}</span><span>${records}</span>${a.version === 3 ? '<span>From course notes</span>' : ''}</div>${cardProgress(r)}<button data-open="${safe(a.id)}">${r?.completed ? 'Review assignment' : r ? 'Continue assignment' : 'Start assignment'} ${laneIcon('arrow', 18)}</button></article>`;
+  }).join('') || '<div class="card"><h3>Your next chapter is on its way.</h3><p>No published assignments yet. Import an assignment from your instructor to get started.</p></div>'}</div></section><aside class="card business-summary"><span class="tag">MEET YOUR BUSINESS</span>${shop()}<h3>${safe(data.profile.name)}</h3><p>${safe(data.profile.type)} · ${safe(data.profile.district || 'Your neighborhood')}</p><div class="business-tip">${laneIcon('spark', 20)}<p>Same business. Fresh books.<br><span>Each assignment is a new chance to figure it out.</span></p></div><button class="secondary" data-page="profile">View business profile ${laneIcon('arrow', 16)}</button></aside></div>`;
+}
 </script><script>function gradingCopy(a){return a?.grading?.attempt==='first'?'The first entry earns the grade. You can still correct entries for practice.':'Corrections improve your score.';}
 const Q=s=>document.querySelector(s),safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),cash=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
 const key='ledger-lane-classroom-v1';let data;try{data=JSON.parse(localStorage.getItem(key));}catch{}data||={profile:null,assignments:[],runs:{}};let role='home',page='assignments',active=null,record=null,teacherDraft=null,teacherTab='builder',notice='',entryRows=[{account:'',debit:'',credit:''},{account:'',debit:'',credit:''}];
@@ -518,9 +1167,9 @@ function wireDesigner(id,editing){const form=Q('#'+id);form.querySelectorAll('in
 
 function shop(p=data.profile){const b=Lessons.businesses[p.type]||Lessons.businesses['Coffee shop'],style=p.style||Lessons.styles[0];return `<div class="class-shop ${safe(p.color)} ${style==='Modern studio'?'modern':style==='Garden storefront'?'garden':''}" style="--brand:${Lessons.colors[p.color]||Lessons.colors.sage}"><div class="district-line">${safe(p.district||Lessons.districts[0])} · ${safe(p.type)}</div><div class="shop-sign"><span>${safe(p.logo||b.icon)}</span> ${safe(p.name||'Your business')}<small>${safe(p.tagline||p.specialty||b.products[0])}</small></div><div class="class-awning"></div><div class="class-windows"><span>${b.icon}</span><span class="shop-door">${run()?.completed?'MONTH CLOSED':'OPEN'}</span><span>${safe(p.logo||b.icon)}</span></div><div class="shop-sidewalk"></div></div>`;}
 
-function studentIntro(){return `<div class="intro"><div><div class="tag">${safe(data.profile.type)} · BUSINESS CLASSROOM</div><h1>${safe(data.profile.name)}</h1><p>Your business stays the same. Each assignment starts with its own records.</p></div><button id="import" class="secondary">Import assignment</button></div><nav class="tabs"><button data-page="assignments" class="${page==='assignments'?'selected':''}">Assignments</button><button data-page="ledger" class="${page==='ledger'?'selected':''}">General ledger</button><button data-page="portfolio" class="${page==='portfolio'?'selected':''}">Learning portfolio</button><button data-page="profile" class="${page==='profile'?'selected':''}">Business profile</button></nav>`;}
+function studentIntro(){return `<div class="intro student-heading"><div><div class="tag">${safe(data.profile.type)} · YOUR BUSINESS HQ</div><h1>${safe(data.profile.name)}</h1><p>A little practice. A lot of possibility.</p></div><button id="import" class="secondary">${laneIcon('notes', 17)} Import assignment</button></div><nav class="tabs" aria-label="Student classroom"><button data-page="assignments" class="${page==='assignments'?'selected':''}">${laneIcon('book', 18)} Assignments</button><button data-page="ledger" class="${page==='ledger'?'selected':''}">${laneIcon('chart', 18)} General ledger</button><button data-page="portfolio" class="${page==='portfolio'?'selected':''}">${laneIcon('spark', 18)} Learning portfolio</button><button data-page="profile" class="${page==='profile'?'selected':''}">${laneIcon('shop', 18)} Business profile</button></nav>`;}
 function studentNav(){document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>{page=b.dataset.page;active=null;notice='';render();});if(Q('#import'))Q('#import').onclick=importAssignment;}
-function renderStudent(){if(run()&&!run().publicRun){data.runs[active]=Lessons.withBusinessActivity(run());Lessons.syncBusinessEntries(run());}let content='';if(page==='profile')content=`<div class="role-grid"><section class="card">${shop()}</section><section class="card"><h2>Your business identity</h2><p><strong>${safe(data.profile.name)}</strong><br>${safe(data.profile.type)}</p><p>Business identity carries across assignments. Balances, transactions and mistakes do not. Each assignment is a separate classroom scenario.</p><button id="edit-profile" class="secondary">Redesign my business</button></section></div>`;else if(page==='ledger')content=ledgerPage();else if(page==='portfolio')content=portfolio();else if(active)content=assignmentPage();else content=`<div class="assignment-layout"><section class="card business-summary">${shop()}<h3>A business worth understanding.</h3><p>Select a lesson or import an assignment from your professor. You will choose a business action, read the documents, and account for the result.</p><div class="message">Example assignments are ready to try. Your professor can replace these with course-specific assignments.</div></section><div class="assignment-list">${data.assignments.filter(a=>a.published&&!a.deleted).map(a=>{const r=data.runs[a.id],s=r?Lessons.grade(r):null;return `<section class="card assignment-card"><div class="tag">${safe(a.origin||a.course)} · ${Lessons.topic(a).name}</div><h2>${safe(businessText(a.title))}</h2><p>${safe(businessText(a.instructions))}</p><div class="assignment-meta"><span>${month(a)}</span><span>${a.interactive?a.interactive.controls.length+' decisions · '+Lessons.journalEvents({events:a.blueprint.paths[0].events}).length+' business records':a.version===3?'Business plan · '+Lessons.journalEvents({events:a.blueprint.paths[0].events}).length+' business records':a.version===2?a.concepts.length+' decisions · '+Lessons.expected(a,Lessons.defaultEpisodeChoice(a),data.profile).events.length+' records':'One decision · two records'}</span><span>${r?.completed?'Completed':r?'In progress':'Not started'}</span>${a.version===3?'<span>Created from course notes</span>':a.version===2?`<span>${safe(a.concepts.map(id=>Lessons.concepts[id].name).join(' · '))}</span>`:''}</div>${typeof cardProgress==='function'?cardProgress(r):''}<button data-open="${safe(a.id)}">${r?.completed?'Review assignment':r?'Continue assignment':'Start assignment'} →</button></section>`;}).join('')}</div></div>`;
+function renderStudent(){if(run()&&!run().publicRun){data.runs[active]=Lessons.withBusinessActivity(run());Lessons.syncBusinessEntries(run());}let content='';if(page==='profile')content=`<div class="role-grid"><section class="card">${shop()}</section><section class="card"><h2>Your business identity</h2><p><strong>${safe(data.profile.name)}</strong><br>${safe(data.profile.type)}</p><p>Business identity carries across assignments. Balances, transactions and mistakes do not. Each assignment is a separate classroom scenario.</p><button id="edit-profile" class="secondary">Redesign my business</button></section></div>`;else if(page==='ledger')content=ledgerPage();else if(page==='portfolio')content=portfolio();else if(active)content=assignmentPage();else content=studentDashboard();
 shell((active&&page==='assignments'?'':studentIntro())+content);studentNav();if(page==='ledger'&&Q('#open-ledger'))Q('#open-ledger').onclick=()=>{const old=active;active=Q('#ledger-episode').value;tAccounts();active=old;};document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{active=b.dataset.open;record=null;notice='';render();});if(page==='profile')Q('#edit-profile').onclick=editProfile;if(page==='portfolio'){Q('#export-portfolio').onclick=()=>download('ledger-lane-portfolio.json',{version:1,profile:data.profile,runs:data.runs,note:'Local student-controlled work, not an authenticated grade record.'});return;}if(active)wireAssignment();}
 function portfolio(){const rows=data.assignments.filter(a=>data.runs[a.id]);return `<section class="card portfolio-card"><h2>Your progress</h2><p>Journal scores update as you correct your work. Your professor can review earlier submissions.</p><table><thead><tr><th>Assignment</th><th>Score</th><th>Status</th></tr></thead><tbody>${rows.map(a=>{const r=data.runs[a.id],s=Lessons.grade(r);return `<tr><td>${safe(businessText(a.title))}</td><td>${s.journal+s.effects+s.prediction}/100</td><td>${r.completed?'Completed':'In progress'}</td></tr>`;}).join('')||'<tr><td colspan="3">Start an assignment to begin.</td></tr>'}</tbody></table><button id="export-portfolio">Download portfolio</button><p class="foot">Downloads are copies of your work.</p></section>`;}
 

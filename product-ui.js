@@ -1,6 +1,127 @@
-// Original storefront artwork and the public product introduction.
-let previewBusiness='coffee';
-const previewBusinesses={coffee:{name:'Tommy’s Coffee',type:'Coffee shop',sign:'TOMMY’S COFFEE',color:'#264e42',window:'COFFEE · EVERY DAY',item:'Coffee and pastries',invoice:'Harbor Coffee Supply',amount:'$420.00'},bakery:{name:'Sunday Bakery',type:'Bakery',sign:'SUNDAY BAKERY',color:'#a65f43',window:'BREAD · BAKED HERE',item:'Bread and baked goods',invoice:'Miller Baking Supply',amount:'$360.00'},flowers:{name:'Field & Stem',type:'Flower studio',sign:'FIELD & STEM',color:'#647452',window:'FLOWERS · FOR EVERY DAY',item:'Flowers and arrangements',invoice:'Greenhouse Wholesale',amount:'$285.00'}};
-function storefrontArt(b){return `<svg class="lane-art" viewBox="0 0 680 470" role="img" aria-label="${safe(b.name)} on a neighborhood shopping street"><defs><pattern id="brick-lines" width="38" height="22" patternUnits="userSpaceOnUse"><path d="M0 22H38M19 0v11M0 11H38M0 11v11M38 11v11" fill="none" stroke="#8b806f" stroke-width=".5" opacity=".28"/></pattern><linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#769087"/><stop offset=".5" stop-color="#b6c6b8"/><stop offset="1" stop-color="#59756b"/></linearGradient><pattern id="awning-stripes" width="32" height="30" patternUnits="userSpaceOnUse"><rect width="32" height="30" fill="#efebda"/><rect width="16" height="30" fill="${b.color}"/></pattern></defs><rect width="680" height="470" fill="#e4e8dd"/><path d="M0 95H680M0 150H680" stroke="#d5dccf" stroke-width=".6"/><circle cx="560" cy="80" r="40" fill="#f4efd9"/><path d="M0 367h680v103H0Z" fill="#d7d6c9"/><path d="M0 412h680v58H0Z" fill="#b1b8aa"/><path d="M0 437h680" stroke="#e5e6d6" stroke-width="2" stroke-dasharray="38 25"/><path d="M15 369h650M0 405h680" stroke="#f7f5e8" stroke-width="4"/><g opacity=".7"><rect x="12" y="190" width="143" height="175" fill="#c9baa3"/><rect x="12" y="190" width="143" height="175" fill="url(#brick-lines)"/><path d="M4 184h158v12H4Z" fill="#b5aa92"/><rect x="29" y="210" width="111" height="26" fill="#f3e9d5"/><text x="84" y="227" font-size="9" text-anchor="middle" fill="#807960" font-family="Arial" letter-spacing="2">THE BOOK ROOM</text><rect x="30" y="250" width="52" height="97" fill="#8fa399"/><rect x="90" y="250" width="44" height="112" fill="#bfb297"/><path d="M33 274h45M33 302h45M33 330h45" stroke="#d7d6bb" stroke-width="3"/><rect x="538" y="165" width="140" height="200" fill="#d1bdac"/><rect x="538" y="165" width="140" height="200" fill="url(#brick-lines)"/><path d="M530 160h150v12H530Z" fill="#b5a18e"/><rect x="554" y="195" width="111" height="32" fill="#b88a6d"/><text x="610" y="215" fill="#f6efdf" font-family="Arial" font-size="9" text-anchor="middle" letter-spacing="2">CORNER STUDIO</text><rect x="555" y="248" width="99" height="100" fill="#91a19a"/><path d="M605 248v100" stroke="#d5ccbb" stroke-width="5"/></g><g><path d="M158 352h372l15 20H143Z" fill="#929888" opacity=".24"/><rect x="171" y="126" width="344" height="232" fill="#ded2ba"/><rect x="171" y="126" width="344" height="232" fill="url(#brick-lines)"/><path d="M162 121h362v13H162Z" fill="#bab197"/><path d="M169 135h348v5H169Z" fill="#f4eedf"/><rect x="185" y="153" width="316" height="51" rx="1" fill="${b.color}"/><rect x="192" y="160" width="302" height="37" fill="none" stroke="#f2e7ce" stroke-width=".7" opacity=".5"/><text x="343" y="183" text-anchor="middle" fill="#f9f2df" font-size="20" font-family="Georgia,serif" letter-spacing="2">${safe(b.sign)}</text><path d="M181 210h324l16 33H165Z" fill="url(#awning-stripes)"/><path d="M165 243h356v11H165Z" fill="url(#awning-stripes)"/><path d="M169 254h348" stroke="#243d31" stroke-width="3" opacity=".2"/><rect x="190" y="267" width="96" height="77" fill="url(#glass)" stroke="#f7efdf" stroke-width="7"/><rect x="400" y="267" width="96" height="77" fill="url(#glass)" stroke="#f7efdf" stroke-width="7"/><path d="M202 274l60 60M212 274l60 60M412 274l60 60M422 274l60 60" stroke="#eaf0e4" stroke-width="10" opacity=".15"/><path d="M238 267v77M448 267v77" stroke="#f7efdf" stroke-width="3"/><rect x="306" y="261" width="74" height="97" fill="${b.color}"/><rect x="314" y="269" width="58" height="60" fill="url(#glass)" stroke="#d9d3bd" stroke-width="3"/><rect x="324" y="293" width="38" height="17" rx="1" fill="#f4eddc"/><text x="343" y="305" text-anchor="middle" fill="${b.color}" font-family="Arial" font-size="8" letter-spacing="1">OPEN</text><path d="M366 337v9" stroke="#dfcea5" stroke-width="3"/><path d="M176 352h334v8H176Z" fill="#c0b49b"/><text x="237" y="305" text-anchor="middle" fill="#fff8e8" font-family="Arial" font-size="6" letter-spacing=".7">${safe(b.window)}</text><rect x="433" y="314" width="31" height="19" fill="#e7d8bd"/><path d="M437 314c-5-18 5-25 12-17 9-19 17-8 10 17" fill="#728362"/></g><g><rect x="526" y="307" width="4" height="73" fill="#797b62"/><path d="M515 320h31v39h-31Z" fill="#f5ecda" stroke="#797b62" stroke-width="2"/><text x="530" y="336" font-family="Georgia" font-size="7" fill="#5b7053" text-anchor="middle">Welcome</text><path d="M521 345h18M524 350h12" stroke="#a5aa8d" stroke-width="1"/><rect x="112" y="326" width="3" height="53" fill="#8b8168"/><path d="M97 336h34l-2 4H99Z" fill="#c3b598"/><path d="M103 339v35M126 339v35" stroke="#847b65" stroke-width="2"/><path d="M53 360v28M54 215v145" stroke="#817f67" stroke-width="5"/><path d="M43 215h22l-3-29H46Z" fill="#f2e9cd" stroke="#817f67" stroke-width="2"/><path d="M53 186v-10" stroke="#817f67" stroke-width="2"/><rect x="587" y="369" width="47" height="7" fill="#83907a"/><path d="M591 376v11M631 376v11" stroke="#707b65" stroke-width="3"/><path d="M588 359h46v7h-46Z" fill="#83907a"/></g><g><path d="M650 273v110" stroke="#8b886b" stroke-width="6"/><ellipse cx="650" cy="249" rx="32" ry="56" fill="#98a582"/><ellipse cx="626" cy="265" rx="27" ry="41" fill="#a8b392"/><ellipse cx="667" cy="278" rx="27" ry="36" fill="#8f9e7b"/><path d="M649 274v81m0-31-13-14m13-6 13-18" stroke="#8b886b" stroke-width="2"/><rect x="10" y="346" width="22" height="27" rx="2" fill="#bba186"/><path d="M21 349c-30-24-7-52 1-33 17-34 31-2 5 21 14-15 21 4-6 12" fill="#7e8e68"/></g></svg>`;}
-function publicWelcome(){const b=previewBusinesses[previewBusiness];return `<section class="lane-welcome"><div class="lane-kicker"><span class="status-dot"></span>A classroom built around your business</div><div class="lane-hero"><div class="lane-hero-copy"><h1>Small business.<br><em>Big accounting<br> lessons.</em></h1><p>Open a coffee shop. Take a customer’s order. Read the invoice. Work out the entry.</p><p class="lane-hero-detail">A business simulation for financial accounting, with assignments shaped by your professor’s notes.</p><div class="lane-hero-actions"><button id="student">Try it as a student <span aria-hidden="true">→</span></button><button id="instructor-demo" class="secondary">Try it as an instructor <span aria-hidden="true">→</span></button></div><div class="lane-demo-note">No account needed. Both demos run in your browser. <button id="professor" class="link-button">Instructor sign in</button></div></div><div class="lane-business-preview"><div class="lane-preview-top"><span>YOUR BUSINESS, ALL SEMESTER</span><span>01 / 04</span></div><div class="lane-scene" id="welcome-scene">${storefrontArt(b)}<div class="lane-paper"><span class="lane-paper-type">SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>Read the record. Decide what belongs in the accounts.</small></div></div><div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id,x])=>`<button class="${previewBusiness===id?'selected':''}" data-preview-business="${id}" aria-pressed="${previewBusiness===id}">${id==='coffee'?'Coffee':id==='bakery'?'Bakery':'Flowers'}</button>`).join('')}</div></div></div></div><div class="lane-bottom-line"><span>MAKE THE DECISION.</span><span>READ THE RECORDS.</span><span>UNDERSTAND THE ENTRY.</span><a href="#how-ledger-works">See how it works ↓</a></div></section><section class="lane-how" id="how-ledger-works"><div class="lane-how-heading"><span class="lane-section-label">THE CLASSROOM</span><h2>The same business.<br>A fresh challenge each lesson.</h2><p>Your business stays with you. Each assignment starts with its own balances, so one mistake doesn’t follow you all semester.</p></div><div class="lane-how-steps"><article><span>01</span><div><h3>Make it yours</h3><p>Choose your business, name it, and design your storefront.</p></div></article><article><span>02</span><div><h3>Make a real choice</h3><p>Decide what your business does. Your choices create invoices, receipts, and reports.</p></div></article><article><span>03</span><div><h3>Keep the books</h3><p>Write dated entries, check your T accounts, and prepare the assigned reports. No “make sales” button.</p></div></article></div></section><section class="lane-instructor"><div><span class="lane-section-label">FOR INSTRUCTORS</span><h2>Teach from your notes.<br>Assign work that fits.</h2><p>Upload the material you’ve covered. Get a new business scenario, source documents, and an answer key to review. Publish it when you’re happy with the work.</p></div><div class="lane-note-stack"><div class="lane-notes-header"><span>Your course notes</span><span>PDF / DOCX / TEXT</span></div><div class="lane-notes-body"><span>PREPAID EXPENSES</span><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p></div><div class="lane-notes-result"><span>↓</span><p><strong>A lease for your student’s business</strong><br>Student decisions · source records · dated entries</p></div></div></section><footer class="lane-public-footer"><span>ledger lane <small>Financial accounting, put into practice.</small></span><a href="capstone.html">Explore the four-month simulation →</a></footer>`;}
-function wireWelcome(){if(Q('#instructor-demo')){if(typeof cloudAccount!=='undefined'&&cloudAccount)Q('#instructor-demo').hidden=true;Q('#instructor-demo').onclick=()=>{role='professor';notice='';render();};}document.querySelectorAll('[data-preview-business]').forEach(button=>button.onclick=()=>{previewBusiness=button.dataset.previewBusiness;const b=previewBusinesses[previewBusiness];Q('#welcome-scene').innerHTML=storefrontArt(b)+`<div class="lane-paper"><span class="lane-paper-type">SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>Read the record. Decide what belongs in the accounts.</small></div>`;Q('#preview-business-name').textContent=b.name;Q('#preview-business-item').textContent=b.item;document.querySelectorAll('[data-preview-business]').forEach(el=>{el.classList.toggle('selected',el===button);el.setAttribute('aria-pressed',String(el===button));});});}
+// Original illustrations and product introduction. No external assets required.
+let previewBusiness = 'coffee';
+const previewBusinesses = {
+  coffee: { name: 'Tommy’s Coffee', type: 'Coffee shop', sign: 'TOMMY’S COFFEE', color: '#5b50d6', window: 'COFFEE & GOOD COMPANY', item: 'Coffee and pastries', invoice: 'Harbor Coffee Supply', amount: '$420.00' },
+  bakery: { name: 'Sunday Bakery', type: 'Bakery', sign: 'SUNDAY BAKERY', color: '#d34f35', window: 'BAKED WITH A LITTLE JOY', item: 'Bread and baked goods', invoice: 'Miller Baking Supply', amount: '$360.00' },
+  flowers: { name: 'Field & Stem', type: 'Plant shop', sign: 'FIELD & STEM', color: '#176e65', window: 'A LITTLE MORE COLOR', item: 'Plants and arrangements', invoice: 'Greenhouse Wholesale', amount: '$285.00' },
+};
+
+function laneIcon(name, size = 22) {
+  const paths = {
+    shop: '<path d="M3 10h18l-2-6H5l-2 6ZM4 10v10h16V10M9 20v-6h6v6M3 10c0 3 4 3 4 0 0 3 5 3 5 0 0 3 5 3 5 0 0 3 4 3 4 0"/>',
+    book: '<path d="M4 3h14a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V3Zm0 14h16M8 7h8M8 11h5"/>',
+    chart: '<path d="M4 3v17h17M8 15v-4M13 15V6M18 15V9"/>',
+    spark: '<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z"/>',
+    arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    check: '<path d="m5 12 4 4L19 6"/>',
+    coffee: '<path d="M5 8h12v7a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V8Zm12 1h2a3 3 0 0 1 0 6h-2M8 3v2m5-2v2M3 22h17"/>',
+    notes: '<path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h5"/>',
+    people: '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/>',
+  };
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || paths.spark}</svg>`;
+}
+
+function storefrontArt(b) {
+  return `<svg class="lane-art" viewBox="0 0 680 470" role="img" aria-label="${safe(b.name)} on a colorful neighborhood street">
+  <rect width="680" height="470" rx="24" fill="#d9e5ff"/>
+  <circle cx="568" cy="82" r="42" fill="#ffd369"/>
+  <path d="M50 90h90m-45-15h80M430 46h58" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+  <path d="M0 340h680v130H0Z" fill="#bfc8ef"/><path d="M0 402h680v68H0Z" fill="#28334f"/>
+  <path d="M0 435h680" stroke="#f5cf77" stroke-width="3" stroke-dasharray="30 24"/>
+  <path d="M0 396h680" stroke="#fff" stroke-width="6"/>
+  <g stroke="#26324f" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M12 174 92 153l80 21v176H12Z" fill="#f6a27a"/>
+    <path d="M20 184h144v163H20Z" fill="#ffc69d"/>
+    <path d="M37 208h110v28H37Z" fill="#fff6db"/>
+    <path d="M37 253h43v85H37Zm59 0h51v85H96Z" fill="#707db7"/>
+    <path d="M37 274h43m16 15h51" stroke="#d7e3ff"/>
+    <path d="M534 139h134v211H534Z" fill="#a69de4"/>
+    <path d="M542 151h118v194H542Z" fill="#beb5f6"/>
+    <path d="M554 175h95v33h-95Z" fill="#fff5da"/>
+    <path d="M555 227h41v111h-41Zm54 0h40v111h-40Z" fill="#6b80b1"/>
+    <path d="M555 255h41m13 20h40" stroke="#d7e3ff"/>
+    <path d="M165 132h365v226H165Z" fill="#fdf4d8"/>
+    <path d="M154 123h387v15H154Z" fill="#ffcb6a"/>
+    <path d="M179 152h337v54H179Z" fill="${b.color}"/>
+    <path d="M180 215h335l17 38H163Z" fill="#fff4d9"/>
+    <path d="m204 215-8 38h27l5-38m32 0-2 38h28v-38m31 0 2 38h28l-4-38m32 0 7 38h28l-10-38m32 0 12 38h28l-15-38" fill="${b.color}" stroke="none"/>
+    <path d="M163 253v10c0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 24 12 24 0 0 12 33 12 33 0v-10Z" fill="${b.color}"/>
+    <path d="M184 281h106v65H184Zm219 0h107v65H403Z" fill="#809ed1"/>
+    <path d="M301 277h92v81h-92Z" fill="${b.color}"/>
+    <path d="M312 286h70v49h-70Z" fill="#afc9ef"/>
+    <path d="m198 284 47 59m179-59 47 59" stroke="#cde0ff" stroke-width="12"/>
+    <path d="M375 341v9" stroke="#ffcb6a" stroke-width="4"/>
+    <rect x="327" y="299" width="40" height="19" rx="4" fill="#fff5da"/>
+    <path d="M160 358h376v12H160Z" fill="#ffcb6a"/>
+    <path d="M562 331v50m-11-35h23" stroke="#26324f" stroke-width="4"/>
+    <path d="M546 331h36l-4 39h-28Z" fill="#ff9b72"/>
+    <path d="M583 330v-70" stroke="#26324f" stroke-width="5"/>
+    <ellipse cx="584" cy="248" rx="27" ry="42" fill="#3b9c85"/>
+    <ellipse cx="610" cy="267" rx="21" ry="30" fill="#7fc09c"/>
+    <path d="M582 274v75m0-50 20-18"/>
+    <path d="M121 330h27v37h-27Z" fill="#c47b63"/><path d="M134 330v-34m0 17-17-13m17 5 16-19" stroke="#287a66" stroke-width="7"/>
+    <path d="m54 361 13-33h36l12 33Z" fill="#fff5da"/><path d="M67 341h36m-39 10h42"/>
+  </g>
+  <g font-family="Arial,sans-serif" text-anchor="middle" font-weight="700">
+    <text x="347" y="185" font-size="22" fill="#fff">${safe(b.sign)}</text>
+    <text x="92" y="226" font-size="8" fill="#26324f" letter-spacing="1">THE BOOK ROOM</text>
+    <text x="602" y="195" font-size="9" fill="#26324f" letter-spacing="1">THE STUDIO</text>
+    <text x="347" y="312" font-size="9" fill="#26324f">OPEN</text>
+  </g>
+  <g fill="#26324f"><circle cx="237" cy="314" r="12"/><path d="M226 309h22v10c0 12-22 12-22 0Zm22 2h5v10h-5" fill="#fff0c6"/><path d="M231 302v-6m9 6v-6" stroke="#fff0c6" stroke-width="2"/></g>
+  <g fill="#ffe099"><path d="m461 295 4 8 9 2-7 6 1 10-7-5-8 5 2-10-7-6 9-2Z"/></g>
+  <ellipse cx="355" cy="383" rx="166" ry="5" fill="#26324f" opacity=".12"/>
+  </svg>`;
+}
+
+function previewRecord(b) {
+  return `<div class="lane-paper"><span class="lane-paper-type">${laneIcon('notes', 15)} SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>One business choice. A real accounting question.</small></div>`;
+}
+
+function publicWelcome() {
+  const b = previewBusinesses[previewBusiness];
+  return `<section class="play-hero">
+    <div class="play-hero-copy">
+      <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
+      <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
+      <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
+      <div class="play-actions"><button id="student">Try it as a student ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Try it as an instructor</button></div>
+      <div class="play-demo-note">No sign-up. No pressure. Just jump in.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
+    </div>
+    <div class="play-world">
+      <div class="world-label"><span>${laneIcon('shop', 16)} YOUR NEXT BIG IDEA</span><span>STARTS SMALL.</span></div>
+      <div class="lane-scene" id="welcome-scene">${storefrontArt(b)}${previewRecord(b)}</div>
+      <div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${id === 'coffee' ? 'Coffee' : id === 'bakery' ? 'Bakery' : 'Flowers'}</button>`).join('')}</div></div>
+      <div class="world-sticker">${laneIcon('spark', 20)} Learn it by<br><strong>living it.</strong></div>
+    </div>
+  </section>
+  <div class="play-ribbon"><span>${laneIcon('shop')} 10 business types. Make one yours.</span><span>${laneIcon('notes')} Realistic records, not random quizzes.</span><span>${laneIcon('check')} Feedback that helps it click.</span></div>
+  <section class="play-how" id="how-ledger-works">
+    <div class="play-section-heading"><div><span class="tag">FROM “WHAT?” TO “I GET IT.”</span><h2>You’re not just doing homework.<br>You’re running the place.</h2></div><p>The same business. A new challenge each lesson.<br>Every assignment starts with fresh books.</p></div>
+    <div class="play-feature-grid">
+      <article class="play-feature peach"><div class="feature-visual"><span class="feature-number">01</span><div class="mini-store">${laneIcon('shop', 64)}<span>YOUR NAME HERE</span></div><span class="feature-doodle">✳</span></div><h3>Make it yours.</h3><p>Coffee shop? Design studio? Neighborhood bakery? Name it, style it, and open your doors.</p></article>
+      <article class="play-feature lilac"><div class="feature-visual"><span class="feature-number">02</span><div class="mini-receipt"><span>BUSINESS DECISION</span><strong>Stock up for the month.</strong><div>Supplies ordered <b>✓</b></div><div>Invoice received <b>→</b></div></div></div><h3>Call the shots.</h3><p>Choose what to buy, when to pay, and what happens next. Your decisions create the records.</p></article>
+      <article class="play-feature blue"><div class="feature-visual"><span class="feature-number">03</span><div class="mini-ledger"><span>YOUR JOURNAL</span><div><strong>Account</strong><strong>Debit</strong><strong>Credit</strong></div><div><span>Supplies</span><b>420</b><span>—</span></div><div><span>Cash</span><span>—</span><b>420</b></div><small>${laneIcon('check', 14)} Balanced. Now it makes sense.</small></div></div><h3>Connect the dots.</h3><p>Read the document, write the entry, and see the impact. Get useful feedback, then try again.</p></article>
+    </div>
+  </section>
+  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>Your course notes.<br>Their <span>next chapter.</span></h2><p>Turn what you’ve taught into a business challenge. Review the decisions, documents, and answer key before sharing with your class.</p><button id="explore-studio">Explore the instructor demo ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
+  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="capstone.html">Explore the four-month simulation →</a></footer>`;
+}
+
+function wireWelcome() {
+  const signedIn = typeof cloudAccount !== 'undefined' && cloudAccount;
+  const openStudio = () => { role = 'professor'; notice = ''; render(); };
+  if (Q('#instructor-demo')) { Q('#instructor-demo').hidden = !!signedIn; Q('#instructor-demo').onclick = openStudio; }
+  if (Q('#explore-studio')) { Q('#explore-studio').hidden = !!signedIn; Q('#explore-studio').onclick = openStudio; }
+  document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
+    previewBusiness = button.dataset.previewBusiness;
+    const b = previewBusinesses[previewBusiness];
+    Q('#welcome-scene').innerHTML = storefrontArt(b) + previewRecord(b);
+    Q('#preview-business-name').textContent = b.name;
+    Q('#preview-business-item').textContent = b.item;
+    document.querySelectorAll('[data-preview-business]').forEach((el) => {
+      el.classList.toggle('selected', el === button);
+      el.setAttribute('aria-pressed', String(el === button));
+    });
+  }));
+}

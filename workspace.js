@@ -126,7 +126,7 @@ function appHeader() {
   const switcher = practice && inApp
     ? `<div class="mode-switch" role="group" aria-label="Demo view"><button class="${role === 'student' ? 'on' : ''}" data-demo-role="student" aria-pressed="${role === 'student'}">Student</button><button class="${role === 'professor' ? 'on' : ''}" data-demo-role="professor" aria-pressed="${role === 'professor'}">Instructor</button></div>`
     : '';
-  return `<header><a href="#" class="brand" id="brand-home"><span class="brand-mark" aria-hidden="true">L<span>∕</span></span>ledger lane</a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
+  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">${laneIcon('shop', 25)}</span><span>ledger lane<small>THE BUSINESS CLASSROOM</small></span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
 }
 
 function wireAppHeader() {
@@ -159,4 +159,18 @@ function addSampleNotes() {
     notes.focus();
   };
   notes.insertAdjacentElement('afterend', b);
+}
+
+function studentDashboard() {
+  const assignments = data.assignments.filter((a) => a.published && !a.deleted);
+  const runs = assignments.map((a) => data.runs[a.id]).filter(Boolean);
+  const completed = runs.filter((r) => r.completed).length;
+  const recorded = runs.reduce((sum, r) => sum + workspaceProgress(r).done, 0);
+  return `<section class="dashboard-banner"><div><span class="tag">YOUR BUSINESS. YOUR NEXT CHAPTER.</span><h2>Big plans.<br><span>One entry at a time.</span></h2><p>Choose a challenge, make a business decision,<br>and put your accounting skills to work.</p></div><div class="dashboard-art" aria-hidden="true"><span class="art-orbit"></span>${laneIcon('shop', 102)}<span class="art-note">${laneIcon('check', 18)} Open for learning</span><span class="art-spark">✳</span></div></section>
+  <div class="dashboard-stats" aria-label="Your learning progress"><div><span class="stat-icon lilac">${laneIcon('book')}</span><p><strong>${assignments.length}</strong><span>Assignments available</span></p></div><div><span class="stat-icon peach">${laneIcon('notes')}</span><p><strong>${recorded}</strong><span>Records checked correctly</span></p></div><div><span class="stat-icon blue">${laneIcon('check')}</span><p><strong>${completed}</strong><span>Assignments completed</span></p></div></div>
+  <div class="dashboard-layout"><section class="dashboard-assignments"><div class="dashboard-section-title"><h2>Your next challenge</h2><span>${isPracticeMode() ? 'PRACTICE CLASSROOM' : 'YOUR CLASSROOM'}</span></div><div class="assignment-list">${assignments.map((a, index) => {
+    const r = data.runs[a.id];
+    const records = a.interactive ? a.interactive.controls.length + ' decisions · ' + Lessons.journalEvents({events:a.blueprint.paths[0].events}).length + ' records' : a.version === 3 ? 'Business plan · ' + Lessons.journalEvents({events:a.blueprint.paths[0].events}).length + ' records' : a.version === 2 ? a.concepts.length + ' decisions · ' + Lessons.expected(a, Lessons.defaultEpisodeChoice(a), data.profile).events.length + ' records' : 'One decision · two records';
+    return `<article class="card assignment-card"><div class="assignment-card-top"><span class="assignment-icon">${laneIcon(index % 2 ? 'chart' : 'coffee', 27)}</span><span class="assignment-status ${r?.completed ? 'is-complete' : r ? 'is-active' : ''}">${r?.completed ? 'Completed' : r ? 'In progress' : 'Ready to start'}</span></div><div class="tag">${safe(a.origin || a.course)} · ${safe(Lessons.topic(a).name)}</div><h2>${safe(businessText(a.title))}</h2><p>${safe(businessText(a.instructions))}</p><div class="assignment-meta"><span>${month(a)}</span><span>${records}</span>${a.version === 3 ? '<span>From course notes</span>' : ''}</div>${cardProgress(r)}<button data-open="${safe(a.id)}">${r?.completed ? 'Review assignment' : r ? 'Continue assignment' : 'Start assignment'} ${laneIcon('arrow', 18)}</button></article>`;
+  }).join('') || '<div class="card"><h3>Your next chapter is on its way.</h3><p>No published assignments yet. Import an assignment from your instructor to get started.</p></div>'}</div></section><aside class="card business-summary"><span class="tag">MEET YOUR BUSINESS</span>${shop()}<h3>${safe(data.profile.name)}</h3><p>${safe(data.profile.type)} · ${safe(data.profile.district || 'Your neighborhood')}</p><div class="business-tip">${laneIcon('spark', 20)}<p>Same business. Fresh books.<br><span>Each assignment is a new chance to figure it out.</span></p></div><button class="secondary" data-page="profile">View business profile ${laneIcon('arrow', 16)}</button></aside></div>`;
 }
