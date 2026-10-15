@@ -85,7 +85,7 @@ function publicWelcome() {
       <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
       <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
       <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
-      <div class="play-actions"><button id="student">Try it as a student ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Try it as an instructor</button></div>
+      <div class="play-actions"><button id="student">Run a business for a year ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Turn my notes into a game</button></div>
       <div class="play-demo-note">No sign-up. No pressure. Just jump in.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
     </div>
     <div class="play-world">
@@ -110,7 +110,7 @@ function publicWelcome() {
 
 function wireWelcome() {
   const signedIn = typeof cloudAccount !== 'undefined' && cloudAccount;
-  const openStudio = () => { role = 'professor'; notice = ''; render(); };
+  const openStudio = () => { location.href = 'play.html#instructor'; };
   if (Q('#instructor-demo')) { Q('#instructor-demo').hidden = !!signedIn; Q('#instructor-demo').onclick = openStudio; }
   if (Q('#explore-studio')) { Q('#explore-studio').hidden = !!signedIn; Q('#explore-studio').onclick = openStudio; }
   document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {

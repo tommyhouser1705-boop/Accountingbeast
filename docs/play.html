@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledger Lane · Run a business for a year</title>
+<meta name="description" content="Run a business for a year, record every journal entry, close the books and prepare your own financial statements.">
+<style>:root{--v:#6c5ce7;--v2:#4834d4;--navy:#1e1b4b;--peach:#ffb38a;--or:#ff7a45;--mint:#12b5a0;--sun:#ffd166;--pink:#ff6b9d;--ink:#1f1d3a;--soft:#6b6890;--card:#fff;--line:#e6e2ff;--good:#0f9f6e;--bad:#e5484d}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:ui-rounded,"SF Pro Rounded","Nunito","Segoe UI",system-ui,sans-serif;color:var(--ink);background:radial-gradient(1200px 600px at 10% -10%,#ffd9c7 0,transparent 60%),radial-gradient(1000px 700px at 110% 0,#d9d2ff 0,transparent 55%),linear-gradient(180deg,#f6f3ff,#fff6ef);min-height:100vh}
+button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.top{display:flex;align-items:center;gap:14px;padding:14px clamp(14px,3vw,32px);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;color:var(--navy);text-decoration:none}
+.logo{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--v),var(--pink));color:#fff;font-size:15px;box-shadow:0 6px 16px #6c5ce755}
+.biz-pill{background:var(--navy);color:#fff;border-radius:999px;padding:7px 14px;font-weight:800}
+.top-actions{margin-left:auto;display:flex;gap:8px}
+.ghost{background:#fff;border:2px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:800;color:var(--v2)}
+.ghost:hover{border-color:var(--v)}
+.go{background:linear-gradient(135deg,var(--v),#8c7bff);color:#fff;border:0;border-radius:16px;padding:14px 22px;font-weight:900;font-size:17px;box-shadow:0 8px 0 var(--v2),0 14px 26px #6c5ce755;transition:transform .08s}
+.go:active{transform:translateY(4px);box-shadow:0 4px 0 var(--v2)}
+.go:disabled{background:#c9c4ea;box-shadow:0 6px 0 #aaa4d6;cursor:not-allowed}
+.go.light{background:#fff;color:var(--v2);box-shadow:0 8px 0 #c9c1ff}
+.year{list-style:none;display:flex;gap:4px;margin:0 clamp(14px,3vw,32px) 10px;padding:6px;background:#fff;border-radius:16px;box-shadow:0 4px 16px #2b235a14;overflow-x:auto}
+.year li{flex:1;min-width:34px;text-align:center;border-radius:10px;padding:7px 2px;font-size:12px;font-weight:800;color:var(--soft);background:#f3f0ff}
+.year li.wide{flex:1.6;min-width:64px}
+.year li.past{background:linear-gradient(135deg,var(--mint),#3ddbb6);color:#fff}
+.year li.now{background:linear-gradient(135deg,var(--or),var(--sun));color:var(--navy);transform:scale(1.08);box-shadow:0 4px 12px #ff7a4566}
+main{padding:0 clamp(14px,3vw,32px) 60px}
+.stats{display:grid;grid-template-columns:1fr 2.2fr 1fr;gap:12px;margin-bottom:14px}
+.stat{background:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 6px 20px #2b235a14;position:relative;overflow:hidden}
+.stat small{display:block;font-weight:800;color:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.stat b{font-size:26px;font-weight:900}
+.stat.cash{background:linear-gradient(135deg,#0f9f6e,#3ddbb6);color:#fff}.stat.cash small{color:#e6fff6}
+.stat.cash i{position:absolute;left:0;bottom:0;height:6px;background:var(--sun);transition:width .6s}
+.stat.cash.up b{animation:pop .6s}.stat.cash.down b{animation:shake .5s}
+@keyframes pop{40%{transform:scale(1.2)}}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.eqn div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.eqn span{font-size:13px;font-weight:700;color:var(--soft)}.eqn span b{display:block;font-size:20px;color:var(--ink)}.eqn em{font-style:normal;font-weight:900;font-size:22px;color:var(--v)}
+.eqn.ok small{color:var(--good)}.eqn.off small{color:var(--bad)}
+.score b span{font-size:16px;color:var(--soft)}
+.play{display:grid;grid-template-columns:minmax(300px,390px) 1fr;gap:16px;align-items:start}
+.card{position:sticky;top:12px;background:var(--card);border-radius:24px;padding:20px;box-shadow:0 14px 40px #2b235a22;border:3px solid #fff;outline:3px solid var(--line)}
+.card.big{text-align:center}
+.when{display:inline-block;background:var(--navy);color:var(--sun);font-weight:900;border-radius:999px;padding:5px 12px;font-size:13px}
+.who{display:flex;align-items:center;gap:8px;margin-top:12px;font-weight:800;color:var(--soft)}.av{font-size:28px;width:44px;height:44px;display:grid;place-items:center;background:#fff2ea;border-radius:14px}
+.card h2{margin:8px 0 6px;font-size:24px;line-height:1.15;font-weight:900;color:var(--navy)}.story{font-size:17px;line-height:1.45;margin:0 0 14px}
+.burst{font-size:56px;margin:8px 0}
+.choices{display:grid;gap:10px}
+.choice{text-align:left;background:linear-gradient(135deg,#fff,#f5f2ff);border:3px solid var(--line);border-radius:18px;padding:13px 15px;display:grid;gap:2px;transition:transform .1s,border-color .1s}
+.choice b{font-size:17px;color:var(--navy)}.choice span{color:var(--soft);font-size:14px;font-weight:700}
+.choice:hover:not(:disabled){border-color:var(--v);transform:translateY(-2px)}
+.choice:disabled{opacity:.55;cursor:not-allowed}.lock{color:var(--bad)!important}
+.picked{background:#f3f0ff;border-radius:12px;padding:8px 12px;font-size:14px;margin-bottom:10px}
+.task{font-size:15px;line-height:1.4}.dr-t{color:#2563eb;font-weight:900}.cr-t{color:#d9468b;font-weight:900}
+.amount{margin:12px auto;width:max-content;background:linear-gradient(135deg,var(--sun),var(--or));color:var(--navy);font-weight:900;font-size:28px;padding:10px 22px;border-radius:18px;box-shadow:0 8px 0 #d65f2c;cursor:grab;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.slots{display:grid;gap:6px;margin-bottom:10px}.slots span{background:#f6f6fb;border:2px dashed #d6d2f0;border-radius:12px;padding:7px 10px;font-size:14px}.slots span.set{border-style:solid;border-color:var(--v);background:#f1eeff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.row.center{justify-content:center;margin-top:22px}
+.fb{border-radius:14px;padding:11px 14px;margin:10px 0;font-size:15px;line-height:1.45}.fb ul{margin:6px 0 0;padding-left:18px}
+.fb.good{background:#e3fbf1;border:2px solid #7fe0b9}.fb.bad{background:#ffecec;border:2px solid #ffb3b5}.fb.warn{background:#fff6dc;border:2px solid #ffd98a}.fb.info{background:#eef0ff;border:2px solid #c6c0ff}
+.muted{color:var(--soft);display:block;margin-top:10px}
+.mini{list-style:none;padding:0;display:grid;gap:6px;font-weight:800;margin:12px 0 18px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.col h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--soft)}
+.t{background:#fff;border-radius:16px;margin-bottom:10px;box-shadow:0 4px 14px #2b235a12;overflow:hidden;border:2px solid transparent}
+.t header{display:flex;justify-content:space-between;gap:6px;padding:7px 10px;font-weight:800;font-size:13px;border-bottom:3px solid var(--navy)}
+.t header b{white-space:nowrap}
+.t.asset header,.t.contra header{background:#e8f6ff}.t.liability header{background:#fff0e6}.t.equity header,.t.draw header{background:#f0ecff}.t.revenue header{background:#e5fbf1}.t.expense header{background:#ffeef5}
+.t-body{display:grid;grid-template-columns:1fr 1fr}
+.zone{min-height:44px;padding:5px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px}
+.zone.dr{border-right:3px solid var(--navy)}
+.zone small{font-size:10px;font-weight:800;text-transform:uppercase;color:#a5a2c4}
+.zone.live{cursor:pointer;background:repeating-linear-gradient(45deg,#fafaff,#fafaff 6px,#f3f0ff 6px,#f3f0ff 12px)}
+.zone.live.dr:hover{background:#dbeafe}.zone.live.cr:hover{background:#fde2ef}
+.zone.fresh{background:#e3fbf1}
+.chip{background:#f1f1f7;border-radius:8px;padding:2px 7px;font-weight:800}
+.chip.new{background:var(--mint);color:#fff;animation:pop .6s}
+.chip.pending{border:0;background:linear-gradient(135deg,var(--sun),var(--or));color:var(--navy)}
+.more{font-size:10px;color:var(--soft)}
+.pick .hero{text-align:center;padding:26px 0 10px}
+.eyebrow{display:inline-block;font-weight:900;font-size:12px;letter-spacing:.1em;color:var(--v2);background:#ece8ff;border-radius:999px;padding:6px 12px}
+.hero h1{font-size:clamp(36px,6vw,64px);line-height:1.02;margin:14px 0;color:var(--navy);font-weight:900}.hero h1 span{background:linear-gradient(90deg,var(--v),var(--pink),var(--or));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:640px;margin:0 auto;font-size:19px;line-height:1.5;color:#4a4770}
+.resume{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;background:#fff;border-radius:18px;padding:12px 16px;margin:18px auto 0;max-width:760px;box-shadow:0 6px 20px #2b235a14}
+.bizzes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:1100px;margin:26px auto}
+.biz{--c:var(--v);text-align:left;border:0;border-radius:28px;padding:22px;color:#fff;background:linear-gradient(160deg,var(--c),var(--navy) 130%);box-shadow:0 18px 40px #2b235a33;display:grid;gap:6px;transition:transform .15s}
+.biz:hover{transform:translateY(-6px) rotate(-.5deg)}
+.biz .em{font-size:64px;line-height:1;filter:drop-shadow(0 6px 10px #0004)}.biz small{font-weight:900;text-transform:uppercase;letter-spacing:.08em;opacity:.85}.biz b{font-size:28px;font-weight:900}.biz span{font-size:16px;opacity:.95}.biz i{font-style:normal;margin-top:10px;background:#fff;color:var(--navy);border-radius:14px;padding:10px 14px;font-weight:900;width:max-content}
+.how{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1100px;margin:0 auto}.how div{background:#fff;border-radius:18px;padding:14px;display:grid;gap:4px;box-shadow:0 4px 14px #2b235a10}.how b{color:var(--v2)}.how span{color:var(--soft);font-size:14px}
+.teach{max-width:1100px;margin:26px auto 0;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:linear-gradient(135deg,var(--navy),#3b2f9e);color:#fff;border-radius:28px;padding:26px}.teach h2{margin:10px 0 6px;font-size:28px}.teach p{margin:0;opacity:.85;max-width:560px}.teach .eyebrow{background:#ffffff22;color:var(--sun)}
+.stmts,.report{max-width:1180px;margin:0 auto}
+.stmt-head{text-align:center;margin:8px 0 14px}.stmt-head h2{font-size:32px;margin:8px 0 4px;color:var(--navy)}.stmt-head p{margin:0;color:var(--soft)}
+.step{background:var(--or);color:#fff;font-weight:900;border-radius:999px;padding:5px 12px;font-size:13px}
+.tray{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#fff;border-radius:20px;padding:14px;margin-bottom:14px;box-shadow:0 6px 20px #2b235a14;min-height:64px;position:sticky;top:8px;z-index:2}
+.item{background:linear-gradient(135deg,#fff,#f5f2ff);border:2px solid var(--line);border-radius:12px;padding:8px 11px;font-weight:800;font-size:14px}
+.item b{color:var(--v2);margin-left:4px}.item.sel{border-color:var(--or);background:#fff1e8;box-shadow:0 0 0 4px #ffb38a66;transform:translateY(-2px)}.item.wrong{border-color:var(--bad);background:#ffecec}
+.papers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.paper{background:#fffdf8;border-radius:18px;padding:16px;box-shadow:0 10px 30px #2b235a1c;border-top:8px solid var(--v)}
+.paper:nth-child(2){border-top-color:var(--or)}.paper:nth-child(3){border-top-color:var(--mint)}
+.paper h3{margin:0;font-size:18px;color:var(--navy);text-align:center}.paper>small{display:block;text-align:center;color:var(--soft);margin-bottom:8px}
+.paper h4{margin:12px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft)}
+.drop{border:3px dashed #d6d2f0;border-radius:14px;padding:8px;margin-top:10px;min-height:70px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;cursor:pointer}
+.drop h4{width:100%;margin:0 0 2px}.drop:hover{border-color:var(--or);background:#fff7f1}.drop.fixed{cursor:default;background:#f6f6fb;border-style:solid;border-color:#ecebf5;min-height:0}
+.hint{color:#aaa6c8;font-size:13px}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:14px;border-bottom:1px dotted #e3e0f2}.ln b{white-space:nowrap}
+.ln.tot{font-weight:800;border-bottom:2px solid #cfcbe6}.ln.grand{font-weight:900;font-size:16px;border-bottom:4px double var(--navy);background:#fff6d6;margin-top:4px;padding:6px 4px;align-items:center}
+.ln input{width:120px;text-align:right;border:3px solid var(--v);border-radius:10px;padding:5px 8px;font-weight:900;background:#fff}.ln input.wrong{border-color:var(--bad);background:#ffecec}
+.hero-end{text-align:center;background:linear-gradient(135deg,var(--v),var(--pink) 60%,var(--or));color:#fff;border-radius:30px;padding:26px 18px;margin-bottom:16px;box-shadow:0 20px 50px #6c5ce755}
+.hero-end h1{font-size:clamp(28px,4.4vw,46px);margin:6px 0}.hero-end p{margin:0;opacity:.95;font-weight:700}
+.stars span{font-size:52px;color:#ffffff55;margin:0 4px}.stars span.on{color:var(--sun);text-shadow:0 4px 0 #d65f2c;animation:pop .7s}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}.kpis div{background:#ffffff26;border-radius:16px;padding:10px}.kpis small{display:block;font-weight:800;opacity:.9}.kpis b{font-size:24px}
+.decisions{margin-top:14px;border-top-color:var(--sun)}.decisions ol{padding-left:0;list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px}.decisions li{font-size:14px}.decisions li span{display:inline-block;min-width:64px;font-weight:900;color:var(--or)}
+.scrim{position:fixed;inset:0;background:#1e1b4bcc;display:grid;place-items:center;padding:16px;z-index:20}
+.modal{position:relative;background:#fff;border-radius:26px;padding:24px;width:min(680px,100%);max-height:92vh;overflow:auto;box-shadow:0 30px 80px #0006}
+.modal h2{margin:10px 0;color:var(--navy);font-size:26px}.modal label{display:grid;gap:6px;font-weight:800;margin:10px 0}
+.modal input,.modal textarea{border:2px solid var(--line);border-radius:12px;padding:10px;width:100%;font-size:15px}.modal textarea{resize:vertical}
+.x{position:absolute;right:14px;top:14px;border:0;background:#f3f0ff;border-radius:50%;width:36px;height:36px;font-weight:900}
+.key{padding-left:20px;display:grid;gap:8px}.key li{font-size:14px}.key li span{display:block}.key li b{color:var(--good);font-size:13px}.key li em{color:var(--bad);font-size:13px}
+@media (max-width:1100px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}.how{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:900px){.play{grid-template-columns:1fr}.card{position:static}.stats{grid-template-columns:1fr 1fr}.eqn{grid-column:1/-1;order:3}.papers{grid-template-columns:1fr}.bizzes{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.decisions ol{grid-template-columns:1fr}}
+@media (max-width:560px){.top-actions{width:100%;margin-left:0}.top-actions button{flex:1;padding:8px 10px;font-size:14px}.board{gap:8px}.t header{font-size:12px;padding:6px 7px}.zone{font-size:11px}.stat b{font-size:21px}.eqn span b{font-size:16px}.how{grid-template-columns:1fr}.card h2{font-size:21px}.ln{font-size:13px}.ln input{width:100px}.hero p{font-size:17px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>// Ledger Lane "Year One" demo engine: scenarios, double-entry ledger, statements.
+(function ENGINE(root){
+const money=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
+const ACCOUNTS={
+ cash:['Cash','asset','💵'],supplies:['Supplies','asset','📦'],prepaid:['Prepaid Rent','asset','🗓️'],equip:['Equipment','asset','🛠️'],accdep:['Accumulated Depreciation','contra','📉'],
+ ap:['Accounts Payable','liability','🧾'],wagespay:['Wages Payable','liability','⏰'],intpay:['Interest Payable','liability','🏦'],unearned:['Unearned Revenue','liability','⏳'],note:['Notes Payable','liability','📝'],
+ capital:["Owner's Capital",'equity','👤'],draws:["Owner's Withdrawals",'draw','👛'],
+ sales:['Sales Revenue','revenue','📈'],
+ rentexp:['Rent Expense','expense','🏠'],wages:['Wages Expense','expense','🧑‍🍳'],suppexp:['Supplies Expense','expense','🥤'],depexp:['Depreciation Expense','expense','⚙️'],intexp:['Interest Expense','expense','💸'],utilexp:['Utilities Expense','expense','💡'],adexp:['Advertising Expense','expense','📣'],permits:['Permits & Insurance Expense','expense','🛡️'],repairs:['Repairs Expense','expense','🔧']};
+const typeOf=id=>ACCOUNTS[id][1];
+const debitNormal=id=>['asset','expense','draw'].includes(typeOf(id));
+const nameOf=(biz,id)=>(biz.labels&&biz.labels[id])||ACCOUNTS[id][0];
+const iconOf=id=>ACCOUNTS[id][2];
+const SECTION={asset:'bs-assets',contra:'bs-assets',liability:'bs-liab',equity:'oe-cap',draw:'oe-draw',revenue:'is-rev',expense:'is-exp'};
+const sectionOf=id=>SECTION[typeOf(id)];
+const SECTIONS=[['is-rev','Income statement','Revenues'],['is-exp','Income statement','Expenses'],['oe-cap',"Statement of owner's equity",'Owner investments'],['oe-draw',"Statement of owner's equity",'Withdrawals'],['bs-assets','Balance sheet','Assets'],['bs-liab','Balance sheet','Liabilities']];
+const SECTION_HINT={'is-rev':'This was earned from customers. Revenue belongs on the income statement.','is-exp':'This cost was used up to run the business. Expenses belong on the income statement.','oe-cap':"This is what the owner put in. It starts the statement of owner's equity.",'oe-draw':"The owner took this out for personal use. It's not an expense: it reduces owner's equity.",'bs-assets':'The business owns this (or it reduces an asset, like accumulated depreciation). It goes in balance sheet assets.','bs-liab':'The business owes this to someone. It goes in balance sheet liabilities.'};
+const HINT_DR={cash:'Money came INTO the bank account.',supplies:"You got supplies you'll use up soon.",prepaid:"You paid now for something you'll use later. That's a future benefit you own.",equip:"Something you'll use for years arrived.",accdep:'Accumulated depreciation is almost never debited here.',ap:'You paid down a bill you owed, so that debt shrinks.',wagespay:'You paid wages you already owed.',intpay:'You paid interest you already owed.',unearned:'You finally did the work customers paid for in advance, so you owe them less.',note:'You paid back part of a loan.',capital:'The owner took capital back out.',draws:"The owner took money out for personal use. That's a withdrawal, not a business expense.",sales:'Revenue is almost never debited.',depexp:'Equipment wore out a little this year. That used-up cost is an expense.',intexp:'Borrowing cost you something this year. That cost is an expense.'};
+const HINT_CR={cash:'Money LEFT the bank account.',supplies:'Supplies got used up, so what is on the shelves went down.',prepaid:'Part of what you prepaid got used up.',equip:'You gave up equipment.',accdep:'Record the wear on equipment without erasing its original cost. Use the contra-asset.',ap:'You promised to pay a supplier later. You now owe them.',wagespay:"Your team earned wages you haven't paid yet. You owe them.",intpay:"Interest built up that you haven't paid yet.",unearned:"Customers paid before you did the work. Until you do it, you owe them.",note:'You signed a loan. You owe the bank.',capital:'The money came from the owner.',draws:'Withdrawals are almost never credited.',sales:'You earned it by serving customers.'};
+const hintDr=id=>HINT_DR[id]||'A cost got used up running the business. That is an expense.';
+const hintCr=id=>HINT_CR[id]||'Expenses are almost never credited.';
+const E=(when,make,yearEnd)=>({when,make,yearEnd:!!yearEnd});
+const ch=(label,entry,why,extra)=>Object.assign({label,entry,why},extra||{});
+const skip=(label,note,extra)=>Object.assign({label,entry:null,note},extra||{});
+const adjSupplies=left=>E('Dec 31',h=>{const had=h.bal('supplies'),used=had-left;if(used<=0)return null;return {who:'Year-end count',av:'📋',title:'Count what is left',story:`Your books show ${money(had)} of supplies, but when you count the shelves only ${money(left)} is left. The rest was used up during the year.`,choices:[ch(`Record ${money(used)} of supplies used`,['suppexp','supplies',used],"Supplies you used are now an expense, and the Supplies asset shrinks to what's really on the shelves. This is an adjusting entry.")]};},true);
+const adjPrepaid=(months,story)=>E('Dec 31',h=>{if(!h.f.prepaid)return null;const used=Math.round(h.f.prepaid*months/12);return {who:'Year-end adjustment',av:'🗓️',title:'Rent you have used up',story:`You prepaid ${money(h.f.prepaid)} of rent. ${story}`,choices:[ch(`Record ${money(used)} of rent used`,['rentexp','prepaid',used],"The months you've used move from the Prepaid Rent asset to Rent Expense."+(months<12?' The month you have left stays an asset.':''))]};},true);
+const adjDep=()=>E('Dec 31',h=>{const d=h.f.dep||0;if(!d)return null;return {who:'Year-end adjustment',av:'⚙️',title:'Equipment wears out',story:`Your equipment won't last forever. Spread its cost over its useful life: ${money(d)} of depreciation this year.`,choices:[ch(`Record ${money(d)} of depreciation`,['depexp','accdep',d],'Depreciation spreads the cost of equipment over the years you use it. The credit goes to Accumulated Depreciation, a contra-asset, so the original cost stays visible.')]};},true);
+const adjWages=(fn,story)=>E('Dec 31',h=>{const w=fn(h);if(!w)return null;return {who:'Year-end adjustment',av:'⏰',title:"Wages you haven't paid yet",story:story+` They earned ${money(w)}.`,choices:[ch(`Record ${money(w)} of unpaid wages`,['wages','wagespay',w],"Your team earned it this year, so it's this year's expense, even though you'll pay it in January. Wages Payable is what you owe.")]};},true);
+const adjInterest=()=>E('Dec 31',h=>{if(!h.f.loan)return null;const amt=Math.round(h.f.loan*h.f.rate);return {who:'Year-end adjustment',av:'🏦',title:'Interest builds up',story:`You've had the ${money(h.f.loan)} bank loan all year at ${Math.round(h.f.rate*100)}%. ${money(amt)} of interest has built up, and it's not due until later.`,choices:[ch(`Record ${money(amt)} of interest`,['intexp','intpay',amt],"Borrowing cost you money this year, so it's an expense now. Interest Payable is the amount you owe the bank.")]};},true);
+const payBills=when=>E(when,h=>{const owe=h.bal('ap');if(owe<=0)return null;return {who:'Your suppliers',av:'🧾',title:'Bills are due',story:`You owe ${money(owe)} on account. Pay it now?`,choices:[ch(`Pay ${money(owe)} now`,['ap','cash',owe],"Paying a bill is NOT an expense: you recorded what you bought when you bought it. You're just shrinking a liability with cash."),skip('Ask for more time','No money moved, so there is nothing to record. The liability stays on your books.',{sub:'Keep the cash'})]};});
+const invest=(when,story,a,b)=>E(when,()=>({who:'You · Owner',av:'🧑‍💼',title:'Day one',story,choices:[ch(`Invest ${money(a)}`,['cash','capital',a],"Cash went up, and so did Owner's Capital. The owner funded the business.",{sub:'Bigger cushion, more options'}),ch(`Invest ${money(b)}`,['cash','capital',b],"Cash went up, and so did Owner's Capital. With a smaller cushion, some choices may be out of reach.",{sub:'Keep more savings for yourself'})]}));
+const draw=(when,a,b)=>E(when,()=>({who:'You · Owner',av:'🎁',title:'Paying yourself',story:'The year has gone well and the holidays are coming. Take some cash out for yourself?',choices:[ch(`Take ${money(a)}`,['draws','cash',a],"Money the owner takes out is a withdrawal, NOT an expense. It lowers equity directly and never touches net income."),ch(`Take ${money(b)}`,['draws','cash',b],'Withdrawals lower equity directly. They never appear on the income statement.'),skip('Leave it in the business','No money moved, so there is nothing to record.')]}));
+const single=(when,who,av,title,story,entry,why,cond)=>E(when,h=>{if(cond&&!cond(h))return null;const en=typeof entry==='function'?entry(h):entry;const st=typeof story==='function'?story(h):story;return {who,av,title,story:st,choices:[ch(`Record ${money(en[2])}`,en,why)]};});
+const coffee={id:'coffee',name:"Tommy's Coffee",type:'Coffee shop',emoji:'☕',color:'#6c5ce7',tagline:'Lattes, a bank loan and a holiday catering gig.',labels:{},
+accounts:['cash','supplies','prepaid','equip','accdep','ap','wagespay','intpay','unearned','note','capital','draws','sales','rentexp','wages','suppexp','utilexp','depexp','intexp'],events:[
+invest('Jan 2',"You just got the keys to an empty corner shop on Harbor Street. How much of your savings will you put into Tommy's Coffee?",20000,15000),
+E('Jan 4',()=>({who:'Maya · Harbor Bank',av:'🏦',title:'A loan offer',story:'"We can lend you $10,000 at 6% a year. You repay it in three years."',choices:[ch('Take the $10,000 loan',['cash','note',10000],"You got cash, but you also owe the bank. Notes Payable is a liability. Borrowing is never revenue.",{sub:'More cash, but you pay interest',set:{loan:10000,rate:.06}}),skip('No thanks',"No money moved, so there's nothing to record.",{sub:'Stay debt-free'})]})),
+E('Jan 6',()=>({who:'Rosa · Espresso Supply Co.',av:'👩‍🔧',title:'The espresso machine',story:'A two-group espresso machine and grinder for $12,000. "Pay today, or pay me by June."',choices:[ch('Pay cash today',['equip','cash',12000],"One asset (Cash) turned into another (Equipment). Total assets didn't change.",{sub:'No debt',add:{dep:2400}}),ch('Pay Rosa by June',['equip','ap',12000],'You gained an asset AND a liability. Accounts Payable is your promise to pay Rosa.',{sub:'Keep your cash for now',add:{dep:2400}})]})),
+E('Jan 8',()=>({who:'Mr. Patel · Landlord',av:'🏠',title:'Signing the lease',story:'"Rent is $1,500 a month. Pay the whole year today and I\'ll take 10% off: $16,200."',choices:[ch('Prepay the year: $16,200',['prepaid','cash',16200],"You haven't used the space yet, so it's an asset: Prepaid Rent. At year-end you'll move what you used to Rent Expense.",{sub:'Save $1,800',set:{prepaid:16200}}),skip('Pay every six months',"Signing a lease isn't a transaction. No money moved yet, so you'll record rent when you pay it.",{sub:'$9,000 in June and December'})]})),
+E('Jan 9',()=>({who:'Harbor Bean Roasters',av:'🫘',title:'Stocking up',story:'Beans, milk, cups and pastries for the first few months: $2,400.',choices:[ch('Pay cash',['supplies','cash',2400],'Supplies are an asset until you use them. You swapped cash for beans.'),ch('Put it on account',['supplies','ap',2400],'More supplies, more money owed. Your liabilities just grew.',{sub:'Pay later'})]})),
+E('Apr 1',()=>({who:'Spring rush',av:'🌷',title:'How will you run the shop?',story:'Foot traffic is picking up. Pick your plan for the rest of the year.',choices:[skip('Two baristas, $4.25 lattes',"A plan isn't a transaction. You'll record wages when you pay them and sales when customers buy.",{sub:'Busier shop, bigger payroll',set:{plan:'big'}}),skip('One barista, $5.00 lattes',"A plan isn't a transaction. You'll record wages when you pay them and sales when customers buy.",{sub:'Calmer shop, smaller payroll',set:{plan:'lean'}})]})),
+payBills('Jun 1'),
+single('Jun 30','First-half wrap-up','📈','Six months of sales',h=>`From January through June, customers bought ${money(h.f.plan==='big'?46000:41000)} of coffee and pastries, all paid by cash or card.`,h=>['cash','sales',h.f.plan==='big'?46000:41000],'You earned it and got paid, so Cash and Sales Revenue both went up. Revenue raises equity.'),
+single('Jun 30','Payroll','🧑‍🍳','Paying your team',h=>`Wages from April through June come to ${money(h.f.plan==='big'?9000:5000)}.`,h=>['wages','cash',h.f.plan==='big'?9000:5000],"Your team's time gets used up as they work, so wages are an expense."),
+single('Jun 30','Mr. Patel · Landlord','🏠','Rent for January to June','Six months at $1,500: $9,000.',['rentexp','cash',9000],"You've already used those six months, so the rent is an expense.",h=>!h.f.prepaid),
+E('Aug 20',()=>({who:'Dana · Northwind Offices',av:'💼',title:'A holiday party order',story:'"Cater our December party and we\'ll pay the full $3,000 today."',choices:[ch('Accept the $3,000',['cash','unearned',3000],"You have the cash but haven't done the work. Until December you owe Dana, so it's Unearned Revenue, a liability.",{set:{deposit:3000}}),skip('Politely decline','No deal and no money, so there is nothing to record.',{sub:'Too busy'})]})),
+E('Sep 10',()=>({who:'Harbor Bean Roasters',av:'🎃',title:'Fall restock',story:'Pumpkin-spice season! Another round of supplies: $3,600.',choices:[ch('Pay cash',['supplies','cash',3600],'Supplies are an asset until you use them.'),ch('Put it on account',['supplies','ap',3600],'More supplies, and you owe the roaster again.',{sub:'Pay later'})]})),
+single('Oct 5','Harbor Power & Water','💡','Utility bills','Electricity and water for the year so far: $2,100, paid today.',['utilexp','cash',2100],'Power and water got used up running the shop, so they are an expense.'),
+draw('Nov 20',8000,3000),
+single('Dec 18','Dana · Northwind Offices','🎉','Party time',"You catered Northwind's holiday party, the one Dana paid for in August.",['unearned','sales',3000],"You did the work, so you no longer owe Dana. The liability becomes revenue.",h=>h.f.deposit),
+single('Dec 30','Second-half wrap-up','🎄','Holiday-season sales',h=>`From July through December, customers bought ${money(h.f.plan==='big'?52000:47000)}. The holidays were huge.`,h=>['cash','sales',h.f.plan==='big'?52000:47000],'Earned and collected: Cash and Sales Revenue both go up.'),
+single('Dec 30','Payroll','🧑‍🍳','Paying your team',h=>`Wages paid from July through December 28: ${money(h.f.plan==='big'?12000:6500)}.`,h=>['wages','cash',h.f.plan==='big'?12000:6500],'Wages are an expense as the work happens.'),
+single('Dec 30','Mr. Patel · Landlord','🏠','Rent for July to December','Six more months at $1,500: $9,000.',['rentexp','cash',9000],'Space you have used is an expense.',h=>!h.f.prepaid),
+adjSupplies(900),adjPrepaid(12,'The whole year has now gone by.'),adjDep(),adjWages(h=>h.f.plan==='big'?600:350,'Your baristas worked December 29 to 31, but payday isn\'t until January.'),adjInterest()]};
+const bike={id:'bike',name:'Spoke & Sprocket',type:'Bike repair shop',emoji:'🚲',color:'#12b5a0',tagline:'A used van, a city contract and race season.',labels:{sales:'Repair Revenue',supplies:'Parts & Supplies',suppexp:'Parts & Supplies Expense'},
+accounts:['cash','supplies','prepaid','equip','accdep','ap','wagespay','intpay','unearned','note','capital','draws','sales','rentexp','wages','suppexp','adexp','depexp','intexp'],events:[
+invest('Jan 3','You found a garage with a roll-up door two blocks from the river trail. How much will you put into Spoke & Sprocket?',18000,12000),
+E('Jan 5',()=>({who:'Eddie · Riverside Motors',av:'🚐',title:'A van for mobile repairs',story:'A used cargo van for $14,000. "Pay cash, or Harbor Bank can finance it with an 8% note."',choices:[ch('Pay cash',['equip','cash',14000],"Cash turned into Equipment. Total assets didn't change.",{add:{dep:2800}}),ch('Finance it with the bank',['equip','note',14000],'You got the van and a loan at the same time: Equipment went up and Notes Payable went up. No cash moved.',{sub:'8% interest',set:{loan:14000,rate:.08},add:{dep:2800}})]})),
+E('Jan 7',()=>({who:'Park Tool Supply',av:'🔧',title:'Tools and work stands',story:'Repair stands, a truing stand and a wall of tools: $5,000.',choices:[ch('Pay cash',['equip','cash',5000],'Tools last for years, so they are Equipment, an asset.',{add:{dep:1000}}),ch('Put it on account',['equip','ap',5000],"Equipment went up, and so did Accounts Payable: you'll pay Park Tool later.",{sub:'Pay later',add:{dep:1000}})]})),
+E('Jan 9',()=>({who:'Velo Parts Wholesale',av:'⚙️',title:'Stocking parts',story:'Tubes, chains, brake pads and cables: $3,000.',choices:[ch('Pay cash',['supplies','cash',3000],"Parts are an asset until you use them on a customer's bike."),ch('Put it on account',['supplies','ap',3000],'More parts, more money owed.',{sub:'Pay later'})]})),
+E('Feb 1',()=>({who:'Gloria · Landlord',av:'🏠',title:'The garage lease',story:'"It\'s $900 a month. Pay a year up front, February to January, and it\'s $9,600."',choices:[ch('Prepay the year: $9,600',['prepaid','cash',9600],"You haven't used the space yet, so it's Prepaid Rent, an asset.",{sub:'Save $1,200',set:{prepaid:9600}}),skip('Pay as you go',"Signing a lease isn't a transaction. You'll record rent when you pay it.",{sub:'Pay in June and December'})]})),
+E('Mar 15',()=>({who:'City Bike Share',av:'🏙️',title:'A city contract',story:'"Keep our 60 share bikes running from April to December. We\'ll pay the full $6,000 today."',choices:[ch('Sign the contract',['cash','unearned',6000],"You got paid before doing the work, so you owe the city service. That's Unearned Revenue, a liability.",{set:{contract:6000}}),skip('Pass on it','No contract and no money, so there is nothing to record.',{sub:'Focus on walk-ins'})]})),
+E('Apr 1',()=>({who:'Riding season',av:'🌤️',title:'Hire an apprentice?',story:"Spring tune-ups are piling up. Do you hire help?",choices:[skip('Hire an apprentice',"Hiring isn't a transaction. You'll record wages when you pay them.",{sub:'Fix more bikes, pay wages',set:{crew:'two'}}),skip('Stay solo',"A decision isn't a transaction, so there is nothing to record.",{sub:'No payroll, fewer repairs',set:{crew:'solo'}})]})),
+single('Jun 30','First-half wrap-up','📈','Six months of repairs',h=>`Customers paid ${money(h.f.crew==='two'?30000:23000)} for repairs from January through June.`,h=>['cash','sales',h.f.crew==='two'?30000:23000],'You earned it and got paid: Cash up, Repair Revenue up.'),
+single('Jun 30','Payroll','🧑‍🔧','Paying your apprentice','Wages for April through June: $6,000.',['wages','cash',6000],"Your apprentice's time is used up as they work, so wages are an expense.",h=>h.f.crew==='two'),
+single('Jun 30','Gloria · Landlord','🏠','Rent for February to June','Five months at $900: $4,500.',['rentexp','cash',4500],'Space you have already used is an expense.',h=>!h.f.prepaid),
+payBills('Jul 10'),
+E('Aug 1',()=>({who:'Riverside Gran Fondo',av:'🏁',title:'Sponsor the big race?',story:'A sponsor booth at the region\'s biggest ride costs $1,500. Riders will see your name all fall.',choices:[ch('Sponsor it: $1,500',['adexp','cash',1500],'Promoting your shop is an expense: Advertising Expense goes up, Cash goes down.',{sub:'More fall customers',set:{sponsor:true}}),skip('Skip it','No money moved, so there is nothing to record.')]})),
+E('Oct 1',()=>({who:'Velo Parts Wholesale',av:'⚙️',title:'Restocking parts',story:'Fall restock: $2,500.',choices:[ch('Pay cash',['supplies','cash',2500],'Parts are an asset until you use them.'),ch('Put it on account',['supplies','ap',2500],'More parts, more owed.',{sub:'Pay later'})]})),
+draw('Nov 15',6000,2000),
+single('Dec 30','Second-half wrap-up','📈','Six more months of repairs',h=>`July through December brought in ${money((h.f.crew==='two'?32000:24000)+(h.f.sponsor?6000:0))} in repairs${h.f.sponsor?', including riders who found you at the race':''}.`,h=>['cash','sales',(h.f.crew==='two'?32000:24000)+(h.f.sponsor?6000:0)],'Earned and collected: Cash and Repair Revenue both go up.'),
+single('Dec 30','Payroll','🧑‍🔧','Paying your apprentice','Wages for July through December 28: $7,500.',['wages','cash',7500],'Wages are an expense as the work happens.',h=>h.f.crew==='two'),
+single('Dec 30','Gloria · Landlord','🏠','Rent for July to December','Six months at $900: $5,400.',['rentexp','cash',5400],'Space you have used is an expense.',h=>!h.f.prepaid),
+adjSupplies(1200),adjPrepaid(11,'February through December are used up. January is still ahead.'),
+E('Dec 31',h=>h.f.contract?{who:'Year-end adjustment',av:'🏙️',title:'The city contract is done',story:'You kept the share bikes rolling from April through December. The $6,000 contract is fully earned.',choices:[ch('Record $6,000 earned',['unearned','sales',6000],"You did the work, so you no longer owe the city. Unearned Revenue becomes Repair Revenue.")]}:null,true),
+adjDep(),adjWages(h=>h.f.crew==='two'?300:0,'Your apprentice worked December 29 to 31, but payday is in January.'),adjInterest()]};
+const truck={id:'truck',name:'Rolling Taco Co.',type:'Food truck',emoji:'🌮',color:'#ff8a4c',tagline:'A truck loan, festival season and a wedding gig.',labels:{sales:'Food Sales',adexp:'Event Fees Expense',prepaid:'Prepaid Kitchen Rent',rentexp:'Kitchen Rent Expense'},
+accounts:['cash','supplies','prepaid','equip','accdep','ap','wagespay','intpay','unearned','note','capital','draws','sales','rentexp','wages','suppexp','permits','adexp','repairs','depexp','intexp'],events:[
+invest('Jan 2',"You've perfected your grandmother's al pastor recipe. Time to hit the road. How much will you invest in Rolling Taco Co.?",25000,18000),
+E('Jan 3',()=>({who:'Maya · Harbor Bank',av:'🏦',title:'Financing the dream',story:'"Trucks aren\'t cheap. We can lend you money at 7% a year. How much do you want?"',choices:[ch('Borrow $30,000',['cash','note',30000],"Cash went up, and so did Notes Payable. A loan is a liability, not revenue.",{sub:'More options, more interest',set:{loan:30000,rate:.07}}),ch('Borrow $15,000',['cash','note',15000],'Cash went up, and so did Notes Payable. Less debt, less interest.',{sub:'Smaller loan',set:{loan:15000,rate:.07}})]})),
+E('Jan 5',()=>({who:'Big Wheel Trucks',av:'🚚',title:'Pick your truck',story:'A brand-new kitchen truck is $38,000 and should last 8 years. A used one is $24,000 and has about 4 years left.',choices:[ch('New truck: $38,000',['equip','cash',38000],"Cash turned into Equipment. You'll spread its cost over 8 years.",{sub:'Lasts 8 years',add:{dep:4750}}),ch('Used truck: $24,000',['equip','cash',24000],"Cash turned into Equipment. You'll spread its cost over 4 years.",{sub:'Lasts about 4 years',add:{dep:6000}})]})),
+E('Jan 8',()=>({who:'Mercado Wholesale',av:'🌶️',title:'Stocking the kitchen',story:'Tortillas, meat, salsa ingredients and to-go boxes: $2,000.',choices:[ch('Pay cash',['supplies','cash',2000],'Supplies are an asset until you use them.'),ch('Put it on account',['supplies','ap',2000],'More supplies, more money owed.',{sub:'Pay later'})]})),
+E('Feb 1',()=>({who:'Harbor Commissary Kitchen',av:'🏠',title:'A home base kitchen',story:'"It\'s $500 a month for prep space. Prepay February to January and it\'s $5,400."',choices:[ch('Prepay the year: $5,400',['prepaid','cash',5400],"You haven't used the kitchen yet, so it's an asset: Prepaid Kitchen Rent.",{sub:'Save $600',set:{prepaid:5400}}),skip('Pay as you go',"Signing up isn't a transaction. You'll record rent when you pay it.",{sub:'Pay in June and December'})]})),
+single('Mar 31','First quarter','🌮','Winter sales','Cold months, but loyal regulars: $11,000 of tacos sold for cash.',['cash','sales',11000],'You earned it and got paid: Cash up, Food Sales up.'),
+single('Apr 1','City of Harbor','🛡️','Permits & insurance','Health permit, parking permits and a year of insurance: $1,800.',['permits','cash',1800],'This is a cost of operating, so it is an expense.'),
+E('Apr 10',()=>({who:'Festival circuit',av:'🎪',title:'Book the festival season?',story:'Six summer festivals. Booth fees total $2,500, paid now.',choices:[ch('Book all six: $2,500',['adexp','cash',2500],'Booth fees are a cost of doing business, so they are an expense.',{sub:'Huge crowds',set:{fest:true}}),skip('Stick to street corners','No money moved, so there is nothing to record.')]})),
+E('May 20',()=>({who:'Ana & Luis',av:'💍',title:'A wedding gig',story:'"Cater our October wedding? We\'ll pay the $4,000 deposit today."',choices:[ch('Accept the $4,000',['cash','unearned',4000],"You haven't cooked yet, so you owe them a wedding. That's Unearned Revenue, a liability.",{set:{deposit:true}}),skip('Decline','No deal, no money, nothing to record.')]})),
+single('Jun 30','Second quarter','☀️','Spring sales',h=>`April through June: ${money(26000+(h.f.fest?9000:0))} of tacos${h.f.fest?', including two packed festivals':''}.`,h=>['cash','sales',26000+(h.f.fest?9000:0)],'Earned and collected: Cash up, Food Sales up.'),
+single('Jun 30','Payroll','🧑‍🍳','Paying your line cook','Wages for January through June: $8,000.',['wages','cash',8000],'Wages are an expense as the work happens.'),
+single('Jun 30','Harbor Commissary Kitchen','🏠','Kitchen rent, February to June','Five months at $500: $2,500.',['rentexp','cash',2500],'Space you have used is an expense.',h=>!h.f.prepaid),
+payBills('Jul 1'),
+E('Aug 15',()=>({who:'Uh-oh',av:'🔥',title:'The generator dies',story:'Mid-shift, the generator quits. Repair the old one for $1,200, or buy a new one for $3,000 that will last 5 years?',choices:[ch('Repair it: $1,200',['repairs','cash',1200],"A repair keeps things running but doesn't add a new asset, so it's an expense."),ch('Buy a new one: $3,000',['equip','cash',3000],"A new generator will last years, so it's Equipment, an asset you'll depreciate.",{add:{dep:600}})]})),
+single('Oct 12','Ana & Luis','💃','The wedding',"You fed 150 happy guests at Ana and Luis's wedding.",['unearned','sales',4000],"The work is done, so the deposit is now earned. Unearned Revenue becomes Food Sales.",h=>h.f.deposit),
+draw('Nov 10',10000,4000),
+single('Dec 30','Second half','🍂','Summer and fall sales',h=>`July through December: ${money(39000+(h.f.fest?7000:0))} of tacos sold.`,h=>['cash','sales',39000+(h.f.fest?7000:0)],'Earned and collected: Cash up, Food Sales up.'),
+single('Dec 30','Payroll','🧑‍🍳','Paying your line cook','Wages for July through December 28: $9,000.',['wages','cash',9000],'Wages are an expense as the work happens.'),
+single('Dec 30','Harbor Commissary Kitchen','🏠','Kitchen rent, July to December','Six months at $500: $3,000.',['rentexp','cash',3000],'Space you have used is an expense.',h=>!h.f.prepaid),
+adjSupplies(600),adjPrepaid(11,'February through December are used up. January is still ahead.'),adjDep(),adjWages(()=>400,'Your line cook worked December 29 to 31, but payday is in January.'),adjInterest()]};
+const BUSINESSES=[coffee,bike,truck];
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const monthOf=when=>Math.max(0,MONTHS.indexOf(String(when).slice(0,3)));
+function newGame(biz){const g={biz,i:-1,ev:null,led:{},flags:{},status:[],first:0,rec:0,decisions:[],done:false,choice:null};biz.accounts.forEach(id=>g.led[id]={dr:[],cr:[]});return g;}
+const sum=a=>a.reduce((s,x)=>s+x,0);
+function bal(g,id){const l=g.led[id];if(!l)return 0;const d=sum(l.dr),c=sum(l.cr);return debitNormal(id)?d-c:c-d;}
+const helper=g=>({bal:id=>bal(g,id),f:g.flags});
+function advance(g){g.i++;g.choice=null;while(g.i<g.biz.events.length){const ev=g.biz.events[g.i].make(helper(g));if(ev){g.ev=ev;g.status[g.i]='cur';return ev;}g.status[g.i]='skip';g.i++;}g.ev=null;g.done=true;return null;}
+const isDisabled=(g,c)=>g.ev.choices.length>1&&!!c.entry&&c.entry[1]==='cash'&&c.entry[2]>bal(g,'cash');
+function choose(g,k){const c=g.ev&&g.ev.choices[k];if(!c||isDisabled(g,c))return null;Object.assign(g.flags,c.set||{});for(const key in c.add||{})g.flags[key]=(g.flags[key]||0)+c.add[key];g.choice=c;g.decisions.push({when:g.biz.events[g.i].when,title:g.ev.title,label:c.label});if(!c.entry)g.status[g.i]='done';return c;}
+function checkEntry(g,dr,cr){const e=g.choice.entry,n=id=>nameOf(g.biz,id);if(!dr||!cr)return {ok:false,kind:'warn',text:'Every entry has two sides. Drop the amount on one <b>Debit</b> side and one <b>Credit</b> side.'};
+ if(dr===e[0]&&cr===e[1])return {ok:true};
+ if(dr===e[1]&&cr===e[0])return {ok:false,kind:'bad',text:'So close! Right accounts, wrong sides. <b>Debit</b> = what the business got or used up. <b>Credit</b> = where it came from.'};
+ if(dr!==e[0]&&cr!==e[1])return {ok:false,kind:'bad',text:'Both sides need another look. <b>Debit hint:</b> '+hintDr(e[0])+' <b>Credit hint:</b> '+hintCr(e[1])};
+ if(dr!==e[0])return {ok:false,kind:'bad',text:'<b>'+n(cr)+'</b> on the Credit side is right! Now the Debit: '+hintDr(e[0])};
+ return {ok:false,kind:'bad',text:'<b>'+n(dr)+'</b> on the Debit side is right! Now the Credit: '+hintCr(e[1])};}
+function post(g,tries){const [dr,cr,amt]=g.choice.entry;g.led[dr].dr.push(amt);g.led[cr].cr.push(amt);g.rec++;if(!tries)g.first++;g.status[g.i]='done';}
+function trialBalance(g){let d=0,c=0;for(const id in g.led){const b=bal(g,id);if(debitNormal(id)===(b>=0))d+=Math.abs(b);else c+=Math.abs(b);}return {debits:d,credits:c};}
+function statements(g){const biz=g.biz,ids=biz.accounts.filter(id=>Math.round(bal(g,id))!==0),row=id=>({id,name:nameOf(biz,id),amount:bal(g,id)}),of=(...t)=>ids.filter(id=>t.includes(typeOf(id)));
+ const rev=of('revenue').map(row),exp=of('expense').map(row),totalRev=sum(rev.map(r=>r.amount)),totalExp=sum(exp.map(r=>r.amount)),netIncome=totalRev-totalExp;
+ const investments=bal(g,'capital'),draws=bal(g,'draws'),endCapital=investments+netIncome-draws;
+ const assets=of('asset','contra').map(id=>({...row(id),amount:typeOf(id)==='contra'?-bal(g,id):bal(g,id)})),totalAssets=sum(assets.map(r=>r.amount));
+ const liabilities=of('liability').map(row),totalLiab=sum(liabilities.map(r=>r.amount));
+ return {ids,rev,exp,totalRev,totalExp,netIncome,investments,draws,endCapital,assets,totalAssets,liabilities,totalLiab,totalLE:totalLiab+endCapital};}
+function sortItems(g){const h=s=>[...s].reduce((a,c)=>(a*31+c.charCodeAt(0))%9973,7);return statements(g).ids.slice().sort((a,b)=>h(a)-h(b));}
+function checkSort(g,placed){const items=sortItems(g);return {missing:items.filter(id=>!placed[id]),wrong:items.filter(id=>placed[id]&&placed[id]!==sectionOf(id))};}
+function parseLine(line){const l=line.toLowerCase(),m=line.match(/\$\s?([\d,]+(?:\.\d{1,2})?)/),amt=m?Math.round(parseFloat(m[1].replace(/,/g,''))):0;
+ if(!amt)return {line,ok:false,why:'No dollar amount found. Include one, like $500.'};
+ const later=/on account|on credit|pay later|in 30 days|invoice/.test(l);let e=null;
+ if(/invest|contribut/.test(l))e=['cash','capital'];
+ else if(/withdr|personal use|\bdraws?\b/.test(l))e=['draws','cash'];
+ else if(/borrow|loan|note payable/.test(l)&&!/repa|pays? (back|off)/.test(l))e=['cash','note'];
+ else if(/depreciat/.test(l))e=['depexp','accdep'];
+ else if(/(wage|salar).*(owed|unpaid|accru|not (yet )?paid)|(owed|unpaid|accru).*(wage|salar)/.test(l))e=['wages','wagespay'];
+ else if(/\bowed\b|payable|pays? off|settles?|pays? (the )?(supplier|vendor)/.test(l))e=['ap','cash'];
+ else if(/in advance|advance|deposit|upfront|up front/.test(l))e=['cash','unearned'];
+ else if(/(used|count|on hand)/.test(l)&&/suppl/.test(l))e=['suppexp','supplies'];
+ else if(/prepa/.test(l))e=['prepaid','cash'];
+ else if(/\brent\b/.test(l))e=['rentexp','cash'];
+ else if(/wage|salar|payroll/.test(l))e=['wages','cash'];
+ else if(/utilit|electric|water bill/.test(l))e=['utilexp','cash'];
+ else if(/advertis|marketing|\bads?\b/.test(l))e=['adexp','cash'];
+ else if(/interest/.test(l))e=['intexp','cash'];
+ else if(/suppl|ingredient|inventory|beans|cups|parts/.test(l))e=['supplies',later?'ap':'cash'];
+ else if(/equip|machine|bike|oven|computer|truck|van|furniture|tool|register/.test(l))e=['equip',later?'ap':'cash'];
+ else if(/earn|sold|sale|customer|revenue|service|fee/.test(l))e=['cash','sales'];
+ return e?{line,ok:true,dr:e[0],cr:e[1],amt}:{line,ok:false,why:"Couldn't tell what kind of transaction this is. Try words like rent, wages, invests, buys or sold."};}
+const parseNotes=text=>String(text).split('\n').map(s=>s.trim()).filter(Boolean).map(parseLine);
+const CUSTOM_ACCOUNTS=['cash','supplies','prepaid','equip','accdep','ap','wagespay','unearned','note','capital','draws','sales','rentexp','wages','suppexp','utilexp','adexp','depexp','intexp'];
+function customBusiness(name,lines){const ok=lines.filter(p=>p.ok),n=ok.length;return {id:'custom',name:name||'My class business',type:'Your course notes',emoji:'📝',labels:{},custom:{name,lines:lines.map(p=>p.line)},accounts:CUSTOM_ACCOUNTS,
+ events:ok.map((p,k)=>E(MONTHS[Math.min(11,Math.floor(k*12/Math.max(1,n)))]+' '+(k%2?15:1),()=>({who:'From your course notes',av:'📝',title:'Transaction '+(k+1)+' of '+n,story:p.line,choices:[ch('Record '+money(p.amt),[p.dr,p.cr,p.amt],nameOf({},p.dr)+(debitNormal(p.dr)?' goes up':' goes down')+' and '+nameOf({},p.cr)+(debitNormal(p.cr)?' goes down':' goes up')+'. Debits equal credits, so the books still balance.')]})))};}
+function replay(biz,log){const g=newGame(biz);for(const step of log){if(!advance(g))break;const c=choose(g,step.k);if(!c)break;if(c.entry)post(g,step.tries);}return g;}
+const SAMPLE_NOTES=['The owner invests $15,000 cash to start the shop.','Borrows $5,000 from the bank on a note payable.','Buys repair tools and work stands (equipment) for $6,000 on account.','Prepays $4,800 of rent for the year.','Customers pay $22,000 cash for repairs during the year.','A bike club pays $1,500 in advance for clinics next year.','Pays $3,000 owed to the tool supplier.','Pays the mechanic $9,000 in wages.','The owner withdraws $4,000 for personal use.','Records $1,200 of depreciation on the equipment.'].join('\n');
+const api={money,ACCOUNTS,typeOf,debitNormal,nameOf,iconOf,sectionOf,SECTIONS,SECTION_HINT,BUSINESSES,MONTHS,monthOf,newGame,bal,advance,isDisabled,choose,checkEntry,post,trialBalance,statements,sortItems,checkSort,parseLine,parseNotes,customBusiness,replay,SAMPLE_NOTES};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;
+root.LedgerPlay=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script>
+<script>// Ledger Lane "Year One" demo: run a business, journalize, close, prepare statements.
+(function PLAYUI(){
+const P=window.LedgerPlay,$=s=>document.querySelector(s),app=document.getElementById('app'),money=P.money,KEY='ledger-lane-play-v1';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let U={view:'pick',modal:null};let lastCash=null;
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY));}catch(e){return null;}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({bizId:U.g.biz.id,custom:U.g.biz.custom||null,log:U.log,seenYE:U.seenYE,name:U.g.biz.name,rec:U.g.rec}));}catch(e){}};
+const clearSave=()=>{try{localStorage.removeItem(KEY);}catch(e){}};
+const bizFor=(id,custom)=>id==='custom'?P.customBusiness(custom.name,P.parseNotes(custom.lines.join('\n'))):P.BUSINESSES.find(b=>b.id===id);
+function start(biz,log,seenYE){U={view:'game',g:null,log:[],seenYE:!!seenYE,phase:'story',pending:[],tries:0,msg:null,fresh:null,placed:{},sel:null,sortTries:0,sortWrong:[],computeTries:0,computeMsg:null,modal:null,inputs:{}};
+ if(log&&log.length){U.g=P.replay(biz,log);U.log=log.slice(0,U.g.decisions.length);}else U.g=P.newGame(biz);
+ lastCash=null;next();window.scrollTo({top:0});}
+function next(){U.pending=[];U.tries=0;U.msg=null;U.fresh=null;const g=U.g,ev=P.advance(g);
+ if(!ev)U.phase='stmt-intro';else if(g.biz.events[g.i].yearEnd&&!U.seenYE){U.seenYE=true;U.phase='yearend';}else U.phase='story';
+ save();render();focusCard();}
+function pick(k){const c=P.choose(U.g,k);if(!c)return;U.k=k;if(!c.entry){U.log.push({k,tries:0});U.phase='note';save();}else U.phase='record';render();focusCard();}
+function place(acct,side){if(U.phase!=='record')return;U.pending=U.pending.filter(p=>p.side!==side);U.pending.push({acct,side});U.msg=null;render();}
+function check(){const d=U.pending.find(p=>p.side==='dr'),c=U.pending.find(p=>p.side==='cr'),r=P.checkEntry(U.g,d&&d.acct,c&&c.acct);
+ if(r.ok){P.post(U.g,U.tries);U.log.push({k:U.k,tries:U.tries});U.pending=[];U.fresh=U.g.choice.entry;U.phase='done';save();render();focusCard();}
+ else{if(r.kind==='bad')U.tries++;U.msg=r;render();}}
+function showMe(){const e=U.g.choice.entry;U.tries=Math.max(U.tries,1);U.pending=[{acct:e[0],side:'dr'},{acct:e[1],side:'cr'}];U.msg={kind:'info',text:'Here it is: debit <b>'+esc(P.nameOf(U.g.biz,e[0]))+'</b>, credit <b>'+esc(P.nameOf(U.g.biz,e[1]))+'</b>. Press <b>Check it</b> to record it.'};render();}
+const focusCard=()=>{const c=$('#card');if(c&&innerWidth<900)c.scrollIntoView({block:'start',behavior:'smooth'});};
+const eq=g=>{const s=P.statements(g),E=P.bal(g,'capital')-P.bal(g,'draws')+s.netIncome;return {A:s.totalAssets,L:s.totalLiab,E};};
+const COLS=[['Assets',['asset','contra']],['Liabilities',['liability']],["Owner's equity & revenue",['equity','draw','revenue']],['Expenses',['expense']]];
+function header(){const g=U.g,inGame=U.view==='game';let cur=0;if(inGame){if(['stmt-intro','sort','compute','report'].includes(U.phase))cur=13;else if(g.ev&&g.biz.events[g.i].yearEnd)cur=12;else if(g.ev)cur=P.monthOf(g.biz.events[g.i].when);}
+ const labels=P.MONTHS.concat(['Close','Statements']);
+ return `<header class="top"><a class="brand" href="index.html"><span class="logo">LL</span><span>Ledger Lane</span></a>${inGame?`<span class="biz-pill">${g.biz.emoji} ${esc(g.biz.name)}</span>`:''}<nav class="top-actions">${inGame?'<button class="ghost" id="to-pick">Switch business</button>':''}<button class="ghost" id="open-instructor">For instructors</button></nav></header>
+ ${inGame?`<ol class="year" aria-label="Year progress">${labels.map((m,i)=>`<li class="${i<cur?'past':i===cur?'now':''} ${i>11?'wide':''}"><span>${m}</span></li>`).join('')}</ol>`:''}`;}
+function stats(){const g=U.g,cash=P.bal(g,'cash'),q=eq(g),ok=Math.round(q.A)===Math.round(q.L+q.E),dir=lastCash===null||cash===lastCash?'':cash>lastCash?'up':'down';lastCash=cash;
+ const pct=Math.max(4,Math.min(100,cash/600));
+ return `<section class="stats"><div class="stat cash ${dir}"><small>Cash in the bank</small><b>${money(cash)}</b><i style="width:${pct}%"></i></div>
+ <div class="stat eqn ${ok?'ok':'off'}"><small>Accounting equation ${ok?'✓ balanced':'⚠'}</small><div><span>Assets <b>${money(q.A)}</b></span><em>=</em><span>Liabilities <b>${money(q.L)}</b></span><em>+</em><span>Equity <b>${money(q.E)}</b></span></div></div>
+ <div class="stat score"><small>First-try entries</small><b>⭐ ${g.first}<span>/${g.rec}</span></b></div></section>`;}
+function tAccount(id){const g=U.g,l=g.led[id],amt=g.choice&&g.choice.entry?g.choice.entry[2]:0,rec=U.phase==='record';
+ const side=s=>{const arr=l[s],more=arr.length>3?`<span class="more">+${arr.length-3} more</span>`:'';const pend=U.pending.filter(p=>p.acct===id&&p.side===s).map(()=>`<button class="chip pending" data-unplace="${s}">${money(amt)}</button>`).join('');
+  const fr=U.fresh&&U.fresh[s==='dr'?0:1]===id;
+  return `<div class="zone ${s} ${fr?'fresh':''} ${rec?'live':''}" data-zone="${id}:${s}" ${rec?`role="button" tabindex="0" aria-label="${s==='dr'?'Debit':'Credit'} ${esc(P.nameOf(g.biz,id))}"`:''}><small>${s==='dr'?'Debit':'Credit'}</small>${more}${arr.slice(-3).map((a,i,x)=>`<span class="chip ${fr&&i===x.length-1?'new':''}">${money(a)}</span>`).join('')}${pend}</div>`;};
+ return `<article class="t ${P.typeOf(id)}"><header><span>${P.iconOf(id)} ${esc(P.nameOf(g.biz,id))}</span><b>${money(P.bal(g,id))}</b></header><div class="t-body">${side('dr')}${side('cr')}</div></article>`;}
+function board(){const g=U.g;return `<section class="board ${U.phase==='record'?'recording':''}" aria-label="T accounts">${COLS.map(([t,types])=>`<div class="col"><h3>${t}</h3>${g.biz.accounts.filter(id=>types.includes(P.typeOf(id))).map(tAccount).join('')}</div>`).join('')}</section>`;}
+function card(){const g=U.g,ev=g.ev,c=g.choice;
+ if(U.phase==='yearend')return `<div class="card big" id="card"><div class="when">December 31</div><div class="burst">🎆</div><h2>Time to close the books</h2><p>The year is over, but your books aren't quite right yet. Some things happened slowly: supplies got used, equipment wore down, and your team earned wages you haven't paid.</p><p><b>Adjusting entries</b> fix that so this year's statements tell the truth.</p><button class="go" id="begin-close">Start closing the books →</button></div>`;
+ if(U.phase==='stmt-intro'){const s=P.statements(g);return `<div class="card big" id="card"><div class="when">Year one is in the books</div><div class="burst">🏁</div><h2>You recorded ${g.rec} entries!</h2><p>Your ledger is complete and balanced. Now do what real accountants do at year-end: <b>prepare the financial statements</b> yourself.</p><ul class="mini"><li>📄 Income statement</li><li>📄 Statement of owner's equity</li><li>📄 Balance sheet</li></ul><button class="go" id="start-statements">Prepare my statements →</button><small class="muted">${s.ids.length} accounts to sort</small></div>`;}
+ const head=`<div class="when">${esc(g.biz.events[g.i].when)}${g.biz.events[g.i].yearEnd?' · Adjusting entry':''}</div><div class="who"><span class="av">${ev.av}</span><span>${esc(ev.who)}</span></div><h2>${esc(ev.title)}</h2><p class="story">${esc(ev.story)}</p>`;
+ if(U.phase==='story')return `<div class="card" id="card">${head}<div class="choices">${ev.choices.map((ch,k)=>{const dis=P.isDisabled(g,ch);return `<button class="choice" data-choice="${k}" ${dis?'disabled':''}><b>${esc(ch.label)}</b>${dis?'<span class="lock">🔒 Not enough cash</span>':ch.sub?`<span>${esc(ch.sub)}</span>`:''}</button>`;}).join('')}</div></div>`;
+ if(U.phase==='note')return `<div class="card" id="card">${head}<div class="picked">You chose: <b>${esc(c.label)}</b></div><div class="fb info">💡 ${esc(c.note)}</div><button class="go" id="next">Next day →</button></div>`;
+ if(U.phase==='record'){const d=U.pending.find(p=>p.side==='dr'),cr=U.pending.find(p=>p.side==='cr');return `<div class="card" id="card">${head}<div class="picked">You chose: <b>${esc(c.label)}</b></div><div class="task"><b>Record it.</b> Drop the amount on one <span class="dr-t">Debit</span> side and one <span class="cr-t">Credit</span> side on the T accounts.</div><div class="amount" draggable="true" data-drag="amt">${money(c.entry[2])}</div><div class="slots"><span class="${d?'set':''}">Debit: <b>${d?esc(P.nameOf(g.biz,d.acct)):'tap a Debit side'}</b></span><span class="${cr?'set':''}">Credit: <b>${cr?esc(P.nameOf(g.biz,cr.acct)):'tap a Credit side'}</b></span></div>${U.msg?`<div class="fb ${U.msg.kind}">${U.msg.text}</div>`:''}<div class="row"><button class="go" id="check" ${d&&cr?'':'disabled'}>Check it</button>${U.tries>=2?'<button class="ghost" id="show-me">Show me</button>':''}</div></div>`;}
+ if(U.phase==='done')return `<div class="card" id="card">${head}<div class="fb good">${U.tries?'✅ Got it.':'🌟 First try!'} <b>Debit ${esc(P.nameOf(g.biz,c.entry[0]))}, credit ${esc(P.nameOf(g.biz,c.entry[1]))}: ${money(c.entry[2])}</b><br>${esc(c.why)}</div><button class="go" id="next">${g.biz.events[g.i].yearEnd?'Next adjustment →':'Next day →'}</button></div>`;
+ return '';}
+const sec=id=>P.SECTIONS.find(s=>s[0]===id);
+function item(id,where){const g=U.g,s=P.statements(g),amt=P.typeOf(id)==='contra'?P.bal(g,id):P.bal(g,id);return `<button class="item ${U.sel===id?'sel':''} ${U.sortWrong.includes(id)?'wrong':''}" data-item="${id}" draggable="true">${P.iconOf(id)} ${esc(P.nameOf(g.biz,id))} <b>${money(amt)}</b></button>`;}
+function sortView(){const g=U.g,items=P.sortItems(g),tray=items.filter(id=>!U.placed[id]),inSec=s=>items.filter(id=>U.placed[id]===s).map(item).join('');
+ const zone=s=>`<div class="drop" data-section="${s}" role="button" tabindex="0"><h4>${sec(s)[2]}</h4>${inSec(s)||'<span class="hint">Drop accounts here</span>'}</div>`;
+ const hints=U.sortWrong.map(id=>`<li><b>${esc(P.nameOf(g.biz,id))}:</b> ${P.SECTION_HINT[P.sectionOf(id)]}</li>`).join('');
+ return `<section class="stmts"><div class="stmt-head"><span class="step">Step 1 of 2</span><h2>Where does each account go?</h2><p>Tap an account, then tap the statement section it belongs in. You can also drag it.</p></div>
+ <div class="tray" data-section="tray">${tray.map(item).join('')||'<span class="hint">All sorted! Press Check.</span>'}</div>
+ ${U.sortWrong.length?`<div class="fb bad">${U.sortWrong.length} account${U.sortWrong.length>1?'s are':' is'} in the wrong place:<ul>${hints}</ul></div>`:''}
+ <div class="papers"><article class="paper"><h3>Income statement</h3><small>For the year ended December 31</small>${zone('is-rev')}${zone('is-exp')}</article>
+ <article class="paper"><h3>Statement of owner's equity</h3><small>For the year ended December 31</small>${zone('oe-cap')}<div class="drop fixed"><h4>Net income</h4><span class="hint">Comes from the income statement</span></div>${zone('oe-draw')}</article>
+ <article class="paper"><h3>Balance sheet</h3><small>December 31</small>${zone('bs-assets')}${zone('bs-liab')}<div class="drop fixed"><h4>Owner's equity</h4><span class="hint">Ending capital comes from the statement of owner's equity</span></div></article></div>
+ <div class="row center"><button class="go" id="check-sort" ${tray.length?'disabled':''}>Check my statements</button></div></section>`;}
+const line=(name,amt,cls='')=>`<div class="ln ${cls}"><span>${name}</span><b>${amt}</b></div>`;
+const inp=(k)=>`<input inputmode="decimal" class="${U.computeWrong&&U.computeWrong.includes(k)?'wrong':''}" id="in-${k}" value="${esc(U.inputs[k]||'')}" placeholder="$ ?" aria-label="${k}">`;
+function papers(final){const g=U.g,s=P.statements(g),m=money;
+ const NI=final?m(s.netIncome):inp('ni'),CAP=final?m(s.endCapital):inp('cap'),TA=final?m(s.totalAssets):inp('ta');
+ const is=`<article class="paper"><h3>${esc(g.biz.name)}<br>Income statement</h3><small>For the year ended December 31</small><h4>Revenues</h4>${s.rev.map(r=>line(esc(r.name),m(r.amount))).join('')}${line('Total revenues',m(s.totalRev),'tot')}<h4>Expenses</h4>${s.exp.map(r=>line(esc(r.name),m(r.amount))).join('')}${line('Total expenses',m(s.totalExp),'tot')}${line('Net income',NI,'grand')}</article>`;
+ const oe=`<article class="paper"><h3>${esc(g.biz.name)}<br>Statement of owner's equity</h3><small>For the year ended December 31</small>${line("Owner's capital, January 1",m(0))}${line('Add: owner investments',m(s.investments))}${line('Add: net income',final?m(s.netIncome):'from income statement')}${line('Less: withdrawals',s.draws?'('+m(s.draws)+')':m(0))}${line("Owner's capital, December 31",CAP,'grand')}</article>`;
+ const bs=`<article class="paper"><h3>${esc(g.biz.name)}<br>Balance sheet</h3><small>December 31</small><h4>Assets</h4>${s.assets.map(r=>line(esc(r.name),r.amount<0?'('+m(-r.amount)+')':m(r.amount))).join('')}${line('Total assets',TA,'grand')}<h4>Liabilities</h4>${s.liabilities.map(r=>line(esc(r.name),m(r.amount))).join('')||line('None',m(0))}${line('Total liabilities',m(s.totalLiab),'tot')}<h4>Owner's equity</h4>${line("Owner's capital",final?m(s.endCapital):'from owner\'s equity')}${line("Total liabilities & owner's equity",final?m(s.totalLE):'?','grand')}</article>`;
+ return `<div class="papers final">${is}${oe}${bs}</div>`;}
+function computeView(){return `<section class="stmts"><div class="stmt-head"><span class="step">Step 2 of 2</span><h2>Finish the math</h2><p>Every account is in the right place. Now fill in the three missing totals.</p></div>${papers(false)}${U.computeMsg?`<div class="fb bad">${U.computeMsg}</div>`:''}<div class="row center"><button class="go" id="check-compute">Check my totals</button>${U.computeTries>=2?'<button class="ghost" id="fill-totals">Show me</button>':''}</div></section>`;}
+function stars(){const g=U.g,pct=g.rec?g.first/g.rec:1;let n=pct>=.85?3:pct>=.6?2:1;if(U.sortTries>1||U.computeTries>1)n=Math.max(1,n-1);return n;}
+function reportView(){const g=U.g,s=P.statements(g),n=stars();return `<section class="report"><div class="hero-end"><div class="stars">${[1,2,3].map(i=>`<span class="${i<=n?'on':''}">★</span>`).join('')}</div><h1>${esc(g.biz.name)} ${s.netIncome>=0?'made '+money(s.netIncome):'lost '+money(-s.netIncome)} in year one!</h1><p>${g.first} of ${g.rec} entries right on the first try · statements ${U.sortTries+U.computeTries<=2?'nailed':'finished'} · balance sheet ✓ balanced</p>
+ <div class="kpis"><div><small>Net income</small><b>${money(s.netIncome)}</b></div><div><small>Cash at year-end</small><b>${money(P.bal(g,'cash'))}</b></div><div><small>Total assets</small><b>${money(s.totalAssets)}</b></div><div><small>Owner's capital</small><b>${money(s.endCapital)}</b></div></div></div>
+ ${papers(true)}
+ <article class="paper decisions"><h3>Your year in decisions</h3><ol>${g.decisions.filter(d=>!/^Record /.test(d.label)).map(d=>`<li><span>${esc(d.when)}</span><b>${esc(d.title)}:</b> ${esc(d.label)}</li>`).join('')}</ol><p class="muted">Different choices lead to a different year. Play again and try to beat your profit.</p></article>
+ <div class="row center"><button class="go" id="play-again">Play another business →</button><button class="ghost" id="replay-same">Replay ${esc(g.biz.name)}</button><button class="ghost" id="open-instructor">Make one from my notes</button></div></section>`;}
+function pickView(){const saved=load();return `<section class="pick"><div class="hero"><span class="eyebrow">NO LOGIN · ABOUT 15 MINUTES</span><h1>Run a real business<br><span>for a whole year.</span></h1><p>Make the calls an owner makes, record every journal entry, close the books on December 31, and prepare your own financial statements.</p></div>
+ ${saved&&saved.log&&saved.log.length?`<div class="resume"><span>⏯️ You were running <b>${esc(saved.name||'a business')}</b> (${saved.rec||0} entries in).</span><button class="go" id="resume">Continue</button><button class="ghost" id="discard">Start over</button></div>`:''}
+ <div class="bizzes">${P.BUSINESSES.map(b=>`<button class="biz" data-biz="${b.id}" style="--c:${b.color}"><span class="em">${b.emoji}</span><small>${esc(b.type)}</small><b>${esc(b.name)}</b><span>${esc(b.tagline)}</span><i>Play year one →</i></button>`).join('')}</div>
+ <div class="how"><div><b>1 · Decide</b><span>One event at a time. Every choice has consequences.</span></div><div><b>2 · Record</b><span>Drop amounts onto live T accounts and watch the books move.</span></div><div><b>3 · Close</b><span>Make the year-end adjusting entries.</span></div><div><b>4 · Report</b><span>Build the income statement, owner's equity and balance sheet.</span></div></div>
+ <div class="teach"><div><span class="eyebrow">FOR INSTRUCTORS</span><h2>Paste your course notes. Play them right away.</h2><p>Ledger Lane turns each transaction in your notes into a day in the business, with an answer key and a year-end statements challenge.</p></div><button class="go light" id="open-instructor">Turn notes into a game →</button></div></section>`;}
+function modal(){const m=U.modal;if(!m)return '';const parsed=m.parsed;
+ return `<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true" aria-label="Instructor"><button class="x" id="close-modal" aria-label="Close">✕</button><span class="eyebrow">INSTRUCTOR DEMO</span><h2>Your notes → a playable year</h2>
+ ${!parsed?`<label>Business name<input id="biz-name" value="${esc(m.name)}"></label><label>Course notes, one transaction per line<textarea id="notes" rows="10">${esc(m.notes)}</textarea></label><div class="row"><button class="go" id="gen">Build the game →</button><button class="ghost" id="sample">Use sample notes</button></div><small class="muted">In the signed-in classroom, AI reads full lecture notes. This demo reads one transaction per line.</small>`
+ :`<p>${parsed.filter(p=>p.ok).length} of ${parsed.length} lines became playable days. Here's the answer key your students will be graded against:</p><ol class="key">${parsed.map(p=>`<li class="${p.ok?'ok':'no'}"><span>${esc(p.line)}</span>${p.ok?`<b>Dr ${esc(P.nameOf({},p.dr))} · Cr ${esc(P.nameOf({},p.cr))} · ${money(p.amt)}</b>`:`<em>${esc(p.why)}</em>`}</li>`).join('')}</ol><div class="row"><button class="go" id="play" ${parsed.filter(p=>p.ok).length>=3?'':'disabled'}>Play it as a student →</button><button class="ghost" id="edit">Edit notes</button></div>`}</div></div>`;}
+function render(){let body;if(U.view==='pick')body=pickView();else if(U.phase==='sort')body=sortView();else if(U.phase==='compute')body=computeView();else if(U.phase==='report')body=reportView();else body=`${stats()}<div class="play">${card()}${board()}</div>`;
+ app.innerHTML=header()+`<main class="${U.view}">${body}</main>`+modal();if(U.modal){const f=$('#notes')||$('#play');f&&f.focus();}}
+function openModal(){U.modal={name:'Maple Street Bikes',notes:P.SAMPLE_NOTES,parsed:null};render();}
+function checkSort(){const r=P.checkSort(U.g,U.placed);U.sortTries++;U.sortWrong=r.wrong;U.sel=null;if(!r.wrong.length&&!r.missing.length){U.phase='compute';U.inputs={};}render();window.scrollTo({top:0,behavior:'smooth'});}
+function readInputs(){['ni','cap','ta'].forEach(k=>{const el=$('#in-'+k);if(el)U.inputs[k]=el.value;});}
+function checkCompute(){readInputs();const s=P.statements(U.g),num=v=>{const t=String(v||'').replace(/[$,\s]/g,'').replace(/^\((.*)\)$/,'-$1');return t===''?NaN:Math.round(parseFloat(t));};
+ const want={ni:s.netIncome,cap:s.endCapital,ta:s.totalAssets},tips={ni:'<b>Net income</b> = total revenues − total expenses.',cap:"<b>Ending owner's capital</b> = $0 starting capital + investments + net income − withdrawals.",ta:'<b>Total assets</b> = add up the assets, then subtract accumulated depreciation.'};
+ U.computeWrong=Object.keys(want).filter(k=>num(U.inputs[k])!==Math.round(want[k]));U.computeTries++;
+ if(!U.computeWrong.length){U.phase='report';clearSave();render();window.scrollTo({top:0,behavior:'smooth'});return;}
+ U.computeMsg='Not quite. '+U.computeWrong.map(k=>tips[k]).join(' ');render();}
+app.addEventListener('click',e=>{const t=e.target.closest('button,[data-zone],[data-section],[data-item]');if(!t||t.disabled)return;const id=t.id,d=t.dataset;
+ if(d.biz){clearSave();return start(bizFor(d.biz));}
+ if(d.choice!==undefined)return pick(+d.choice);
+ if(d.unplace){e.stopPropagation();U.pending=U.pending.filter(p=>p.side!==d.unplace);return render();}
+ if(d.zone){const [a,s]=d.zone.split(':');return place(a,s);}
+ if(d.item){e.stopPropagation();const host=t.closest('[data-section]');if(U.sel&&U.sel!==d.item&&host&&host.dataset.section!=='tray'){U.placed[U.sel]=host.dataset.section;U.sortWrong=U.sortWrong.filter(x=>x!==U.sel);U.sel=null;return render();}U.sel=U.sel===d.item?null:d.item;return render();}
+ if(d.section){if(!U.sel)return;if(d.section==='tray')delete U.placed[U.sel];else U.placed[U.sel]=d.section;U.sortWrong=U.sortWrong.filter(x=>x!==U.sel);U.sel=null;return render();}
+ const A={next,check,'show-me':showMe,'begin-close':()=>{U.phase='story';render();focusCard();},'start-statements':()=>{U.phase='sort';render();window.scrollTo({top:0});},'check-sort':checkSort,'check-compute':checkCompute,
+  'fill-totals':()=>{const s=P.statements(U.g);U.inputs={ni:String(s.netIncome),cap:String(s.endCapital),ta:String(s.totalAssets)};U.computeMsg=null;U.computeWrong=[];render();},
+  'to-pick':()=>{U={view:'pick',modal:null};render();},'play-again':()=>{U={view:'pick',modal:null};render();window.scrollTo({top:0});},'replay-same':()=>start(U.g.biz.id==='custom'?U.g.biz:bizFor(U.g.biz.id)),
+  'open-instructor':openModal,'close-modal':()=>{U.modal=null;render();},resume:()=>{const s=load();const b=s&&bizFor(s.bizId,s.custom);if(b)start(b,s.log,s.seenYE);},discard:()=>{clearSave();render();},
+  sample:()=>{U.modal.notes=P.SAMPLE_NOTES;render();},gen:()=>{U.modal.name=$('#biz-name').value.trim()||'My class business';U.modal.notes=$('#notes').value;U.modal.parsed=P.parseNotes(U.modal.notes);render();},edit:()=>{U.modal.parsed=null;render();},
+  play:()=>{const m=U.modal;clearSave();start(P.customBusiness(m.name,m.parsed));}};
+ if(A[id]){if(U.phase==='compute')readInputs();A[id]();}});
+app.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-zone],[data-section]')){e.preventDefault();e.target.click();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&U.modal){U.modal=null;render();}});
+app.addEventListener('input',e=>{if(e.target.id&&e.target.id.startsWith('in-'))U.inputs[e.target.id.slice(3)]=e.target.value;});
+app.addEventListener('dragstart',e=>{const t=e.target.closest('[draggable]');if(!t)return;e.dataTransfer.setData('text/plain',t.dataset.item||'amt');if(t.dataset.item)U.sel=t.dataset.item;});
+app.addEventListener('dragover',e=>{if(e.target.closest('[data-zone],[data-section]'))e.preventDefault();});
+app.addEventListener('drop',e=>{const z=e.target.closest('[data-zone],[data-section]');if(!z)return;e.preventDefault();if(z.dataset.zone){const [a,s]=z.dataset.zone.split(':');place(a,s);}else if(U.sel){z.click();}});
+app.addEventListener('click',e=>{if(e.target.id==='scrim'){U.modal=null;render();}});
+window.__play=()=>({view:U.view,phase:U.phase,i:U.g?U.g.i:null,entry:U.g&&U.g.choice?U.g.choice.entry:null,rec:U.g?U.g.rec:0,biz:U.g?U.g.biz.id:null,modal:!!U.modal});
+window.__playGame=()=>U.g;
+render();if(location.hash==='#instructor')openModal();
+})();
+</script>
+</body>
+</html>
