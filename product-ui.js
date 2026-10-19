@@ -85,8 +85,8 @@ function publicWelcome() {
       <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
       <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
       <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
-      <div class="play-actions"><button id="student">Run a business for a year ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Turn my notes into a game</button></div>
-      <div class="play-demo-note">No sign-up. No pressure. Just jump in.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
+      <div class="play-actions"><button id="student">Start your business ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Browse the lesson library</button></div>
+      <div class="play-demo-note">No sign-up required. Your progress saves in this browser.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
     </div>
     <div class="play-world">
       <div class="world-label"><span>${laneIcon('shop', 16)} YOUR NEXT BIG IDEA</span><span>STARTS SMALL.</span></div>
@@ -104,13 +104,13 @@ function publicWelcome() {
       <article class="play-feature blue"><div class="feature-visual"><span class="feature-number">03</span><div class="mini-ledger"><span>YOUR JOURNAL</span><div><strong>Account</strong><strong>Debit</strong><strong>Credit</strong></div><div><span>Supplies</span><b>420</b><span>—</span></div><div><span>Cash</span><span>—</span><b>420</b></div><small>${laneIcon('check', 14)} Balanced. Now it makes sense.</small></div></div><h3>Connect the dots.</h3><p>Read the document, write the entry, and see the impact. Get useful feedback, then try again.</p></article>
     </div>
   </section>
-  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>Your course notes.<br>Their <span>next chapter.</span></h2><p>Turn what you’ve taught into a business challenge. Review the decisions, documents, and answer key before sharing with your class.</p><button id="explore-studio">Explore the instructor demo ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
-  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="capstone.html">Explore the four-month simulation →</a></footer>`;
+  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>A full semester,<br><span>ready to assign.</span></h2><p>Eleven chapter lessons, three cumulative reviews and a year-long final project, aligned to introductory financial accounting. Preview any lesson as a student and assign it with a due date.</p><button id="explore-studio">Open the lesson library ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
+  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="lessons.html#library">Browse all 15 lessons →</a></footer>`;
 }
 
 function wireWelcome() {
   const signedIn = typeof cloudAccount !== 'undefined' && cloudAccount;
-  const openStudio = () => { location.href = 'play.html#instructor'; };
+  const openStudio = () => { location.href = 'lessons.html#library'; };
   if (Q('#instructor-demo')) { Q('#instructor-demo').hidden = !!signedIn; Q('#instructor-demo').onclick = openStudio; }
   if (Q('#explore-studio')) { Q('#explore-studio').hidden = !!signedIn; Q('#explore-studio').onclick = openStudio; }
   document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
