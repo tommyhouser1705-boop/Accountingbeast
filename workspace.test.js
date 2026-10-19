@@ -52,7 +52,7 @@ test('preview switch updates the illustration, record, label and pressed state t
   assert.equal(buttons[0].attributes['aria-pressed'], 'false');
   c.location = {href: ''};
   nodes['#explore-studio'].onclick();
-  assert.equal(c.location.href, 'play.html#instructor');
+  assert.equal(c.location.href, 'lessons.html#library');
   c.cloudAccount = {role: 'professor'};
   c.wireWelcome();
   assert.equal(nodes['#instructor-demo'].hidden, true);
