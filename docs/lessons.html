@@ -202,6 +202,41 @@ button{font:inherit;cursor:pointer;border:0}
 </head>
 <body>
 <div id="app"></div>
+<script>// Public browser settings only. Never put a service-role key here.
+window.LEDGER_CLOUD = {
+  url: 'https://eaahwjgdpmvaasgtjpaq.supabase.co',
+  publishableKey: 'sb_publishable_B0geGyoDCj1AVSrX36rUxQ_Wkow6Dde'
+};
+</script>
+<script>// Supabase Auth REST + the protected classroom Edge Function. No secret keys.
+(function(root){
+class CloudClient {
+ static revisionChanges(previous,next){
+  const stable=value=>JSON.stringify(value,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])):v);
+  const sections=[['Assignment title',a=>a.title],['Student instructions',a=>a.instructions],['Learning goals',a=>a.objectives],['Dates and timeline',a=>[a.year,a.month,a.periodMonths]],['Business decisions',a=>a.interactive?.controls],['Source documents and entries',a=>a.interactive?.events||a.blueprint?.paths],['Chart of accounts',a=>a.blueprint?.accounts],['Topic coverage',a=>a.topicCoverage]];
+  return sections.filter(([,read])=>stable(read(previous))!==stable(read(next))).map(([label])=>label);
+ }
+
+ constructor(config,storage=root.sessionStorage,fetcher=root.fetch.bind(root)){
+  this.config=config;this.storage=storage;this.fetcher=fetcher;this.session=null;
+  this.redirectUrl=config.redirectUrl||(root.location?new URL('.',root.location.href).href:'');
+  try{this.session=JSON.parse(storage.getItem('ledger-cloud-session'));}catch{}
+ }
+ get configured(){return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(this.config.url)&&!!this.config.publishableKey;}
+ setSession(session){this.session=session;session?this.storage.setItem('ledger-cloud-session',JSON.stringify(session)):this.storage.removeItem('ledger-cloud-session');}
+ async auth(path,body){const res=await this.fetcher(this.config.url+'/auth/v1/'+path,{method:'POST',headers:{apikey:this.config.publishableKey,'Content-Type':'application/json'},body:JSON.stringify(body)});const value=await res.json();if(!res.ok)throw Error(value.msg||value.error_description||value.message||'Sign-in failed.');return value;}
+ async login(email,password){const s=await this.auth('token?grant_type=password',{email,password});this.setSession({...s,expires_at:Date.now()+s.expires_in*1000});return s;}
+ redirectPath(path){return this.redirectUrl?path+'?redirect_to='+encodeURIComponent(this.redirectUrl):path;}
+ async signup(email,password){return await this.auth(this.redirectPath('signup'),{email,password});}
+ async resend(email){return await this.auth(this.redirectPath('resend'),{type:'signup',email});}
+ async recover(email){return await this.auth(this.redirectPath('recover'),{email});}
+ async refresh(){if(!this.session)throw Error('Sign in first.');if(this.session.expires_at>Date.now()+60000)return;const s=await this.auth('token?grant_type=refresh_token',{refresh_token:this.session.refresh_token});this.setSession({...s,expires_at:Date.now()+s.expires_in*1000});}
+ async call(action,payload={}){await this.refresh();let res;try{res=await this.fetcher(this.config.url+'/functions/v1/classroom',{method:'POST',headers:{apikey:this.config.publishableKey,Authorization:'Bearer '+this.session.access_token,'Content-Type':'application/json'},body:JSON.stringify({action,payload}),signal:AbortSignal.timeout(120000)});}catch(error){throw Error(error.name==='TimeoutError'?'This step took too long. Your notes are saved. Try again.':'The connection was interrupted. Your saved work is unchanged. Check your connection and try again.');}let value;try{value=await res.json();}catch{throw Error('The server did not finish this step. Your saved work is unchanged. Try again shortly.');}if(!res.ok){const e=Error(value.error||'Request failed.');e.status=res.status;throw e;}return value;}
+ async logout(){try{if(this.session)await this.fetcher(this.config.url+'/auth/v1/logout',{method:'POST',headers:{apikey:this.config.publishableKey,Authorization:'Bearer '+this.session.access_token}});}finally{this.setSession(null);}}
+}
+if(typeof module!=='undefined')module.exports=CloudClient;else root.CloudClient=CloudClient;
+})(globalThis);
+</script>
 <script>// Ledger Lane lesson engine: the student's semester business, the chart of
 // accounts, journal-entry checking, posting and grading. No DOM access here so
 // every lesson can be verified in Node.
@@ -1072,6 +1107,9 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const store={get(k,d){try{const v=JSON.parse(localStorage.getItem('ll-'+k));return v??d;}catch{return d;}},set(k,v){try{localStorage.setItem('ll-'+k,JSON.stringify(v));}catch{}},del(k){try{localStorage.removeItem('ll-'+k);}catch{}}};
 let biz=store.get('biz',null),progress=store.get('progress',{}),assigned=new Set(store.get('assigned',[]));
 let view='home',filt='all',L=null,S=null,ui={};
+const LC=typeof CloudClient!=='undefined'?new CloudClient(window.LEDGER_CLOUD||{}):null;let acct=null,acctClasses=[],acctLessons=[];
+const isAssigned=id=>acct?acctLessons.some(a=>a.lessonId===id):assigned.has(id);
+async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(view!=='play')render();}catch{}}
 const lessonById=id=>LL.lessons.find(l=>l.id===id);
 const isGraded=s=>['je','num','mc','sort'].includes(s.k);
 const steps=()=>L.steps;
@@ -1080,7 +1118,7 @@ const stepNow=()=>steps()[S.i];
 /* ---------- shell ---------- */
 function top(){
  const tab=(v,t)=>`<button data-view="${v}" class="${view===v||(v==='home'&&view==='play')?'on':''}">${t}</button>`;
- return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${tab('lib','Instructor library')}</nav>${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
+ return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${tab('lib','Instructor library')}</nav>${acct?`<a class="btn alt homelink" href="index.html">${acct.role==='student'?'My classroom':'Instructor home'}</a>`:''}${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
 }
 function render(){
  if(view==='lib')app.innerHTML=top()+library();
@@ -1125,12 +1163,16 @@ function library(){
   ls.forEach(l=>{const tasks=l.steps.filter(isGraded).length,jes=l.steps.filter(s=>s.k==='je').length;
    h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} ${assigned.has(l.id)?'assigned':''}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(l.summary)}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
    <div class="meta"><span>${esc(l.mins)} min</span><span>${tasks} graded tasks</span>${jes?`<span>${jes} journal entries</span>`:''}</div>
-   <div class="acts"><button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${assigned.has(l.id)?'Assigned ✓':'Assign'}</button></div></article>`;});h+='</div>';});
+   <div class="acts"><button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${isAssigned(l.id)?'Assigned ✓':'Assign'}</button></div></article>`;});h+='</div>';});
  return h+'</main>';
 }
-function assignModal(id){const l=lessonById(id),m=document.createElement('div');m.className='modal';
- m.innerHTML=`<div class="sheet" role="dialog" aria-label="Assign lesson"><h3>Assign ${esc(l.n)}: ${esc(l.t)}</h3><p class="note">Students complete it inside their own business. Grading uses first-attempt accuracy.</p><label>Class<select><option>ACCT 203 · Section 01</option><option>ACCT 203 · Section 02</option></select></label><label>Due date<input type="date" value="2026-11-06"></label><label>Attempts<select><option>Unlimited practice, first attempt graded</option><option>One attempt</option></select></label><div class="row"><button class="btn" id="ok">Assign</button><button class="btn alt" id="no">Cancel</button></div></div>`;
- document.body.append(m);m.querySelector('#no').onclick=()=>m.remove();m.querySelector('#ok').onclick=()=>{assigned.add(id);store.set('assigned',[...assigned]);m.remove();render();toast(`${l.n} assigned to ACCT 203 · Section 01`);};}
+function assignModal(id){const l=lessonById(id),m=document.createElement('div'),live=!!acct&&acct.role!=='student';m.className='modal';
+ const classes=live?acctClasses:[{id:'demo1',name:'ACCT 203 · Section 01'},{id:'demo2',name:'ACCT 203 · Section 02'}];
+ m.innerHTML=`<div class="sheet" role="dialog" aria-label="Assign lesson"><h3>Assign ${esc(l.n)}: ${esc(l.t)}</h3><p class="note">Students complete it inside their own business. Grading uses first-attempt accuracy.${live?'':' This is a preview. Sign in as an instructor to assign lessons to a real class.'}</p>${classes.length?`<label>Class<select id="as-class">${classes.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')}</select></label><label>Due date<input id="as-due" type="date" value="${new Date(Date.now()+7*864e5).toISOString().slice(0,10)}"></label>`:'<p class="note">Create a class on your instructor home first.</p>'}<p class="note" id="as-msg" role="status"></p><div class="row">${classes.length?'<button class="btn" id="ok">Assign</button>':'<a class="btn" href="index.html">Instructor home</a>'}<button class="btn alt" id="no">Cancel</button></div></div>`;
+ document.body.append(m);m.querySelector('#no').onclick=()=>m.remove();const ok=m.querySelector('#ok');if(!ok)return;
+ ok.onclick=async()=>{const cls=classes.find(c=>c.id===m.querySelector('#as-class').value),due=m.querySelector('#as-due').value;
+  if(!live){assigned.add(id);store.set('assigned',[...assigned]);m.remove();render();toast(`${l.n} assigned to ${cls.name}`);return;}
+  ok.disabled=true;try{const a=await LC.call('lesson-assign',{classId:cls.id,lessonId:id,title:`${l.n}: ${l.t}`,dueDate:due});acctLessons=acctLessons.filter(x=>x.id!==a.id).concat([{...a.definition,id:a.id,class_id:cls.id}]);m.remove();render();toast(`${l.n} assigned to ${cls.name}`);}catch(e){ok.disabled=false;m.querySelector('#as-msg').textContent=e.message||'The lesson could not be assigned. Please try again.';}};}
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2400);}
 
 /* ---------- lesson player ---------- */
@@ -1184,7 +1226,7 @@ function play(){if(S.done)return results();const st=stepNow();
  ui.flash=[];ui.shown=S.i;}
 function grade(ok,msg){const st=stepNow();if(ok){if(!S.tries)S.first++;S.graded++;S.posted=true;ui.msg=null;if(st.k==='je'){const ls=linesOf(st,S);post(S,ls,S.i);ui.flash=ls.map(l=>l[0]);}if(st.onDone)st.onDone(S);save();}else{S.tries++;ui.msg={ok:false,text:msg};}play();}
 function next(){S.i++;while(S.i<steps().length&&steps()[S.i].skip&&steps()[S.i].skip(S))S.i++;S.tries=0;S.posted=false;resetStep();if(S.i>=steps().length)finish();save();play();scrollTo(0,0);}
-function finish(){S.done=true;if(!S.preview){const prev=progress[L.id]||{};const s=stars(S);progress[L.id]={done:true,stars:Math.max(prev.stars||0,s),first:S.first,graded:S.graded};store.set('progress',progress);store.del('cur-'+L.id);}}
+function finish(){S.done=true;if(!S.preview){const prev=progress[L.id]||{};const s=stars(S);progress[L.id]={done:true,stars:Math.max(prev.stars||0,s),first:S.first,graded:S.graded};store.set('progress',progress);store.del('cur-'+L.id);if(acct&&acct.role==='student')LC.call('lesson-score',{lessonId:L.id,first:S.first,graded:S.graded,stars:s}).then(r=>{if(r&&r.saved)toast('Score sent to your class gradebook');}).catch(()=>{});}}
 function results(){const s=stars(S),recap=L.recap?V(L.recap,S):[];const nextL=LL.lessons[LL.lessons.indexOf(L)+1];
  app.innerHTML=top()+hud()+`<div class="stage">${rail()}<div class="main"><section class="ev"><div class="win"><div class="stars" aria-label="${s} of 3 stars">${[1,2,3].map(n=>`<span class="${n<=s?'s':''}">★</span>`).join('')}</div><h2>${esc(L.n)} complete</h2><p class="score">${S.first} of ${S.graded} tasks correct on the first attempt (${Math.round(100*S.first/Math.max(1,S.graded))}%)</p>
  ${L.report?`<div class="res">${V(L.report,S)}</div>`:''}${recap.length?`<div class="recap"><b>How your decisions played out</b><ul>${recap.map(r=>`<li>${r}</li>`).join('')}</ul></div>`:''}
@@ -1224,7 +1266,7 @@ document.addEventListener('change',e=>{const r=e.target.closest('.je-r');if(r&&e
 window.__ll={state:()=>({view,lesson:L&&L.id,i:S&&S.i,done:S&&S.done,posted:S&&S.posted,step:S&&!S.done?(({k,q})=>({k}))(stepNow()):null}),
  answer(){const st=stepNow();if(st.k==='je')return linesOf(st,S);if(st.k==='num')return V(st.fields,S).map(f=>[f.id,f.ans]);if(st.k==='sort')return V(st.items,S).map(([id,,a])=>[id,a]);if(st.k==='mc')return st.a;if(st.k==='decide')return V(st.q,S).map(q=>[q.id,(q.opts.find(o=>!(o.locked&&o.locked(S)))||q.opts[0]).v]);return null;},
  reset(){localStorage.clear();biz=null;progress={};assigned=new Set();view='home';render();}};
-const h=location.hash.slice(1);if(h==='library')view='lib';render();if(h.startsWith('lesson=')&&lessonById(h.slice(7)))start(h.slice(7),!biz);
+const h=location.hash.slice(1);if(h==='library')view='lib';render();cloudBoot();if(h.startsWith('lesson=')&&lessonById(h.slice(7)))start(h.slice(7),!biz);
 })();
 </script>
 </body>

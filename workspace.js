@@ -126,7 +126,7 @@ function appHeader() {
   const switcher = practice && inApp
     ? `<div class="mode-switch" role="group" aria-label="Demo view"><button class="${role === 'student' ? 'on' : ''}" data-demo-role="student" aria-pressed="${role === 'student'}">Student</button><button class="${role === 'professor' ? 'on' : ''}" data-demo-role="professor" aria-pressed="${role === 'professor'}">Instructor</button></div>`
     : '';
-  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">${laneIcon('shop', 25)}</span><span>ledger lane<small>THE BUSINESS CLASSROOM</small></span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
+  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">LL</span><span>Ledger Lane</span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
 }
 
 function wireAppHeader() {

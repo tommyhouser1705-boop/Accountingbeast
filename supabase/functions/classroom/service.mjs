@@ -35,6 +35,7 @@ export function businessResult(L,state){state=L.withBusinessActivity(state);cons
 export function prepareGuidedAssignment(original){const a=structuredClone(original);if(!a?.interactive)return a;for(const payment of a.interactive.events){if(!payment.lines.some(l=>l.account==='Accounts Payable'&&l.side==='debit')||!payment.lines.some(l=>l.account==='Cash'&&l.side==='credit'))continue;if(payment.dateControl&&payment.dateControl!=='none')continue;const purchase=a.interactive.events.find(e=>e.date<=payment.date&&e.lines.some(l=>l.account==='Accounts Payable'&&l.side==='credit'));if(!purchase||a.interactive.controls.length>=6)continue;const offset=Number(payment.date.slice(5,7))-a.month,last=new Date(Date.UTC(a.year,a.month+offset,0)).getUTCDate(),min=payment.date.slice(0,7)===purchase.date.slice(0,7)?Number(purchase.date.slice(8))+1:1;if(min>last)continue;const id=Array.from({length:6},(_,i)=>'decision'+(i+1)).find(id=>!a.interactive.controls.some(c=>c.id===id)),stage=(a.periodMonths||1)>1?offset*2+1:1;a.interactive.controls.push({id,monthOffset:offset,decisionStage:stage,kind:'date',category:'none',label:'When will you pay this supplier?',purpose:'Check the invoice terms, then choose a payment date. The payment confirmation will use this date.',min,max:last,step:1,defaultValue:Math.max(min,Number(payment.date.slice(8)))});payment.dateControl=id;payment.stage=Math.max(payment.stage,stage);payment.document.layout='payment';payment.document.fields=payment.document.fields.filter(f=>!/payment date|transfer date/i.test(f.label));payment.document.fields.push({label:'Payment date',value:'{{date:'+id+'}}'});}return a;}
 export function studentDefinition(a,upgrade=true){if(upgrade)a=prepareGuidedAssignment(a);if(a.version!==3)return a;const v=structuredClone(a);v.publicDefinition=true;delete v.revisionChat;if(v.interactive)delete v.interactive.events;delete v.conceptCheck.correct;delete v.conceptCheck.feedback;for(const p of v.blueprint.paths)for(const e of p.events)delete e.lines;return v;}
 export function studentRun(L,state){if(state.assignment.version!==3)return state;state=L.withBusinessActivity(state);const s=structuredClone(state);L.expandAccountChoices(s.scenario);L.syncBusinessEntries(s);s.publicRun=true;s.businessResult=businessResult(L,state);s.serverGrade=L.grade(state);s.assessments=Object.fromEntries(s.scenario.events.map(e=>[e.id,s.entries[e.id]?L.assess(s.entries[e.id].rows,s.entries[e.id].date,e):null]));s.assignment=studentDefinition(state.assignment,false);if(state.prediction===undefined){delete s.scenario.prediction.correct;delete s.scenario.prediction.feedback;}for(const e of s.scenario.events){delete e.lines;delete e.amount;}for(const e of s.scenario.effects)delete e.value;return s;}
+const isLib=a=>a?.definition?.kind==='library';
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
  const address=email(user.email),grant=await store.one('demo_access',{email:address});
@@ -49,9 +50,9 @@ export async function handleAction(store,L,user,action,p={}){
  const studentAssignment=async id=>{if(grant.role!=='student')fail('Student access is required.',403);const a=await store.one('demo_assignments',{id:uuid(id)});if(!a||a.definition.deleted||!await store.one('demo_invitations',{class_id:a.class_id,email:address}))fail('This assignment is not in your class.',403);return a;};
  if(action==='bootstrap'){
   const classes=teacher?await store.list('demo_classes',grant.role==='owner'?{}:{professor_id:user.id}):await studentClasses();
-  const allAssignments=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat(),assignments=teacher?allAssignments:allAssignments.filter(a=>!a.definition.deleted);
+  const everything=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat(),lessonAssignments=everything.filter(a=>isLib(a)&&!a.definition.deleted),allAssignments=everything.filter(a=>!isLib(a)),assignments=teacher?allAssignments:allAssignments.filter(a=>!a.definition.deleted);
   const runs=grant.role==='student'?(await store.list('demo_runs',{student_id:user.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[];
-  return {user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments:grant.role==='student'?assignments.map(a=>({...a,definition:studentDefinition(L.enableSimulation(a.definition))})):assignments.map(a=>({...a,definition:L.enableSimulation(prepareGuidedAssignment(a.definition))})),runs:runs.map(r=>({...r,state:studentRun(L,r.state)}))};
+  return {lessons:lessonAssignments.map(a=>({...a.definition,id:a.id,class_id:a.class_id})),lessonScores:grant.role==='student'?(await store.list('demo_runs',{student_id:user.id})).filter(r=>lessonAssignments.some(a=>a.id===r.assignment_id)).map(r=>({...r.state,assignment_id:r.assignment_id})):[],user:{id:user.id,email:address,role:grant.role},business:profile.business,classes,assignments:grant.role==='student'?assignments.map(a=>({...a,definition:studentDefinition(L.enableSimulation(a.definition))})):assignments.map(a=>({...a,definition:L.enableSimulation(prepareGuidedAssignment(a.definition))})),runs:runs.map(r=>({...r,state:studentRun(L,r.state)}))};
  }
  if(action==='access-list'){if(grant.role!=='owner')fail('Owner access required.',403);return await store.list('demo_access',{});}
  if(action==='authorize'){
@@ -80,6 +81,22 @@ export async function handleAction(store,L,user,action,p={}){
   requireTeacher();const c=await classAccess(p.classId);p={...p,assignment:prepareGuidedAssignment(p.assignment)};if(!L.checkAssignment(p.assignment))fail('Invalid assignment settings.');
   const id=crypto.randomUUID(),definition={...p.assignment,id,published:true,origin:c.name};return await store.insert('demo_assignments',{id,class_id:c.id,definition});
  }
+ if(action==='lesson-assign'){
+  requireTeacher();const c=await classAccess(p.classId),lessonId=String(p.lessonId||'');if(!/^[A-Za-z0-9_-]{1,40}$/.test(lessonId))fail('Choose a lesson.');
+  const title=String(p.title||'').trim().slice(0,160)||lessonId,dueDate=/^\d{4}-\d{2}-\d{2}$/.test(p.dueDate||'')?p.dueDate:null;
+  const existing=(await store.list('demo_assignments',{class_id:c.id})).find(a=>isLib(a)&&a.definition.lessonId===lessonId&&!a.definition.deleted);
+  if(existing){const definition={...existing.definition,title,dueDate};await store.update('demo_assignments',{id:existing.id},{definition});return {...existing,definition};}
+  const id=crypto.randomUUID();return await store.insert('demo_assignments',{id,class_id:c.id,definition:{kind:'library',id,lessonId,title,dueDate,published:true}});
+ }
+ if(action==='lesson-score'){
+  if(grant.role!=='student')fail('Only students submit lesson scores.',403);
+  const lessonId=String(p.lessonId||''),graded=Number(p.graded),first=Number(p.first),stars=Number(p.stars);
+  if(!Number.isInteger(graded)||graded<1||graded>500||!Number.isInteger(first)||first<0||first>graded||![0,1,2,3].includes(stars))fail('Invalid lesson score.');
+  const targets=(await Promise.all((await studentClasses()).map(c=>store.list('demo_assignments',{class_id:c.id})))).flat().filter(a=>isLib(a)&&!a.definition.deleted&&a.definition.lessonId===lessonId);
+  let saved=0;for(const a of targets){const old=await store.one('demo_runs',{student_id:user.id,assignment_id:a.id});if(old?.state?.completed)continue;const now=new Date().toISOString();
+   await store.upsert('demo_runs',{student_id:user.id,assignment_id:a.id,state:{kind:'library',lessonId,completed:true,first,graded,stars,score:Math.round(100*first/graded),completedAt:now},revision:1,updated_at:now});saved++;}
+  return {saved};
+ }
  if(action==='business'){
   if(grant.role!=='student')fail('Only students have a business profile.',403);const v=p.business;
   let business;try{business=L.normalizeBusiness(v);}catch(error){fail(error.message);}
@@ -87,8 +104,9 @@ export async function handleAction(store,L,user,action,p={}){
   await store.update('demo_profiles',{id:user.id},{business});return {business};
  }
  if(action==='gradebook'){
-  requireTeacher();await classAccess(p.classId);const invitations=await store.list('demo_invitations',{class_id:p.classId}),assignments=await store.list('demo_assignments',{class_id:p.classId});
-  const students=await Promise.all(invitations.map(async i=>{const s=await store.one('demo_profiles',{email:i.email});return {email:i.email,business:s?.business||null,runs:s?(await store.list('demo_runs',{student_id:s.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[]};}));return {assignments,students};
+  requireTeacher();await classAccess(p.classId);const invitations=await store.list('demo_invitations',{class_id:p.classId}),everything=await store.list('demo_assignments',{class_id:p.classId}),assignments=everything.filter(a=>!isLib(a)),lessons=everything.filter(a=>isLib(a)&&!a.definition.deleted);
+  const students=await Promise.all(invitations.map(async i=>{const s=await store.one('demo_profiles',{email:i.email});return {email:i.email,business:s?.business||null,runs:s?(await store.list('demo_runs',{student_id:s.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[]};}));for(const s of students){const sp=await store.one('demo_profiles',{email:s.email});s.lessonScores=sp?(await store.list('demo_runs',{student_id:sp.id})).filter(r=>lessons.some(a=>a.id===r.assignment_id)).map(r=>({...r.state,assignment_id:r.assignment_id})):[];}
+  return {assignments,lessons:lessons.map(a=>({...a.definition,id:a.id})),students};
  }
  if(action==='attempts'){
   requireTeacher();const a=await store.one('demo_assignments',{id:uuid(p.assignmentId)});if(!a)fail('Assignment not found.',404);await classAccess(a.class_id);

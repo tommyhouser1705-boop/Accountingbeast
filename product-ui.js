@@ -75,37 +75,56 @@ function storefrontArt(b) {
 }
 
 function previewRecord(b) {
-  return `<div class="lane-paper"><span class="lane-paper-type">${laneIcon('notes', 15)} SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>One business choice. A real accounting question.</small></div>`;
+  return `<div class="lp-player" style="--biz:${b.color}">
+    <div class="lp-player-top"><span class="lp-chip"><i></i>${safe(b.name)}</span><span>CH 2 · Launch Month</span><span class="lp-step">Task 6 of 14</span></div>
+    <div class="lp-decision"><span class="lp-label">TRANSACTION</span><p>Supplies were delivered on account from <strong>${safe(b.invoice)}</strong>. Record the purchase.</p></div>
+    <table class="lp-journal"><thead><tr><th>Date</th><th>Account</th><th>Debit</th><th>Credit</th></tr></thead><tbody>
+      <tr><td>Mar 4</td><td>Supplies</td><td>${b.amount}</td><td></td></tr>
+      <tr><td></td><td class="lp-cr">Accounts Payable</td><td></td><td>${b.amount}</td></tr>
+      <tr class="lp-total"><td></td><td>Totals</td><td>${b.amount}</td><td>${b.amount}</td></tr></tbody></table>
+    <div class="lp-posted">${laneIcon('check', 16)} Entry balanced and posted to the ledger</div>
+    <div class="lp-taccts"><div><b>Supplies</b><span>${b.amount}</span><span></span></div><div><b>Accounts Payable</b><span></span><span>${b.amount}</span></div></div>
+  </div>`;
 }
 
 function publicWelcome() {
   const b = previewBusinesses[previewBusiness];
-  return `<section class="play-hero">
-    <div class="play-hero-copy">
-      <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
-      <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
-      <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
-      <div class="play-actions"><button id="student">Start your business ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Browse the lesson library</button></div>
-      <div class="play-demo-note">No sign-up required. Your progress saves in this browser.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
+  const units = [
+    ['Unit 1 · Foundations', ['Business forms and the financial statements', 'Recording transactions', 'Adjusting and closing entries', 'Cumulative review']],
+    ['Unit 2 · Operating the business', ['Cash and internal control', 'Receivables', 'Merchandise inventory', 'Long-term assets', 'Cumulative review']],
+    ['Unit 3 · Growing the business', ['Current liabilities and payroll', 'Long-term debt', 'Stockholders’ equity', 'Statement of cash flows', 'Cumulative review']],
+    ['Final project', ['A full year of operations: monthly entries, adjustments, closing and all four statements']],
+  ];
+  return `<div class="lp">
+  <section class="lp-hero">
+    <div class="lp-hero-copy">
+      <span class="lp-eyebrow">INTRODUCTORY FINANCIAL ACCOUNTING</span>
+      <h1>Students run a business. Then they account for it.</h1>
+      <p>Ledger Lane is a full semester of prebuilt lessons. Each student creates a business, makes its operating decisions and records the results in a real general journal, from the first stock issue to year-end financial statements.</p>
+      <div class="lp-actions"><button id="student" class="lp-btn">Start your business ${laneIcon('arrow', 18)}</button><button id="instructor-demo" class="lp-btn alt">Browse the lesson library</button></div>
+      <p class="lp-note">Free to try. No account required; progress is saved in this browser. <button id="professor" class="lp-link">Instructor sign in →</button></p>
     </div>
-    <div class="play-world">
-      <div class="world-label"><span>${laneIcon('shop', 16)} YOUR NEXT BIG IDEA</span><span>STARTS SMALL.</span></div>
-      <div class="lane-scene" id="welcome-scene">${storefrontArt(b)}${previewRecord(b)}</div>
-      <div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${id === 'coffee' ? 'Coffee' : id === 'bakery' ? 'Bakery' : 'Flowers'}</button>`).join('')}</div></div>
-      <div class="world-sticker">${laneIcon('spark', 20)} Learn it by<br><strong>living it.</strong></div>
-    </div>
-  </section>
-  <div class="play-ribbon"><span>${laneIcon('shop')} 10 business types. Make one yours.</span><span>${laneIcon('notes')} Realistic records, not random quizzes.</span><span>${laneIcon('check')} Feedback that helps it click.</span></div>
-  <section class="play-how" id="how-ledger-works">
-    <div class="play-section-heading"><div><span class="tag">FROM “WHAT?” TO “I GET IT.”</span><h2>You’re not just doing homework.<br>You’re running the place.</h2></div><p>The same business. A new challenge each lesson.<br>Every assignment starts with fresh books.</p></div>
-    <div class="play-feature-grid">
-      <article class="play-feature peach"><div class="feature-visual"><span class="feature-number">01</span><div class="mini-store">${laneIcon('shop', 64)}<span>YOUR NAME HERE</span></div><span class="feature-doodle">✳</span></div><h3>Make it yours.</h3><p>Coffee shop? Design studio? Neighborhood bakery? Name it, style it, and open your doors.</p></article>
-      <article class="play-feature lilac"><div class="feature-visual"><span class="feature-number">02</span><div class="mini-receipt"><span>BUSINESS DECISION</span><strong>Stock up for the month.</strong><div>Supplies ordered <b>✓</b></div><div>Invoice received <b>→</b></div></div></div><h3>Call the shots.</h3><p>Choose what to buy, when to pay, and what happens next. Your decisions create the records.</p></article>
-      <article class="play-feature blue"><div class="feature-visual"><span class="feature-number">03</span><div class="mini-ledger"><span>YOUR JOURNAL</span><div><strong>Account</strong><strong>Debit</strong><strong>Credit</strong></div><div><span>Supplies</span><b>420</b><span>—</span></div><div><span>Cash</span><span>—</span><b>420</b></div><small>${laneIcon('check', 14)} Balanced. Now it makes sense.</small></div></div><h3>Connect the dots.</h3><p>Read the document, write the entry, and see the impact. Get useful feedback, then try again.</p></article>
+    <div class="lp-hero-visual">
+      <div id="welcome-scene">${previewRecord(b)}</div>
+      <div class="lp-switch"><span>Preview as <strong id="preview-business-name">${safe(b.name)}</strong> <em id="preview-business-item">${safe(b.item)}</em></span><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id, x]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${safe(x.type)}</button>`).join('')}</div></div>
     </div>
   </section>
-  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>A full semester,<br><span>ready to assign.</span></h2><p>Eleven chapter lessons, three cumulative reviews and a year-long final project, aligned to introductory financial accounting. Preview any lesson as a student and assign it with a due date.</p><button id="explore-studio">Open the lesson library ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
-  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="lessons.html#library">Browse all 15 lessons →</a></footer>`;
+  <section class="lp-stats"><div><strong>11</strong><span>chapter lessons</span></div><div><strong>3</strong><span>cumulative reviews</span></div><div><strong>1</strong><span>year-long final project</span></div><div><strong>20–30</strong><span>minutes per lesson</span></div></section>
+  <section class="lp-section">
+    <span class="lp-eyebrow">HOW A LESSON WORKS</span><h2>Every lesson follows the same business</h2>
+    <div class="lp-steps">
+      <article><span>1</span><h3>Create the business</h3><p>Students choose a business type and name it in Chapter 1. The same business carries through every lesson of the semester.</p></article>
+      <article><span>2</span><h3>Make the decisions</h3><p>Each lesson opens with an operating decision, such as hiring staff, offering credit terms or financing an expansion. Those choices determine the transactions.</p></article>
+      <article><span>3</span><h3>Record and report</h3><p>Students write general-journal entries, see them post to T accounts and prepare the statements. Feedback identifies the specific error.</p></article>
+    </div>
+  </section>
+  <section class="lp-section">
+    <span class="lp-eyebrow">COURSE COVERAGE</span><h2>Aligned to the introductory course sequence</h2>
+    <div class="lp-units">${units.map(([u, items]) => `<article><h3>${u}</h3><ul>${items.map((t) => `<li>${t}</li>`).join('')}</ul></article>`).join('')}</div>
+  </section>
+  <section class="lp-teach"><div><span class="lp-eyebrow">FOR INSTRUCTORS</span><h2>Ready to assign on day one</h2><p>Preview any lesson as a student, then assign it to your class with a due date. Chapter lessons take 20–30 minutes, cumulative reviews 45–60 minutes, and every lesson is graded on first-attempt accuracy.</p></div><button id="explore-studio" class="lp-btn light">Open the lesson library ${laneIcon('arrow', 18)}</button></section>
+  <footer class="lp-footer"><span><strong>Ledger Lane</strong> · Financial accounting, taught through a business students run</span><a href="lessons.html#library">All 15 lessons →</a></footer>
+  </div>`;
 }
 
 function wireWelcome() {
@@ -116,7 +135,7 @@ function wireWelcome() {
   document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
     previewBusiness = button.dataset.previewBusiness;
     const b = previewBusinesses[previewBusiness];
-    Q('#welcome-scene').innerHTML = storefrontArt(b) + previewRecord(b);
+    Q('#welcome-scene').innerHTML = previewRecord(b);
     Q('#preview-business-name').textContent = b.name;
     Q('#preview-business-item').textContent = b.item;
     document.querySelectorAll('[data-preview-business]').forEach((el) => {
