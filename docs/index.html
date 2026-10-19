@@ -644,6 +644,116 @@ dialog::backdrop { background: #22223b77; backdrop-filter: blur(3px); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none!important; transition: none!important; scroll-behavior: auto!important; }
 }
+</style>
+  <style>:root{--s-font:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;--s-ink:#0f172a;--s-mut:#64748b;--s-line:#e2e8f0;--s-bg:#f5f7fb;--s-navy:#1e3a8a;--s-blue:#2563eb;--s-soft:#eff4ff;--s-green:#047857}
+body,body[data-screen]{background:var(--s-bg)!important;color:var(--s-ink);font-family:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+body main.shell{max-width:1200px;margin:0 auto;padding:0 28px 40px;background:none}
+body .app-header{display:flex;align-items:center;gap:14px;padding:14px 0;margin:0 0 8px;border-bottom:1px solid var(--s-line);background:none}
+body .app-header .brand{display:flex;align-items:center;gap:10px;font:700 18px/1 Inter,system-ui,sans-serif;letter-spacing:-.01em;color:var(--s-navy);text-decoration:none;background:none;padding:0;box-shadow:none}
+body .app-header .brand>span:last-child{background:none;padding:0;color:var(--s-navy);font-size:18px}
+body .app-header .brand-mark{width:32px;height:32px;border-radius:8px;background:var(--s-navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;box-shadow:none;transform:none}
+body .app-header .header-tools{margin-left:auto;display:flex;gap:8px;align-items:center}
+body .app-header .header-tools button,body .app-header .header-tools .button{background:#fff;color:var(--s-ink);border:1px solid var(--s-line);border-radius:8px;padding:8px 14px;font:600 14px/1.2 var(--s-font);box-shadow:none}
+body .app-header .header-tools button:hover{background:#f8fafc}
+body .app-header .header-tools button:last-child{background:var(--s-navy);color:#fff;border-color:var(--s-navy)}
+body:has(.lp) .classroom-foot{display:none}
+.lp{color:var(--s-ink)}
+.lp h1,.lp h2,.lp h3,body .account-layout h1,body .account-layout h2,body .app-header .brand,body .app-header .brand-mark{font-family:var(--s-font)!important;color:var(--s-ink);letter-spacing:-.02em;margin:0}
+.lp-eyebrow{display:inline-block;font:700 12px/1 var(--s-font);letter-spacing:.08em;color:var(--s-blue);margin-bottom:12px;background:none;padding:0}
+.lp-hero{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;padding:48px 0 40px}
+.lp-hero h1{font-size:46px;line-height:1.08;font-weight:800;margin-bottom:18px}
+.lp-hero-copy>p{font-size:17px;line-height:1.6;color:#334155;margin:0 0 26px;max-width:560px}
+.lp-actions{display:flex;gap:12px;flex-wrap:wrap}
+body .lp .lp-btn{display:inline-flex;align-items:center;gap:8px;background:var(--s-navy);color:#fff;border:1px solid var(--s-navy);border-radius:8px;padding:12px 20px;font:600 15px/1.2 var(--s-font);box-shadow:none;transform:none;cursor:pointer}
+.lp .lp-btn:hover{background:#172e6e}
+body .lp .lp-btn.alt{background:#fff;color:var(--s-ink);border-color:var(--s-line)}
+.lp .lp-btn.alt:hover{background:#f8fafc}
+.lp .lp-btn.light{background:#fff;color:var(--s-navy);border-color:#fff}
+.lp .lp-btn svg{width:18px;height:18px}
+.lp .lp-note{font-size:14px;line-height:1.6;color:var(--s-mut);margin:20px 0 0!important}
+.lp .lp-link{background:none;border:0;padding:0;color:var(--s-blue);font:600 14px var(--s-font);cursor:pointer;box-shadow:none;text-decoration:none}
+.lp .lp-link:hover{text-decoration:underline}
+.lp-player{background:#fff;border:1px solid var(--s-line);border-radius:14px;box-shadow:0 12px 32px rgba(15,23,42,.08);padding:20px;font-size:14px}
+.lp-player-top{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:600;color:var(--s-mut);padding-bottom:14px;border-bottom:1px solid var(--s-line)}
+.lp-chip{display:inline-flex;align-items:center;gap:7px;color:var(--s-ink);background:#f8fafc;border:1px solid var(--s-line);border-radius:99px;padding:5px 11px}
+.lp-chip i{width:9px;height:9px;border-radius:50%;background:var(--biz)}
+.lp-step{margin-left:auto}
+.lp-decision{padding:14px 0 6px}.lp-decision p{margin:6px 0 0;color:#334155}
+.lp-label{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--s-mut)}
+.lp-journal{width:100%;border-collapse:collapse;margin:10px 0;font-variant-numeric:tabular-nums}
+.lp-journal th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--s-mut);font-weight:700;padding:8px;background:#f8fafc;border-bottom:1px solid var(--s-line)}
+.lp-journal td{padding:9px 8px;border-bottom:1px solid #f1f5f9}
+.lp-journal th:nth-child(n+3),.lp-journal td:nth-child(n+3){text-align:right}
+.lp-journal .lp-cr{padding-left:30px}
+.lp-total td{font-weight:700;border-bottom:0;border-top:1px solid var(--s-line)}
+.lp-posted{display:flex;align-items:center;gap:8px;background:#ecfdf5;color:var(--s-green);border:1px solid #a7f3d0;border-radius:8px;padding:9px 12px;font-weight:600;font-size:13px}
+.lp-posted svg{width:16px;height:16px}
+.lp-taccts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.lp-taccts div{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid var(--s-ink);font-variant-numeric:tabular-nums}
+.lp-taccts b{grid-column:1/-1;text-align:center;font-size:12px;padding:6px 0;border-bottom:1px solid var(--s-ink);margin-top:-30px;background:none}
+.lp-taccts span{padding:8px;min-height:20px;text-align:right}
+.lp-taccts span:nth-of-type(1){border-right:1px solid var(--s-ink)}
+.lp-taccts{padding-top:28px}
+.lp-switch{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--s-mut)}
+.lp-switch em{font-style:normal}
+.lp-switch div{display:flex;gap:6px}
+.lp .lp-switch button{background:#fff;border:1px solid var(--s-line);border-radius:99px;padding:6px 12px;font:600 12px var(--s-font);color:#334155;box-shadow:none;cursor:pointer}
+.lp .lp-switch button.selected{background:var(--s-soft);border-color:#bfdbfe;color:var(--s-navy)}
+.lp-stats{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border:1px solid var(--s-line);border-radius:12px;margin:8px 0 56px}
+.lp-stats div{padding:20px 24px;border-left:1px solid var(--s-line)}.lp-stats div:first-child{border-left:0}
+.lp-stats strong{display:block;font-size:28px;font-weight:800;color:var(--s-navy)}
+.lp-stats span{font-size:14px;color:var(--s-mut)}
+.lp-section{margin-bottom:56px}
+.lp-section h2,.lp-teach h2{font-size:30px;font-weight:800;margin-bottom:24px}
+.lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.lp-steps article,.lp-units article{background:#fff;border:1px solid var(--s-line);border-radius:12px;padding:24px;box-shadow:none}
+.lp-steps span{display:grid;place-items:center;width:32px;height:32px;border-radius:8px;background:var(--s-soft);color:var(--s-navy);font-weight:800;margin-bottom:14px}
+.lp-steps h3,.lp-units h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.lp-steps p{margin:0;color:#475569;line-height:1.6;font-size:15px}
+.lp-units{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.lp-units article{border-top:3px solid var(--s-navy)}
+.lp-units article:last-child{border-top-color:var(--s-blue)}
+.lp-units ul{margin:0;padding-left:18px;color:#475569;font-size:14px;line-height:1.8}
+.lp-teach{display:flex;align-items:center;justify-content:space-between;gap:32px;background:var(--s-navy);color:#fff;border-radius:14px;padding:40px 44px;margin-bottom:40px}
+.lp-teach h2{color:#fff;margin-bottom:12px}
+.lp-teach .lp-eyebrow{color:#93c5fd}
+.lp-teach p{margin:0;color:#dbeafe;max-width:640px;line-height:1.6}
+.lp-footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 0;border-top:1px solid var(--s-line);font-size:14px;color:var(--s-mut)}
+.lp-footer a{color:var(--s-blue);font-weight:600;text-decoration:none}
+body .account-layout{display:grid;grid-template-columns:1fr 1fr;max-width:1000px;margin:40px auto;background:#fff;border:1px solid var(--s-line);border-radius:14px;overflow:hidden;box-shadow:0 12px 32px rgba(15,23,42,.06)}
+body .account-story{background:var(--s-navy);color:#fff;padding:48px 44px;border:0}
+body .account-story .tag{color:#93c5fd;background:none;padding:0;font-weight:700;letter-spacing:.08em;font-size:12px}
+body .account-story h1{color:#fff;font:800 32px/1.15 var(--s-font);letter-spacing:-.02em;margin:14px 0}
+body .account-story p{color:#dbeafe;line-height:1.6}
+body .account-points{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:14px}
+body .account-points li{position:relative;padding-left:28px;color:#fff;line-height:1.5}
+body .account-points li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:12px}
+body .account-panel{padding:48px 44px;background:#fff}
+body .account-panel .tag{color:var(--s-blue);background:none;padding:0;font-weight:700;letter-spacing:.08em;font-size:12px}
+body .account-panel h2{font:800 26px/1.2 var(--s-font);color:var(--s-ink);letter-spacing:-.02em;margin:10px 0 6px}
+body .account-panel .account-intro{color:var(--s-mut)}
+body .account-panel .field{color:var(--s-ink);font-weight:600;font-size:14px}
+body .account-panel input{border:1px solid #cbd5e1;border-radius:8px;background:#fff;padding:11px 12px;font:15px var(--s-font);color:var(--s-ink)}
+body .account-panel input:focus{outline:2px solid #bfdbfe;border-color:var(--s-blue)}
+body .account-panel .account-submit{width:100%;background:var(--s-navy);color:#fff;border:0;border-radius:8px;padding:13px;font:600 15px var(--s-font);box-shadow:none}
+body .account-panel .account-submit:hover{background:#172e6e}
+body .account-panel .account-text-button,body .account-switch button{background:none;border:0;color:var(--s-blue);font-weight:600;padding:0;box-shadow:none;text-decoration:none}
+body .account-panel .message,body .account-panel #account-feedback-slot>*{border-radius:8px}
+body .account-panel .account-access summary{color:var(--s-mut)}
+@media (max-width:900px){
+ .lp-hero{grid-template-columns:1fr;gap:32px;padding-top:28px}
+ .lp-hero h1{font-size:34px}
+ .lp-stats{grid-template-columns:1fr 1fr}.lp-stats div:nth-child(3){border-left:0}.lp-stats div:nth-child(n+3){border-top:1px solid var(--s-line)}
+ .lp-steps,.lp-units{grid-template-columns:1fr}
+ .lp-teach{flex-direction:column;align-items:flex-start;padding:28px}
+ body .account-layout{grid-template-columns:1fr;margin:20px 0}
+ body .account-story,body .account-panel{padding:28px 24px}
+ body main.shell{padding:0 16px 32px}
+}
+body .account-panel .account-note{background:#f8fafc;border:1px solid var(--s-line);color:#475569;border-radius:8px;padding:12px 14px;font-size:14px}
+body .app-header .brand-mark{color:#fff!important}
+body .lp .lp-btn.alt{color:var(--s-ink)!important;border-color:#cbd5e1!important;background:#fff!important}
+body .account-panel .message,body .account-panel [role=status],body .account-panel #cloud-status{background:#f8fafc!important;border:1px solid var(--s-line)!important;color:#475569!important;border-radius:8px}
 </style></head><body><div id="classroom"></div><script>(function(root){
 let definitions={};
 const cents=n=>Math.round((n+Number.EPSILON)*100)/100;
@@ -923,37 +1033,56 @@ function storefrontArt(b) {
 }
 
 function previewRecord(b) {
-  return `<div class="lane-paper"><span class="lane-paper-type">${laneIcon('notes', 15)} SOURCE RECORD · EXAMPLE</span><strong>${safe(b.invoice)}</strong><div><span>Supplies delivered</span><b>${b.amount}</b></div><small>One business choice. A real accounting question.</small></div>`;
+  return `<div class="lp-player" style="--biz:${b.color}">
+    <div class="lp-player-top"><span class="lp-chip"><i></i>${safe(b.name)}</span><span>CH 2 · Launch Month</span><span class="lp-step">Task 6 of 14</span></div>
+    <div class="lp-decision"><span class="lp-label">TRANSACTION</span><p>Supplies were delivered on account from <strong>${safe(b.invoice)}</strong>. Record the purchase.</p></div>
+    <table class="lp-journal"><thead><tr><th>Date</th><th>Account</th><th>Debit</th><th>Credit</th></tr></thead><tbody>
+      <tr><td>Mar 4</td><td>Supplies</td><td>${b.amount}</td><td></td></tr>
+      <tr><td></td><td class="lp-cr">Accounts Payable</td><td></td><td>${b.amount}</td></tr>
+      <tr class="lp-total"><td></td><td>Totals</td><td>${b.amount}</td><td>${b.amount}</td></tr></tbody></table>
+    <div class="lp-posted">${laneIcon('check', 16)} Entry balanced and posted to the ledger</div>
+    <div class="lp-taccts"><div><b>Supplies</b><span>${b.amount}</span><span></span></div><div><b>Accounts Payable</b><span></span><span>${b.amount}</span></div></div>
+  </div>`;
 }
 
 function publicWelcome() {
   const b = previewBusinesses[previewBusiness];
-  return `<section class="play-hero">
-    <div class="play-hero-copy">
-      <div class="play-eyebrow"><span class="play-dot"></span> NOT YOUR AVERAGE ACCOUNTING CLASS</div>
-      <h1>Small business.<br>Big <span>aha!</span><br>moments.</h1>
-      <p>Build a business you care about.<br>Make the calls. Make sense of the numbers.</p>
-      <div class="play-actions"><button id="student">Start your business ${laneIcon('arrow', 20)}</button><button id="instructor-demo" class="secondary">Browse the lesson library</button></div>
-      <div class="play-demo-note">No sign-up required. Your progress saves in this browser.<br><button id="professor" class="link-button">Already teaching here? Instructor sign in →</button></div>
+  const units = [
+    ['Unit 1 · Foundations', ['Business forms and the financial statements', 'Recording transactions', 'Adjusting and closing entries', 'Cumulative review']],
+    ['Unit 2 · Operating the business', ['Cash and internal control', 'Receivables', 'Merchandise inventory', 'Long-term assets', 'Cumulative review']],
+    ['Unit 3 · Growing the business', ['Current liabilities and payroll', 'Long-term debt', 'Stockholders’ equity', 'Statement of cash flows', 'Cumulative review']],
+    ['Final project', ['A full year of operations: monthly entries, adjustments, closing and all four statements']],
+  ];
+  return `<div class="lp">
+  <section class="lp-hero">
+    <div class="lp-hero-copy">
+      <span class="lp-eyebrow">INTRODUCTORY FINANCIAL ACCOUNTING</span>
+      <h1>Students run a business. Then they account for it.</h1>
+      <p>Ledger Lane is a full semester of prebuilt lessons. Each student creates a business, makes its operating decisions and records the results in a real general journal, from the first stock issue to year-end financial statements.</p>
+      <div class="lp-actions"><button id="student" class="lp-btn">Start your business ${laneIcon('arrow', 18)}</button><button id="instructor-demo" class="lp-btn alt">Browse the lesson library</button></div>
+      <p class="lp-note">Free to try. No account required; progress is saved in this browser. <button id="professor" class="lp-link">Instructor sign in →</button></p>
     </div>
-    <div class="play-world">
-      <div class="world-label"><span>${laneIcon('shop', 16)} YOUR NEXT BIG IDEA</span><span>STARTS SMALL.</span></div>
-      <div class="lane-scene" id="welcome-scene">${storefrontArt(b)}${previewRecord(b)}</div>
-      <div class="lane-business-controls"><div><strong id="preview-business-name">${safe(b.name)}</strong><span id="preview-business-item">${safe(b.item)}</span></div><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${id === 'coffee' ? 'Coffee' : id === 'bakery' ? 'Bakery' : 'Flowers'}</button>`).join('')}</div></div>
-      <div class="world-sticker">${laneIcon('spark', 20)} Learn it by<br><strong>living it.</strong></div>
-    </div>
-  </section>
-  <div class="play-ribbon"><span>${laneIcon('shop')} 10 business types. Make one yours.</span><span>${laneIcon('notes')} Realistic records, not random quizzes.</span><span>${laneIcon('check')} Feedback that helps it click.</span></div>
-  <section class="play-how" id="how-ledger-works">
-    <div class="play-section-heading"><div><span class="tag">FROM “WHAT?” TO “I GET IT.”</span><h2>You’re not just doing homework.<br>You’re running the place.</h2></div><p>The same business. A new challenge each lesson.<br>Every assignment starts with fresh books.</p></div>
-    <div class="play-feature-grid">
-      <article class="play-feature peach"><div class="feature-visual"><span class="feature-number">01</span><div class="mini-store">${laneIcon('shop', 64)}<span>YOUR NAME HERE</span></div><span class="feature-doodle">✳</span></div><h3>Make it yours.</h3><p>Coffee shop? Design studio? Neighborhood bakery? Name it, style it, and open your doors.</p></article>
-      <article class="play-feature lilac"><div class="feature-visual"><span class="feature-number">02</span><div class="mini-receipt"><span>BUSINESS DECISION</span><strong>Stock up for the month.</strong><div>Supplies ordered <b>✓</b></div><div>Invoice received <b>→</b></div></div></div><h3>Call the shots.</h3><p>Choose what to buy, when to pay, and what happens next. Your decisions create the records.</p></article>
-      <article class="play-feature blue"><div class="feature-visual"><span class="feature-number">03</span><div class="mini-ledger"><span>YOUR JOURNAL</span><div><strong>Account</strong><strong>Debit</strong><strong>Credit</strong></div><div><span>Supplies</span><b>420</b><span>—</span></div><div><span>Cash</span><span>—</span><b>420</b></div><small>${laneIcon('check', 14)} Balanced. Now it makes sense.</small></div></div><h3>Connect the dots.</h3><p>Read the document, write the entry, and see the impact. Get useful feedback, then try again.</p></article>
+    <div class="lp-hero-visual">
+      <div id="welcome-scene">${previewRecord(b)}</div>
+      <div class="lp-switch"><span>Preview as <strong id="preview-business-name">${safe(b.name)}</strong> <em id="preview-business-item">${safe(b.item)}</em></span><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id, x]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${safe(x.type)}</button>`).join('')}</div></div>
     </div>
   </section>
-  <section class="play-teach"><div><span class="play-eyebrow">${laneIcon('people', 17)} BUILT FOR THE PEOPLE WHO TEACH</span><h2>A full semester,<br><span>ready to assign.</span></h2><p>Eleven chapter lessons, three cumulative reviews and a year-long final project, aligned to introductory financial accounting. Preview any lesson as a student and assign it with a due date.</p><button id="explore-studio">Open the lesson library ${laneIcon('arrow', 19)}</button><small>Try sample notes. No account needed.</small></div><div class="teach-diagram"><article class="teach-note"><span>${laneIcon('notes', 20)} COURSE NOTES</span><h3>Prepaid expenses</h3><p>A payment today can cover future months. Record the asset, then recognize the amount used.</p><div class="note-lines"></div></article><span class="teach-arrow" aria-hidden="true">↘</span><article class="teach-assignment"><span>${laneIcon('spark', 18)} THE STUDENT CHALLENGE</span><h3>A new home for your business.</h3><p>Choose a space. Read the lease.<br>Work out the entry.</p><div><span>Decisions</span><span>Documents</span><span>Feedback</span></div></article></div></section>
-  <footer class="play-footer"><span><strong>ledger lane</strong> Accounting that comes to life.</span><a href="lessons.html#library">Browse all 15 lessons →</a></footer>`;
+  <section class="lp-stats"><div><strong>11</strong><span>chapter lessons</span></div><div><strong>3</strong><span>cumulative reviews</span></div><div><strong>1</strong><span>year-long final project</span></div><div><strong>20–30</strong><span>minutes per lesson</span></div></section>
+  <section class="lp-section">
+    <span class="lp-eyebrow">HOW A LESSON WORKS</span><h2>Every lesson follows the same business</h2>
+    <div class="lp-steps">
+      <article><span>1</span><h3>Create the business</h3><p>Students choose a business type and name it in Chapter 1. The same business carries through every lesson of the semester.</p></article>
+      <article><span>2</span><h3>Make the decisions</h3><p>Each lesson opens with an operating decision, such as hiring staff, offering credit terms or financing an expansion. Those choices determine the transactions.</p></article>
+      <article><span>3</span><h3>Record and report</h3><p>Students write general-journal entries, see them post to T accounts and prepare the statements. Feedback identifies the specific error.</p></article>
+    </div>
+  </section>
+  <section class="lp-section">
+    <span class="lp-eyebrow">COURSE COVERAGE</span><h2>Aligned to the introductory course sequence</h2>
+    <div class="lp-units">${units.map(([u, items]) => `<article><h3>${u}</h3><ul>${items.map((t) => `<li>${t}</li>`).join('')}</ul></article>`).join('')}</div>
+  </section>
+  <section class="lp-teach"><div><span class="lp-eyebrow">FOR INSTRUCTORS</span><h2>Ready to assign on day one</h2><p>Preview any lesson as a student, then assign it to your class with a due date. Chapter lessons take 20–30 minutes, cumulative reviews 45–60 minutes, and every lesson is graded on first-attempt accuracy.</p></div><button id="explore-studio" class="lp-btn light">Open the lesson library ${laneIcon('arrow', 18)}</button></section>
+  <footer class="lp-footer"><span><strong>Ledger Lane</strong> · Financial accounting, taught through a business students run</span><a href="lessons.html#library">All 15 lessons →</a></footer>
+  </div>`;
 }
 
 function wireWelcome() {
@@ -964,7 +1093,7 @@ function wireWelcome() {
   document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
     previewBusiness = button.dataset.previewBusiness;
     const b = previewBusinesses[previewBusiness];
-    Q('#welcome-scene').innerHTML = storefrontArt(b) + previewRecord(b);
+    Q('#welcome-scene').innerHTML = previewRecord(b);
     Q('#preview-business-name').textContent = b.name;
     Q('#preview-business-item').textContent = b.item;
     document.querySelectorAll('[data-preview-business]').forEach((el) => {
@@ -1101,7 +1230,7 @@ function appHeader() {
   const switcher = practice && inApp
     ? `<div class="mode-switch" role="group" aria-label="Demo view"><button class="${role === 'student' ? 'on' : ''}" data-demo-role="student" aria-pressed="${role === 'student'}">Student</button><button class="${role === 'professor' ? 'on' : ''}" data-demo-role="professor" aria-pressed="${role === 'professor'}">Instructor</button></div>`
     : '';
-  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">${laneIcon('shop', 25)}</span><span>ledger lane<small>THE BUSINESS CLASSROOM</small></span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
+  return `<header class="app-header"><a href="#" class="brand" id="brand-home"><span class="brand-mark">LL</span><span>Ledger Lane</span></a>${switcher}<div class="header-tools">${feedback ? `<a class="quiet button" id="feedback" href="${safe(feedback)}" target="_blank" rel="noopener">Give feedback</a>` : ''}<button class="quiet" id="help">Help</button>${practice && inApp ? '<button class="quiet" id="reset-demo">Reset demo</button>' : ''}<button class="quiet" id="role-home">${inApp ? 'Exit' : 'Home'}</button></div></header>`;
 }
 
 function wireAppHeader() {
@@ -1296,8 +1425,8 @@ function cloudFooter(){return cloudAccount?`Signed in as ${safe(cloudAccount.ema
 shell=function(content){localShell(content);Q('.classroom-foot').innerHTML=cloudFooter();const tools=Q('.header-tools');if(cloudAccount){tools.insertAdjacentHTML('beforeend','<button class="quiet" id="account-dashboard">My classroom</button><button class="quiet" id="cloud-logout">Sign out</button>');Q('#account-dashboard').onclick=()=>{cloudScreen='dashboard';render();};Q('#cloud-logout').onclick=()=>cloudTask(async()=>{try{await cloud.logout();}finally{location.reload();}});}else{tools.insertAdjacentHTML('beforeend','<button class="secondary" id="cloud-login">Sign in</button>');Q('#cloud-login').onclick=()=>{cloudScreen='login';render();};}
 Q('#role-home').onclick=Q('#brand-home').onclick=e=>{e.preventDefault();cloudScreen=cloudAccount?'dashboard':'';if(!cloudAccount)role='home';render();};Q('main').insertAdjacentHTML('beforeend',`<div id="cloud-status" role="status">${safe(cloudMessage)}</div>`);};
 async function loadCloud(){const result=await cloud.call('bootstrap');cloudAccount=result.user;cloudClasses=result.classes;cloudClass=cloudClasses.some(c=>c.id===cloudClass)?cloudClass:cloudClasses[0]?.id||'';data={profile:result.business,assignments:result.assignments.map(x=>({...x.definition,classId:x.class_id})),runs:{}};cloudRevision={};for(const r of result.runs){data.runs[r.assignment_id]=r.state;cloudRevision[r.assignment_id]=r.revision;}active=null;record=null;teacherDraft=null;if(cloudAccount.role!=='student'){try{teacherDraft=JSON.parse(sessionStorage.getItem('ledger-teacher-draft-'+cloudAccount.id));}catch{}}teacherTab='builder';role=cloudAccount.role==='student'?'student':'professor';page='assignments';}
-render=function(){if(cloudScreen==='login'){renderLogin();return;}if(cloudAccount&&cloudScreen==='dashboard'){renderDashboard();return;}localRender();if(role==='home'&&cloudAccount&&Q('#professor')){Q('#professor').textContent='Open instructor workspace';Q('#student').textContent='Open my business';}if(role==='home'&&!cloudAccount&&Q('#professor'))Q('#professor').onclick=()=>{cloudScreen='login';cloudMessage='Sign in with an approved professor account to create and publish assignments.';render();};if(role==='home'&&cloudAccount){Q('#student').disabled=cloudAccount.role!=='student';Q('#professor').disabled=cloudAccount.role==='student';}if(cloudAccount&&role==='student'&&Q('#import')){Q('#import').textContent='Refresh class';Q('#import').onclick=()=>cloudTask(async()=>{await loadCloud();render();});if(Q('.business-summary .message'))Q('.business-summary .message').textContent='Assignments appear here when your professor publishes them. Your submitted work saves to your account.';if(!data.assignments.length&&Q('.assignment-list'))Q('.assignment-list').innerHTML='<section class="card"><h2>Your class is getting ready</h2><p>Your professor has not published an assignment yet. Open My classroom to see your classes.</p></section>';if(page==='portfolio')Q('.portfolio-card .foot').textContent='Your professor sees the server-recorded submissions in the class gradebook. Downloads are copies for your records.';}};
-function renderLogin(){const signup=authMode==='signup';shell(`<section class="account-layout"><aside class="account-story"><div class="tag">LEDGER LANE CLASSROOM</div><h1>Your business.<br>Your next chapter.</h1><p>Build a business of your own. Learn accounting through the choices you make and the records that follow.</p><div class="account-art" aria-hidden="true">${storefrontArt(previewBusinesses.coffee)}</div><div class="account-story-note"><strong>One business, all semester.</strong><p>Your assignments, books, and progress stay together in your account.</p></div></aside><section class="account-panel"><div class="tag">${signup?'GET STARTED':'WELCOME BACK'}</div><h2>${signup?'Create your account':'Sign in to Ledger Lane'}</h2><p class="account-intro">${signup?'Use the email your professor approved for your class.':'Pick up where you left off.'}</p>${cloud.configured?`<form id="cloud-auth"><label class="field" for="cloud-email">Email address<input id="cloud-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.edu" value="${safe(authEmail)}"></label><label class="field" for="cloud-password">Password<div class="password-field"><input id="cloud-password" name="password" type="password" autocomplete="${signup?'new-password':'current-password'}" required ${signup?'minlength="12"':''}><button type="button" id="show-password" aria-label="Show password" aria-pressed="false">Show</button></div></label>${signup?'<p class="password-help">Use at least 12 characters.</p><label class="field" for="confirm-password">Confirm password<input id="confirm-password" type="password" autocomplete="new-password" required minlength="12"></label>':'<button type="button" id="cloud-recover" class="account-text-button">Forgot your password?</button>'}<button class="account-submit" data-cloud-submit>${signup?'Create account':'Sign in'}</button><div id="account-feedback-slot"></div></form><p class="account-switch">${signup?'Already have an account? <button type="button" id="cloud-signin">Sign in</button>':'New to Ledger Lane? <button type="button" id="cloud-signup">Create an account</button>'}</p><details class="account-access"><summary>Need help getting access?</summary><p>Students: ask your professor to add your email to the class. Professors: ask the person running your demo to approve your email.</p><p>If you’re waiting for a confirmation email, enter your email above and request a new link.</p><button type="button" id="cloud-resend" class="account-text-button" data-cloud-submit>Resend confirmation email</button></details>`:'<div class="message">Account sign-in is currently unavailable. You can still explore the practice demo.</div>'}<div class="account-demo"><button id="back-practice" class="account-text-button">← Explore the practice demo</button><span>No account needed</span></div></section></section>`);Q('.classroom-foot').textContent='Ledger Lane · An accounting classroom built around your business';Q('#back-practice').onclick=()=>{cloudScreen='';render();};if(!cloud.configured)return;
+render=function(){if(cloudScreen==='login'){renderLogin();return;}if(cloudAccount&&cloudScreen==='dashboard'){renderDashboard();return;}localRender();if(role==='home'&&cloudAccount&&Q('#professor')){Q('#professor').textContent='Open instructor workspace';Q('#student').textContent='Open my business';}if(role==='home'&&!cloudAccount&&Q('#professor'))Q('#professor').onclick=()=>{cloudScreen='login';cloudMessage='Instructors and students sign in with the email approved for their class.';render();};if(role==='home'&&cloudAccount){Q('#student').disabled=cloudAccount.role!=='student';Q('#professor').disabled=cloudAccount.role==='student';}if(cloudAccount&&role==='student'&&Q('#import')){Q('#import').textContent='Refresh class';Q('#import').onclick=()=>cloudTask(async()=>{await loadCloud();render();});if(Q('.business-summary .message'))Q('.business-summary .message').textContent='Assignments appear here when your professor publishes them. Your submitted work saves to your account.';if(!data.assignments.length&&Q('.assignment-list'))Q('.assignment-list').innerHTML='<section class="card"><h2>Your class is getting ready</h2><p>Your professor has not published an assignment yet. Open My classroom to see your classes.</p></section>';if(page==='portfolio')Q('.portfolio-card .foot').textContent='Your professor sees the server-recorded submissions in the class gradebook. Downloads are copies for your records.';}};
+function renderLogin(){const signup=authMode==='signup';shell(`<section class="account-layout"><aside class="account-story"><div class="tag">LEDGER LANE CLASSROOM</div><h1>One business. A full semester of accounting.</h1><p>Your lessons, business decisions and journal entries stay with your account.</p><ul class="account-points"><li>Fifteen prebuilt lessons aligned to introductory financial accounting</li><li>Real general-journal entries with specific feedback</li><li>Instructors assign lessons to their class with due dates</li></ul></aside><section class="account-panel"><div class="tag">${signup?'GET STARTED':'WELCOME BACK'}</div><h2>${signup?'Create your account':'Sign in to Ledger Lane'}</h2><p class="account-intro">${signup?'Use the email your professor approved for your class.':'Pick up where you left off.'}</p>${cloud.configured?`<form id="cloud-auth"><label class="field" for="cloud-email">Email address<input id="cloud-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.edu" value="${safe(authEmail)}"></label><label class="field" for="cloud-password">Password<div class="password-field"><input id="cloud-password" name="password" type="password" autocomplete="${signup?'new-password':'current-password'}" required ${signup?'minlength="12"':''}><button type="button" id="show-password" aria-label="Show password" aria-pressed="false">Show</button></div></label>${signup?'<p class="password-help">Use at least 12 characters.</p><label class="field" for="confirm-password">Confirm password<input id="confirm-password" type="password" autocomplete="new-password" required minlength="12"></label>':'<button type="button" id="cloud-recover" class="account-text-button">Forgot your password?</button>'}<button class="account-submit" data-cloud-submit>${signup?'Create account':'Sign in'}</button><div id="account-feedback-slot"></div></form><p class="account-switch">${signup?'Already have an account? <button type="button" id="cloud-signin">Sign in</button>':'New to Ledger Lane? <button type="button" id="cloud-signup">Create an account</button>'}</p><details class="account-access"><summary>Need help getting access?</summary><p>Students: ask your professor to add your email to the class. Professors: ask the person running your demo to approve your email.</p><p>If you’re waiting for a confirmation email, enter your email above and request a new link.</p><button type="button" id="cloud-resend" class="account-text-button" data-cloud-submit>Resend confirmation email</button></details>`:'<div class="message">Account sign-in is currently unavailable. You can still try the lessons without an account.</div>'}<div class="account-demo"><button id="back-practice" class="account-text-button">← Back to the home page</button><span></span></div></section></section>`);Q('.classroom-foot').textContent='Ledger Lane · An accounting classroom built around your business';Q('#back-practice').onclick=()=>{cloudScreen='';render();};if(!cloud.configured)return;
  const status=Q('#cloud-status');Q('#account-feedback-slot').append(status);status.setAttribute('aria-live','polite');Q('#cloud-email').oninput=e=>{authEmail=e.target.value;};
  Q('#show-password').onclick=e=>{const input=Q('#cloud-password'),show=input.type==='password';input.type=show?'text':'password';e.currentTarget.textContent=show?'Hide':'Show';e.currentTarget.setAttribute('aria-label',show?'Hide password':'Show password');e.currentTarget.setAttribute('aria-pressed',String(show));};
  const switchButton=Q(signup?'#cloud-signin':'#cloud-signup');switchButton.onclick=()=>{authEmail=Q('#cloud-email').value;authMode=signup?'signin':'signup';cloudMessage='';render();Q('#cloud-email').focus();};

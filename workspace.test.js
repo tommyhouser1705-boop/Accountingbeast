@@ -45,7 +45,7 @@ test('preview switch updates the illustration, record, label and pressed state t
   c.render = () => {};
   c.wireWelcome();
   buttons[1].onclick();
-  assert.match(nodes['#welcome-scene'].innerHTML, /SUNDAY BAKERY/);
+  assert.match(nodes['#welcome-scene'].innerHTML, /Sunday Bakery/);
   assert.match(nodes['#welcome-scene'].innerHTML, /Miller Baking Supply/);
   assert.equal(nodes['#preview-business-name'].textContent, 'Sunday Bakery');
   assert.equal(buttons[1].attributes['aria-pressed'], 'true');
