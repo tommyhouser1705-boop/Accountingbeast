@@ -1,6 +1,6 @@
 # Ledger Lane
 
-A browser classroom for introductory financial accounting. Students keep one business identity across independent topic assignments. The September–December comprehensive simulation remains available at `capstone.html`.
+A browser classroom for introductory financial accounting. Students keep one business identity across independent topic assignments. The prebuilt lesson library (11 chapter lessons, 3 cumulative reviews and a year-long final project) is at `lessons.html`.
 
 ## Development and publication
 
@@ -8,7 +8,7 @@ Requires Node.js 22.13 or newer. Run `npm ci` to install the pinned document rea
 
 - `npm start`: serves the application on port 3000 (or `PORT`).
 - `npm test`: runs accounting engine and assignment tests.
-- `npm run build`: generates standalone classroom and capstone pages in `docs/`.
+- `npm run build`: generates standalone classroom and lesson-library pages in `docs/`.
 
 GitHub Pages publishes `main` → `/docs`. Rebuild before publishing source changes. Both generated pages run without external scripts or fonts. For offline testing, retain the `docs/assets/` readers alongside the pages; PDF/Word imports require serving the folder over HTTP.
 

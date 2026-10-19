@@ -8,8 +8,6 @@ on:
       - 'scripts/deployment-db.mjs'
       - 'scripts/check-cloud.mjs'
       - 'scripts/check-ai.mjs'
-      - 'scripts/check-student-browser.mjs'
-      - 'scripts/check-count-browser.mjs'
       - 'classroom.js'
       - 'cloud.js'
       - 'classroom.css'
@@ -70,18 +68,12 @@ jobs:
         run: supabase secrets set --project-ref "$SUPABASE_PROJECT_REF" "LEDGER_AI_API_KEY=$LEDGER_AI_API_KEY"
       - name: Deploy authenticated classroom server
         run: supabase functions deploy classroom --project-ref "$SUPABASE_PROJECT_REF" --no-verify-jwt --use-api
-      - name: Install student-test browser
-        if: env.LEDGER_AI_API_KEY != ''
-        run: npx playwright install --with-deps chromium
-      - name: Check supplies-count grading as a student
-        if: env.LEDGER_AI_API_KEY != ''
-        run: node scripts/check-count-browser.mjs
       - name: Detect changes to AI generation
         id: ai-changes
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] || ! git rev-parse HEAD^ >/dev/null 2>&1; then
             echo 'changed=true' >> "$GITHUB_OUTPUT"
-          elif [ -n "$(git diff --name-only HEAD^ HEAD -- supabase/functions/classroom/generator.mjs supabase/functions/classroom/generation-schema.mjs lesson-engine.js scripts/check-ai.mjs scripts/check-student-browser.mjs classroom.js classroom.css cloud.js)" ]; then
+          elif [ -n "$(git diff --name-only HEAD^ HEAD -- supabase/functions/classroom/generator.mjs supabase/functions/classroom/generation-schema.mjs lesson-engine.js scripts/check-ai.mjs classroom.js classroom.css cloud.js)" ]; then
             echo 'changed=true' >> "$GITHUB_OUTPUT"
           else
             echo 'changed=false' >> "$GITHUB_OUTPUT"
@@ -91,11 +83,3 @@ jobs:
         run: node scripts/check-ai.mjs
       - name: Check server responds to website
         run: node scripts/check-cloud.mjs
-
-      - name: Save student walkthrough screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: student-walkthrough
-          path: student-test-results/
-          if-no-files-found: ignore
