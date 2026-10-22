@@ -203,6 +203,79 @@ button{font:inherit;cursor:pointer;border:0}
 .demo-note{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--soft);border:1px solid #c7d7fe;border-radius:10px;padding:14px 18px;margin:0 0 24px;font-size:14px;color:var(--ink)}
 
 .demo-note .btn,.lc a.btn{white-space:nowrap}
+
+/* Signed-in app shell (dashboard.js) */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh;background:#fff;color:#1d2433;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.app-side{background:#f4f5f7;border-right:1px solid #dde1e6;padding:20px 14px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh;box-sizing:border-box}
+.app-logo{font:600 21px Georgia,"Times New Roman",serif;color:#13294b;text-decoration:none;padding:0 8px}
+.app-class{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#5f6875;padding:0 8px}
+.app-class select{font:inherit;font-size:14px;padding:6px 8px;border:1px solid #c9cfd8;border-radius:6px;background:#fff;color:#1d2433}
+.app-nav{display:flex;flex-direction:column;gap:2px}
+.app-nav a,.app-nav button{display:block;text-align:left;font:inherit;font-size:14.5px;color:#2f3a4b;background:none;border:0;border-radius:6px;padding:8px 10px;cursor:pointer;text-decoration:none}
+.app-nav a:hover,.app-nav button:hover{background:#e8ebf0}
+.app-nav .on{background:#fff;color:#13294b;font-weight:600;box-shadow:inset 3px 0 0 #13294b}
+.app-try{font-size:13.5px;color:#1f5bd6;padding:0 10px;text-decoration:none}
+.app-who{margin-top:auto;font-size:13px;color:#5f6875;padding:0 8px;word-break:break-all;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.app-main{padding:34px 48px 64px;max-width:1100px;min-width:0;box-sizing:border-box}
+.app-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}
+.app-head h1{font:600 28px Georgia,"Times New Roman",serif;color:#13294b;margin:0}
+.app-head p{margin:4px 0 0;color:#5f6875}
+.app-btn{display:inline-block;background:#13294b;color:#fff;border:1px solid #13294b;border-radius:6px;padding:8px 15px;font:inherit;font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.app-btn:disabled{opacity:.5;cursor:default}
+.app-link{background:none;border:0;padding:0;font:inherit;font-size:14px;color:#1f5bd6;cursor:pointer;text-decoration:none}
+.app-link:hover{text-decoration:underline}
+.app-table{border-collapse:collapse;width:100%;font-size:14.5px}
+.app-table th{text-align:left;font-weight:600;font-size:13px;color:#5f6875;border-bottom:1px solid #b9c0ca;padding:8px 10px;vertical-align:bottom}
+.app-table td{border-bottom:1px solid #e6e9ed;padding:10px;vertical-align:top}
+.app-table small{display:block;font-size:12.5px;color:#6b7482;font-weight:400}
+.app-table .num{text-align:right;font-variant-numeric:tabular-nums}
+.app-total td{font-weight:600;border-top:1px solid #b9c0ca}
+.app-scroll{overflow-x:auto}
+.app-inline{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.app-inline input,.app-inline select{font:inherit;font-size:14px;padding:8px 10px;border:1px solid #c9cfd8;border-radius:6px;min-width:0;flex:0 1 300px}
+.app-note{font-size:13px;color:#6b7482;margin:10px 0 18px}
+.app-empty{color:#5f6875;border:1px dashed #cdd3db;border-radius:8px;padding:22px;text-align:center}
+.app-mut{color:#6b7482}
+.app-msg{background:#eef4ff;border:1px solid #c9dafc;color:#1b3a73;border-radius:6px;padding:10px 14px;margin-bottom:18px;font-size:14px}
+.app-setup{border:1px solid #d5dae1;border-left:4px solid #13294b;border-radius:6px;padding:14px 18px;margin-bottom:22px}
+.app-setup ol{margin:6px 0 0;padding-left:20px;display:flex;gap:28px;flex-wrap:wrap}
+.app-setup li.done{color:#6b7482;text-decoration:line-through}
+.app-next{border:1px solid #d5dae1;border-left:4px solid #13294b;border-radius:6px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px}
+.app-next small{display:block;color:#5f6875;font-size:13px}
+.app-next b{font-size:17px;color:#13294b}
+@media(max-width:780px){
+ .app{grid-template-columns:1fr}
+ .app-side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px;gap:10px;border-right:0;border-bottom:1px solid #dde1e6}
+ .app-nav{flex-direction:row;flex-wrap:wrap;width:100%}
+ .app-class{flex-direction:row;align-items:center;flex:1}
+ .app-who{margin:0 0 0 auto;flex-direction:row;align-items:center;font-size:12px}
+ .app-try{display:none}
+ .app-main{padding:22px 16px 48px}
+ .app-head{flex-direction:column;align-items:flex-start}
+}
+.app .app-table th{text-transform:none;letter-spacing:0;background:none;font-size:13px;color:#5f6875;min-width:84px}
+.app .app-table td strong,.app .app-table td{color:#1d2433}
+.app .app-table td small{color:#6b7482}
+.app .app-link{margin:0;min-height:0;line-height:1.5;box-shadow:none}
+
+.app .app-filters{display:flex;gap:6px;margin:0 0 18px}
+.app-filters button,.libpub .app-filters button{background:#fff;border:1px solid #c9cfd8;color:#2f3a4b;border-radius:6px;padding:6px 12px;font-size:13.5px;font-weight:600}
+.app-filters button.on{background:#13294b;border-color:#13294b;color:#fff}
+.lib-unit{font:600 18px Georgia,"Times New Roman",serif;color:#13294b;margin:28px 0 6px}
+.lib-table td:first-child{width:72px;color:#5f6875;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lib-table .lib-t strong{display:block;color:#1d2433}
+.lib-table .lib-t small{max-width:560px}
+.lib-table .lib-acts{white-space:nowrap;text-align:right}
+.lib-table .lib-acts>*+*{margin-left:14px}
+.lib-ok{color:#047857;font-weight:600;font-size:14px}
+.libpub{max-width:1100px;margin:0 auto;padding:34px 28px 64px;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d2433}
+.libpub .app-head h1{font:600 28px Georgia,"Times New Roman",serif;color:#13294b;margin:0}
+@media(max-width:780px){.lib-table td:nth-child(3){display:none}.lib-table .lib-acts{white-space:normal}.libpub{padding:22px 16px 48px}}
+.lib-table{table-layout:fixed}
+.lib-table td:first-child{width:90px}.lib-table td:nth-child(3){width:110px}.lib-table td.lib-acts{width:310px}
+.lib-unit{text-transform:none;letter-spacing:0}
+.app-side button.app-try{padding:0 10px;text-align:left;background:none}
+@media(max-width:780px){.lib-table td:first-child{width:62px}.lib-table td.lib-acts{width:118px}.lib-table .lib-acts>*+*{margin:6px 0 0}.lib-table .lib-acts>*{display:block;margin-left:auto}.app-filters button{padding:6px 9px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -1113,10 +1186,10 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem('ll-'+k));retu
 let biz=store.get('biz',null),progress=store.get('progress',{}),assigned=new Set(store.get('assigned',[]));
 let view='home',filt='all',L=null,S=null,ui={};
 const LC=typeof CloudClient!=='undefined'?new CloudClient(window.LEDGER_CLOUD||{}):null;let acct=null,acctClasses=[],acctLessons=[];
-const DEMO='ch2';let unlockAll=false;const canOpen=id=>unlockAll||!!acct||id===DEMO;
+const isStudent=()=>!!acct&&acct.role==='student',isTeacher=()=>!!acct&&!isStudent();const DEMO='ch2';let unlockAll=false;const canOpen=id=>unlockAll||!!acct||id===DEMO;
 function lockedMsg(){toast('This lesson opens when you sign in with your class account.');}
 const isAssigned=id=>acct?acctLessons.some(a=>a.lessonId===id):assigned.has(id);
-async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(view!=='play')render();}catch{}}
+async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(isStudent()&&view==='lib')view='home';if(view!=='play')render();}catch{}}
 const lessonById=id=>LL.lessons.find(l=>l.id===id);
 const isGraded=s=>['je','num','mc','sort'].includes(s.k);
 const steps=()=>L.steps;
@@ -1125,10 +1198,11 @@ const stepNow=()=>steps()[S.i];
 /* ---------- shell ---------- */
 function top(){
  const tab=(v,t)=>`<button data-view="${v}" class="${view===v||(v==='home'&&view==='play')?'on':''}">${t}</button>`;
- return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${tab('lib','Instructor library')}</nav>${acct?`<a class="btn alt homelink" href="index.html">${acct.role==='student'?'My classroom':'Instructor home'}</a>`:''}${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
+ return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${isStudent()?'':tab('lib','Instructor library')}</nav>${acct?`<a class="btn alt homelink" href="index.html">${acct.role==='student'?'My classroom':'Instructor home'}</a>`:''}${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
 }
 function render(){
- if(view==='lib')app.innerHTML=top()+library();
+ if(view==='lib'&&isStudent())view='home';
+ if(view==='lib')app.innerHTML=isTeacher()?library():top()+library();
  else if(view==='play')return play();
  else app.innerHTML=top()+(biz?dashboard():setup());
 }
@@ -1163,16 +1237,13 @@ function dashboard(){
 /* ---------- instructor library ---------- */
 function library(){
  const show=l=>filt==='all'||(filt==='ch'&&!l.cum)||(filt==='cum'&&l.cum);
- const chs=LL.lessons.filter(l=>!l.cum).length,cums=LL.lessons.filter(l=>l.cum).length;
- let h=`<main class="wrap"><section class="hero"><div><div class="kick">PREBUILT COURSE · FINANCIAL ACCOUNTING</div><h1>A semester of lessons where each student <span>runs a business</span>.</h1><p>Students create their own business in Chapter 1 and run it through the entire course. In every lesson they make operating decisions, then journalize, adjust and report the results. Answer keys, targeted feedback and grading are built in.</p></div>
- <div class="stats"><div class="stat"><b>${chs}</b><small>chapter lessons</small></div><div class="stat"><b>${cums}</b><small>cumulative reviews</small></div><div class="stat"><b>20–30</b><small>minutes per lesson</small></div></div></section>
- <div class="filters">${[['all','All lessons'],['ch','Chapter lessons'],['cum','Cumulative reviews']].map(([k,t])=>`<button data-f="${k}" class="${filt===k?'on':''}">${t}</button>`).join('')}</div>`;
- units().forEach(u=>{const ls=u.ls.filter(show);if(!ls.length)return;h+=`<div class="unit">${esc(u.name)}</div><div class="grid">`;
-  ls.forEach(l=>{const tasks=l.steps.filter(isGraded).length,jes=l.steps.filter(s=>s.k==='je').length;
-   h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} ${assigned.has(l.id)?'assigned':''}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(l.summary)}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
-   <div class="meta"><span>${esc(l.mins)} min</span><span>${tasks} graded tasks</span>${jes?`<span>${jes} journal entries</span>`:''}</div>
-   <div class="acts">${acct||unlockAll?`<button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${isAssigned(l.id)?'Assigned ✓':'Assign'}</button>`:canOpen(l.id)?`<button class="btn alt" data-preview="${l.id}">Preview</button><a class="btn" href="index.html#signin">Assign</a>`:'<a class="btn alt" href="index.html#signin">Sign in to open</a>'}</div></article>`;});h+='</div>';});
- return h+'</main>';
+ const acts=l=>isTeacher()||unlockAll?`<button class="app-link" data-preview="${l.id}">Preview</button>${isAssigned(l.id)?'<span class="lib-ok">Assigned</span>':''}<button class="app-btn" data-assign="${l.id}">${isAssigned(l.id)?'Assign again':'Assign'}</button>`:canOpen(l.id)?`<button class="app-btn" data-preview="${l.id}">Open the free sample</button>`:'<a class="app-link" href="index.html#signin">Sign in to open</a>';
+ let rows='';units().forEach(u=>{const ls=u.ls.filter(show);if(!ls.length)return;rows+=`<h2 class="lib-unit">${esc(u.name)}</h2><div class="app-scroll"><table class="app-table lib-table"><tbody>${ls.map(l=>`<tr><td>${esc(l.n)}</td><td class="lib-t"><strong>${esc(l.t)}</strong><small>${esc(l.topics.join(' · '))}</small></td><td class="num">${esc(l.mins)} min</td><td class="lib-acts">${acts(l)}</td></tr>`).join('')}</tbody></table></div>`;});
+ const filters=`<div class="app-filters">${[['all','All lessons'],['ch','Chapter lessons'],['cum','Cumulative reviews']].map(([k,t])=>`<button data-f="${k}" class="${filt===k?'on':''}">${t}</button>`).join('')}</div>`;
+ const head=`<div class="app-head"><div><h1>Lessons</h1><p>${isTeacher()?'Preview any lesson, then assign it to a class with a due date. Students complete it inside their own business.':'Chapter 2 is a free sample. The full course opens with a class account.'}</p></div></div>`;
+ if(!isTeacher())return `<main class="libpub">${head}${filters}${rows}</main>`;
+ const nav=[['index.html#dash=gradebook','Gradebook'],['lessons.html#library','Lessons',1],['index.html#dash=students','Students'],['index.html#dash=classes','Classes']];
+ return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a><nav class="app-nav">${nav.map(([h,t,on])=>`<a href="${h}" class="${on?'on':''}">${t}</a>`).join('')}</nav><button class="app-try app-link" data-view="home">Try a lesson as a student</button><div class="app-who">${esc(acct.email||'')}<button id="ll-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${head}${filters}${rows}</main></div>`;
 }
 function assignModal(id){const l=lessonById(id),m=document.createElement('div'),live=!!acct&&acct.role!=='student';m.className='modal';
  const classes=live?acctClasses:[{id:'demo1',name:'ACCT 203 · Section 01'},{id:'demo2',name:'ACCT 203 · Section 02'}];
@@ -1242,9 +1313,10 @@ function results(){const s=stars(S),recap=L.recap?V(L.recap,S):[];const nextL=LL
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
+ if(b.id==='ll-logout'){Promise.resolve(LC&&LC.logout&&LC.logout()).catch(()=>{}).finally(()=>{location.href='index.html';});return;}
  if(d.view){ui.draft=null;return go(d.view);}
  if(d.f){filt=d.f;return render();}
- if(d.assign){if(!acct){location.href='index.html#signin';return;}return assignModal(d.assign);}
+ if(d.assign){if(isStudent())return;if(!acct){location.href='index.html#signin';return;}return assignModal(d.assign);}
  if(d.preview){if(!canOpen(d.preview))return lockedMsg();return start(d.preview,true);}
  if(d.start){if(!canOpen(d.start))return lockedMsg();if(!biz){view='home';return render();}return start(d.start,false);}
  if(d.type){ui.draft.type=d.type;ui.draft.name=$('#bname').value;ui.draft.founder=$('#fname').value;return render();}
