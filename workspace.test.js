@@ -19,37 +19,31 @@ function ui() {
   return context;
 }
 
-test('public introduction keeps both demo paths and all selectable storefronts', () => {
+test('public home page explains the product and shows real screenshots', () => {
   const c = ui(), html = c.publicWelcome();
-  for (const id of ['student', 'instructor-demo', 'explore-studio', 'professor', 'welcome-scene']) {
+  for (const id of ['student', 'professor', 'instructor-demo', 'explore-studio']) {
     assert.equal((html.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1);
   }
-  assert.equal((html.match(/data-preview-business=/g) || []).length, 3);
-  for (const b of Object.values(c.eval('previewBusinesses'))) {
-    assert.ok(Lessons.businesses[b.type], 'Each preview enters a supported business type');
-    const art = c.storefrontArt(b);
-    assert.match(art, /role="img"/);
-    assert.ok(art.includes(c.safe(b.sign)));
-    assert.ok(c.previewRecord(b).includes(b.amount));
+  for (const file of ['decision.jpg', 'journal-feedback.jpg', 'ledger.jpg', 'create-business.jpg', 'gradebook.jpg']) {
+    assert.ok(html.includes('assets/screens/' + file), file);
+    assert.ok(fs.existsSync('screens/' + file), file + ' exists');
   }
+  assert.match(html, /Free sample/);
+  assert.equal((html.match(/<img [^>]*alt="[^"]+"/g) || []).length, (html.match(/<img /g) || []).length);
+  for (const b of Object.values(c.eval('previewBusinesses'))) assert.ok(Lessons.businesses[b.type], 'Each preview enters a supported business type');
 });
 
-test('preview switch updates the illustration, record, label and pressed state together', () => {
-  const c = ui(), nodes = Object.fromEntries(['instructor-demo','explore-studio','welcome-scene','preview-business-name','preview-business-item'].map((id) => ['#'+id, {}]));
-  const buttons = ['coffee','bakery','flowers'].map((id) => ({
-    dataset: {previewBusiness: id}, attributes: {},
-    classList: {toggle() {}}, setAttribute(key, value) { this.attributes[key] = value; },
-  }));
+test('home page buttons route to the sample lesson, sign-in and library', () => {
+  const c = ui(), nodes = Object.fromEntries(['instructor-demo', 'explore-studio'].map((id) => ['#' + id, {}]));
+  let clicked = [];
+  nodes['#student'] = {click: () => clicked.push('student')};
+  nodes['#professor'] = {click: () => clicked.push('professor')};
+  const sample = {}, signin = {};
   c.Q = (id) => nodes[id];
-  c.document = {querySelectorAll: () => buttons};
-  c.render = () => {};
+  c.document = {querySelectorAll: (sel) => (sel === '[data-sample]' ? [sample] : [signin])};
   c.wireWelcome();
-  buttons[1].onclick();
-  assert.match(nodes['#welcome-scene'].innerHTML, /Sunday Bakery/);
-  assert.match(nodes['#welcome-scene'].innerHTML, /Miller Baking Supply/);
-  assert.equal(nodes['#preview-business-name'].textContent, 'Sunday Bakery');
-  assert.equal(buttons[1].attributes['aria-pressed'], 'true');
-  assert.equal(buttons[0].attributes['aria-pressed'], 'false');
+  sample.onclick(); signin.onclick();
+  assert.deepEqual(clicked, ['student', 'professor']);
   c.location = {href: ''};
   nodes['#explore-studio'].onclick();
   assert.equal(c.location.href, 'lessons.html#library');
