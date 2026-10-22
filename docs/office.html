@@ -175,6 +175,84 @@ legend{font-weight:600;margin-bottom:8px}
  .main{display:block}.inbox{border-right:0;border-bottom:1px solid var(--line)}.inbox ul{max-height:260px}.desk{padding:14px}.d-inv,.d-legal{padding:20px}.inv-top{flex-direction:column}.inv-meta h2,.inv-meta table{text-align:left;margin-left:0}
  .types,.two,.rp-two{grid-template-columns:1fr}.rp-k{grid-template-columns:1fr 1fr}.setup-card,.rp-card,.bookview{padding:22px 18px}.main.one{padding:14px}.gj{font-size:13px}
 }
+/* ---- Owner's computer: desktop, tiled app windows, taskbar ---- */
+body[data-v=office]{overflow:hidden;background:#dfe5ee}
+.os{position:fixed;inset:0;display:grid;grid-template-rows:minmax(0,1fr) 60px}
+.desk-bg{position:absolute;inset:0 0 60px;background:linear-gradient(180deg,#e9eef5,#d9e1ec);display:flex;align-items:flex-end;justify-content:flex-end;padding:24px 32px;pointer-events:none}
+.desk-bg span{font:600 44px/1 Georgia,serif;color:rgba(19,41,75,.07)}
+.wins{position:relative;display:grid;gap:10px;padding:10px;min-height:0}
+.wins.n1{grid-template-columns:minmax(0,1fr)}.wins.n2{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.wins.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.win{background:#fff;border:1px solid #c9d2df;border-radius:10px;box-shadow:0 6px 24px rgba(19,41,75,.12);display:flex;flex-direction:column;min-height:0;overflow:hidden;animation:winpop .28s ease-out}
+@keyframes winpop{from{opacity:0;transform:scale(.98) translateY(6px)}to{opacity:1;transform:none}}
+.win-h{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px 0 12px;border-bottom:1px solid #e3e8ef;background:#f7f9fc;flex:none}
+.win-h b{font-size:14px;color:#13294b}.win-s{color:#6b7a90;font-size:12px;margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-c{margin-left:auto;display:flex;gap:4px}.win-c button{width:26px;height:26px;border:0;background:none;border-radius:6px;color:#56657a;cursor:pointer;font-size:15px}.win-c button:hover{background:#e6ebf2}
+.win-b{flex:1;min-height:0;overflow:auto;container-type:inline-size}
+.ico{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;color:#fff;font:700 12px/1 system-ui;flex:none}
+.ico-mail{background:#1f5fbf}.ico-books{background:#13294b}.ico-bank{background:#1d7a52}.ico-msgs{background:#2c9b4a}
+/* mail + messages */
+.mail{display:grid;grid-template-columns:minmax(200px,34%) minmax(0,1fr);height:100%}
+.mlist{list-style:none;margin:0;padding:0;border-right:1px solid #e3e8ef;overflow:auto}
+.mlist li{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:11px 14px;border-bottom:1px solid #eef1f5;cursor:pointer;position:relative;font-size:13px}
+.mlist li b{font-weight:500;color:#36465c;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.mlist li small{color:#7a879a}
+.mlist li span{grid-column:1/-1;color:#5b6a80;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mlist li.new b,.mlist li.new span{font-weight:700;color:#13294b}.mlist li.new::before{content:"";position:absolute;left:5px;top:16px;width:6px;height:6px;border-radius:50%;background:#1f5fbf}
+.mlist li em{grid-column:1/-1;font-style:normal;font-size:11px;font-weight:700;color:#9a5b00}
+.mlist li.sel{background:#e8f0fc}.mlist li:hover{background:#f3f6fa}.mlist li.sel:hover{background:#e8f0fc}.mlist li.none{color:#7a879a;cursor:default}
+.mlist li.arrive{animation:arrive .5s ease-out}
+.mread{overflow:auto;background:#eef2f7;min-width:0}
+.read{padding:16px}.read .papers{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+.read .doc{max-width:100%}
+.mhead{background:#fff;border:1px solid #dde3ec;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px}.mhead span{grid-column:1/-1;color:#4a5a70}.mhead small{color:#7a879a}
+.atts{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}.att-l{align-self:flex-start;color:#6b7a90;font-weight:600}
+.back{display:none;border:0;background:none;color:#1f5fbf;font-weight:600;padding:10px 14px;cursor:pointer}
+.reply{background:#fff;border:1px solid #cfd8e4;border-radius:10px;padding:14px 16px;margin-top:16px;animation:rise .3s ease-out}
+.reply h4{margin:0 0 8px;font-size:13px;color:#56657a;text-transform:none}.reply fieldset{border:0;padding:0;margin:0 0 12px}.reply legend{font-weight:600;color:#13294b;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{flex:1 1 180px;border:1px solid #cfd8e4;border-radius:8px;padding:9px 11px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
+.chip input{position:absolute;opacity:0;pointer-events:none}.chip b{display:block;font-size:14px;color:#13294b}.chip span{font-size:12.5px;color:#5b6a80}
+.chip:hover{border-color:#8fa6c6}.chip:has(input:checked){border-color:#1f5fbf;background:#eef4fd;box-shadow:inset 0 0 0 1px #1f5fbf}
+.sent{background:#fff;border-left:3px solid #1d7a52;border-radius:6px;padding:10px 14px;margin-top:16px}.sent b{color:#1d7a52;font-size:13px}.sent p{margin:4px 0 0}
+.torec{display:flex;align-items:center;gap:12px;justify-content:space-between;background:#fff;border:1px dashed #9fb2cc;border-radius:8px;padding:10px 14px;margin-top:16px;color:#36465c;font-size:14px}
+.empty{display:grid;place-items:center;height:100%;color:#6b7a90;padding:24px;text-align:center}
+@container (max-width:620px){.mail{grid-template-columns:1fr}.mail.has .mlist{display:none}.mail:not(.has) .mread{display:none}.back{display:block}}
+/* books */
+.btabs{display:flex;align-items:center;gap:2px;padding:6px 10px;border-bottom:1px solid #e3e8ef;position:sticky;top:0;background:#fff;z-index:2;flex-wrap:wrap}
+.btabs button{border:0;background:none;padding:6px 10px;border-radius:6px;font:600 13px system-ui;color:#56657a;cursor:pointer}.btabs button.on{background:#13294b;color:#fff}
+.bk{margin-left:auto;display:flex;align-items:baseline;gap:6px;font-size:12px;color:#6b7a90}.bk b{font-size:14px;color:#13294b;margin-right:8px}
+.bbody{padding:12px 14px}.pad{padding:4px 0}
+.queue{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.queue button{border:1px solid #d3dbe6;background:#f7f9fc;border-radius:999px;padding:5px 11px;font-size:12.5px;color:#36465c;cursor:pointer}.queue button.on{border-color:#1f5fbf;background:#e8f0fc;color:#13294b;font-weight:600}
+.rec{border:1px solid #dde3ec;border-radius:10px;padding:14px;background:#fff}.rec-h h3{margin:2px 0}.rec-h small{color:#6b7a90}
+.rec .je{margin-top:12px}.pin{margin:10px 0;border:1px solid #e3e8ef;border-radius:8px;background:#f4f6fa}.pin summary{padding:8px 12px;cursor:pointer;color:#1f5fbf;font-weight:600;font-size:13px}.pin .papers{padding:10px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ok-pulse{animation:okp .7s ease-out}@keyframes okp{0%{box-shadow:0 0 0 0 rgba(29,122,82,.45)}100%{box-shadow:0 0 0 14px rgba(29,122,82,0)}}
+#recp.shake,#decide.shake{animation:shake .4s}
+.w-books .gj{width:100%}.w-books .tgrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+/* bank */
+.bank{padding:14px}.bk-h{background:#1d7a52;color:#fff;border-radius:10px;padding:14px 16px;display:grid;margin-bottom:12px}.bk-h small{opacity:.85}.bk-h span{margin-top:8px;font-size:13px;opacity:.9}.bk-h b{font-size:26px}
+.bk-t td.pos{color:#1d7a52}.bk-t td.neg{color:#a02929}.bk-t{width:100%;font-size:13px}
+/* taskbar */
+.task{position:relative;z-index:5;display:flex;align-items:center;gap:14px;padding:0 14px;background:#13294b;color:#fff}
+.t-co{display:flex;align-items:center;gap:10px;min-width:0}.t-co i{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:#fff;color:#13294b;font:700 14px Georgia,serif;font-style:normal}
+.t-co span{display:grid;min-width:0}.t-co b{font-size:14px;white-space:nowrap}.t-co small{font-size:11.5px;opacity:.75;white-space:nowrap}
+.dock{display:flex;gap:4px;margin:0 auto}.dock button{position:relative;display:flex;align-items:center;gap:7px;border:0;background:none;color:#cfdaea;padding:7px 10px;border-radius:8px;cursor:pointer;font:600 13px system-ui}
+.dock button:hover{background:rgba(255,255,255,.08)}.dock button.on{background:rgba(255,255,255,.14);color:#fff}.dock em{font-style:normal}
+.badge{position:absolute;top:1px;left:22px;min-width:17px;height:17px;border-radius:9px;background:#d93838;color:#fff;font:700 10.5px/17px system-ui;font-style:normal;text-align:center;padding:0 4px;animation:pop .3s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.snap{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px}.snap button{display:flex;gap:2px;width:34px;height:24px;padding:4px;border:0;border-radius:5px;background:none;cursor:pointer}
+.snap button span{flex:1;border:1.5px solid #9fb2cc;border-radius:2px}.snap button.on{background:rgba(255,255,255,.18)}.snap button.on span{border-color:#fff}
+.t-cash{display:grid;line-height:1.15;text-align:right;position:relative}.t-cash small{font-size:11px;opacity:.7}.t-cash b{font-size:16px;font-variant-numeric:tabular-nums}
+.t-cash em{position:absolute;right:0;top:-18px;font-style:normal;font-size:12px;font-weight:700;opacity:0}.t-cash em.show{animation:delta 1.6s ease-out}.t-cash em.up{color:#7ee2a8}.t-cash em.down{color:#ffb4b4}
+@keyframes delta{0%{opacity:0;transform:translateY(6px)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+.t-day{display:flex;align-items:center;gap:12px}.t-day .btn{padding:8px 14px;font-size:13px}.t-day .btn[disabled]{opacity:.55;background:rgba(255,255,255,.1);color:#fff;border-color:transparent}
+.clock{display:grid;text-align:right;line-height:1.15}.clock b{font-size:13px}.clock small{font-size:11px;opacity:.7}
+.turning .clock b{animation:flip .6s}
+.toasts{position:fixed;right:14px;bottom:72px;display:flex;flex-direction:column;gap:8px;z-index:9;pointer-events:none}
+.toast{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #d3dbe6;border-radius:10px;box-shadow:0 10px 30px rgba(19,41,75,.2);padding:10px 14px;width:290px;opacity:0;animation:tin .4s ease-out forwards,tout .5s ease-in forwards}
+.toast div{display:grid;font-size:13px;min-width:0}.toast b{color:#13294b}.toast span:not(.ico){color:#56657a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@keyframes tin{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}@keyframes tout{to{opacity:0;transform:translateX(30px)}}
+.wins .report{overflow:auto;padding:16px}.reset{position:fixed;top:6px;right:10px;z-index:6;font-size:12px;display:none}
+@media(max-width:1100px){.dock em{display:none}.t-co small{display:none}}
+@media(max-width:820px){.os{grid-template-rows:minmax(0,1fr) auto}.wins{padding:6px}.wins>.win:not(:first-child){display:none}.wins.n2,.wins.n3{grid-template-columns:1fr}
+.task{flex-wrap:wrap;gap:8px;padding:8px 10px;row-gap:6px}.snap,.t-co span{display:none}.dock{order:3;width:100%;justify-content:space-around;margin:0}.t-cash{margin-left:auto}.desk-bg{display:none}.win-c{display:none}.toasts{bottom:120px;right:8px}}
 </style>
 </head>
 <body>
@@ -478,7 +556,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
         body: `<p>${st.biz.founder.split(' ')[0]},</p><p>The Secretary of State approved the articles of incorporation for <b>${st.biz.name}, Inc.</b> this morning. The corporation is authorized to issue 100,000 shares of no-par common stock.</p><p>Before you open the business bank account, decide how much of your own money you are putting in. You will receive one share for every $10 you invest. Keep in mind this is the cushion that pays rent and equipment until customers start paying you.</p><p>Let me know the amount and I will prepare the stock certificate.</p>`, sig: 'Karen Ramsey<br>Ramsey &amp; Cole, Attorneys at Law', attach: ['Articles_of_Incorporation.pdf']}),
       q: [{id: 'invest', label: 'How much of your savings will you invest?', opts: [{v: 20000, t: '$20,000', d: '2,000 shares. Leaves you more personal savings, but a thin cushion.'}, {v: 30000, t: '$30,000', d: '3,000 shares. A moderate cushion.'}, {v: 40000, t: '$40,000', d: '4,000 shares. Most of your savings, the most room for mistakes.'}]}],
       outcome: (st) => `You invested $${st.ch.invest.toLocaleString()} in exchange for ${(st.ch.invest / 10).toLocaleString()} shares.`},
-    {id: 'm1-stock', day: 1, kind: 'doc', from: 'Heartland Community Bank', subject: 'Deposit receipt: opening deposit', accts: ACCTS,
+    {id: 'm1-stock', day: 1, kind: 'doc', when: (st) => st.ch.invest > 0, from: 'Heartland Community Bank', subject: 'Deposit receipt: opening deposit', accts: ACCTS,
       doc: (st) => [{type: 'cert', no: '001', shares: st.ch.invest / 10, corp: st.biz.name + ', Inc.', state: ({OH: 'Ohio', CO: 'Colorado', NC: 'North Carolina', TX: 'Texas'})[place(st).state], holder: st.biz.founder, secretary: 'Karen Ramsey', par: 0},
         {type: 'deposit', bank, name: st.biz.name + ', Inc.', acct: '••••8837', rows: [['Check #1043 – ' + st.biz.founder, st.ch.invest]], date: d(st, 1, 'short')}],
       lines: (st) => [['cash', 'dr', st.ch.invest], ['cs', 'cr', st.ch.invest]], memo: 'Issued common stock for cash',
@@ -503,7 +581,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     {id: 'm1-note', day: 5, kind: 'doc', when: (st) => st.ch.loan > 0, from: 'Heartland Community Bank', subject: 'Promissory note and loan proceeds', accts: ACCTS,
       doc: (st) => [{type: 'legal', title: 'Promissory Note', sub: `$${st.ch.loan.toLocaleString()}.00 · ${place(st).city}, ${place(st).state} · ${d(st, 5)}`, paras: [`For value received, ${st.biz.name}, Inc. (“Borrower”) promises to pay to the order of ${bank} the principal sum of <b>${SIMDOCS_words(st.ch.loan)} Dollars</b>, with interest at 7.5% per year on the unpaid balance.`, 'Principal and interest are payable in 36 monthly installments beginning on the first day of the second month after the date of this note.', 'Loan proceeds will be deposited to Borrower’s business checking account ••••8837.'], sigs: [[st.biz.founder, 'President, ' + st.biz.name + ', Inc.']]}],
       lines: (st) => [['cash', 'dr', st.ch.loan], ['np', 'cr', st.ch.loan]], memo: 'Borrowed from bank on a note', why: 'You received cash and now owe the bank. A signed note is recorded as Notes Payable.'},
-    {id: 'm1-equipq', day: 6, kind: 'decision', from: 'Two quotes for equipment', subject: 'New package or used equipment?',
+    {id: 'm1-equipq', day: 6, kind: 'decision', from: (st) => kit(st).eqVendor.name, subject: 'New package or used equipment?',
       doc: (st) => [{type: 'invoice', title: 'QUOTE', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: 'Q-' + (31000 + Math.floor(rand(st, 'q') * 900)), date: d(st, 6, 'short'), terms: 'Valid 14 days', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], footer: 'Includes delivery, setup and a 2-year parts warranty.'},
         {type: 'text', fromName: kit(st).seller, phone: phone(st, 8812), date: d(st, 6, 'day'), msgs: [['them', `Saw your post. I can let everything go for $${kit(st).usedEq[1].toLocaleString()}, you pick it up.`], ['them', 'It all works. A couple pieces are a few years old, no warranty though.']]}],
       q: [{id: 'equip', label: 'Which equipment will you buy?', opts: [{v: 'new', t: () => 'New package', d: 'Warranty and reliable, much more cash out the door.'}, {v: 'used', t: 'Used from a private seller', d: 'Saves cash now. Older equipment, no warranty.'}]}],
@@ -513,13 +591,13 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
         ? {type: 'invoice', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: String(88000 + Math.floor(rand(st, 'e') * 900)), date: d(st, 7, 'short'), terms: 'Paid at delivery', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], paid: d(st, 7, 'short') + ' CK#102'}
         : {type: 'receipt', store: 'Bill of Sale', addr: at(st, 'Private sale'), date: d(st, 7, 'short'), no: '—', lines: [[kit(st).usedEq[0], kit(st).usedEq[1]]], tender: 'Business check #102', footer: 'Sold as is. Seller: ' + kit(st).seller}),
       lines: (st) => [['equip', 'dr', equip(st)[1]], ['cash', 'cr', equip(st)[1]]], memo: 'Purchased equipment for cash', why: 'Equipment is a long-term asset. One asset went up and another, Cash, went down.'},
-    {id: 'm1-quote', day: 8, kind: 'doc', from: () => 'Supplier price quote', subject: 'Supplier price quote', accts: ACCTS,
+    {id: 'm1-quote', day: 8, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Supplier price quote', accts: ACCTS,
       doc: (st) => ({type: 'invoice', title: 'PRICE QUOTE', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: 'EST-4471', date: d(st, 8, 'short'), terms: 'Quote valid 30 days', billTo: me(st), lines: kit(st).sup, footer: 'This is a price quote, not a bill. Reply to place your order.'}),
       lines: null, why: 'A quote is only a price offer. Nothing was received, paid or owed yet, so there is no journal entry.', hint: 'Read the document type. Has anything been delivered, paid or promised yet?'},
     {id: 'm1-supplies', day: 9, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Invoice for supplies delivered', accts: ACCTS,
       doc: (st) => ({type: 'invoice', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: '61-20' + Math.floor(100 + rand(st, 's') * 800), date: d(st, 9, 'short'), po: 'PO-0001', terms: 'Net 30', due: d(st, 9 + 30 > 30 ? 9 : 9, 'short').replace(/^(\d+)\//, (m, x) => String(+x + 1).padStart(2, '0') + '/'), billTo: me(st), lines: kit(st).sup, remit: kit(st).supVendor.name + ', PO Box 1180'}),
       lines: (st) => [['supplies', 'dr', supTotal(st)], ['ap', 'cr', supTotal(st)]], memo: 'Purchased supplies on account', hint: 'Look at the terms. Did you pay today, or do you owe the vendor?', why: 'You received supplies now and owe the vendor in 30 days: Supplies up, Accounts Payable up.'},
-    {id: 'm1-market', day: 10, kind: 'decision', from: 'Opening week plan', subject: 'Set your prices and marketing before you open',
+    {id: 'm1-market', day: 10, kind: 'decision', from: 'Jordan Pike', subject: 'Set your prices and marketing before you open',
       doc: (st) => ({type: 'email', subject: 'Opening Monday: prices and marketing', fromName: 'Jordan Pike (your part-time help)', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 10, 'day') + ', 7:55 PM',
         body: `<p>Shop’s set up and looks great. Two things before Monday:</p><p>1. What are we charging for a ${kit(st).svc.toLowerCase()}? The going rate around here is about $${kit(st).price}. Cheaper brings in more people, pricier means fewer customers but more per sale.</p><p>2. Are we doing any marketing? Northside Print quoted $350 for flyers and door hangers. A local agency will run targeted social ads for $900 this month.</p>`}),
       q: (st) => [{id: 'price', label: `Price per ${kit(st).svc.toLowerCase()}`, opts: [{v: 'low', t: `$${r2(kit(st).price * 0.85)}`, d: 'Undercut the market. More customers.'}, {v: 'std', t: `$${kit(st).price}`, d: 'Market rate.'}, {v: 'high', t: `$${r2(kit(st).price * 1.2)}`, d: 'Premium. Fewer customers, more per sale.'}]}, {id: 'mkt', label: 'Marketing this month', opts: [{v: 'none', t: 'None', d: 'Word of mouth only.'}, {v: 'flyers', t: 'Flyers · $350', d: 'Small boost nearby.'}, {v: 'social', t: 'Social ads · $900', d: 'Largest boost.'}]}],
@@ -530,7 +608,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     {id: 'm1-hire', day: 12, kind: 'doc', from: 'Jordan Pike', subject: 'Signed offer letter', accts: ACCTS,
       doc: (st) => ({type: 'email', subject: 'Re: Offer letter', fromName: 'Jordan Pike', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 12, 'day') + ', 6:30 PM', body: `<p>Signed and attached. $17/hour, about 20 hours a week, first paycheck on the 1st of next month like we talked about. Excited to get going!</p>`, attach: ['Offer_Letter_Signed.pdf']}),
       lines: null, why: 'Signing an offer letter is an agreement about the future. No work has been done and nothing is owed yet, so nothing is recorded.', hint: 'Has Jordan worked any hours yet, or been paid?'},
-    {id: 'm1-z1', day: 15, kind: 'doc', from: 'Register report', subject: 'Week 1 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 1, 8, 14, 14),
+    {id: 'm1-z1', day: 15, kind: 'doc', from: 'Shop register', subject: 'Week 1 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 1, 8, 14, 14),
       lines: (st) => [['cash', 'dr', week(st, 1).gross], ['rev', 'cr', week(st, 1).gross]], memo: 'Cash and card sales, week 1', hint: 'Card sales are deposited to your bank in a day or two, so treat them as cash.', why: 'You earned revenue by serving customers and collected the money. Card payments settle into the bank, so they are cash too.'},
     {id: 'm1-corp', day: 16, kind: 'decision', from: (st) => kit(st).corpName, subject: 'Can you bill us monthly?',
       doc: (st) => ({type: 'email', subject: 'Service for our team, invoiced?', fromName: 'Priya Natarajan', from: 'pnatarajan@' + kit(st).corpDom, to: email(st), date: d(st, 16, 'day') + ', 2:12 PM', body: `<p>Hello, I manage operations at ${kit(st).corpName}, ${kit(st).corpWhat} a few blocks from you. We’d like ${kit(st).corpQty} × “${kit(st).corpDesc.toLowerCase()}” this month at a 10% volume discount, $${corpTotal(st).toLocaleString()} total.</p><p>Our accounts payable department pays vendor invoices in 30 days. Could you invoice us when the work is done?</p>`, sig: 'Priya Natarajan<br>Operations Manager, ' + kit(st).corpName.replace(/&/g, '&amp;')}),
@@ -542,20 +620,20 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     {id: 'm1-util', day: 20, kind: 'doc', from: 'Metro Power & Light', subject: 'Electric bill, due next month', accts: ACCTS,
       doc: (st) => ({type: 'invoice', title: 'UTILITY BILL', vendor: {name: 'Metro Power & Light', tagline: 'Account 4402-118-' + (300 + Math.floor(rand(st, 'u') * 600)), color: '#0b5394', ...at(st, 'PO Box 2400'), phone: '1-800-555-0144'}, no: 'Statement ' + d(st, 20, 'short'), date: d(st, 20, 'short'), terms: 'Due in 21 days', billTo: me(st), lines: [['Electric service ' + d(st, 1, 'short') + ' – ' + d(st, 19, 'short') + ', 1,812 kWh', 1, st.ch.site === 'prime' ? 386.4 : 312.75, 'E-COM']], footer: 'Pay online, by phone, or by mail.'}),
       lines: (st) => [['util', 'dr', st.ch.site === 'prime' ? 386.4 : 312.75], ['ap', 'cr', st.ch.site === 'prime' ? 386.4 : 312.75]], memo: 'Received utility bill', hint: 'The electricity has already been used, but you haven’t paid yet.', why: 'You used the electricity this month, so it is this month’s expense even though you pay next month.'},
-    {id: 'm1-repair', day: 21, kind: 'doc', when: (st) => st.ch.equip === 'used', from: 'Breakdown', subject: 'Equipment repair receipt', accts: ACCTS,
+    {id: 'm1-repair', day: 21, kind: 'doc', when: (st) => st.ch.equip === 'used', from: 'Jordan Pike', subject: 'Equipment repair receipt', accts: ACCTS,
       doc: (st) => [{type: 'text', fromName: 'Jordan Pike', phone: phone(st, 7781), date: d(st, 21, 'day') + ', 10:02 AM', msgs: [['them', 'Bad news, one of the used machines died this morning. Had to call the repair guy, he’s here now.'], ['me', 'Ugh. Pay him with the business card.']]}, {type: 'receipt', store: 'Ace Mobile Equipment Repair', addr: at(st, '88 Cleveland Avenue'), date: d(st, 21, 'short'), time: '12:47 PM', no: '7719', lines: [['Service call', 95], ['Labor 2.5 hr @ 98.00', 245], ['Replacement parts', 300]], tender: 'DEBIT ••4471 APPROVED'}],
       lines: (st) => [['repairs', 'dr', repairCost(st)], ['cash', 'cr', repairCost(st)]], memo: 'Paid for equipment repair', hint: 'A repair restores the equipment; it doesn’t make it more valuable.', why: 'Ordinary repairs keep equipment working and are expensed. They don’t add to the equipment’s cost.'},
-    {id: 'm1-z2', day: 22, kind: 'doc', from: 'Register report', subject: 'Week 2 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 2, 15, 21, 21),
+    {id: 'm1-z2', day: 22, kind: 'doc', from: 'Shop register', subject: 'Week 2 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 2, 15, 21, 21),
       lines: (st) => [['cash', 'dr', week(st, 2).gross], ['rev', 'cr', week(st, 2).gross]], memo: 'Cash and card sales, week 2', why: 'Revenue earned and collected this week.'},
-    {id: 'm1-custpay', day: 26, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: 'Payment received', subject: (st) => 'Check from ' + kit(st).corpName, accts: ACCTS,
+    {id: 'm1-custpay', day: 26, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: (st) => kit(st).corpName, subject: (st) => 'Check from ' + kit(st).corpName, accts: ACCTS,
       doc: (st) => ({type: 'check', payer: kit(st).corpName, payerAddr: at(st, '500 Harbor Point Plaza'), no: '20877', date: d(st, 26, 'short'), payee: st.biz.name + ', Inc.', amount: r2(corpTotal(st) / 2), bank: 'Fifth Lakes Bank', memo: 'Inv 1001 partial', signer: 'P. Natarajan'}),
       lines: (st) => [['cash', 'dr', r2(corpTotal(st) / 2)], ['ar', 'cr', r2(corpTotal(st) / 2)]], memo: 'Collected part of customer invoice', hint: 'You already recorded the revenue when you sent the invoice.', why: 'The revenue was recorded on day 19. Collecting the money only turns the receivable into cash.'},
     {id: 'm1-paysup', day: 27, kind: 'doc', from: 'Check register', subject: 'Check #103 to your supplier', accts: ACCTS,
       doc: (st) => ({type: 'check', payer: st.biz.name + ', Inc.', payerAddr: me(st), no: '103', date: d(st, 27, 'short'), payee: kit(st).supVendor.name, amount: supTotal(st), bank, memo: 'Inv 61-20 · PO-0001', signer: st.biz.founder}),
       lines: (st) => [['ap', 'dr', supTotal(st)], ['cash', 'cr', supTotal(st)]], memo: 'Paid supplier on account', hint: 'The supplies were recorded when they arrived. What does this check settle?', why: 'Paying a bill you already recorded reduces Accounts Payable. No new expense.'},
-    {id: 'm1-z3', day: 29, kind: 'doc', from: 'Register report', subject: 'Week 3 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 3, 22, 28, 28),
+    {id: 'm1-z3', day: 29, kind: 'doc', from: 'Shop register', subject: 'Week 3 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 3, 22, 28, 28),
       lines: (st) => [['cash', 'dr', week(st, 3).gross], ['rev', 'cr', week(st, 3).gross]], memo: 'Cash and card sales, week 3', why: 'Revenue earned and collected this week.'},
-    {id: 'm1-div', day: 30, kind: 'decision', from: 'Board of directors', subject: 'Month-end: pay yourself a dividend?',
+    {id: 'm1-div', day: 30, kind: 'decision', from: 'Karen Ramsey, Ramsey & Cole', subject: 'Month-end: pay yourself a dividend?',
       doc: (st) => ({type: 'email', subject: 'Month-end: pay yourself a dividend?', fromName: 'Karen Ramsey', from: 'kramsey@ramseycole-law.com', to: email(st), date: d(st, 30, 'day') + ', 4:05 PM', body: `<p>As the sole director you can declare a cash dividend to yourself as the shareholder. It comes out of the company’s cash, not its expenses. Many owners skip it until the business is steady; rent and the loan still need to be paid next month.</p><p>Current bank balance: <b>$${SIM.bal(st, 'cash').toLocaleString('en-US', {minimumFractionDigits: 2})}</b>.</p>`}),
       q: (st) => [{id: 'div', label: 'Dividend to shareholders', opts: [{v: 0, t: 'No dividend', d: 'Keep the cash in the business.'}, {v: 500, t: '$500', d: 'A small reward for month one.'}, {v: 1500, t: '$1,500', d: 'Takes a real bite out of cash.'}]}],
       outcome: (st) => (st.ch.div ? `You paid a $${st.ch.div.toLocaleString()} dividend.` : 'No dividend this month.')},
@@ -591,65 +669,92 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
 <button class="btn primary big">Incorporate and open the office</button></form></div></div>`;
     const f = $('#setup');
     f.type.forEach((r) => (r.onchange = () => (f.name.placeholder = LL.PROFILES[r.value].name)));
-    f.onsubmit = (e) => { e.preventDefault(); st = S.newGame({type: f.type.value, name: f.name.value, founder: f.founder.value, city: f.city.value}); save(); fresh = new Set(S.open(st).map((x) => x.id)); sel = null; render(); };
+    f.onsubmit = (e) => { e.preventDefault(); st = S.newGame({type: f.type.value, name: f.name.value, founder: f.founder.value, city: f.city.value}); save(); fresh = new Set(S.open(st).map((x) => x.id)); sel = null; const f0 = S.open(st)[0]; if (f0) select(f0.id); render(); };
   }
 
   const initials = (n) => n.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w)).slice(0, 2).map((w) => w[0].toUpperCase()).join('');
   const sum = () => S.summary(st);
+  const APPS = {mail: ['Mail', 'M'], books: ['Books', 'B'], bank: ['Bank', '$'], msgs: ['Messages', '…']};
+  let wins = JSON.parse(localStorage.getItem(KEY + '-wins') || 'null') || ['mail', 'books'], btab = 'record', rec = null, msel = null, toasts = [];
+  const saveWins = () => localStorage.setItem(KEY + '-wins', JSON.stringify(wins));
+  const specsOf = (it) => { const x = V(it.doc); return Array.isArray(x) ? x : [x]; };
+  const chan = (it) => (specsOf(it)[0].type === 'text' ? 'msgs' : 'mail');
+  const visible = () => S.inbox(st);
+  const pending = (c) => visible().filter((it) => !st.done[it.id] && (!c || chan(it) === c));
+  const short = (day) => S.fmtDate(st, day, 'short').slice(0, 5);
 
-  function top() {
+  function taskbar() {
     const m = S.current(st), dt = new Date(Date.UTC(m.start[0], m.start[1] - 1, st.day));
-    const mon = dt.toLocaleDateString('en-US', {timeZone: 'UTC', month: 'short'}), wd = dt.toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short'});
-    return `<header class="bar"><div class="co"><i>${esc(initials(st.biz.name))}</i><div><b>${esc(st.biz.name)}, Inc.</b><small>${esc(S.prof(st).type)} · ${esc(S.place(st).city)}, ${esc(S.place(st).state)}</small></div></div>
-<div class="cal" title="Today"><span class="cal-m">${mon}</span><span class="cal-d" id="cal-d">${st.day}</span><span class="cal-w">${wd}</span></div>
-<div class="kpis"><div><small>Cash</small><b id="k-cash">${money(shown.cash, 1)}</b><em id="k-delta"></em></div><div><small>Revenue</small><b id="k-rev">${money(shown.rev, 1)}</b></div><div><small>Net income</small><b id="k-ni">${money(shown.ni, 1)}</b></div></div>
-<nav class="tabs">${[['office', 'Office'], ['journal', 'Journal'], ['ledger', 'Ledger'], ['tb', 'Trial balance']].map(([k, t]) => `<button data-tab="${k}" class="${tab === k ? 'on' : ''}">${t}</button>`).join('')}</nav></header>`;
+    const wd = dt.toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric'});
+    const open = S.open(st).length, next = S.nextDay(st);
+    const badge = (a) => { const n = a === 'books' ? visible().filter((it) => it.kind === 'doc' && !st.done[it.id]).length : a === 'bank' ? 0 : pending(a).length; return n ? `<i class="badge">${n}</i>` : ''; };
+    return `<footer class="task"><div class="t-co"><i>${esc(initials(st.biz.name))}</i><span><b>${esc(st.biz.name)}, Inc.</b><small>${esc(S.prof(st).type)} · ${esc(S.place(st).city)}, ${esc(S.place(st).state)}</small></span></div>
+<nav class="dock">${Object.entries(APPS).map(([k, [t, g]]) => `<button data-app="${k}" class="${wins.includes(k) ? 'on' : ''}" title="${t}"><span class="ico ico-${k}">${g}</span><em>${t}</em>${badge(k)}</button>`).join('')}</nav>
+<div class="snap" title="Screen layout">${[1, 2, 3].map((n) => `<button data-snap="${n}" class="${wins.length === n ? 'on' : ''}" aria-label="${n} app${n > 1 ? 's' : ''} side by side">${'<span></span>'.repeat(n)}</button>`).join('')}</div>
+<div class="t-cash"><small>Cash</small><b id="k-cash">${money(shown.cash, 1)}</b><em id="k-delta"></em></div>
+<div class="t-day">${st.ended ? '' : open ? `<button class="btn" disabled title="Handle everything waiting on you first">${open} waiting</button>` : next != null ? `<button class="btn primary" id="next">Close up for the day</button>` : `<button class="btn primary" id="close">Close the month</button>`}<span class="clock"><b id="cal-d">${esc(wd)}</b><small>${open ? '9:00 AM' : '5:30 PM'}</small></span></div></footer>`;
   }
 
-  function inbox() {
-    const all = S.inbox(st), open = all.filter((x) => !st.done[x.id]);
-    const next = S.nextDay(st);
-    return `<aside class="inbox"><div class="ib-head"><b>Inbox</b><span>${open.length ? open.length + ' to handle' : 'All caught up'}</span></div><ul>${all.slice().reverse().map((it) => `<li class="${st.done[it.id] ? 'done' : 'new'} ${sel === it.id ? 'sel' : ''} ${fresh.has(it.id) ? 'arrive' : ''}" data-open="${it.id}"><span class="ib-kind k-${it.kind}">${it.kind === 'decision' ? 'Decision' : 'Paperwork'}</span><b>${esc(V(it.from))}</b><span class="ib-sub">${esc(V(it.subject))}</span><small>${esc(S.fmtDate(st, it.day, 'short').slice(0, 5))}</small></li>`).join('')}</ul>
-<div class="ib-foot">${open.length ? `<p>Handle everything in your inbox to move to the next business day.</p>` : next != null ? `<button class="btn primary" id="next">Go to ${esc(S.fmtDate(st, next, 'day'))}</button>` : `<button class="btn primary" id="close">Close the month</button>`}</div></aside>`;
+  const win = (k, body, extra = '') => `<section class="win w-${k}" data-win="${k}"><header class="win-h"><span class="ico ico-${k}">${APPS[k][1]}</span><b>${APPS[k][0]}</b>${extra}<span class="win-c">${wins.length > 1 ? `<button data-max="${k}" title="Full screen">▢</button><button data-min="${k}" title="Close">×</button>` : ''}</span></header><div class="win-b">${body}</div></section>`;
+
+  function listItem(it, cur) {
+    return `<li class="${st.done[it.id] ? 'done' : 'new'} ${cur === it.id ? 'sel' : ''} ${fresh.has(it.id) ? 'arrive' : ''}" data-mail="${it.id}"><b>${esc(V(it.from))}</b><small>${short(it.day)}</small><span>${esc(V(it.subject))}</span>${it.kind === 'decision' && !st.done[it.id] ? '<em>Reply needed</em>' : ''}</li>`;
   }
 
-  function docView(it) {
-    if (!it) return `<section class="desk empty"><div><h2>${S.open(st).length ? 'Open an item in your inbox' : 'Nothing waiting on you'}</h2><p>${S.open(st).length ? 'Start with the oldest one. Decisions come first; the paperwork follows from what you decide.' : 'Your books are up to date for today.'}</p></div></section>`;
-    const spec = V(it.doc), specs = Array.isArray(spec) ? spec : [spec];
-    return `<section class="desk"><div class="papers">${specs.map((s) => D.render(s)).join('')}${st.done[it.id] && it.kind === 'doc' ? `<div class="stamp-big ${S.want(st, it) ? '' : 'none'}">${S.want(st, it) ? 'POSTED' : 'NO ENTRY'}</div>` : ''}</div></section>`;
+  function reader(it) {
+    if (!it) return `<div class="empty"><p>${pending().length ? 'Select a message to read it.' : 'You’re caught up for today.'}</p></div>`;
+    const specs = specsOf(it), head = specs[0].type === 'email' || specs[0].type === 'text';
+    const atts = head ? specs.slice(1) : specs;
+    let act = '';
+    if (it.kind === 'decision') {
+      act = st.done[it.id] ? `<div class="sent"><b>You replied</b><p>${esc(V(it.outcome))}</p></div>`
+        : `<form class="reply" id="decide"><h4>Reply</h4>${V(it.q).map((q) => `<fieldset><legend>${esc(q.label)}</legend><div class="chips">${q.opts.map((o) => `<label class="chip"><input type="radio" name="${q.id}" value="${o.v}"><b>${esc(S.V(o.t, st))}</b><span>${esc(o.d)}</span></label>`).join('')}</div></fieldset>`).join('')}<button class="btn primary">Send reply</button><p class="fb" id="fb"></p></form>`;
+    } else if (!st.done[it.id]) act = `<div class="torec"><span>Record this in Books${wins.includes('books') ? ', it’s open beside you' : ''}.</span>${wins.includes('books') ? '' : '<button class="btn primary" data-rec="' + it.id + '">Open in Books</button>'}</div>`;
+    return `<div class="read">${head ? '' : `<div class="mhead"><b>${esc(V(it.from))}</b><span>${esc(V(it.subject))}</span><small>${esc(S.fmtDate(st, it.day, 'day'))}</small></div>`}<div class="papers">${head ? D.render(specs[0]) : ''}${atts.length ? `<div class="atts">${head ? `<small class="att-l">${atts.length} attachment${atts.length > 1 ? 's' : ''}</small>` : ''}${atts.map((x) => D.render(x)).join('')}</div>` : ''}${st.done[it.id] && it.kind === 'doc' ? `<div class="stamp-big ${S.want(st, it) ? '' : 'none'}">${S.want(st, it) ? 'POSTED' : 'NO ENTRY'}</div>` : ''}</div>${act}</div>`;
+  }
+
+  function mailApp(c) {
+    const list = visible().filter((it) => chan(it) === c).reverse(), cur = c === 'mail' ? sel : msel;
+    const it = cur && list.find((x) => x.id === cur);
+    const n = list.filter((x) => !st.done[x.id]).length;
+    return win(c, `<div class="mail ${it ? 'has' : ''}"><ul class="mlist">${list.map((x) => listItem(x, cur)).join('') || '<li class="none">No messages yet.</li>'}</ul><div class="mread">${it ? `<button class="back" data-back="${c}">‹ ${APPS[c][0]}</button>` : ''}${reader(it)}</div></div>`, `<small class="win-s">${n ? n + ' unread' : 'All read'}</small>`);
   }
 
   function acctOpts(it, v) {
     const list = V(it.accts) || Object.keys(ACC);
     return `<option value="">Choose account…</option>${list.map((a) => `<option value="${a}" ${a === v ? 'selected' : ''}>${esc(ACC[a][0])}</option>`).join('')}`;
   }
+  const entryTable = (j) => `<table class="jt">${j.lines.map(([a, s, x]) => `<tr class="${s}"><td>${esc(ACC[a][0])}</td><td>${s === 'dr' ? money(x, 1) : ''}</td><td>${s === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}</table>`;
 
-  function panel(it) {
-    if (!it) return `<aside class="panel"><h3>${esc(S.current(st).n)}: ${esc(S.current(st).title)}</h3><p class="muted">${S.current(st).topics.join(' · ')}</p>${log()}</aside>`;
-    if (it.kind === 'decision') {
-      if (st.done[it.id]) return `<aside class="panel"><span class="tag decision">Decision made</span><h3>${esc(V(it.subject))}</h3><p class="outcome">${esc(V(it.outcome))}</p>${log()}</aside>`;
-      return `<aside class="panel"><span class="tag decision">Your decision</span><h3>${esc(V(it.subject))}</h3><form id="decide">${V(it.q).map((q) => `<fieldset><legend>${esc(q.label)}</legend>${q.opts.map((o) => `<label class="opt"><input type="radio" name="${q.id}" value="${o.v}"><b>${esc(S.V(o.t, st))}</b><span>${esc(o.d)}</span></label>`).join('')}</fieldset>`).join('')}<button class="btn primary">Decide</button><p class="fb" id="fb"></p></form></aside>`;
-    }
-    if (st.done[it.id]) {
-      const j = st.book.find((b) => b.id === it.id);
-      return `<aside class="panel"><span class="tag ok">${j ? 'Posted' : 'No entry needed'}</span><h3>${esc(V(it.subject))}</h3>${j ? entryTable(j) : ''}<p class="why">${esc(V(it.why))}</p></aside>`;
-    }
+  function recordView() {
+    const todo = visible().filter((it) => it.kind === 'doc');
+    const it = rec && todo.find((x) => x.id === rec);
+    const queue = `<div class="queue">${todo.filter((x) => !st.done[x.id]).map((x) => `<button data-rec="${x.id}" class="${rec === x.id ? 'on' : ''}">${esc(V(x.subject))}</button>`).join('')}</div>`;
+    if (!it) return queue + `<div class="empty"><p>${todo.some((x) => !st.done[x.id]) ? 'Pick a document to record.' : 'Your books are up to date.'}</p></div>`;
+    const pin = wins.includes(chan(it)) && (chan(it) === 'mail' ? sel : msel) === it.id ? '' : `<details class="pin"><summary>View the document</summary><div class="papers">${specsOf(it).map((x) => D.render(x)).join('')}</div></details>`;
+    if (st.done[it.id]) { const j = st.book.find((b) => b.id === it.id); return queue + `<div class="rec"><span class="tag ok">${j ? 'Posted' : 'No entry needed'}</span><h3>${esc(V(it.subject))}</h3>${j ? entryTable(j) : ''}<p class="why">${esc(V(it.why))}</p></div>`; }
     if (!rows.length) rows = [{a: '', d: '', c: ''}, {a: '', d: '', c: ''}];
     const miss = st.misses[it.id] || 0;
-    return `<aside class="panel"><span class="tag rec">Record this</span><h3>${esc(V(it.subject))}</h3><p class="muted">Journalize what happened. If nothing changed hands, there is nothing to record.</p>
+    return queue + `<div class="rec" id="recp"><div class="rec-h"><small>New journal entry · ${esc(short(it.day))}</small><h3>${esc(V(it.subject))}</h3><small class="muted">From ${esc(V(it.from))}</small></div>${pin}
 <div class="je" id="je"><div class="je-h"><span>Account</span><span>Debit</span><span>Credit</span></div>${rows.map((r, i) => `<div class="je-r ${r.c && !r.d ? 'cr' : ''}"><select data-i="${i}" data-k="a">${acctOpts(it, r.a)}</select><input data-i="${i}" data-k="d" inputmode="decimal" value="${esc(r.d)}" aria-label="Debit"><input data-i="${i}" data-k="c" inputmode="decimal" value="${esc(r.c)}" aria-label="Credit"></div>`).join('')}
 <div class="je-t"><button class="link" id="addrow">+ Add line</button><span id="je-tot"></span></div></div>
-<div class="acts"><button class="btn primary" id="post">Post entry</button><button class="btn" id="noentry">No entry needed</button></div><p class="fb" id="fb"></p>${miss >= 2 ? '<button class="link" id="reveal">Show me the entry</button>' : ''}</aside>`;
+<div class="acts"><button class="btn primary" id="post">Post entry</button><button class="btn" id="noentry">No entry needed</button></div><p class="fb" id="fb"></p>${miss >= 2 ? '<button class="link" id="reveal">Show me the entry</button>' : ''}</div>`;
   }
 
-  const entryTable = (j) => `<table class="jt">${j.lines.map(([a, s, x]) => `<tr class="${s}"><td>${esc(ACC[a][0])}</td><td>${s === 'dr' ? money(x, 1) : ''}</td><td>${s === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}</table>`;
-  const log = () => (st.log.length ? `<div class="tl"><h4>What you’ve decided</h4><ol>${st.log.map((l) => `<li><small>${esc(S.fmtDate(st, l.day, 'short').slice(0, 5))}</small>${esc(l.text)}</li>`).join('')}</ol></div>` : '');
+  function booksApp() {
+    const s = sum();
+    let body;
+    if (btab === 'record') body = recordView();
+    else if (btab === 'journal') body = st.book.length ? `<table class="gj"><thead><tr><th>Date</th><th>Account and explanation</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>${st.book.map((j) => `<tbody>${j.lines.map(([a, sd, x], i) => `<tr><td>${i ? '' : esc(short(j.day))}</td><td class="${sd}">${esc(ACC[a][0])}</td><td class="r">${sd === 'dr' ? money(x, 1) : ''}</td><td class="r">${sd === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}<tr class="memo"><td></td><td colspan="3">${esc(j.memo)}</td></tr></tbody>`).join('')}</table>` : '<p class="muted pad">No entries yet.</p>';
+    else if (btab === 'ledger') body = `<div class="tgrid">${Object.keys(ACC).filter((a) => st.led[a]).map((a) => { const l = st.led[a]; return `<div class="t"><h4>${esc(ACC[a][0])}</h4><div class="tb"><div>${l.dr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div><div>${l.cr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div></div><div class="tbal ${LL.dn(a) ? '' : 'crb'}">${money(S.bal(st, a), 1)}</div></div>`; }).join('') || '<p class="muted">No postings yet.</p>'}</div>`;
+    else { const tb = S.trialBalance(st), Dt = tb.reduce((t, r) => t + r[2], 0), Ct = tb.reduce((t, r) => t + r[3], 0); body = `<p class="muted pad">${esc(st.biz.name)}, Inc. · ${esc(S.fmtDate(st, st.day))}</p><table class="gj tbt"><thead><tr><th>Account</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead><tbody>${tb.map(([, n, d, c]) => `<tr><td>${esc(n)}</td><td class="r">${d ? money(d, 1) : ''}</td><td class="r">${c ? money(c, 1) : ''}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td class="r">${money(Dt, 1)}</td><td class="r">${money(Ct, 1)}</td></tr></tbody></table>`; }
+    return win('books', `<nav class="btabs">${[['record', 'Record'], ['journal', 'Journal'], ['ledger', 'Ledger'], ['tb', 'Trial balance']].map(([k, t]) => `<button data-btab="${k}" class="${btab === k ? 'on' : ''}">${t}</button>`).join('')}<span class="bk"><small>Revenue</small><b id="k-rev">${money(shown.rev, 1)}</b><small>Net income</small><b id="k-ni">${money(shown.ni, 1)}</b></span></nav><div class="bbody">${body}</div>`, `<small class="win-s">${esc(st.biz.name)}, Inc.</small>`);
+  }
 
-  function books() {
-    if (tab === 'journal') return `<section class="bookview"><h2>General journal</h2>${st.book.length ? `<table class="gj"><thead><tr><th>Date</th><th>Account and explanation</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>${st.book.map((j) => `<tbody>${j.lines.map(([a, s, x], i) => `<tr><td>${i ? '' : esc(S.fmtDate(st, j.day, 'short').slice(0, 5))}</td><td class="${s}">${esc(ACC[a][0])}</td><td class="r">${s === 'dr' ? money(x, 1) : ''}</td><td class="r">${s === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}<tr class="memo"><td></td><td colspan="3">${esc(j.memo)}</td></tr></tbody>`).join('')}</table>` : '<p class="muted">No entries yet.</p>'}</section>`;
-    if (tab === 'ledger') return `<section class="bookview"><h2>Ledger</h2><div class="tgrid">${Object.keys(ACC).filter((a) => st.led[a]).map((a) => { const l = st.led[a], b = S.bal(st, a); return `<div class="t"><h4>${esc(ACC[a][0])}</h4><div class="tb"><div>${l.dr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div><div>${l.cr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div></div><div class="tbal ${LL.dn(a) ? '' : 'crb'}">${money(b, 1)}</div></div>`; }).join('') || '<p class="muted">No postings yet.</p>'}</div></section>`;
-    const tb = S.trialBalance(st), Dt = tb.reduce((t, r) => t + r[2], 0), Ct = tb.reduce((t, r) => t + r[3], 0);
-    return `<section class="bookview"><h2>Trial balance</h2><p class="muted">${esc(st.biz.name)}, Inc. · ${esc(S.fmtDate(st, st.day))}</p><table class="gj tbt"><thead><tr><th>Account</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead><tbody>${tb.map(([, n, d, c]) => `<tr><td>${esc(n)}</td><td class="r">${d ? money(d, 1) : ''}</td><td class="r">${c ? money(c, 1) : ''}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td class="r">${money(Dt, 1)}</td><td class="r">${money(Ct, 1)}</td></tr></tbody></table></section>`;
+  function bankApp() {
+    let run = 0;
+    const tx = st.book.filter((j) => j.lines.some((l) => l[0] === 'cash')).map((j) => { const x = j.lines.filter((l) => l[0] === 'cash').reduce((t, [, sd, v]) => t + (sd === 'dr' ? v : -v), 0); run += x; return {j, x, run}; }).reverse();
+    return win('bank', `<div class="bank"><div class="bk-h"><small>Heartland Community Bank · Business Checking ••••8837</small><span>Available balance</span><b>${money(S.bal(st, 'cash'), 1)}</b></div><table class="gj bk-t"><thead><tr><th>Date</th><th>Description</th><th class="r">Amount</th><th class="r">Balance</th></tr></thead><tbody>${tx.map(({j, x, run}) => `<tr><td>${esc(short(j.day))}</td><td>${esc(j.memo)}</td><td class="r ${x < 0 ? 'neg' : 'pos'}">${x < 0 ? '−' : '+'}${money(Math.abs(x), 1)}</td><td class="r">${money(run, 1)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">No activity yet.</td></tr>'}</tbody></table><p class="muted pad">Shows deposits and payments you have recorded in Books.</p></div>`);
   }
 
   function monthEnd() {
@@ -657,7 +762,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     const custs = st.book.filter((j) => /sales, week/.test(j.memo)).length;
     return `<section class="report"><div class="rp-card"><small>${esc(mo.n)} report</small><h1>${esc(st.biz.name)} made it through ${esc(mo.title.toLowerCase())}</h1>
 <div class="rp-k"><div><small>Revenue</small><b>${money(s.revenue, 1)}</b></div><div><small>Expenses</small><b>${money(s.expenses, 1)}</b></div><div><small>Net income</small><b class="${s.netIncome < 0 ? 'neg' : ''}">${money(s.netIncome, 1)}</b></div><div><small>Cash in the bank</small><b>${money(s.cash, 1)}</b></div></div>
-<div class="rp-two"><div><h3>Your decisions</h3><ol class="rp-log">${st.log.map((l) => `<li>${esc(l.text)}</li>`).join('')}</ol></div><div><h3>Your bookkeeping</h3><p class="rp-score"><b>${s.first}</b> of ${s.graded} recorded correctly on the first try (${s.score}%).</p><p class="muted">${custs} weeks of register sales recorded. Your trial balance ${Math.abs(S.trialBalance(st).reduce((t, r) => t + r[2] - r[3], 0)) < 0.005 ? 'is in balance' : 'is out of balance'}.</p><button class="btn" data-tab="journal">Review your journal</button></div></div>
+<div class="rp-two"><div><h3>Your decisions</h3><ol class="rp-log">${st.log.map((l) => `<li>${esc(l.text)}</li>`).join('')}</ol></div><div><h3>Your bookkeeping</h3><p class="rp-score"><b>${s.first}</b> of ${s.graded} recorded correctly on the first try (${s.score}%).</p><p class="muted">${custs} weeks of register sales recorded. Your trial balance ${Math.abs(S.trialBalance(st).reduce((t, r) => t + r[2] - r[3], 0)) < 0.005 ? 'is in balance' : 'is out of balance'}.</p><button class="btn" id="rp-books">Review your books</button></div></div>
 <p class="muted rp-note">Next month: your first payroll, rent comes due from the prepaid balance, and the loan’s first payment.</p></div></section>`;
   }
 
@@ -665,12 +770,24 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     if (!st) return setup();
     document.body.dataset.v = 'office';
     const it = sel && S.inbox(st).find((x) => x.id === sel);
-    const ended = st.ended;
-    root.innerHTML = top() + (tab !== 'office' ? `<main class="main one">${books()}</main>` : ended ? `<main class="main one">${monthEnd()}</main>` : `<main class="main">${inbox()}${docView(it)}${panel(it)}</main>`) + `<footer class="foot"><a href="index.html">Ledger Lane</a><button class="link" id="reset">Start over</button></footer>`;
+    const ws = st.ended && !st.review ? `<div class="wins n1">${monthEnd()}</div>` : `<div class="wins n${wins.length}">${wins.map((k) => (k === 'books' ? booksApp() : k === 'bank' ? bankApp() : mailApp(k))).join('')}</div>`;
+    root.innerHTML = `<div class="os"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><button class="link reset" id="reset">Start over</button>`;
+    toasts = [];
     wire(it);
-    if (scrollTop) { window.scrollTo(0, 0); scrollTop = false; }
     animateKpis();
     fresh.clear();
+  }
+
+  function select(id) {
+    const it = S.inbox(st).find((x) => x.id === id); if (!it) return;
+    if (chan(it) === 'mail') sel = id; else msel = id;
+    if (it.kind === 'doc' && !st.done[id] && rec !== id) { rec = id; rows = []; btab = 'record'; }
+  }
+  function show(k, front) {
+    if (wins.includes(k)) return;
+    if (innerWidth < 820 || front) wins = [k, ...wins.filter((w) => w !== k)].slice(0, Math.max(1, wins.length));
+    else wins[wins.length - 1] = k;
+    saveWins();
   }
 
   function animateKpis() {
@@ -683,40 +800,59 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     if (Object.keys(to).some((x) => from[x] !== to[x])) requestAnimationFrame(step);
   }
 
-  function readRows() { $$('#je [data-i]').forEach((el) => (rows[+el.dataset.i][el.dataset.k] = el.value)); }
+  function readRows() { $$('#je [data-i]').forEach((el) => { if (rows[+el.dataset.i]) rows[+el.dataset.i][el.dataset.k] = el.value; }); }
   function totals() {
     readRows();
     const n = (v) => +String(v).replace(/[$,\s]/g, '') || 0, dsum = rows.reduce((t, r) => t + n(r.d), 0), csum = rows.reduce((t, r) => t + n(r.c), 0);
     const el = $('#je-tot'); if (el) { el.textContent = `Debits ${money(dsum, 1)} · Credits ${money(csum, 1)}`; el.className = dsum && Math.abs(dsum - csum) < 0.005 ? 'bal' : ''; }
   }
-  function feedback(r) { const fb = $('#fb'); if (!fb) return; fb.innerHTML = r.text; fb.className = 'fb ' + (r.ok ? 'ok' : 'bad'); if (!r.ok) { const p = $('.panel'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); } }
+  function feedback(r) { const fb = $('#fb'); if (!fb) return; fb.innerHTML = r.text; fb.className = 'fb ' + (r.ok ? 'ok' : 'bad'); if (!r.ok) { const p = $('#recp') || $('#decide'); p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); } }
 
   function wire(it) {
-    $$('[data-tab]').forEach((b) => (b.onclick = () => { tab = b.dataset.tab; scrollTop = true; render(); }));
-    $$('[data-open]').forEach((li) => (li.onclick = () => { if (sel !== li.dataset.open) rows = []; sel = li.dataset.open; render(); }));
-    if ($('#reset')) $('#reset').onclick = () => { if (confirm('Start over with a new business? Your current books will be erased.')) { localStorage.removeItem(KEY); st = null; sel = null; shown = {cash: 0, rev: 0, ni: 0}; render(); } };
+    $$('[data-app]').forEach((b) => (b.onclick = () => { const k = b.dataset.app; if (wins.includes(k)) { if (innerWidth < 820) { wins = [k, ...wins.filter((w) => w !== k)]; saveWins(); } } else show(k, true); st.review = st.ended ? true : st.review; render(); }));
+    $$('[data-snap]').forEach((b) => (b.onclick = () => { const n = +b.dataset.snap, pool = [...wins, ...['mail', 'books', 'bank', 'msgs'].filter((k) => !wins.includes(k))]; wins = pool.slice(0, n); saveWins(); render(); }));
+    $$('[data-min]').forEach((b) => (b.onclick = () => { wins = wins.filter((k) => k !== b.dataset.min); saveWins(); render(); }));
+    $$('[data-max]').forEach((b) => (b.onclick = () => { wins = [b.dataset.max]; saveWins(); render(); }));
+    $$('[data-mail]').forEach((li) => (li.onclick = () => { select(li.dataset.mail); render(); }));
+    $$('[data-back]').forEach((b) => (b.onclick = () => { if (b.dataset.back === 'mail') sel = null; else msel = null; render(); }));
+    $$('[data-rec]').forEach((b) => (b.onclick = () => { if (rec !== b.dataset.rec) rows = []; rec = b.dataset.rec; btab = 'record'; show('books'); render(); }));
+    $$('[data-btab]').forEach((b) => (b.onclick = () => { btab = b.dataset.btab; render(); }));
+    if ($('#rp-books')) $('#rp-books').onclick = () => { st.review = true; btab = 'journal'; if (!wins.includes('books')) wins = ['books']; render(); };
+    if ($('#reset')) $('#reset').onclick = () => { if (confirm('Start over with a new business? Your current books will be erased.')) { localStorage.removeItem(KEY); st = null; sel = msel = rec = null; shown = {cash: 0, rev: 0, ni: 0}; render(); } };
     if ($('#next')) $('#next').onclick = () => {
-      const r = S.advance(st); save(); (r.arrived || []).forEach((id) => fresh.add(id)); sel = (r.arrived || [])[0] || null; rows = [];
-      scrollTop = true; root.classList.add('turning'); setTimeout(() => root.classList.remove('turning'), 650); render();
+      const r = S.advance(st); save(); const arr = r.arrived || [];
+      arr.forEach((id) => fresh.add(id)); sel = msel = rec = null; rows = [];
+      const items = arr.map((id) => S.inbox(st).find((x) => x.id === id));
+      toasts = items.slice(0, 3).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
+      if (items[0]) select(items[0].id);
+      root.classList.add('turning'); setTimeout(() => root.classList.remove('turning'), 650); render();
     };
-    if ($('#close')) $('#close').onclick = () => { S.advance(st); st.ended = true; save(); scrollTop = true; render(); };
+    if ($('#close')) $('#close').onclick = () => { S.advance(st); st.ended = true; save(); render(); };
     if ($('#decide')) $('#decide').onsubmit = (e) => {
       e.preventDefault(); const f = e.target, ch = {};
-      V(it.q).forEach((q) => { const v = f.querySelector(`input[name="${q.id}"]:checked`); if (v) { const o = q.opts.find((o) => String(o.v) === v.value); ch[q.id] = o.v; } });
+      V(it.q).forEach((q) => { const v = f.querySelector(`input[name="${q.id}"]:checked`); if (v) ch[q.id] = q.opts.find((o) => String(o.v) === v.value).v; });
       const r = S.handle(st, it.id, {choice: ch}); if (!r.ok) return feedback(r);
-      save(); fresh = new Set(S.open(st).map((x) => x.id).filter((id) => id !== it.id)); render();
+      save(); const nu = S.open(st).filter((x) => x.id !== it.id);
+      nu.forEach((x) => fresh.add(x.id)); toasts = nu.slice(0, 2).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
+      render();
     };
     if ($('#je')) {
       $('#je').oninput = totals; totals();
       $('#addrow').onclick = () => { readRows(); rows.push({a: '', d: '', c: ''}); render(); };
-      $('#post').onclick = () => { readRows(); const r = S.handle(st, it.id, {rows}); finish(r); };
-      $('#noentry').onclick = () => { readRows(); finish(S.handle(st, it.id, {noEntry: true})); };
-      if ($('#reveal')) $('#reveal').onclick = () => { const r = S.handle(st, it.id, {reveal: true}); if (r.reveal) { rows = r.reveal.map(([a, s, x]) => ({a, d: s === 'dr' ? String(x) : '', c: s === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } };
+      const cur = S.inbox(st).find((x) => x.id === rec);
+      $('#post').onclick = () => { readRows(); finish(S.handle(st, rec, {rows})); };
+      $('#noentry').onclick = () => { readRows(); finish(S.handle(st, rec, {noEntry: true})); };
+      if ($('#reveal')) $('#reveal').onclick = () => { const r = S.handle(st, rec, {reveal: true}); if (r.reveal) { rows = r.reveal.map(([a, sd, x]) => ({a, d: sd === 'dr' ? String(x) : '', c: sd === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } };
+      void cur;
     }
     function finish(r) {
-      if (!r.ok) { save(); if ((st.misses[it.id] || 0) === 2) { render(); } return feedback(r); }
-      save(); rows = []; render();
+      if (!r.ok) { save(); if ((st.misses[rec] || 0) === 2) render(); return feedback(r); }
+      save(); rows = []; const done = rec;
+      const nxt = S.open(st).find((x) => x.kind === 'doc');
+      if (nxt && (sel === done || msel === done)) { /* keep the posted document visible with its stamp */ }
+      render();
       const stamp = $('.stamp-big'); if (stamp) stamp.classList.add('hit');
+      const p = $('.w-books .rec'); if (p) p.classList.add('ok-pulse');
     }
   }
 
