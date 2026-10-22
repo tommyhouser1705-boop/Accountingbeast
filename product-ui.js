@@ -76,7 +76,7 @@ function storefrontArt(b) {
 
 function previewRecord(b) {
   return `<div class="lp-player" style="--biz:${b.color}">
-    <div class="lp-player-top"><span class="lp-chip"><i></i>${safe(b.name)}</span><span>CH 2 · Launch Month</span><span class="lp-step">Task 6 of 14</span></div>
+    <div class="lp-player-top"><span class="lp-chip"><i></i>${safe(b.name)}</span><span>CH 2 · Keep Your Own Books</span><span class="lp-step">Task 6 of 14</span></div>
     <div class="lp-decision"><span class="lp-label">TRANSACTION</span><p>Supplies were delivered on account from <strong>${safe(b.invoice)}</strong>. Record the purchase.</p></div>
     <table class="lp-journal"><thead><tr><th>Date</th><th>Account</th><th>Debit</th><th>Credit</th></tr></thead><tbody>
       <tr><td>Mar 4</td><td>Supplies</td><td>${b.amount}</td><td></td></tr>
@@ -102,7 +102,7 @@ function publicWelcome() {
       <h1>Students run a business. Then they account for it.</h1>
       <p>Ledger Lane is a full semester of prebuilt lessons. Each student creates a business, makes its operating decisions and records the results in a real general journal, from the first stock issue to year-end financial statements.</p>
       <div class="lp-actions"><button id="student" class="lp-btn">Start your business ${laneIcon('arrow', 18)}</button><button id="instructor-demo" class="lp-btn alt">Browse the lesson library</button></div>
-      <p class="lp-note">Free to try. No account required; progress is saved in this browser. <button id="professor" class="lp-link">Instructor sign in →</button></p>
+      <p class="lp-note">Try a sample lesson free, no account needed. Your class account opens the full course. <button id="professor" class="lp-link">Instructor sign in →</button></p>
     </div>
     <div class="lp-hero-visual">
       <div id="welcome-scene">${previewRecord(b)}</div>
