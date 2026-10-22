@@ -7,10 +7,10 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem('ll-'+k));retu
 let biz=store.get('biz',null),progress=store.get('progress',{}),assigned=new Set(store.get('assigned',[]));
 let view='home',filt='all',L=null,S=null,ui={};
 const LC=typeof CloudClient!=='undefined'?new CloudClient(window.LEDGER_CLOUD||{}):null;let acct=null,acctClasses=[],acctLessons=[];
-const DEMO='ch2';let unlockAll=false;const canOpen=id=>unlockAll||!!acct||id===DEMO;
+const isStudent=()=>!!acct&&acct.role==='student',isTeacher=()=>!!acct&&!isStudent();const DEMO='ch2';let unlockAll=false;const canOpen=id=>unlockAll||!!acct||id===DEMO;
 function lockedMsg(){toast('This lesson opens when you sign in with your class account.');}
 const isAssigned=id=>acct?acctLessons.some(a=>a.lessonId===id):assigned.has(id);
-async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(view!=='play')render();}catch{}}
+async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(isStudent()&&view==='lib')view='home';if(view!=='play')render();}catch{}}
 const lessonById=id=>LL.lessons.find(l=>l.id===id);
 const isGraded=s=>['je','num','mc','sort'].includes(s.k);
 const steps=()=>L.steps;
@@ -19,10 +19,11 @@ const stepNow=()=>steps()[S.i];
 /* ---------- shell ---------- */
 function top(){
  const tab=(v,t)=>`<button data-view="${v}" class="${view===v||(v==='home'&&view==='play')?'on':''}">${t}</button>`;
- return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${tab('lib','Instructor library')}</nav>${acct?`<a class="btn alt homelink" href="index.html">${acct.role==='student'?'My classroom':'Instructor home'}</a>`:''}${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
+ return `<header class="top"><a class="logo" href="index.html"><i>LL</i>Ledger Lane</a><nav class="tabs">${tab('home','My business')}${isStudent()?'':tab('lib','Instructor library')}</nav>${acct?`<a class="btn alt homelink" href="index.html">${acct.role==='student'?'My classroom':'Instructor home'}</a>`:''}${biz?`<div class="bizchip"><span style="background:${profile(biz).icon}"></span>${esc(profile(biz).name)}</div>`:''}</header>`;
 }
 function render(){
- if(view==='lib')app.innerHTML=top()+library();
+ if(view==='lib'&&isStudent())view='home';
+ if(view==='lib')app.innerHTML=isTeacher()?library():top()+library();
  else if(view==='play')return play();
  else app.innerHTML=top()+(biz?dashboard():setup());
 }
@@ -57,16 +58,13 @@ function dashboard(){
 /* ---------- instructor library ---------- */
 function library(){
  const show=l=>filt==='all'||(filt==='ch'&&!l.cum)||(filt==='cum'&&l.cum);
- const chs=LL.lessons.filter(l=>!l.cum).length,cums=LL.lessons.filter(l=>l.cum).length;
- let h=`<main class="wrap"><section class="hero"><div><div class="kick">PREBUILT COURSE · FINANCIAL ACCOUNTING</div><h1>A semester of lessons where each student <span>runs a business</span>.</h1><p>Students create their own business in Chapter 1 and run it through the entire course. In every lesson they make operating decisions, then journalize, adjust and report the results. Answer keys, targeted feedback and grading are built in.</p></div>
- <div class="stats"><div class="stat"><b>${chs}</b><small>chapter lessons</small></div><div class="stat"><b>${cums}</b><small>cumulative reviews</small></div><div class="stat"><b>20–30</b><small>minutes per lesson</small></div></div></section>
- <div class="filters">${[['all','All lessons'],['ch','Chapter lessons'],['cum','Cumulative reviews']].map(([k,t])=>`<button data-f="${k}" class="${filt===k?'on':''}">${t}</button>`).join('')}</div>`;
- units().forEach(u=>{const ls=u.ls.filter(show);if(!ls.length)return;h+=`<div class="unit">${esc(u.name)}</div><div class="grid">`;
-  ls.forEach(l=>{const tasks=l.steps.filter(isGraded).length,jes=l.steps.filter(s=>s.k==='je').length;
-   h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} ${assigned.has(l.id)?'assigned':''}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(l.summary)}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
-   <div class="meta"><span>${esc(l.mins)} min</span><span>${tasks} graded tasks</span>${jes?`<span>${jes} journal entries</span>`:''}</div>
-   <div class="acts">${acct||unlockAll?`<button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${isAssigned(l.id)?'Assigned ✓':'Assign'}</button>`:canOpen(l.id)?`<button class="btn alt" data-preview="${l.id}">Preview</button><a class="btn" href="index.html#signin">Assign</a>`:'<a class="btn alt" href="index.html#signin">Sign in to open</a>'}</div></article>`;});h+='</div>';});
- return h+'</main>';
+ const acts=l=>isTeacher()||unlockAll?`<button class="app-link" data-preview="${l.id}">Preview</button>${isAssigned(l.id)?'<span class="lib-ok">Assigned</span>':''}<button class="app-btn" data-assign="${l.id}">${isAssigned(l.id)?'Assign again':'Assign'}</button>`:canOpen(l.id)?`<button class="app-btn" data-preview="${l.id}">Open the free sample</button>`:'<a class="app-link" href="index.html#signin">Sign in to open</a>';
+ let rows='';units().forEach(u=>{const ls=u.ls.filter(show);if(!ls.length)return;rows+=`<h2 class="lib-unit">${esc(u.name)}</h2><div class="app-scroll"><table class="app-table lib-table"><tbody>${ls.map(l=>`<tr><td>${esc(l.n)}</td><td class="lib-t"><strong>${esc(l.t)}</strong><small>${esc(l.topics.join(' · '))}</small></td><td class="num">${esc(l.mins)} min</td><td class="lib-acts">${acts(l)}</td></tr>`).join('')}</tbody></table></div>`;});
+ const filters=`<div class="app-filters">${[['all','All lessons'],['ch','Chapter lessons'],['cum','Cumulative reviews']].map(([k,t])=>`<button data-f="${k}" class="${filt===k?'on':''}">${t}</button>`).join('')}</div>`;
+ const head=`<div class="app-head"><div><h1>Lessons</h1><p>${isTeacher()?'Preview any lesson, then assign it to a class with a due date. Students complete it inside their own business.':'Chapter 2 is a free sample. The full course opens with a class account.'}</p></div></div>`;
+ if(!isTeacher())return `<main class="libpub">${head}${filters}${rows}</main>`;
+ const nav=[['index.html#dash=gradebook','Gradebook'],['lessons.html#library','Lessons',1],['index.html#dash=students','Students'],['index.html#dash=classes','Classes']];
+ return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a><nav class="app-nav">${nav.map(([h,t,on])=>`<a href="${h}" class="${on?'on':''}">${t}</a>`).join('')}</nav><button class="app-try app-link" data-view="home">Try a lesson as a student</button><div class="app-who">${esc(acct.email||'')}<button id="ll-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${head}${filters}${rows}</main></div>`;
 }
 function assignModal(id){const l=lessonById(id),m=document.createElement('div'),live=!!acct&&acct.role!=='student';m.className='modal';
  const classes=live?acctClasses:[{id:'demo1',name:'ACCT 203 · Section 01'},{id:'demo2',name:'ACCT 203 · Section 02'}];
@@ -136,9 +134,10 @@ function results(){const s=stars(S),recap=L.recap?V(L.recap,S):[];const nextL=LL
 
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
+ if(b.id==='ll-logout'){Promise.resolve(LC&&LC.logout&&LC.logout()).catch(()=>{}).finally(()=>{location.href='index.html';});return;}
  if(d.view){ui.draft=null;return go(d.view);}
  if(d.f){filt=d.f;return render();}
- if(d.assign){if(!acct){location.href='index.html#signin';return;}return assignModal(d.assign);}
+ if(d.assign){if(isStudent())return;if(!acct){location.href='index.html#signin';return;}return assignModal(d.assign);}
  if(d.preview){if(!canOpen(d.preview))return lockedMsg();return start(d.preview,true);}
  if(d.start){if(!canOpen(d.start))return lockedMsg();if(!biz){view='home';return render();}return start(d.start,false);}
  if(d.type){ui.draft.type=d.type;ui.draft.name=$('#bname').value;ui.draft.founder=$('#fname').value;return render();}

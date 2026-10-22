@@ -1,5 +1,5 @@
 // Signed-in instructor and student app: sidebar navigation, one task per page.
-let dashPage = '';
+let dashPage = (location.hash.match(/^#dash=(\w+)/) || [])[1] || '';
 
 function dashNav(items) {
   return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
