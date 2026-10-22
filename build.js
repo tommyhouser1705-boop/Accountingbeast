@@ -11,7 +11,7 @@ function inline(file) {
       '<script>' + fs.readFileSync(path.join(root, name), 'utf8').replace(/<\/script/gi, '<\\/script') + '</script>');
 }
 fs.mkdirSync(path.join(root, 'docs'), {recursive:true});
-for (const file of ['index.html', 'lessons.html']) fs.writeFileSync(path.join(root, 'docs', file), inline(file));
+for (const file of ['index.html', 'lessons.html', 'office.html']) fs.writeFileSync(path.join(root, 'docs', file), inline(file));
 fs.writeFileSync(path.join(root, 'docs', '.nojekyll'), '');
 fs.cpSync(path.join(root, 'screens'), path.join(root, 'docs/assets/screens'), {recursive:true});
 console.log('Built classroom and lesson library in docs/');

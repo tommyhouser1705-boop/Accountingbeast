@@ -1754,7 +1754,7 @@ function professorHome() {
 
 function studentHome() {
   if (!['assignments', 'grades'].includes(dashPage)) dashPage = 'assignments';
-  const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'lessons.html']]);
+  const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'office.html']]);
   const score = (l) => cloudLessonScores.find((x) => x.assignment_id === l.id);
   const sorted = [...cloudLessons].sort((a, b) => String(a.dueDate || '9').localeCompare(String(b.dueDate || '9')));
   let main;
