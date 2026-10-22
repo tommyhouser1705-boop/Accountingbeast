@@ -13,6 +13,7 @@ function inline(file) {
 fs.mkdirSync(path.join(root, 'docs'), {recursive:true});
 for (const file of ['index.html', 'lessons.html']) fs.writeFileSync(path.join(root, 'docs', file), inline(file));
 fs.writeFileSync(path.join(root, 'docs', '.nojekyll'), '');
+fs.cpSync(path.join(root, 'screens'), path.join(root, 'docs/assets/screens'), {recursive:true});
 console.log('Built classroom and lesson library in docs/');
 // Keep server accounting identical to the tested browser engine.
 fs.copyFileSync(path.join(root,'business-decisions.js'),path.join(root,'supabase/functions/classroom/business-decisions.js'));

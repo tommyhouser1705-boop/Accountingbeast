@@ -87,60 +87,64 @@ function previewRecord(b) {
   </div>`;
 }
 
+const courseContents = [
+  ['Ch 1', 'Open Your Doors', '20–25 min'], ['Ch 2', 'Keep Your Own Books', 'Free sample'], ['Ch 3', 'Close Out the Year', '25–30 min'], ['Review 1', 'Full Cycle: One Month', '45–60 min'],
+  ['Ch 4', 'Protect Your Cash', '20–25 min'], ['Ch 5', 'Sell on Credit', '25–30 min'], ['Ch 6', 'Launch a Product Line', '25–30 min'], ['Ch 7', 'Buy a Vehicle', '25–30 min'], ['Review 2', 'Holiday Quarter', '45–60 min'],
+  ['Ch 8', 'Hire Your Team', '25–30 min'], ['Ch 9', 'Finance an Expansion', '25–30 min'], ['Ch 10', 'Bring In Investors', '25–30 min'], ['Ch 11', 'Where Did the Cash Go?', '20–25 min'], ['Review 3', 'Fund the Next Stage', '45–60 min'],
+  ['Final', 'Your First Full Year', '120–150 min'],
+];
+
+function screenshot(file, alt, bar = true) {
+  return `<figure class="hp-frame">${bar ? '<div class="hp-bar"><i></i><i></i><i></i></div>' : ''}<img src="assets/screens/${file}" alt="${alt}" loading="lazy"></figure>`;
+}
+
+function feature(id, kicker, title, text, points, visual, flip, extra = '') {
+  return `<section class="hp-feat${flip ? ' flip' : ''}"${id ? ` id="${id}"` : ''}><div class="hp-txt"><p class="hp-kicker">${kicker}</p><h2>${title}</h2><p>${text}</p><ul class="hp-ticks">${points.map((x) => `<li>${x}</li>`).join('')}</ul>${extra}</div>${visual}</section>`;
+}
+
 function publicWelcome() {
-  const b = previewBusinesses[previewBusiness];
-  const units = [
-    ['Unit 1 · Foundations', ['Business forms and the financial statements', 'Recording transactions', 'Adjusting and closing entries', 'Cumulative review']],
-    ['Unit 2 · Operating the business', ['Cash and internal control', 'Receivables', 'Merchandise inventory', 'Long-term assets', 'Cumulative review']],
-    ['Unit 3 · Growing the business', ['Current liabilities and payroll', 'Long-term debt', 'Stockholders’ equity', 'Statement of cash flows', 'Cumulative review']],
-    ['Final project', ['A full year of operations: monthly entries, adjustments, closing and all four statements']],
-  ];
-  return `<div class="lp">
-  <section class="lp-hero">
-    <div class="lp-hero-copy">
-      <span class="lp-eyebrow">INTRODUCTORY FINANCIAL ACCOUNTING</span>
-      <h1>Students run a business. Then they account for it.</h1>
-      <p>Ledger Lane is a full semester of prebuilt lessons. Each student creates a business, makes its operating decisions and records the results in a real general journal, from the first stock issue to year-end financial statements.</p>
-      <div class="lp-actions"><button id="student" class="lp-btn">Start your business ${laneIcon('arrow', 18)}</button><button id="instructor-demo" class="lp-btn alt">Browse the lesson library</button></div>
-      <p class="lp-note">Free to try. No account required; progress is saved in this browser. <button id="professor" class="lp-link">Instructor sign in →</button></p>
-    </div>
-    <div class="lp-hero-visual">
-      <div id="welcome-scene">${previewRecord(b)}</div>
-      <div class="lp-switch"><span>Preview as <strong id="preview-business-name">${safe(b.name)}</strong> <em id="preview-business-item">${safe(b.item)}</em></span><div role="group" aria-label="Preview a business">${Object.entries(previewBusinesses).map(([id, x]) => `<button class="${previewBusiness === id ? 'selected' : ''}" data-preview-business="${id}" aria-pressed="${previewBusiness === id}">${safe(x.type)}</button>`).join('')}</div></div>
-    </div>
-  </section>
-  <section class="lp-stats"><div><strong>11</strong><span>chapter lessons</span></div><div><strong>3</strong><span>cumulative reviews</span></div><div><strong>1</strong><span>year-long final project</span></div><div><strong>20–30</strong><span>minutes per lesson</span></div></section>
-  <section class="lp-section">
-    <span class="lp-eyebrow">HOW A LESSON WORKS</span><h2>Every lesson follows the same business</h2>
-    <div class="lp-steps">
-      <article><span>1</span><h3>Create the business</h3><p>Students choose a business type and name it in Chapter 1. The same business carries through every lesson of the semester.</p></article>
-      <article><span>2</span><h3>Make the decisions</h3><p>Each lesson opens with an operating decision, such as hiring staff, offering credit terms or financing an expansion. Those choices determine the transactions.</p></article>
-      <article><span>3</span><h3>Record and report</h3><p>Students write general-journal entries, see them post to T accounts and prepare the statements. Feedback identifies the specific error.</p></article>
-    </div>
-  </section>
-  <section class="lp-section">
-    <span class="lp-eyebrow">COURSE COVERAGE</span><h2>Aligned to the introductory course sequence</h2>
-    <div class="lp-units">${units.map(([u, items]) => `<article><h3>${u}</h3><ul>${items.map((t) => `<li>${t}</li>`).join('')}</ul></article>`).join('')}</div>
-  </section>
-  <section class="lp-teach"><div><span class="lp-eyebrow">FOR INSTRUCTORS</span><h2>Ready to assign on day one</h2><p>Preview any lesson as a student, then assign it to your class with a due date. Chapter lessons take 20–30 minutes, cumulative reviews 45–60 minutes, and every lesson is graded on first-attempt accuracy.</p></div><button id="explore-studio" class="lp-btn light">Open the lesson library ${laneIcon('arrow', 18)}</button></section>
-  <footer class="lp-footer"><span><strong>Ledger Lane</strong> · Financial accounting, taught through a business students run</span><a href="lessons.html#library">All 15 lessons →</a></footer>
+  return `<div class="hp">
+  <nav class="hp-nav"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">How it works</a><a class="hp-nl" href="#contents">Course</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try a sample lesson</button></div></nav>
+  <header class="hp-hero"><div class="hp-wrap"><div>
+    <h1>Students run a business. Then they account for it.</h1>
+    <p class="hp-lead">Ledger Lane is an introductory financial accounting course where every student starts a company, makes its decisions all semester, and records the results in a real general journal.</p>
+    <div class="hp-actions"><button id="student" class="hp-btn">Try a sample lesson</button><button id="professor" class="hp-btn ghost">Instructor sign in</button></div>
+    <p class="hp-small">The sample is Chapter 2 and takes about 25 minutes. No account needed.</p></div>
+    <div class="hp-collage">${screenshot('decision.jpg', 'A lesson: choosing equipment and marketing for the business')}<div class="hp-float">${screenshot('journal-feedback.jpg', 'A journal entry with feedback on the error', false)}</div></div>
+  </div></header>
+  <div class="hp-facts"><div class="hp-wrap"><span><b>11</b> chapter lessons</span><span><b>3</b> cumulative reviews</span><span><b>1</b> year-long final project</span><span>Graded on the first attempt</span></div></div>
+  <main class="hp-wrap">
+  ${feature('how', 'Chapter 1', 'Every student starts a business', 'Students choose what to run and name it. That company is theirs for the semester: it adds a product line, buys a vehicle, hires staff, borrows and brings in investors as the chapters go on.',
+    ['Four business types, each with its own revenue and later a product to sell', 'Set up as a corporation from day one: common stock, retained earnings, dividends', 'The business name and past decisions carry into every lesson'],
+    screenshot('create-business.jpg', 'Creating the business'), false)}
+  ${feature('', 'Every lesson', 'Decisions that change the numbers', 'Each lesson opens with real choices: which equipment to buy, how to market, whether to offer credit, how to finance an expansion. Students see the expected revenue and cash before they commit.',
+    ['Different choices produce different transactions to record', 'No two students work from the same answer key', 'The accounting stays the focus; the decisions give it a reason'],
+    screenshot('decision.jpg', 'Business decisions in a lesson'), true)}
+  ${feature('', 'The core skill', 'Real journal entries, with feedback that teaches', 'Students write general journal entries the way the course expects: date, accounts from the chart, debits and credits, compound entries. When something is off, the feedback says what and why.',
+    ['Flags the wrong side, a wrong account, a wrong amount or an unbalanced entry', 'T accounts and the accounting equation update the moment an entry posts', 'Adjusting entries, closing entries, trial balances and statements follow'],
+    `<div class="hp-pair">${screenshot('journal-feedback.jpg', 'Journal entry feedback', false)}${screenshot('ledger.jpg', 'T accounts updating after an entry posts', false)}</div>`, false)}
+  ${feature('instructors', 'For instructors', 'Assign it Monday. Grades are in by Friday.', 'Create a class, add students by email and assign lessons with due dates. Scores arrive in your gradebook as students submit, with no answer keys to check by hand.',
+    ['Prebuilt lessons for every chapter, ready to assign', 'First-attempt scores, so practice afterwards doesn’t change the grade', 'Preview any lesson as a student; export the gradebook to CSV'],
+    screenshot('gradebook.jpg', 'Instructor gradebook'), true,
+    '<p class="hp-actions"><button class="hp-btn ghost" data-signin>Instructor sign in</button><button id="explore-studio" class="hp-link">Browse the lesson library</button></p>')}
+  <section class="hp-sec"><h2>How a lesson works</h2><div class="hp-steps">
+    <div><b>1. The situation</b><span>A month in the life of the student’s business: what happened and what’s at stake.</span></div>
+    <div><b>2. The decision</b><span>Students pick a course of action and see the expected effect on revenue and cash.</span></div>
+    <div><b>3. The entries</b><span>They journalize each transaction; the ledger and equation update as they post.</span></div>
+    <div><b>4. The close</b><span>Trial balance, adjustments, statements or closing, then a score and a summary.</span></div></div></section>
+  <section class="hp-sec" id="contents"><h2>Course contents</h2><p class="hp-muted">Chapter lessons take 20–30 minutes; cumulative reviews 45–60; the final project spans a full year of the business.</p>
+    <div class="hp-toc">${courseContents.map(([n, t, m]) => `<div><span><em>${n}</em> ${t}</span><small${m === 'Free sample' ? ' class="free"' : ''}>${m}</small></div>`).join('')}</div>
+    <p><button id="instructor-demo" class="hp-link">Open the lesson library</button></p></section>
+  </main>
+  <section class="hp-cta"><div class="hp-wrap"><div><h2>See a lesson for yourself.</h2><p>Chapter 2 is open to everyone. Instructors can request access to the full course.</p></div><div class="hp-actions"><button class="hp-btn light" data-sample>Try the sample lesson</button><button class="hp-btn outline" data-signin>Instructor sign in</button></div></div></section>
+  <footer class="hp-wrap hp-foot">© 2026 Ledger Lane · Introductory financial accounting</footer>
   </div>`;
 }
 
 function wireWelcome() {
   const signedIn = typeof cloudAccount !== 'undefined' && cloudAccount;
   const openStudio = () => { location.href = 'lessons.html#library'; };
-  if (Q('#instructor-demo')) { Q('#instructor-demo').hidden = !!signedIn; Q('#instructor-demo').onclick = openStudio; }
-  if (Q('#explore-studio')) { Q('#explore-studio').hidden = !!signedIn; Q('#explore-studio').onclick = openStudio; }
-  document.querySelectorAll('[data-preview-business]').forEach((button) => (button.onclick = () => {
-    previewBusiness = button.dataset.previewBusiness;
-    const b = previewBusinesses[previewBusiness];
-    Q('#welcome-scene').innerHTML = previewRecord(b);
-    Q('#preview-business-name').textContent = b.name;
-    Q('#preview-business-item').textContent = b.item;
-    document.querySelectorAll('[data-preview-business]').forEach((el) => {
-      el.classList.toggle('selected', el === button);
-      el.setAttribute('aria-pressed', String(el === button));
-    });
-  }));
+  for (const id of ['#instructor-demo', '#explore-studio']) if (Q(id)) { Q(id).hidden = !!signedIn; Q(id).onclick = openStudio; }
+  document.querySelectorAll('[data-sample]').forEach((b) => (b.onclick = () => Q('#student').click()));
+  document.querySelectorAll('[data-signin]').forEach((b) => (b.onclick = () => Q('#professor').click()));
 }
