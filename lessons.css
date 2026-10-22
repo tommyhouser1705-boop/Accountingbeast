@@ -191,3 +191,8 @@ button{font:inherit;cursor:pointer;border:0}
 .hud{display:grid!important;grid-template-columns:auto minmax(220px,1.5fr) repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
 .hud .back{align-self:center}
 @media (max-width:760px){.hud{grid-template-columns:auto 1fr 1fr}.hud .shop{grid-column:2/4}.hud .meter:nth-of-type(odd){grid-column:1/3}}
+
+.lc.locked{background:#fafbfc}.lc.locked h3,.lc.locked .what{color:var(--mut)}.lockline{font-size:13px;font-weight:600;color:var(--mut)}a.btn{display:inline-block;text-decoration:none;text-align:center}
+.demo-note{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--soft);border:1px solid #c7d7fe;border-radius:10px;padding:14px 18px;margin:0 0 24px;font-size:14px;color:var(--ink)}
+
+.demo-note .btn,.lc a.btn{white-space:nowrap}

@@ -24,7 +24,7 @@ async function play(page,id,tag){await clickData(page,'start',id);let wrong=fals
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,id+' overflow');
  await page.click('[data-view="home"]');}
 async function run(viewport,tag,type){const page=await browser.newPage({viewport});page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
- await page.goto(url);await page.evaluate(()=>window.__ll.reset());if(shots&&tag)await page.screenshot({path:`${shots}${tag}-setup.png`,fullPage:true});
+ await page.goto(url);await page.evaluate(()=>window.__ll.reset());await page.evaluate(()=>window.__ll.unlock());if(shots&&tag)await page.screenshot({path:`${shots}${tag}-setup.png`,fullPage:true});
  await clickData(page,'type',type);await page.fill('#bname','Northside '+type);await page.click('#save-biz');
  const ids=(await page.evaluate(()=>LL.lessons.map(l=>l.id))).filter(id=>!only||only.includes(id));for(const id of ids)await play(page,id,tag);
  if(shots&&tag){await page.screenshot({path:`${shots}${tag}-dashboard.png`,fullPage:true});await page.click('[data-view="lib"]');await page.screenshot({path:`${shots}${tag}-library.png`,fullPage:true});}

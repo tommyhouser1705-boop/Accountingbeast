@@ -198,6 +198,11 @@ button{font:inherit;cursor:pointer;border:0}
 .hud{display:grid!important;grid-template-columns:auto minmax(220px,1.5fr) repeat(4,minmax(0,1fr));gap:12px;align-items:stretch}
 .hud .back{align-self:center}
 @media (max-width:760px){.hud{grid-template-columns:auto 1fr 1fr}.hud .shop{grid-column:2/4}.hud .meter:nth-of-type(odd){grid-column:1/3}}
+
+.lc.locked{background:#fafbfc}.lc.locked h3,.lc.locked .what{color:var(--mut)}.lockline{font-size:13px;font-weight:600;color:var(--mut)}a.btn{display:inline-block;text-decoration:none;text-align:center}
+.demo-note{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--soft);border:1px solid #c7d7fe;border-radius:10px;padding:14px 18px;margin:0 0 24px;font-size:14px;color:var(--ink)}
+
+.demo-note .btn,.lc a.btn{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1108,6 +1113,8 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem('ll-'+k));retu
 let biz=store.get('biz',null),progress=store.get('progress',{}),assigned=new Set(store.get('assigned',[]));
 let view='home',filt='all',L=null,S=null,ui={};
 const LC=typeof CloudClient!=='undefined'?new CloudClient(window.LEDGER_CLOUD||{}):null;let acct=null,acctClasses=[],acctLessons=[];
+const DEMO='ch2';let unlockAll=false;const canOpen=id=>unlockAll||!!acct||id===DEMO;
+function lockedMsg(){toast('This lesson opens when you sign in with your class account.');}
 const isAssigned=id=>acct?acctLessons.some(a=>a.lessonId===id):assigned.has(id);
 async function cloudBoot(){if(!LC||!LC.configured||!LC.session)return;try{const r=await LC.call('bootstrap');acct=r.user;acctClasses=r.classes||[];acctLessons=r.lessons||[];if(view!=='play')render();}catch{}}
 const lessonById=id=>LL.lessons.find(l=>l.id===id);
@@ -1141,14 +1148,15 @@ function setup(edit){
 function units(){const out=[];LL.lessons.forEach(l=>{let u=out.find(x=>x.name===l.unit);if(!u)out.push(u={name:l.unit,ls:[]});u.ls.push(l);});return out;}
 function statusOf(l){const p=progress[l.id],cur=store.get('cur-'+l.id,null);if(p&&p.done)return {k:'done',t:'Complete',p};if(cur)return {k:'go',t:`In progress · ${Math.round(100*cur.i/l.steps.length)}%`,pct:cur.i/l.steps.length};return {k:'new',t:'Not started'};}
 function dashboard(){
- const p=profile(biz),done=LL.lessons.filter(l=>progress[l.id]?.done).length,next=LL.lessons.find(l=>!progress[l.id]?.done);
+ const p=profile(biz),done=LL.lessons.filter(l=>progress[l.id]?.done).length,next=LL.lessons.find(l=>!progress[l.id]?.done&&canOpen(l.id));
  const starsTotal=LL.lessons.reduce((t,l)=>t+(progress[l.id]?.stars||0),0);
  let h=`<main class="wrap"><section class="hero biz"><div class="bizmark" style="background:${p.icon}">${esc(p.name.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase())}</div><div><div class="kick">${esc(p.type.toUpperCase())} · FOUNDED BY ${esc(p.founder==='you'?'YOU':p.founder.toUpperCase())}</div><h1>${esc(p.name)}</h1><p>${next?`Up next: <b>${esc(next.n)} · ${esc(next.t)}</b>. ${esc(V(next.blurb,{p}))}`:'You have completed every lesson this semester.'}</p><div class="row">${next?`<button class="btn big" data-start="${next.id}">${statusOf(next).k==='go'?'Continue':'Start'} ${esc(next.n)}</button>`:''}<button class="link" id="edit-biz">Edit business</button></div></div>
- <div class="stats"><div class="stat"><b>${done}/${LL.lessons.length}</b><small>lessons complete</small></div><div class="stat"><b>${starsTotal}</b><small>stars earned</small></div></div></section>`;
+ <div class="stats"><div class="stat"><b>${done}/${LL.lessons.length}</b><small>lessons complete</small></div><div class="stat"><b>${starsTotal}</b><small>stars earned</small></div></div></section>${acct||unlockAll?'':`<div class="demo-note"><div><b>You’re using the free sample.</b> ${esc(lessonById(DEMO).n.replace("CH","Chapter"))}, ${esc(lessonById(DEMO).t)}, is open to everyone. The rest of the course opens when you sign in with the account your professor set up.</div><a class="btn" href="index.html#signin">Sign in</a></div>`}`;
  units().forEach(u=>{h+=`<div class="unit">${esc(u.name)}</div><div class="grid">`;u.ls.forEach(l=>{const s=statusOf(l);
-  h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} st-${s.k}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(V(l.blurb,{p}))}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+  const ok=canOpen(l.id);
+  h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} st-${s.k} ${ok?'':'locked'}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(V(l.blurb,{p}))}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
   <div class="prog"><div style="width:${s.k==='done'?100:Math.round((s.pct||0)*100)}%"></div></div><div class="meta"><span>${esc(l.mins)} min</span><span class="${s.k}">${s.k==='done'?'★'.repeat(s.p.stars)+'☆'.repeat(3-s.p.stars)+' Complete':esc(s.t)}</span></div>
-  <div class="acts"><button class="btn ${s.k==='done'?'alt':''}" data-start="${l.id}">${s.k==='done'?'Replay':s.k==='go'?'Continue':'Start'}</button></div></article>`;});h+='</div>';});
+  <div class="acts">${ok?`<button class="btn ${s.k==='done'?'alt':''}" data-start="${l.id}">${s.k==='done'?'Replay':s.k==='go'?'Continue':'Start'}</button>`:'<span class="lockline">Opens with your class account</span>'}</div></article>`;});h+='</div>';});
  return h+'</main>';
 }
 
@@ -1163,7 +1171,7 @@ function library(){
   ls.forEach(l=>{const tasks=l.steps.filter(isGraded).length,jes=l.steps.filter(s=>s.k==='je').length;
    h+=`<article class="lc ${l.cum?'cum':''} ${l.final?'final':''} ${assigned.has(l.id)?'assigned':''}"><div class="band"></div><div class="num">${esc(l.n)}${l.cum?' · CUMULATIVE':''}</div><h3>${esc(l.t)}</h3><p class="what">${esc(l.summary)}</p><div class="chips">${l.topics.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
    <div class="meta"><span>${esc(l.mins)} min</span><span>${tasks} graded tasks</span>${jes?`<span>${jes} journal entries</span>`:''}</div>
-   <div class="acts"><button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${isAssigned(l.id)?'Assigned ✓':'Assign'}</button></div></article>`;});h+='</div>';});
+   <div class="acts">${acct||unlockAll?`<button class="btn alt" data-preview="${l.id}">Preview</button><button class="btn" data-assign="${l.id}">${isAssigned(l.id)?'Assigned ✓':'Assign'}</button>`:canOpen(l.id)?`<button class="btn alt" data-preview="${l.id}">Preview</button><a class="btn" href="index.html#signin">Assign</a>`:'<a class="btn alt" href="index.html#signin">Sign in to open</a>'}</div></article>`;});h+='</div>';});
  return h+'</main>';
 }
 function assignModal(id){const l=lessonById(id),m=document.createElement('div'),live=!!acct&&acct.role!=='student';m.className='modal';
@@ -1236,9 +1244,9 @@ function results(){const s=stars(S),recap=L.recap?V(L.recap,S):[];const nextL=LL
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const d=b.dataset;
  if(d.view){ui.draft=null;return go(d.view);}
  if(d.f){filt=d.f;return render();}
- if(d.assign)return assignModal(d.assign);
- if(d.preview)return start(d.preview,true);
- if(d.start){if(!biz){view='home';return render();}return start(d.start,false);}
+ if(d.assign){if(!acct){location.href='index.html#signin';return;}return assignModal(d.assign);}
+ if(d.preview){if(!canOpen(d.preview))return lockedMsg();return start(d.preview,true);}
+ if(d.start){if(!canOpen(d.start))return lockedMsg();if(!biz){view='home';return render();}return start(d.start,false);}
  if(d.type){ui.draft.type=d.type;ui.draft.name=$('#bname').value;ui.draft.founder=$('#fname').value;return render();}
  if(b.id==='save-biz'){biz={type:ui.draft.type,name:$('#bname').value.trim(),founder:$('#fname').value.trim()};store.set('biz',biz);ui.draft=null;ui.editing=false;return render();}
  if(b.id==='edit-biz'){ui.draft=null;app.innerHTML=top()+setup(true);return;}
@@ -1263,10 +1271,10 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||
 document.addEventListener('input',e=>{if(view!=='play'||!ui.rows)return;const r=e.target.closest('.je-r');if(!r)return;const row=ui.rows[+r.dataset.j];row[e.target.dataset.f]=e.target.value;
  if(e.target.tagName==='INPUT'){const t=$('.tot');if(t)t.innerHTML=totalsHTML();r.classList.toggle('cr',!!(num(row.c)&&!num(row.d)));}});
 document.addEventListener('change',e=>{const r=e.target.closest('.je-r');if(r&&e.target.tagName==='SELECT'&&ui.rows)ui.rows[+r.dataset.j].a=e.target.value;});
-window.__ll={state:()=>({view,lesson:L&&L.id,i:S&&S.i,done:S&&S.done,posted:S&&S.posted,step:S&&!S.done?(({k,q})=>({k}))(stepNow()):null}),
+window.__ll={unlock(){unlockAll=true;render();},state:()=>({view,lesson:L&&L.id,i:S&&S.i,done:S&&S.done,posted:S&&S.posted,step:S&&!S.done?(({k,q})=>({k}))(stepNow()):null}),
  answer(){const st=stepNow();if(st.k==='je')return linesOf(st,S);if(st.k==='num')return V(st.fields,S).map(f=>[f.id,f.ans]);if(st.k==='sort')return V(st.items,S).map(([id,,a])=>[id,a]);if(st.k==='mc')return st.a;if(st.k==='decide')return V(st.q,S).map(q=>[q.id,(q.opts.find(o=>!(o.locked&&o.locked(S)))||q.opts[0]).v]);return null;},
  reset(){localStorage.clear();biz=null;progress={};assigned=new Set();view='home';render();}};
-const h=location.hash.slice(1);if(h==='library')view='lib';render();cloudBoot();if(h.startsWith('lesson=')&&lessonById(h.slice(7)))start(h.slice(7),!biz);
+const h=location.hash.slice(1);if(h==='library')view='lib';render();const hl=h.startsWith('lesson=')&&lessonById(h.slice(7))?h.slice(7):null;if(hl&&canOpen(hl))start(hl,!biz);cloudBoot().then(()=>{if(hl&&view!=='play'&&canOpen(hl))start(hl,!biz);});
 })();
 </script>
 </body>
