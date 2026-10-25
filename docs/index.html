@@ -1710,7 +1710,7 @@ startCloud();
 
 function submissionDetails(attempt,state){const p=attempt.submitted;if(attempt.action==='entry')return `<p>Document: ${safe(p.record)} · Journal date: ${safe(p.date)}</p><table><thead><tr><th>Account</th><th>Debit</th><th>Credit</th></tr></thead><tbody>${p.rows.map(x=>`<tr><td>${safe(x.account)}</td><td>${cash(Number(x.debit||0))}</td><td>${cash(Number(x.credit||0))}</td></tr>`).join('')}</tbody></table>`;if(attempt.action==='prediction')return `<p>Student selected: ${safe(state.scenario.prediction.options[p.answer])}</p>`;if(attempt.action==='effects')return state.scenario.effects.map(e=>`<p>${safe(e.label)}: ${cash(p.values[e.key])}</p>`).join('');if(attempt.action==='start')return `<p>${safe(state.scenario.decision)}</p>`;return '<p>The student continued to the next business event.</p>';}
 </script><script>// Signed-in instructor and student app: sidebar navigation, one task per page.
-let dashPage = '';
+let dashPage = (location.hash.match(/^#dash=(\w+)/) || [])[1] || '';
 
 function dashNav(items) {
   return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
