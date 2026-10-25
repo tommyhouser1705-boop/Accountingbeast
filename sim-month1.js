@@ -127,6 +127,7 @@
   ];
   function SIMDOCS_words(n) { return (root.SIMDOCS || require('./sim-docs.js')).words(n).replace(/ and 00\/100$/, ''); }
 
-  SIM.months.push({id: 'm1', n: 'Month 1', title: 'Opening month', start: [2026, 9], days: 30, topics: ['Recording transactions', 'Journal entries', 'Posting', 'Trial balance'], items});
+  SIM.M1 = {kit, loc, me, at, phone, email, priceOf, week, supTotal, equip, bank};
+  SIM.months.push({id: 'm1', lessonId: 'ch2', n: 'Month 1', title: 'Opening month', start: [2026, 9], days: 30, topics: ['Recording transactions', 'Journal entries', 'Posting', 'Trial balance'], items});
   if (typeof module !== 'undefined' && module.exports) module.exports = SIM;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

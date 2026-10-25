@@ -1,7 +1,8 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const LL=require('./lessons-engine.js');
-const html=require('node:fs').readFileSync(__dirname+'/lessons.html','utf8');for(const [,f] of html.matchAll(/<script src="(lessons-(?!engine)[^"]+)"/g))if(f!=='lessons.js')require('./'+f);
+// Archived lesson content remains tested; active assignments use the simulation.
+for(const f of ['lessons-unit1','lessons-build1','lessons-unit2','lessons-unit2b','lessons-build2','lessons-unit3','lessons-unit3b','lessons-build3','lessons-capstone'])require('./'+f);
 const {V,linesOf,checkJE,post,bal,ACC,newLesson}=LL;
 const rowsFor=ls=>ls.map(([a,s,x])=>({a,d:s==='dr'?String(x):'',c:s==='cr'?String(x):''}));
 function combos(lesson){let out=[{}];const st0=newLesson(lesson,null);lesson.steps.filter(s=>s.k==='decide').forEach(s=>V(s.q,st0).forEach(q=>{out=out.flatMap(c=>q.opts.map(o=>({...c,[q.id]:o.v})));}));return out.slice(0,64);}

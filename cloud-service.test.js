@@ -1,4 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lesson-engine');
+require('./lessons-engine');require('./sim-docs');require('./sim-engine');require('./sim-month1');require('./sim-course');require('./sim-replay');
 const uid=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 class Store{
  constructor(){this.tables={demo_access:[{email:'owner@example.edu',role:'owner',active:true},{email:'prof@example.edu',role:'professor',active:true},{email:'other@example.edu',role:'professor',active:true}],demo_profiles:[],demo_classes:[],demo_invitations:[],demo_assignments:[],demo_runs:[],demo_attempts:[]};}
@@ -8,6 +9,7 @@ class Store{
  async upsert(t,x){const keys=t==='demo_access'?['email']:t==='demo_runs'?['student_id','assignment_id']:['class_id','email'];const old=this.tables[t].find(r=>keys.every(k=>r[k]===x[k]));old?Object.assign(old,structuredClone(x)):this.tables[t].push(structuredClone(x));return x;}
  async update(t,f,x){for(const r of this.tables[t])if(Object.entries(f).every(([k,v])=>r[k]===v))Object.assign(r,structuredClone(x));}
  async remove(t,f){this.tables[t]=this.tables[t].filter(r=>!Object.entries(f).every(([k,v])=>r[k]===v));}
+ async saveOffice(id,revision,run){const row=this.tables.demo_profiles.find(r=>r.id===id);if((row.office?.revision||0)!==revision)throw Error('CONFLICT: Office changed in another tab.');row.office={revision:revision+1,run:structuredClone(run)};return row.office;}
  async commit(student,assignment,revision,state,action,p){const row=this.tables.demo_runs.find(r=>r.student_id===student&&r.assignment_id===assignment);if((row?.revision||0)!==revision)throw Error('CONFLICT');const v={student_id:student,assignment_id:assignment,revision:revision+1,state:structuredClone(state)};row?Object.assign(row,v):this.tables.demo_runs.push(v);this.tables.demo_attempts.push({student_id:student,assignment_id:assignment,revision:v.revision,action,created_at:new Date().toISOString(),submitted:structuredClone(p)});return {state:structuredClone(state),revision:v.revision};}
 }
 const owner={id:uid(1),email:'owner@example.edu'},prof={id:uid(2),email:'prof@example.edu'},other={id:uid(3),email:'other@example.edu'},student={id:uid(4),email:'student@example.edu'},outsider={id:uid(5),email:'outsider@example.edu'};
@@ -34,17 +36,55 @@ test('monthly business choices unlock later records without changing earlier ent
 test('optional business board shows only completed participants in the same assignment and never grades or emails',async()=>{const {store,call,a,c}=await fixture();await call(student,'start',{assignmentId:a.id,revision:0,choice:{location:0,months:3}});assert.deepEqual(await call(student,'leaderboard',{assignmentId:a.id}),[]);const state=store.tables.demo_runs[0].state;state.challenge=true;state.completed=true;const rows=await call(student,'leaderboard',{assignmentId:a.id});assert.equal(rows.length,1);assert.equal(rows[0].business,'Tommy’s Coffee');assert.equal(rows[0].mine,true);assert.ok(!JSON.stringify(rows).includes(student.email));assert.equal(rows[0].grade,undefined);assert.equal(rows[0].cash,state.scenario.opening-state.scenario.events[0].amount);store.tables.demo_runs.push({student_id:uid(99),assignment_id:uid(99),state:structuredClone(state)});assert.equal((await call(student,'leaderboard',{assignmentId:a.id})).length,1);state.challenge=false;assert.deepEqual(await call(student,'leaderboard',{assignmentId:a.id}),[]);await call(prof,'remove-student',{classId:c.id,email:student.email});await assert.rejects(()=>call(student,'leaderboard',{assignmentId:a.id}),e=>e.status===403);});
 test('draft revision is professor-only and checks published-assignment ownership before calling AI',async()=>{const {store,call,c}=await fixture(),{generateCourseAssignment}=await import('./supabase/functions/classroom/generator.mjs'),{topicDraft,scenarioDraft}=require('./test-fixtures/interactive-assignment.cjs');let n=0;const draft=await generateCourseAssignment(L,{notes:'Supplies purchases on account and supplier payments, plus supplies used.',year:2026,month:9,depth:'focused'},{key:'test',fetcher:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(++n===1?topicDraft():scenarioDraft())}}]})})});let invoked=0;store.generate=async input=>{invoked++;assert.equal(input.phase,'revise');assert.equal(input.actor,prof.id);return {...input.currentDraft,published:false,id:'new-draft'};};const p={phase:'revise',notes:draft.notes,currentDraft:draft,request:'Make the payment instructions clearer.'};await assert.rejects(()=>call(student,'generate',p),e=>e.status===403);assert.equal(invoked,0);await assert.rejects(()=>call(prof,'generate',{...p,request:''}));assert.equal(invoked,0);const revised=await call(prof,'generate',p);assert.equal(revised.published,false);assert.equal(invoked,1);const a=await call(prof,'publish',{classId:c.id,assignment:draft});await assert.rejects(()=>call(other,'generate',{...p,currentDraft:a.definition}),e=>e.status===403);assert.equal(invoked,1);await call(prof,'generate',{...p,currentDraft:a.definition});assert.equal(invoked,2);assert.equal(store.tables.demo_assignments.find(x=>x.id===a.id).definition.title,draft.title);});
 
-test('library lessons: professors assign, students submit one first-attempt score, and it reaches only their class gradebook',async()=>{const {call,c}=await fixture();
+test('library assignment permissions and historical grades survive the simulation migration',async()=>{const {call,c,store}=await fixture();
  await assert.rejects(()=>call(student,'lesson-assign',{classId:c.id,lessonId:'ch1'}),e=>e.status===403);
  await assert.rejects(()=>call(other,'lesson-assign',{classId:c.id,lessonId:'ch1'}),e=>e.status===403);
  const a=await call(prof,'lesson-assign',{classId:c.id,lessonId:'ch1',title:'Ch 1',dueDate:'2026-11-06'});
  assert.equal((await call(prof,'lesson-assign',{classId:c.id,lessonId:'ch1',title:'Ch 1',dueDate:'2026-11-07'})).id,a.id);
- assert.equal((await call(student,'lesson-score',{lessonId:'ch2',first:5,graded:10,stars:2})).saved,0);
+ await assert.rejects(()=>call(student,'lesson-score',{lessonId:'ch2',first:5,graded:10,stars:2}),e=>e.status===409);
  await assert.rejects(()=>call(student,'lesson-score',{lessonId:'ch1',first:11,graded:10,stars:2}));
  await assert.rejects(()=>call(prof,'lesson-score',{lessonId:'ch1',first:1,graded:1,stars:3}),e=>e.status===403);
- assert.equal((await call(student,'lesson-score',{lessonId:'ch1',first:8,graded:10,stars:2})).saved,1);
- assert.equal((await call(student,'lesson-score',{lessonId:'ch1',first:10,graded:10,stars:3})).saved,0);
+ // Existing first completions are retained, not rewritten by the new office.
+ await store.upsert('demo_runs',{student_id:student.id,assignment_id:a.id,state:{kind:'library',lessonId:'ch1',completed:true,first:8,graded:10,stars:2,score:80}});
+ await assert.rejects(()=>call(student,'lesson-score',{lessonId:'ch1',first:10,graded:10,stars:3}),e=>e.status===409);
  const g=await call(prof,'gradebook',{classId:c.id});assert.equal(g.lessons.length,1);assert.equal(g.lessons[0].dueDate,'2026-11-07');assert.equal(g.students[0].lessonScores[0].score,80);
  assert.ok(g.assignments.every(x=>x.definition.kind!=='library'));
  const boot=await call(student,'bootstrap');assert.equal(boot.lessons[0].lessonId,'ch1');assert.equal(boot.lessonScores[0].score,80);assert.ok(boot.assignments.every(x=>x.definition.kind!=='library'));
+});
+
+function officeRun() {
+ const run={config:{type:'bike',name:'River Cycle',founder:'Alex Rivera',city:'columbus',seed:37},events:[]},S=global.SIM,st=S.newGame(run.config);
+ let missed=false;
+ for(let n=0;n<200;n++){
+  const it=S.open(st)[0];
+  if(!it){const r=S.advance(st);if(r.monthEnd){S.complete(st);run.events.push({kind:'complete'});return {run,st};}run.events.push({kind:'advance'});continue;}
+  const want=S.want(st,it);
+  if(want&&!missed){const action={rows:[{a:'cash',d:'1',c:''}]};S.handle(st,it.id,action);run.events.push({kind:'handle',id:it.id,action});missed=true;}
+  const action=it.kind==='decision'?{choice:Object.fromEntries(S.V(it.q,st).map(q=>[q.id,q.opts[0].v]))}:want?{rows:want.map(([a,side,x])=>({a,d:side==='dr'?String(x):'',c:side==='cr'?String(x):''}))}:{noEntry:true};
+  assert.ok(S.handle(st,it.id,action).ok);run.events.push({kind:'handle',id:it.id,action});
+ }
+ throw Error('Office did not finish');
+}
+
+test('office restores business and mistakes, computes grades on server, and rejects stale or rewritten work',async()=>{
+ const {store,call,c}=await fixture(),S=global.SIM,{run,st}=officeRun();
+ const assignment=await call(prof,'lesson-assign',{classId:c.id,lessonId:'ch2',title:'Opening month'});
+ await assert.rejects(()=>call(prof,'office-load'),e=>e.status===403);
+ assert.deepEqual(await call(student,'office-load'),{revision:0,run:null});
+ const r=await call(student,'office-save',{revision:0,run});assert.equal(r.revision,1);
+ const restored=S.replay((await call(student,'office-load')).run);
+ assert.deepEqual(restored,st);
+ const grade=(await call(prof,'gradebook',{classId:c.id})).students[0].lessonScores.find(x=>x.assignment_id===assignment.id);
+ assert.equal(grade.score,st.results.ch2.score);assert.ok(grade.score<100);
+ await assert.rejects(()=>call(student,'office-save',{revision:0,run}),/CONFLICT/);
+ const changed=structuredClone(run);changed.events=changed.events.filter(e=>!e.action?.rows||e.action.rows[0].d!=='1');
+ await assert.rejects(()=>call(student,'office-save',{revision:1,run:changed}),/Earlier office/);
+ const identity=structuredClone(run);identity.config.name='Different company';
+ await assert.rejects(()=>call(student,'office-save',{revision:1,run:identity}),/identity/);
+ const future=structuredClone(run);future.events.push({kind:'next'});
+ await assert.rejects(()=>call(student,'office-save',{revision:1,run:future}),e=>e.status===403);
+ await assert.rejects(()=>call(outsider,'office-load'),e=>e.status===403);
+ await call(owner,'authorize',{email:outsider.email,role:'student',active:true});
+ const stranger=(await call(outsider,'office-load'));assert.equal(stranger.run,null);
+ assert.ok(store.tables.demo_profiles.find(x=>x.id===student.id).office.run.events.length);
 });

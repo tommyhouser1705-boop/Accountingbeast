@@ -48,6 +48,25 @@ export async function handleAction(store,L,user,action,p={}){
  const classAccess=async id=>{const c=await store.one('demo_classes',{id:uuid(id)});if(!c)fail('Class not found.',404);if(grant.role!=='owner'&&c.professor_id!==user.id)fail('This class belongs to another professor.',403);return c;};
  const studentClasses=async()=>{const inv=await store.list('demo_invitations',{email:address});return (await Promise.all(inv.map(i=>store.one('demo_classes',{id:i.class_id})))).filter(Boolean);};
  const studentAssignment=async id=>{if(grant.role!=='student')fail('Student access is required.',403);const a=await store.one('demo_assignments',{id:uuid(id)});if(!a||a.definition.deleted||!await store.one('demo_invitations',{class_id:a.class_id,email:address}))fail('This assignment is not in your class.',403);return a;};
+ if(action==='office-load'||action==='office-save'){
+  if(grant.role!=='student')fail('Student access is required.',403);
+  if(action==='office-load')return profile.office||{revision:0,run:null};
+  if(!Number.isInteger(p.revision)||p.revision<0||JSON.stringify(p.run||{}).length>160000)fail('Invalid office save.');
+  const previous=profile.office;
+  if(previous&&JSON.stringify(previous.run.config)!==JSON.stringify(p.run?.config))fail('Your business identity is fixed once it is saved.');
+  if(previous){const events=p.run?.events;if(!Array.isArray(events)||events.length<previous.run.events.length||JSON.stringify(events.slice(0,previous.run.events.length))!==JSON.stringify(previous.run.events))fail('Earlier office work cannot be changed.');}
+  let st;try{st=globalThis.SIM.replay(p.run);}catch(error){fail(error.message);}
+  const assigned=(await Promise.all((await studentClasses()).map(c=>store.list('demo_assignments',{class_id:c.id})))).flat().filter(a=>isLib(a)&&!a.definition.deleted);
+  const last=Math.max(0,...assigned.map(a=>globalThis.SIM.findLesson(a.definition.lessonId)?.index||0));
+  if(st.m>last)fail('This period has not been assigned by your instructor.',403);
+  const saved=await store.saveOffice(user.id,p.revision,p.run);
+  const targets=assigned;
+  for(const a of targets){const result=st.results?.[a.definition.lessonId==='ch1'?'ch2':a.definition.lessonId];if(!result?.graded)continue;
+   const old=await store.one('demo_runs',{student_id:user.id,assignment_id:a.id});if(old?.state?.completed)continue;
+   await store.upsert('demo_runs',{student_id:user.id,assignment_id:a.id,state:{kind:'library',lessonId:a.definition.lessonId,completed:true,...result,stars:result.score>=90?3:result.score>=70?2:1,completedAt:new Date().toISOString()},revision:1,updated_at:new Date().toISOString()});
+  }
+  return {revision:saved.revision,savedAt:saved.savedAt};
+ }
  if(action==='bootstrap'){
   const classes=teacher?await store.list('demo_classes',grant.role==='owner'?{}:{professor_id:user.id}):await studentClasses();
   const everything=(await Promise.all(classes.map(c=>store.list('demo_assignments',{class_id:c.id})))).flat(),lessonAssignments=everything.filter(a=>isLib(a)&&!a.definition.deleted),allAssignments=everything.filter(a=>!isLib(a)),assignments=teacher?allAssignments:allAssignments.filter(a=>!a.definition.deleted);
@@ -90,12 +109,7 @@ export async function handleAction(store,L,user,action,p={}){
  }
  if(action==='lesson-score'){
   if(grant.role!=='student')fail('Only students submit lesson scores.',403);
-  const lessonId=String(p.lessonId||''),graded=Number(p.graded),first=Number(p.first),stars=Number(p.stars);
-  if(!Number.isInteger(graded)||graded<1||graded>500||!Number.isInteger(first)||first<0||first>graded||![0,1,2,3].includes(stars))fail('Invalid lesson score.');
-  const targets=(await Promise.all((await studentClasses()).map(c=>store.list('demo_assignments',{class_id:c.id})))).flat().filter(a=>isLib(a)&&!a.definition.deleted&&a.definition.lessonId===lessonId);
-  let saved=0;for(const a of targets){const old=await store.one('demo_runs',{student_id:user.id,assignment_id:a.id});if(old?.state?.completed)continue;const now=new Date().toISOString();
-   await store.upsert('demo_runs',{student_id:user.id,assignment_id:a.id,state:{kind:'library',lessonId,completed:true,first,graded,stars,score:Math.round(100*first/graded),completedAt:now},revision:1,updated_at:now});saved++;}
-  return {saved};
+  fail('Complete this period in your office. Accounting scores are calculated from the saved work, not sent by the browser.',409);
  }
  if(action==='business'){
   if(grant.role!=='student')fail('Only students have a business profile.',403);const v=p.business;

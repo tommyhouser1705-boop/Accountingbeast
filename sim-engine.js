@@ -22,7 +22,7 @@
   function newGame(o) {
     const seed = o.seed || Math.floor(Math.random() * 1e9);
     const st = {
-      v: 1, seed, biz: {type: o.type || 'bike', name: (o.name || '').trim(), founder: (o.founder || '').trim() || 'Owner', city: CITIES[o.city] ? o.city : 'columbus'},
+      v: 1, seed, biz: {type: o.type || 'bike', name: (o.name || '').replace(/[<>]/g,'').trim().slice(0,40), founder: (o.founder || '').replace(/[<>]/g,'').trim().slice(0,40) || 'Owner', city: CITIES[o.city] ? o.city : 'columbus'},
       m: 0, day: 1, led: {}, journal: [], book: [], done: {}, ch: {}, vars: {}, log: [], first: 0, graded: 0, tries: {}, misses: {},
     };
     st.biz.name = st.biz.name || LL.PROFILES[st.biz.type].name;
@@ -33,7 +33,16 @@
   const prof = (st) => LL.profile({type: st.biz.type, name: st.biz.name, founder: st.biz.founder});
   const rand = (st, key) => { let h = st.seed; for (const c of key) h = (Math.imul(h, 31) + c.charCodeAt(0)) | 0; return rng(h)(); };
   const current = (st) => months[st.m];
-  const items = (st) => current(st).items.filter((it) => !it.when || it.when(st));
+  const items = (st) => current(st).items.filter((it) => !it.when || it.when(st)).map((it) => {
+    if (it.day > st.day || it.kind === 'decision') return it;
+    st.paper ||= {};
+    if (!st.paper[it.id]) {
+      const data = {};
+      for (const key of ['doc', 'lines', 'fields']) if (it[key] != null) data[key] = V(it[key], st);
+      st.paper[it.id] = data;
+    }
+    return {...it, ...st.paper[it.id]};
+  });
   const inbox = (st) => items(st).filter((it) => it.day <= st.day).sort((a, b) => a.day - b.day);
   const open = (st) => inbox(st).filter((it) => !st.done[it.id]);
   const V = (x, st) => (typeof x === 'function' ? x(st) : x);
@@ -48,9 +57,10 @@
   function record(st, it, lines) {
     if (lines && lines.length) {
       post(st, lines, it.id);
-      st.book.push({day: it.day, id: it.id, memo: V(it.memo, st) || V(it.subject, st), lines});
+      st.book.push({m: st.m, date: fmtDate(st, it.day, 'short'), day: it.day, id: it.id, memo: V(it.memo, st) || V(it.subject, st), lines});
     }
     st.done[it.id] = true;
+    if (it.after) it.after(st);
   }
 
   function grade(st, it, ok) {
@@ -65,12 +75,19 @@
     if (!it || st.done[id] || it.day > st.day) return {ok: false, text: 'This item is not available.'};
     if (it.kind === 'decision') {
       const qs = V(it.q, st), ch = action.choice || {};
-      if (qs.some((q) => ch[q.id] == null)) return {ok: false, text: 'Make a choice for each question.'};
+      if (qs.some((q) => !q.opts.some((o) => o.v === ch[q.id]))) return {ok: false, text: 'Choose a reply before sending.'};
       qs.forEach((q) => (st.ch[q.id] = ch[q.id]));
       if (it.apply) it.apply(st, ch);
       st.log.push({day: it.day, text: V(it.outcome, st) || ''});
       record(st, it, want(st, it));
       return {ok: true, done: true, text: V(it.outcome, st) || ''};
+    }
+    if (it.kind === 'work') {
+      const fields = V(it.fields, st), values = action.values || {};
+      const ok = fields.every((f) => String(values[f.id] ?? '').trim() !== '' && Math.abs(LL.num(values[f.id]) - f.value) < 0.015);
+      grade(st, it, ok);
+      if (ok) { record(st, it, null); return {ok: true, done: true, text: 'Filed.'}; }
+      return {ok: false, text: 'The worksheet does not tie to the supporting records. Review the amounts before filing.'};
     }
     const w = want(st, it);
     if (action.reveal) { if ((st.misses[id] || 0) < 2) return {ok: false, text: 'Try at least twice before you look at the answer.'}; return {ok: true, reveal: w}; }
@@ -103,9 +120,27 @@
     return {cash: bal(st, 'cash'), revenue: r2(rev), expenses: r2(exp), netIncome: r2(rev - exp), first: st.first, graded: st.graded, score: st.graded ? Math.round((100 * st.first) / st.graded) : 0};
   }
   function trialBalance(st) {
-    return Object.keys(ACC).filter((a) => st.led[a] && bal(st, a)).map((a) => { const b = bal(st, a), d = LL.dn(a); return [a, ACC[a][0], d ? b : 0, d ? 0 : b]; });
+    return Object.keys(ACC).filter((a) => st.led[a] && bal(st, a)).map((a) => { const b = bal(st, a) * (LL.dn(a) ? 1 : -1); return [a, ACC[a][0], Math.max(b, 0), Math.max(-b, 0)]; });
   }
 
-  root.SIM = {rng, CITIES, months, newGame, current, inbox, open, handle, advance, nextDay, summary, trialBalance, want, V, place, prof, rand, fmtDate, money, r2, bal};
+  function complete(st) {
+    if (open(st).length || nextDay(st) != null) return false;
+    st.results ||= {};
+    const base = st.mark || {first: 0, graded: 0};
+    const first = st.first - base.first, graded = st.graded - base.graded;
+    st.results[current(st).lessonId || 'ch2'] ||= {first, graded, score: graded ? Math.round(100 * first / graded) : 0};
+    st.ended = true;
+    return true;
+  }
+
+  function nextMonth(st) {
+    if (!st.ended || !months[st.m + 1]) return false;
+    st.m++; st.day = 1; st.ended = false; st.review = false;
+    st.mark = {first: st.first, graded: st.graded};
+    st.opening = JSON.parse(JSON.stringify(st.led));
+    return true;
+  }
+
+  root.SIM = {rng, CITIES, months, newGame, current, inbox, open, handle, advance, nextDay, summary, trialBalance, want, V, place, prof, rand, fmtDate, money, r2, bal, complete, nextMonth};
   if (typeof module !== 'undefined' && module.exports) module.exports = root.SIM;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

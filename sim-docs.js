@@ -42,6 +42,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     statement: (d) => `<article class="doc d-inv d-stmt" style="--brand:${d.color || '#1e3a5f'}"><header class="inv-top"><div class="inv-logo"><b>${esc(d.bank)}</b><small>Business Checking Statement</small></div><div class="inv-meta"><table><tr><td>Account</td><td>${esc(d.acct)}</td></tr><tr><td>Period</td><td>${esc(d.period)}</td></tr></table></div></header><table class="inv-lines"><thead><tr><th>Date</th><th>Description</th><th class="r">Withdrawals</th><th class="r">Deposits</th><th class="r">Balance</th></tr></thead><tbody>${d.rows.map(([dt, t, w, dep, b]) => `<tr><td>${esc(dt)}</td><td>${esc(t)}</td><td class="r">${w ? m2(w) : ''}</td><td class="r">${dep ? m2(dep) : ''}</td><td class="r">${m2(b)}</td></tr>`).join('')}</tbody></table></article>`,
   };
 
+  R.schedule = d => `<article class="doc d-legal"><header><b>${esc(d.name)}</b><small>${esc(d.date)}</small></header><h2>${esc(d.title)}</h2><table class="jt">${d.rows.map(([label, value]) => `<tr><td>${esc(label)}</td><td>${esc(typeof value === 'number' ? m2(value) : value)}</td></tr>`).join('')}</table><p>${esc(d.note)}</p></article>`;
   root.SIMDOCS = {render: (spec) => (R[spec.type] ? R[spec.type](spec) : ''), words, m2};
   if (typeof module !== 'undefined' && module.exports) module.exports = root.SIMDOCS;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

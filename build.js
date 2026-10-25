@@ -18,19 +18,22 @@ console.log('Built classroom and lesson library in docs/');
 // Keep server accounting identical to the tested browser engine.
 fs.copyFileSync(path.join(root,'business-decisions.js'),path.join(root,'supabase/functions/classroom/business-decisions.js'));
 fs.copyFileSync(path.join(root,'lesson-engine.js'),path.join(root,'supabase/functions/classroom/lesson-engine.js'));
+for (const name of ['lessons-engine.js', 'sim-docs.js', 'sim-engine.js', 'sim-month1.js', 'sim-course.js', 'sim-replay.js']) fs.copyFileSync(path.join(root, name), path.join(root, 'supabase/functions/classroom', name));
 const service=fs.readFileSync(path.join(root,'supabase/functions/classroom/service.mjs'),'utf8');
 const handler=fs.readFileSync(path.join(root,'supabase/functions/classroom/index.ts'),'utf8')
   .replace("import './business-decisions.js';",'')
   .replace("import './lesson-engine.js';",'')
   .replace("import { handleAction } from './service.mjs';",'')
- .replace("import {generateCourseAssignment} from './generator.mjs';",'');
+ .replace("import {generateCourseAssignment} from './generator.mjs';",'')
+ .replace(/import '\.\/(?:lessons-engine|sim-docs|sim-engine|sim-month1|sim-course|sim-replay)\.js';/g,'');
 // Preserve JavaScript module semantics in the single-file TypeScript editor
 // entry point. The typed request handler is still checked as TypeScript.
 const embedded="import 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'business-decisions.js'),'utf8')).toString('base64')+"';\n"+"import 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'lesson-engine.js'),'utf8')).toString('base64')+"';\n"
   +"import {generateCourseAssignment} from 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'supabase/functions/classroom/generator.mjs'),'utf8').replace("import {prepareGuidedAssignment} from './service.mjs';","import {prepareGuidedAssignment} from 'data:text/javascript;base64,"+Buffer.from(service).toString('base64')+"';").replace("import {makeGenerationSchema,makeTopicSchema,makeInteractiveSchema} from './generation-schema.mjs';","import {makeGenerationSchema,makeTopicSchema,makeInteractiveSchema} from 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,'supabase/functions/classroom/generation-schema.mjs'),'utf8')).toString('base64')+"';")).toString('base64')+"';\n"
  +"import {handleAction} from 'data:text/javascript;base64,"+Buffer.from(service).toString('base64')+"';\n";
-fs.writeFileSync(path.join(root,'docs/classroom-function.ts'),embedded+handler);
-fs.copyFileSync(path.join(root,'supabase/migrations/202610080001_classroom.sql'),path.join(root,'docs/database.sql'));
+const officeImports=['lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js','sim-replay.js'].map(name=>"import 'data:text/javascript;base64,"+Buffer.from(fs.readFileSync(path.join(root,name),'utf8')).toString('base64')+"';\n").join('');
+fs.writeFileSync(path.join(root,'docs/classroom-function.ts'),officeImports+embedded+handler);
+fs.writeFileSync(path.join(root,'docs/database.sql'),['202610080001_classroom.sql','202610260001_office.sql'].map(name=>fs.readFileSync(path.join(root,'supabase/migrations',name),'utf8')).join('\n'));
 fs.copyFileSync(path.join(root,'account-setup.html'),path.join(root,'docs/account-setup.html'));
 fs.copyFileSync(path.join(root,'cloud-config.js'),path.join(root,'docs/cloud-config.js'));
 
