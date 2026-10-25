@@ -62,7 +62,8 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  const tables=await query("select tablename from pg_tables where schemaname='public' and tablename like 'demo_%'",'Inspect existing database');
  if(!Array.isArray(tables))throw Error('Unexpected database response. Setup stopped.');
  const migration=readFileSync(new URL('../supabase/migrations/202610080001_classroom.sql',import.meta.url),'utf8');
- const sql=setupQuery(tables.map(t=>t.tablename),seed,migration);
+ const officeMigration=readFileSync(new URL('../supabase/migrations/202610260001_office.sql',import.meta.url),'utf8');
+ const sql=setupQuery(tables.map(t=>t.tablename),seed+'\n'+officeMigration,migration);
  console.log('Preparing classroom schema and owner approval.');
  await query(sql,'Install database and approve owner',false);
  // Verify the atomic-save RPC required by grading, including existing databases.

@@ -1613,7 +1613,7 @@ function professorHome(){
  return `<div class="lp ih"><section class="ih-head"><div><span class="lp-eyebrow">INSTRUCTOR HOME</span><h1>Welcome to Ledger Lane</h1><p>Signed in as ${safe(cloudAccount.email)}. Your classes, students and gradebook are all on this page.</p></div><div class="ih-actions"><button id="enter-connected" class="lp-btn">Open the lesson library →</button><a class="lp-btn alt" href="lessons.html">Try a lesson as a student</a></div></section>${steps}<section class="ih-card"><div class="ih-card-head"><h2>Gradebook${cls?` · ${safe(cls.name)}`:''}</h2><a class="lp-link" href="lessons.html#library">Assign lessons →</a></div><p class="ih-muted">Scores are first-attempt accuracy on graded tasks and appear when a student finishes an assigned lesson.</p>${grid}</section><div class="ih-grid">${classCard}${rosterCard}</div>${owner}</div>`;
 }
 function studentHome(){
- const rows=cloudLessons.map(l=>{const s=cloudLessonScores.find(x=>x.assignment_id===l.id),cls=cloudClasses.find(c=>c.id===l.class_id);return `<li><div><strong>${safe(l.title)}</strong><small>${safe(cls?.name||'')} · ${dueText(l.dueDate)}</small></div>${s?scoreBadge(s):`<a class="lp-btn sm" href="lessons.html#lesson=${encodeURIComponent(l.lessonId)}">Start</a>`}</li>`;}).join('');
+ const rows=cloudLessons.map(l=>{const s=cloudLessonScores.find(x=>x.assignment_id===l.id),cls=cloudClasses.find(c=>c.id===l.class_id);return `<li><div><strong>${safe(l.title)}</strong><small>${safe(cls?.name||'')} · ${dueText(l.dueDate)}</small></div>${s?scoreBadge(s):`<a class="lp-btn sm" href="office.html?lesson=${encodeURIComponent(l.lessonId)}">Start</a>`}</li>`;}).join('');
  return `<div class="lp ih"><section class="ih-head"><div><span class="lp-eyebrow">STUDENT HOME</span><h1>Your classroom</h1><p>Signed in as ${safe(cloudAccount.email)}${cloudClasses.length?' · '+cloudClasses.map(c=>safe(c.name)).join(', '):''}</p></div><div class="ih-actions"><button id="enter-connected" class="lp-btn">Open my lessons →</button></div></section><section class="ih-card"><h2>Assigned lessons</h2>${!cloudClasses.length?'<p class="ih-empty">You aren’t in a class yet. Ask your professor to add your email.</p>':rows?`<ul class="ih-roster">${rows}</ul>`:'<p class="ih-empty">Your professor hasn’t assigned a lesson yet. You can start any lesson from My lessons in the meantime.</p>'}</section><section class="ih-card"><h2>How it works</h2><ol class="ih-how"><li>Create your business in your first lesson. You run it all semester.</li><li>In each lesson, make the business decisions, then record the results as journal entries.</li><li>When you finish an assigned lesson, your first-attempt score goes to your professor’s gradebook.</li></ol></section></div>`;
 }
 function renderDashboard(){const student=cloudAccount.role==='student';shell(student?studentHome():professorHome());
@@ -1754,7 +1754,7 @@ function professorHome() {
 
 function studentHome() {
   if (!['assignments', 'grades'].includes(dashPage)) dashPage = 'assignments';
-  const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'lessons.html']]);
+  const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'office.html']]);
   const score = (l) => cloudLessonScores.find((x) => x.assignment_id === l.id);
   const sorted = [...cloudLessons].sort((a, b) => String(a.dueDate || '9').localeCompare(String(b.dueDate || '9')));
   let main;

@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your office · Ledger Lane</title>
+<style>/* Office status stays outside the app windows. */
+.office-save{display:flex;align-items:center;gap:14px;padding:10px 18px;background:#fff;border-top:1px solid #dbe2eb;font-size:12px;flex-wrap:wrap;color:#53657b}.office-save a{color:#234d76}.statements{padding:20px;max-width:780px;margin:auto}.statements h3{margin:24px 0 8px}.rec label{display:block;margin:12px 0}.rec label input{display:block;margin-top:5px;width:min(100%,240px);padding:9px;border:1px solid #c7d3df;border-radius:4px}.btabs{flex-wrap:wrap}.lib-table small{display:block;margin-top:5px}.app-table td{vertical-align:top}.app-filters{display:flex;gap:10px;margin:18px 0}.app-filters button{padding:8px 12px;background:#fff;border:1px solid #ccd7e3;border-radius:5px;cursor:pointer}.app-filters .on{background:#e9f0f8;color:#173f68}
+:root{--navy:#13294b;--ink:#1d2433;--mute:#5f6875;--line:#dde1e6;--bg:#f4f5f7;--blue:#1d4ed8;--green:#047857;--red:#b42318;--amber:#a15c07}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid #c9cfd8;background:#fff;color:var(--ink);border-radius:6px;padding:9px 16px;font-weight:600;font-size:14.5px}
+.btn:hover{border-color:#9aa3b0}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover{background:#0c1c36}
+.btn.big{padding:13px 22px;font-size:16px;width:100%}
+.link{background:none;border:0;color:var(--blue);padding:0;font-size:14px}
+.muted{color:var(--mute);font-size:14px}
+
+/* setup */
+.setup{min-height:100vh;display:grid;place-items:center;padding:32px 16px;background:#eef0f3}
+.setup-card{background:#fff;border:1px solid var(--line);border-radius:10px;max-width:720px;width:100%;padding:36px 40px;box-shadow:0 10px 30px rgba(19,41,75,.07)}
+.brand{font:600 20px Georgia,serif;color:var(--navy);text-decoration:none}
+.setup h1{font:600 32px/1.2 Georgia,serif;color:var(--navy);margin:18px 0 6px}
+.lead{color:var(--mute);margin:0 0 24px}
+fieldset{border:0;padding:0;margin:0 0 18px}
+legend{font-weight:600;margin-bottom:8px}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.type{border:1px solid var(--line);border-radius:8px;padding:12px 14px 12px 38px;position:relative;cursor:pointer;transition:border-color .15s,background .15s}
+.type input{position:absolute;left:14px;top:15px}
+.type b{display:block}.type span{font-size:13.5px;color:var(--mute)}
+.type:has(input:checked){border-color:var(--navy);background:#f3f6fb;box-shadow:inset 0 0 0 1px var(--navy)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.setup label{display:block;font-weight:600;font-size:14px;margin-bottom:16px}
+.setup input:not([type=radio]),.setup select{display:block;width:100%;margin-top:6px;padding:10px 12px;border:1px solid #c9cfd8;border-radius:6px;font:inherit;font-weight:400}
+
+/* bar */
+.bar{display:flex;align-items:center;gap:28px;background:#fff;border-bottom:1px solid var(--line);padding:10px 24px;position:sticky;top:0;z-index:5}
+.co{display:flex;align-items:center;gap:12px;min-width:0}
+.co i{font-style:normal;width:40px;height:40px;border-radius:8px;background:var(--navy);color:#fff;display:grid;place-items:center;font:600 16px Georgia,serif;flex:none}
+.co b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.co small{color:var(--mute);font-size:12.5px;white-space:nowrap}
+.cal{width:58px;border:1px solid var(--line);border-radius:7px;text-align:center;overflow:hidden;flex:none;background:#fff;perspective:300px}
+.cal-m{display:block;background:var(--red);color:#fff;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:1px 0}
+.cal-d{display:block;font:600 24px/1.1 Georgia,serif;color:var(--ink);padding-top:2px}
+.cal-w{display:block;font-size:10.5px;color:var(--mute);padding-bottom:3px}
+.turning .cal-d{animation:flip .6s ease}
+@keyframes flip{0%{transform:rotateX(90deg);opacity:0}60%{transform:rotateX(-12deg);opacity:1}100%{transform:none}}
+.kpis{display:flex;gap:26px;margin-left:auto}
+.kpis div{position:relative}
+.kpis small{display:block;font-size:12px;color:var(--mute)}
+.kpis b{font-size:18px;font-variant-numeric:tabular-nums}
+#k-delta{position:absolute;left:0;top:-4px;font-style:normal;font-size:13px;font-weight:700;opacity:0;pointer-events:none}
+#k-delta.show{animation:rise 1.6s ease forwards}#k-delta.up{color:var(--green)}#k-delta.down{color:var(--red)}
+@keyframes rise{0%{opacity:0;transform:translateY(14px)}15%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.tabs{display:flex;gap:2px;background:var(--bg);border-radius:7px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 12px;border-radius:5px;font-size:14px;color:#2f3a4b}
+.tabs .on{background:#fff;color:var(--navy);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* layout */
+.main{display:grid;grid-template-columns:300px minmax(0,1fr) 380px;min-height:calc(100vh - 62px - 44px)}
+.main{overflow-x:clip}
+.main.one{display:block;padding:28px 24px}
+.inbox{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
+.ib-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px 10px}.ib-head span{font-size:13px;color:var(--mute)}
+.inbox ul{list-style:none;margin:0;padding:0;flex:1;overflow:auto}
+.inbox li{padding:11px 18px 11px 22px;border-top:1px solid #eef0f3;cursor:pointer;position:relative;display:grid;grid-template-columns:1fr auto;column-gap:8px}
+.inbox li:hover{background:#f7f8fa}
+.inbox li.sel{background:#eef3fb;box-shadow:inset 3px 0 0 var(--navy)}
+.inbox li.new::before{content:"";position:absolute;left:9px;top:17px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.inbox li.done{color:#7a8391}.inbox li.done b{font-weight:500}
+.inbox li b{grid-column:1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inbox li small{grid-column:2;grid-row:1/3;color:var(--mute);font-size:12px}
+.ib-kind{grid-column:1;font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--mute)}
+.ib-kind.k-decision{color:var(--amber)}
+.ib-sub{grid-column:1;font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inbox li.arrive{animation:arrive .5s ease both}
+.inbox li.arrive:nth-child(2){animation-delay:.12s}.inbox li.arrive:nth-child(3){animation-delay:.24s}
+@keyframes arrive{from{opacity:0;transform:translateX(-24px);background:#fff8e6}to{opacity:1;transform:none}}
+.ib-foot{border-top:1px solid var(--line);padding:14px 18px}.ib-foot p{margin:0;font-size:13px;color:var(--mute)}.ib-foot .btn{width:100%}
+
+.desk{background:#e7e9ed;padding:28px;overflow:auto}
+.desk.empty{display:grid;place-items:center;text-align:center;color:var(--mute)}.desk.empty h2{font:600 22px Georgia,serif;color:var(--ink);margin:0 0 6px}
+.papers{position:relative;display:flex;flex-direction:column;gap:22px;align-items:center;animation:paper .35s ease}
+@keyframes paper{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel{background:#fff;border-left:1px solid var(--line);padding:20px 22px;overflow:auto}
+.panel h3{font:600 19px/1.3 Georgia,serif;color:var(--navy);margin:6px 0 10px}
+.tag{display:inline-block;font-size:12px;font-weight:700;border-radius:4px;padding:2px 8px}
+.tag.decision{background:#fdf3e1;color:var(--amber)}.tag.rec{background:#e8eefb;color:var(--blue)}.tag.ok{background:#e3f4ec;color:var(--green)}
+.opt{display:block;border:1px solid var(--line);border-radius:8px;padding:10px 12px 10px 36px;margin-bottom:8px;position:relative;cursor:pointer;transition:all .15s}
+.opt input{position:absolute;left:12px;top:13px}.opt b{display:block;font-size:14.5px}.opt span{font-size:13px;color:var(--mute)}
+.opt:hover{border-color:#9aa3b0}.opt:has(input:checked){border-color:var(--navy);background:#f3f6fb;box-shadow:inset 0 0 0 1px var(--navy)}
+.panel form .btn{width:100%}
+.outcome,.why{background:#f6f7f9;border-left:3px solid var(--navy);padding:10px 12px;font-size:14px;border-radius:0 6px 6px 0}
+.fb{font-size:14px;margin:12px 0 0;min-height:1em}.fb.ok{color:var(--green)}.fb.bad{color:var(--red)}
+.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.je{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:12px 0}
+.je-h,.je-r{display:grid;grid-template-columns:1fr 92px 92px}
+.je-h span{font-size:12px;font-weight:700;color:var(--mute);padding:7px 8px;background:#f6f7f9;border-bottom:1px solid var(--line)}
+.je-h span+span{text-align:right}
+.je-r{border-bottom:1px solid #eef0f3}
+.je-r.cr select{padding-left:26px}
+.je-r select,.je-r input{border:0;border-right:1px solid #eef0f3;padding:9px 8px;font:inherit;font-size:14px;background:#fff;min-width:0}
+.je-r input{text-align:right;font-variant-numeric:tabular-nums;border-right:0}
+.je-r input:focus,.je-r select:focus{outline:2px solid #bcd0f5;outline-offset:-2px}
+.je-t{display:flex;justify-content:space-between;padding:8px 10px;font-size:12.5px;color:var(--mute)}.je-t .bal{color:var(--green);font-weight:600}
+.acts{display:flex;gap:8px}.acts .btn{flex:1}
+.jt{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 12px}.jt td{padding:5px 4px;border-bottom:1px solid #eef0f3}.jt td+td{text-align:right;font-variant-numeric:tabular-nums}.jt tr.cr td:first-child{padding-left:24px}
+.tl h4{font-size:13px;color:var(--mute);margin:22px 0 6px}.tl ol{margin:0;padding:0;list-style:none;font-size:13.5px}.tl li{padding:6px 0;border-top:1px solid #eef0f3}.tl small{color:var(--mute);margin-right:8px}
+.foot{display:flex;justify-content:space-between;padding:12px 24px;font-size:13px;border-top:1px solid var(--line);background:#fff}.foot a{color:var(--navy);font-family:Georgia,serif;text-decoration:none}
+
+/* books */
+.bookview{max-width:980px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:26px 30px}
+.bookview h2{font:600 24px Georgia,serif;color:var(--navy);margin:0 0 14px}
+.gj{width:100%;border-collapse:collapse;font-size:14.5px}.gj th{text-align:left;font-size:12.5px;color:var(--mute);border-bottom:1px solid var(--line);padding:6px}.gj td{padding:5px 6px}.r{text-align:right;font-variant-numeric:tabular-nums}
+.gj td.cr{padding-left:34px}.gj tr.memo td{color:var(--mute);font-style:italic;font-size:13.5px;padding-bottom:12px;border-bottom:1px solid #eef0f3}
+.tbt tr.tot td{border-top:2px solid var(--ink);font-weight:700}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.t h4{text-align:center;margin:0;font-size:14px;border-bottom:2px solid var(--ink);padding-bottom:4px}
+.tb{display:grid;grid-template-columns:1fr 1fr;min-height:40px}.tb div{display:flex;flex-direction:column;padding:4px 8px;font-size:13.5px;font-variant-numeric:tabular-nums}.tb div:first-child{border-right:2px solid var(--ink);text-align:right}
+.tbal{border-top:1px solid #9aa3b0;font-weight:700;font-size:13.5px;padding:3px 8px;width:50%;text-align:right}.tbal.crb{margin-left:50%;text-align:left}
+
+/* month report */
+.report{max-width:900px;margin:0 auto}
+.rp-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:34px 38px;animation:paper .5s ease}
+.rp-card>small{font-weight:700;color:var(--mute)}.rp-card h1{font:600 30px/1.2 Georgia,serif;color:var(--navy);margin:6px 0 22px}
+.rp-k{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:8px;margin-bottom:24px}.rp-k div{padding:14px 16px}.rp-k div+div{border-left:1px solid var(--line)}.rp-k small{display:block;color:var(--mute);font-size:12.5px}.rp-k b{font-size:21px;font-variant-numeric:tabular-nums}.neg{color:var(--red)}
+.rp-two{display:grid;grid-template-columns:1fr 1fr;gap:28px}.rp-two h3{font-size:15px;margin:0 0 8px}.rp-log{margin:0;padding-left:18px;font-size:14px}.rp-log li{margin-bottom:5px}.rp-score{font-size:15px}.rp-score b{font-size:26px;color:var(--navy)}.rp-note{border-top:1px solid var(--line);padding-top:14px;margin-top:24px}
+
+/* documents */
+.doc{background:#fff;width:100%;max-width:640px;box-shadow:0 1px 2px rgba(0,0,0,.12),0 8px 24px rgba(30,40,60,.12);color:#222;font-size:13.5px;position:relative}
+.d-email{border-radius:6px;padding:20px 24px;font-size:14px}
+.d-email header{border-bottom:1px solid #e5e7eb;padding-bottom:10px;margin-bottom:12px}.em-subj{font-size:18px;font-weight:600;margin-bottom:6px}.em-row{color:#444;font-size:13px}.em-date{color:#777}
+.em-body p{margin:0 0 10px}.em-sig{color:#555;font-size:13px;border-top:1px solid #eee;padding-top:8px;margin-top:6px}
+.em-att{margin-top:12px;display:flex;gap:8px}.em-att span{border:1px solid #d6d9de;border-radius:4px;padding:5px 10px 5px 26px;font-size:12.5px;background:#fafafa url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='14'%3E%3Cpath d='M1 1h7l3 3v9H1z' fill='%23fff' stroke='%23b42318'/%3E%3C/svg%3E") 8px 50% no-repeat}
+.d-text{max-width:360px;background:#f2f2f7;border-radius:22px;padding:16px 14px;border:7px solid #1f2328;font-family:-apple-system,"Helvetica Neue",sans-serif}
+.tx-head{text-align:center;font-size:13px;font-weight:600;margin-bottom:10px}.tx-head small{display:block;font-weight:400;color:#888;font-size:11px}
+.tx-msg{background:#e5e5ea;border-radius:16px;padding:8px 12px;margin:0 50px 6px 0;font-size:14px;line-height:1.35;width:fit-content}
+.tx-msg.me{background:#0a84ff;color:#fff;margin:0 0 6px 50px;margin-left:auto}.tx-time{text-align:center;color:#888;font-size:11px;margin-top:6px}
+.d-inv{padding:30px 34px;border-top:6px solid var(--brand)}
+.inv-top{display:flex;justify-content:space-between;gap:20px;margin-bottom:18px}
+.inv-logo b{display:block;font:700 20px Georgia,serif;color:var(--brand)}.inv-logo span{display:block;font-size:11.5px;color:#666;letter-spacing:.02em;margin-bottom:6px}.inv-logo small{font-size:12px;color:#444;line-height:1.4}
+.inv-meta h2{margin:0 0 6px;font:700 22px/1 Arial,sans-serif;letter-spacing:.12em;color:#333;text-align:right}
+.inv-meta table{font-size:12.5px;border-collapse:collapse;margin-left:auto}.inv-meta td{padding:1px 0 1px 12px}.inv-meta td:first-child{color:#777}
+.inv-to{display:flex;gap:40px;font-size:13px;margin-bottom:16px}.inv-to small{display:block;font-size:10.5px;font-weight:700;color:#777;letter-spacing:.08em}
+.inv-lines{width:100%;border-collapse:collapse;font-size:12.5px}.inv-lines th{background:color-mix(in srgb,var(--brand) 10%,#fff);text-align:left;padding:6px;border-bottom:1px solid #bbb;font-size:11.5px}.inv-lines td{padding:6px;border-bottom:1px solid #eee}.inv-lines .r{text-align:right;font-variant-numeric:tabular-nums}
+.inv-tot{margin:10px 0 0 auto;font-size:13px;border-collapse:collapse}.inv-tot td{padding:3px 0 3px 30px;text-align:right;font-variant-numeric:tabular-nums}.inv-tot .grand td{border-top:2px solid #333;font-weight:700;font-size:14.5px}
+.d-inv footer{margin-top:22px;font-size:11.5px;color:#666;border-top:1px solid #eee;padding-top:8px}
+.stamp{position:absolute;border:3px solid;border-radius:6px;padding:4px 12px;font:700 18px/1.1 "Courier New",monospace;transform:rotate(-12deg);opacity:.75;letter-spacing:.05em}
+.stamp.paid{color:#c0262d;right:40px;top:150px}.stamp.recv{color:#1d4ed8;right:20px;bottom:18px;font-size:13px}
+.d-rcpt{max-width:300px;font:12.5px/1.45 "Courier New",Courier,monospace;padding:18px 18px 26px;background:#fffefa;clip-path:polygon(0 0,100% 0,100% calc(100% - 8px),95% 100%,90% calc(100% - 8px),85% 100%,80% calc(100% - 8px),75% 100%,70% calc(100% - 8px),65% 100%,60% calc(100% - 8px),55% 100%,50% calc(100% - 8px),45% 100%,40% calc(100% - 8px),35% 100%,30% calc(100% - 8px),25% 100%,20% calc(100% - 8px),15% 100%,10% calc(100% - 8px),5% 100%,0 calc(100% - 8px))}
+.d-rcpt hr{border:0;border-top:1px dashed #888;margin:8px 0}.rc-c{text-align:center}.rc-row{display:flex;justify-content:space-between;gap:10px}.rc-row.big{font-weight:700;font-size:14px}.rc-foot{margin-top:10px;color:#555}
+.d-check{max-width:620px;padding:16px 22px 10px;background:linear-gradient(0deg,rgba(255,255,255,.6),rgba(255,255,255,.6)),repeating-linear-gradient(45deg,#e6efe6 0 2px,#eef5ee 2px 8px);border:1px solid #b9cbb9;font-family:Georgia,serif}
+.ck-top{display:flex;justify-content:space-between;font-size:12px}.ck-no{text-align:right;font-family:"Courier New",monospace}
+.ck-pay{display:flex;align-items:flex-end;gap:10px;margin:16px 0 8px}.ck-pay small{font-size:9.5px;line-height:1.1}.ck-pay u{flex:1;font-style:italic;font-size:16px;text-decoration-color:#888}.ck-amt{border:1px solid #888;background:#fff;padding:2px 10px;font-family:"Courier New",monospace;font-weight:700}
+.ck-words{font-size:13.5px;font-style:italic;margin-bottom:12px}.ck-words u{text-decoration-color:#888}
+.ck-bot{display:flex;justify-content:space-between;align-items:flex-end;font-size:12px}.ck-sig{font:italic 22px "Brush Script MT","Segoe Script",cursive;border-bottom:1px solid #555;min-width:200px;text-align:center}
+.ck-micr{font:15px "Courier New",monospace;letter-spacing:.12em;margin-top:10px;color:#333}
+.d-dep{max-width:420px;padding:16px 20px;background:#f5f8fc;border:1px solid #c5d3e6;font-size:13px}.d-dep header{display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid #c5d3e6;padding-bottom:6px;margin-bottom:8px}.d-dep header span{letter-spacing:.1em;color:#555}
+.d-dep table{width:100%;border-collapse:collapse;margin:8px 0}.d-dep td{padding:4px;border-bottom:1px solid #dbe3ee}.d-dep td+td{text-align:right;font-family:"Courier New",monospace}.d-dep .grand td{font-weight:700;border-top:2px solid #333}.dp-date{font-size:12px;color:#555}
+.d-legal{padding:38px 46px;font:14px/1.6 Georgia,"Times New Roman",serif;background:#fffdf8}
+.d-legal h2{text-align:center;font-size:19px;letter-spacing:.08em;text-transform:uppercase;margin:0}.lg-sub{text-align:center;color:#555;font-size:13px;margin:4px 0 18px}
+.d-legal p{margin:0 0 10px;text-align:justify}.lg-sigs{display:flex;gap:36px;margin-top:28px}.lg-sigs div{flex:1}.lg-line{display:block;border-bottom:1px solid #333;font:italic 20px "Brush Script MT","Segoe Script",cursive;padding:0 4px;min-height:30px}.lg-sigs small{font-size:12px;color:#555}
+.d-cert{padding:14px;background:#f3efe2}.ct-in{border:3px double #6b5a2e;padding:26px 30px;text-align:center;font-family:Georgia,serif;background:#fffcf0;position:relative}
+.ct-no,.ct-sh{position:absolute;top:12px;font-size:12px;color:#6b5a2e;border:1px solid #6b5a2e;padding:2px 8px}.ct-no{left:12px}.ct-sh{right:12px}
+.ct-in h2{font-size:24px;margin:22px 0 2px;color:#3d3215}.ct-st{font-size:12px;color:#6b5a2e;font-style:italic;margin-bottom:12px}.ct-in p{font-size:14px;line-height:1.6;margin:0}
+.stamp-big{position:absolute;top:40px;right:6%;font:700 34px "Courier New",monospace;color:var(--green);border:4px solid currentColor;padding:6px 18px;border-radius:8px;transform:rotate(-10deg);opacity:.8;letter-spacing:.08em;pointer-events:none}
+.stamp-big.none{color:#5f6875}
+.stamp-big.hit{animation:stamp .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stamp{0%{transform:scale(2.4) rotate(-10deg);opacity:0}60%{opacity:.9}100%{transform:scale(1) rotate(-10deg);opacity:.8}}
+
+@media(max-width:1180px){.main{grid-template-columns:260px minmax(0,1fr)}.panel{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}.kpis{gap:16px}}
+@media(max-width:780px){
+ .bar{flex-wrap:wrap;gap:12px;padding:10px 14px}.kpis{margin-left:0;order:3;width:100%;justify-content:space-between}.tabs{order:4;width:100%;overflow-x:auto}
+ .main{display:block}.inbox{border-right:0;border-bottom:1px solid var(--line)}.inbox ul{max-height:260px}.desk{padding:14px}.d-inv,.d-legal{padding:20px}.inv-top{flex-direction:column}.inv-meta h2,.inv-meta table{text-align:left;margin-left:0}
+ .types,.two,.rp-two{grid-template-columns:1fr}.rp-k{grid-template-columns:1fr 1fr}.setup-card,.rp-card,.bookview{padding:22px 18px}.main.one{padding:14px}.gj{font-size:13px}
+}
+/* ---- Owner's computer: desktop, tiled app windows, taskbar ---- */
+body[data-v=office]{overflow:hidden;background:#dfe5ee}
+.os{position:fixed;inset:0;display:grid;grid-template-rows:minmax(0,1fr) 60px}
+.desk-bg{position:absolute;inset:0 0 60px;background:linear-gradient(180deg,#e9eef5,#d9e1ec);display:flex;align-items:flex-end;justify-content:flex-end;padding:24px 32px;pointer-events:none}
+.desk-bg span{font:600 44px/1 Georgia,serif;color:rgba(19,41,75,.07)}
+.wins{position:relative;display:grid;gap:10px;padding:10px;min-height:0}
+.wins.n1{grid-template-columns:minmax(0,1fr)}.wins.n2{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.wins.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.win{background:#fff;border:1px solid #c9d2df;border-radius:10px;box-shadow:0 6px 24px rgba(19,41,75,.12);display:flex;flex-direction:column;min-height:0;overflow:hidden;animation:winpop .28s ease-out}
+@keyframes winpop{from{opacity:0;transform:scale(.98) translateY(6px)}to{opacity:1;transform:none}}
+.win-h{display:flex;align-items:center;gap:8px;height:38px;padding:0 10px 0 12px;border-bottom:1px solid #e3e8ef;background:#f7f9fc;flex:none}
+.win-h b{font-size:14px;color:#13294b}.win-s{color:#6b7a90;font-size:12px;margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win-c{margin-left:auto;display:flex;gap:4px}.win-c button{width:26px;height:26px;border:0;background:none;border-radius:6px;color:#56657a;cursor:pointer;font-size:15px}.win-c button:hover{background:#e6ebf2}
+.win-b{flex:1;min-height:0;overflow:auto;container-type:inline-size}
+.ico{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;color:#fff;font:700 12px/1 system-ui;flex:none}
+.ico-mail{background:#1f5fbf}.ico-books{background:#13294b}.ico-bank{background:#1d7a52}.ico-msgs{background:#2c9b4a}
+/* mail + messages */
+.mail{display:grid;grid-template-columns:minmax(200px,34%) minmax(0,1fr);height:100%}
+.mlist{list-style:none;margin:0;padding:0;border-right:1px solid #e3e8ef;overflow:auto}
+.mlist li{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:11px 14px;border-bottom:1px solid #eef1f5;cursor:pointer;position:relative;font-size:13px}
+.mlist li b{font-weight:500;color:#36465c;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.mlist li small{color:#7a879a}
+.mlist li span{grid-column:1/-1;color:#5b6a80;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mlist li.new b,.mlist li.new span{font-weight:700;color:#13294b}.mlist li.new::before{content:"";position:absolute;left:5px;top:16px;width:6px;height:6px;border-radius:50%;background:#1f5fbf}
+.mlist li em{grid-column:1/-1;font-style:normal;font-size:11px;font-weight:700;color:#9a5b00}
+.mlist li.sel{background:#e8f0fc}.mlist li:hover{background:#f3f6fa}.mlist li.sel:hover{background:#e8f0fc}.mlist li.none{color:#7a879a;cursor:default}
+.mlist li.arrive{animation:arrive .5s ease-out}
+.mread{overflow:auto;background:#eef2f7;min-width:0}
+.read{padding:16px}.read .papers{display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+.read .doc{max-width:100%}
+.mhead{background:#fff;border:1px solid #dde3ec;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px}.mhead span{grid-column:1/-1;color:#4a5a70}.mhead small{color:#7a879a}
+.atts{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}.att-l{align-self:flex-start;color:#6b7a90;font-weight:600}
+.back{display:none;border:0;background:none;color:#1f5fbf;font-weight:600;padding:10px 14px;cursor:pointer}
+.reply{background:#fff;border:1px solid #cfd8e4;border-radius:10px;padding:14px 16px;margin-top:16px;animation:rise .3s ease-out}
+.reply h4{margin:0 0 8px;font-size:13px;color:#56657a;text-transform:none}.reply fieldset{border:0;padding:0;margin:0 0 12px}.reply legend{font-weight:600;color:#13294b;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{flex:1 1 180px;border:1px solid #cfd8e4;border-radius:8px;padding:9px 11px;cursor:pointer;display:block;transition:border-color .15s,background .15s}
+.chip input{position:absolute;opacity:0;pointer-events:none}.chip b{display:block;font-size:14px;color:#13294b}.chip span{font-size:12.5px;color:#5b6a80}
+.chip:hover{border-color:#8fa6c6}.chip:has(input:checked){border-color:#1f5fbf;background:#eef4fd;box-shadow:inset 0 0 0 1px #1f5fbf}
+.sent{background:#fff;border-left:3px solid #1d7a52;border-radius:6px;padding:10px 14px;margin-top:16px}.sent b{color:#1d7a52;font-size:13px}.sent p{margin:4px 0 0}
+.torec{display:flex;align-items:center;gap:12px;justify-content:space-between;background:#fff;border:1px dashed #9fb2cc;border-radius:8px;padding:10px 14px;margin-top:16px;color:#36465c;font-size:14px}
+.empty{display:grid;place-items:center;height:100%;color:#6b7a90;padding:24px;text-align:center}
+@container (max-width:620px){.mail{grid-template-columns:1fr}.mail.has .mlist{display:none}.mail:not(.has) .mread{display:none}.back{display:block}}
+/* books */
+.btabs{display:flex;align-items:center;gap:2px;padding:6px 10px;border-bottom:1px solid #e3e8ef;position:sticky;top:0;background:#fff;z-index:2;flex-wrap:wrap}
+.btabs button{border:0;background:none;padding:6px 10px;border-radius:6px;font:600 13px system-ui;color:#56657a;cursor:pointer}.btabs button.on{background:#13294b;color:#fff}
+.bk{margin-left:auto;display:flex;align-items:baseline;gap:6px;font-size:12px;color:#6b7a90}.bk b{font-size:14px;color:#13294b;margin-right:8px}
+.bbody{padding:12px 14px}.pad{padding:4px 0}
+.queue{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.queue button{border:1px solid #d3dbe6;background:#f7f9fc;border-radius:999px;padding:5px 11px;font-size:12.5px;color:#36465c;cursor:pointer}.queue button.on{border-color:#1f5fbf;background:#e8f0fc;color:#13294b;font-weight:600}
+.rec{border:1px solid #dde3ec;border-radius:10px;padding:14px;background:#fff}.rec-h h3{margin:2px 0}.rec-h small{color:#6b7a90}
+.rec .je{margin-top:12px}.pin{margin:10px 0;border:1px solid #e3e8ef;border-radius:8px;background:#f4f6fa}.pin summary{padding:8px 12px;cursor:pointer;color:#1f5fbf;font-weight:600;font-size:13px}.pin .papers{padding:10px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ok-pulse{animation:okp .7s ease-out}@keyframes okp{0%{box-shadow:0 0 0 0 rgba(29,122,82,.45)}100%{box-shadow:0 0 0 14px rgba(29,122,82,0)}}
+#recp.shake,#decide.shake{animation:shake .4s}
+.w-books .gj{width:100%}.w-books .tgrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+/* bank */
+.bank{padding:14px}.bk-h{background:#1d7a52;color:#fff;border-radius:10px;padding:14px 16px;display:grid;margin-bottom:12px}.bk-h small{opacity:.85}.bk-h span{margin-top:8px;font-size:13px;opacity:.9}.bk-h b{font-size:26px}
+.bk-t td.pos{color:#1d7a52}.bk-t td.neg{color:#a02929}.bk-t{width:100%;font-size:13px}
+/* taskbar */
+.task{position:relative;z-index:5;display:flex;align-items:center;gap:14px;padding:0 14px;background:#13294b;color:#fff}
+.t-co{display:flex;align-items:center;gap:10px;min-width:0}.t-co i{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:#fff;color:#13294b;font:700 14px Georgia,serif;font-style:normal}
+.t-co span{display:grid;min-width:0}.t-co b{font-size:14px;white-space:nowrap}.t-co small{font-size:11.5px;opacity:.75;white-space:nowrap}
+.dock{display:flex;gap:4px;margin:0 auto}.dock button{position:relative;display:flex;align-items:center;gap:7px;border:0;background:none;color:#cfdaea;padding:7px 10px;border-radius:8px;cursor:pointer;font:600 13px system-ui}
+.dock button:hover{background:rgba(255,255,255,.08)}.dock button.on{background:rgba(255,255,255,.14);color:#fff}.dock em{font-style:normal}
+.badge{position:absolute;top:1px;left:22px;min-width:17px;height:17px;border-radius:9px;background:#d93838;color:#fff;font:700 10.5px/17px system-ui;font-style:normal;text-align:center;padding:0 4px;animation:pop .3s}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.snap{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px}.snap button{display:flex;gap:2px;width:34px;height:24px;padding:4px;border:0;border-radius:5px;background:none;cursor:pointer}
+.snap button span{flex:1;border:1.5px solid #9fb2cc;border-radius:2px}.snap button.on{background:rgba(255,255,255,.18)}.snap button.on span{border-color:#fff}
+.t-cash{display:grid;line-height:1.15;text-align:right;position:relative}.t-cash small{font-size:11px;opacity:.7}.t-cash b{font-size:16px;font-variant-numeric:tabular-nums}
+.t-cash em{position:absolute;right:0;top:-18px;font-style:normal;font-size:12px;font-weight:700;opacity:0}.t-cash em.show{animation:delta 1.6s ease-out}.t-cash em.up{color:#7ee2a8}.t-cash em.down{color:#ffb4b4}
+@keyframes delta{0%{opacity:0;transform:translateY(6px)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+.t-day{display:flex;align-items:center;gap:12px}.t-day .btn{padding:8px 14px;font-size:13px}.t-day .btn[disabled]{opacity:.55;background:rgba(255,255,255,.1);color:#fff;border-color:transparent}
+.clock{display:grid;text-align:right;line-height:1.15}.clock b{font-size:13px}.clock small{font-size:11px;opacity:.7}
+.turning .clock b{animation:flip .6s}
+.toasts{position:fixed;right:14px;bottom:72px;display:flex;flex-direction:column;gap:8px;z-index:9;pointer-events:none}
+.toast{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #d3dbe6;border-radius:10px;box-shadow:0 10px 30px rgba(19,41,75,.2);padding:10px 14px;width:290px;opacity:0;animation:tin .4s ease-out forwards,tout .5s ease-in forwards}
+.toast div{display:grid;font-size:13px;min-width:0}.toast b{color:#13294b}.toast span:not(.ico){color:#56657a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@keyframes tin{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}@keyframes tout{to{opacity:0;transform:translateX(30px)}}
+.wins .report{overflow:auto;padding:16px}.reset{position:fixed;top:6px;right:10px;z-index:6;font-size:12px;display:none}
+@media(max-width:1100px){.dock em{display:none}.t-co small{display:none}}
+@media(max-width:820px){.os{grid-template-rows:minmax(0,1fr) auto}.wins{padding:6px}.wins>.win:not(:first-child){display:none}.wins.n2,.wins.n3{grid-template-columns:1fr}
+.task{flex-wrap:wrap;gap:8px;padding:8px 10px;row-gap:6px}.snap,.t-co span{display:none}.dock{order:3;width:100%;justify-content:space-around;margin:0}.t-cash{margin-left:auto}.desk-bg{display:none}.win-c{display:none}.toasts{bottom:120px;right:8px}}
+</style>
+</head>
+<body>
+<div id="office"></div>
+<script>// Public browser settings only. Never put a service-role key here.
+window.LEDGER_CLOUD = {
+  url: 'https://eaahwjgdpmvaasgtjpaq.supabase.co',
+  publishableKey: 'sb_publishable_B0geGyoDCj1AVSrX36rUxQ_Wkow6Dde'
+};
+</script>
+<script>// Supabase Auth REST + the protected classroom Edge Function. No secret keys.
+(function(root){
+class CloudClient {
+ static revisionChanges(previous,next){
+  const stable=value=>JSON.stringify(value,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])):v);
+  const sections=[['Assignment title',a=>a.title],['Student instructions',a=>a.instructions],['Learning goals',a=>a.objectives],['Dates and timeline',a=>[a.year,a.month,a.periodMonths]],['Business decisions',a=>a.interactive?.controls],['Source documents and entries',a=>a.interactive?.events||a.blueprint?.paths],['Chart of accounts',a=>a.blueprint?.accounts],['Topic coverage',a=>a.topicCoverage]];
+  return sections.filter(([,read])=>stable(read(previous))!==stable(read(next))).map(([label])=>label);
+ }
+
+ constructor(config,storage=root.sessionStorage,fetcher=root.fetch.bind(root)){
+  this.config=config;this.storage=storage;this.fetcher=fetcher;this.session=null;
+  this.redirectUrl=config.redirectUrl||(root.location?new URL('.',root.location.href).href:'');
+  try{this.session=JSON.parse(storage.getItem('ledger-cloud-session'));}catch{}
+ }
+ get configured(){return /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(this.config.url)&&!!this.config.publishableKey;}
+ setSession(session){this.session=session;session?this.storage.setItem('ledger-cloud-session',JSON.stringify(session)):this.storage.removeItem('ledger-cloud-session');}
+ async auth(path,body){const res=await this.fetcher(this.config.url+'/auth/v1/'+path,{method:'POST',headers:{apikey:this.config.publishableKey,'Content-Type':'application/json'},body:JSON.stringify(body)});const value=await res.json();if(!res.ok)throw Error(value.msg||value.error_description||value.message||'Sign-in failed.');return value;}
+ async login(email,password){const s=await this.auth('token?grant_type=password',{email,password});this.setSession({...s,expires_at:Date.now()+s.expires_in*1000});return s;}
+ redirectPath(path){return this.redirectUrl?path+'?redirect_to='+encodeURIComponent(this.redirectUrl):path;}
+ async signup(email,password){return await this.auth(this.redirectPath('signup'),{email,password});}
+ async resend(email){return await this.auth(this.redirectPath('resend'),{type:'signup',email});}
+ async recover(email){return await this.auth(this.redirectPath('recover'),{email});}
+ async refresh(){if(!this.session)throw Error('Sign in first.');if(this.session.expires_at>Date.now()+60000)return;const s=await this.auth('token?grant_type=refresh_token',{refresh_token:this.session.refresh_token});this.setSession({...s,expires_at:Date.now()+s.expires_in*1000});}
+ async call(action,payload={}){await this.refresh();let res;try{res=await this.fetcher(this.config.url+'/functions/v1/classroom',{method:'POST',headers:{apikey:this.config.publishableKey,Authorization:'Bearer '+this.session.access_token,'Content-Type':'application/json'},body:JSON.stringify({action,payload}),signal:AbortSignal.timeout(120000)});}catch(error){throw Error(error.name==='TimeoutError'?'This step took too long. Your notes are saved. Try again.':'The connection was interrupted. Your saved work is unchanged. Check your connection and try again.');}let value;try{value=await res.json();}catch{throw Error('The server did not finish this step. Your saved work is unchanged. Try again shortly.');}if(!res.ok){const e=Error(value.error||'Request failed.');e.status=res.status;throw e;}return value;}
+ async logout(){try{if(this.session)await this.fetcher(this.config.url+'/auth/v1/logout',{method:'POST',headers:{apikey:this.config.publishableKey,Authorization:'Bearer '+this.session.access_token}});}finally{this.setSession(null);}}
+}
+if(typeof module!=='undefined')module.exports=CloudClient;else root.CloudClient=CloudClient;
+})(globalThis);
+</script>
+<script>// Ledger Lane lesson engine: the student's semester business, the chart of
+// accounts, journal-entry checking, posting and grading. No DOM access here so
+// every lesson can be verified in Node.
+(function(root){
+const ACC={
+ cash:['Cash','A'],pettycash:['Petty Cash','A'],ar:['Accounts Receivable','A'],allow:['Allowance for Doubtful Accounts','XA'],nr:['Notes Receivable','A'],ir:['Interest Receivable','A'],
+ supplies:['Supplies','A'],prepaidrent:['Prepaid Rent','A'],prepaidins:['Prepaid Insurance','A'],inv:['Inventory','A'],
+ equip:['Equipment','A'],vehicle:['Vehicle','A'],building:['Building','A'],land:['Land','A'],adep:['Accumulated Depreciation','XA'],
+ ap:['Accounts Payable','L'],wagespay:['Wages Payable','L'],salpay:['Salaries Payable','L'],intpay:['Interest Payable','L'],unearned:['Unearned Revenue','L'],
+ ficapay:['FICA Taxes Payable','L'],fitpay:['Federal Income Tax Withheld','L'],utaxpay:['Unemployment Taxes Payable','L'],salestaxpay:['Sales Tax Payable','L'],
+ warrpay:['Warranty Liability','L'],np:['Notes Payable','L'],divpay:['Dividends Payable','L'],taxpay:['Income Taxes Payable','L'],
+ bonds:['Bonds Payable','L'],bprem:['Premium on Bonds Payable','L'],bdisc:['Discount on Bonds Payable','XL'],
+ cs:['Common Stock','SE'],ps:['Preferred Stock','SE'],apic:['Additional Paid-in Capital, Common','SE'],apicp:['Additional Paid-in Capital, Preferred','SE'],
+ re:['Retained Earnings','SE'],div:['Dividends','XSE'],treasury:['Treasury Stock','XSE'],
+ rev:['Service Revenue','R'],sales:['Sales Revenue','R'],irev:['Interest Revenue','R'],gain:['Gain on Sale of Assets','R'],
+ disc:['Sales Discounts','XR'],returns:['Sales Returns and Allowances','XR'],
+ cogs:['Cost of Goods Sold','E'],wages:['Wages Expense','E'],salexp:['Salaries Expense','E'],ptaxexp:['Payroll Tax Expense','E'],rent:['Rent Expense','E'],
+ suppliesexp:['Supplies Expense','E'],insexp:['Insurance Expense','E'],util:['Utilities Expense','E'],adv:['Advertising Expense','E'],repairs:['Repairs and Maintenance Expense','E'],
+ depexp:['Depreciation Expense','E'],bde:['Bad Debt Expense','E'],intexp:['Interest Expense','E'],warrexp:['Warranty Expense','E'],misc:['Miscellaneous Expense','E'],
+ cashos:['Cash Over and Short','E'],bankfee:['Bank Service Charges','E'],taxexp:['Income Tax Expense','E'],loss:['Loss on Sale of Assets','E'],delivexp:['Delivery Expense','E'],
+ isum:['Income Summary','T']
+};
+const DEBIT_NORMAL=['A','E','XSE','XR','XL'];
+const GROUPS=[['Assets',['A','XA']],['Liabilities',['L','XL']],['Stockholders\u2019 equity',['SE','XSE']],['Revenues and gains',['R','XR']],['Expenses and losses',['E']],['Closing',['T']]];
+const PROFILES={
+ bike:{type:'Bike repair shop',name:'Spoke & Sprocket',jobs:'repairs and tune-ups',job:'tune-up',client:'rider',clients:'riders',product:'e-bikes',productOne:'e-bike',vehicle:'service van',gear:'repair stands and tools',corp:'a fleet of local delivery businesses',icon:'#2563eb'},
+ fitness:{type:'Fitness studio',name:'Peak Form Studio',jobs:'classes and personal training',job:'training package',client:'member',clients:'members',product:'smart rowing machines',productOne:'rowing machine',vehicle:'mobile training van',gear:'weights and studio equipment',corp:'a downtown law firm',icon:'#0f766e'},
+ landscape:{type:'Landscaping company',name:'Greenline Landscaping',jobs:'lawn care and design projects',job:'yard project',client:'homeowner',clients:'homeowners',product:'patio planters',productOne:'planter',vehicle:'crew truck',gear:'mowers and trimmers',corp:'an apartment management company',icon:'#047857'},
+ photo:{type:'Photography studio',name:'Golden Hour Studio',jobs:'portrait and event shoots',job:'photo shoot',client:'client',clients:'clients',product:'framed canvas prints',productOne:'canvas print',vehicle:'studio van',gear:'cameras and lighting',corp:'a regional wedding venue',icon:'#7c3aed'}
+};
+const r2=x=>Math.round(x*100)/100;
+const num=v=>{const s=String(v??'').replace(/[$,\s]/g,'');if(s==='')return 0;const neg=/^\(.*\)$/.test(s);const n=+s.replace(/[()]/g,'');return isFinite(n)?(neg?-n:n):NaN;};
+const money=(n,c)=>{const v=r2(n),neg=v<0,a=Math.abs(v);const s=c||a%1?a.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):a.toLocaleString('en-US');return (neg?'-':'')+'$'+s;};
+const dn=id=>DEBIT_NORMAL.includes(ACC[id][1]);
+const V=(x,st)=>typeof x==='function'?x(st,st.p):x;
+function profile(saved){const base=PROFILES[saved&&saved.type]||PROFILES.bike;return {...base,key:saved&&PROFILES[saved.type]?saved.type:'bike',name:(saved&&saved.name||'').trim()||base.name,founder:(saved&&saved.founder||'').trim()||'you'};}
+function newLesson(lesson,saved){
+ const st={id:lesson.id,p:profile(saved),led:{},ch:{},i:0,first:0,graded:0,tries:0,posted:false,done:false,answers:{},journal:[]};
+ Object.assign(st.ch,lesson.defaults||{});
+ const open=V(lesson.open||{},st);for(const a in open)if(open[a]){ensure(st,a);st.led[a][dn(a)===(open[a]>0)?'dr':'cr'].push({x:Math.abs(open[a]),open:true});}
+ return st;
+}
+function ensure(st,a){if(!ACC[a])throw new Error('Unknown account '+a);if(!st.led[a])st.led[a]={dr:[],cr:[]};}
+const sum=l=>l.reduce((t,e)=>t+e.x,0);
+function bal(st,a){const l=st.led[a];if(!l)return 0;const d=sum(l.dr),c=sum(l.cr);return r2(dn(a)?d-c:c-d);}
+const total=(st,types)=>r2(Object.keys(st.led).filter(a=>types.includes(ACC[a][1])).reduce((t,a)=>t+bal(st,a),0));
+const netIncome=st=>r2(total(st,['R'])-total(st,['XR'])-total(st,['E']));
+function linesOf(step,st){return V(step.lines,st).filter(l=>Math.round(l[2]*100)!==0).map(([a,s,x])=>[a,s,r2(x)]);}
+function checkJE(st,rows,want){
+ const w={},net={};want.forEach(([a,s,x])=>w[a]=r2((w[a]||0)+(s==='dr'?x:-x)));
+ const u=rows.map(r=>({a:r.a,d:num(r.d),c:num(r.c)})).filter(r=>r.a||r.d||r.c);
+ if(u.some(r=>isNaN(r.d)||isNaN(r.c)))return {ok:false,text:'Enter amounts as numbers, for example 1250 or 1,250.00.'};
+ if(!u.length)return {ok:false,text:'Enter the entry before you post it.'};
+ if(u.some(r=>!r.a))return {ok:false,text:'Choose an account for every line that has an amount.'};
+ if(u.some(r=>r.d&&r.c))return {ok:false,text:'Each line takes a debit <b>or</b> a credit, not both.'};
+ if(u.some(r=>r.d<0||r.c<0))return {ok:false,text:'Amounts are always positive. The column shows the direction.'};
+ if(u.some(r=>!r.d&&!r.c))return {ok:false,text:'One of your lines has an account but no amount.'};
+ if(!u.some(r=>r.d)||!u.some(r=>r.c))return {ok:false,text:'Every entry needs at least one debit and one credit.'};
+ const D=r2(u.reduce((t,r)=>t+r.d,0)),C=r2(u.reduce((t,r)=>t+r.c,0));
+ if(D!==C)return {ok:false,text:`Total debits (${money(D)}) must equal total credits (${money(C)}).`};
+ u.forEach(r=>net[r.a]=r2((net[r.a]||0)+r.d-r.c));
+ const keys=[...new Set([...Object.keys(w),...Object.keys(net)])].filter(k=>(w[k]||0)||(net[k]||0));
+ if(keys.every(k=>(net[k]||0)===(w[k]||0)))return {ok:true};
+ const t=[];
+ keys.forEach(k=>{const a=w[k]||0,n=net[k]||0,name=ACC[k][0];
+  if(!a&&n)t.push(`<b>${name}</b> does not belong in this entry.`);
+  else if(a&&!n)t.push(`An account is missing. Look for one more <b>${a>0?'debit':'credit'}</b>.`);
+  else if(Math.sign(a)!==Math.sign(n))t.push(`<b>${name}</b> is on the wrong side. It is a ${dn(k)?'debit':'credit'}-balance account; think about whether this transaction increases or decreases it.`);
+  else if(a!==n)t.push(`<b>${name}</b> is the right account, but the amount is off.`);});
+ return {ok:false,text:[...new Set(t)].slice(0,2).join('<br>')};
+}
+function post(st,lines,tag){lines.forEach(([a,s,x])=>{ensure(st,a);st.led[a][s].push({x,tag});});st.journal.push({tag,lines});}
+function close(st,tag){ // closing entries for the lesson's own ledger
+ const L=[];let ni=0;Object.keys(st.led).forEach(a=>{const t=ACC[a][1],b=bal(st,a);if(!b)return;if(t==='R'){L.push([a,'dr',b]);ni+=b;}if(t==='XR'||t==='E'){L.push([a,'cr',b]);ni-=b;}});
+ return L;
+}
+function checkNum(ans,given,tol){const g=num(given);if(String(given??'').trim()===''||isNaN(g))return false;return Math.abs(g-ans)<=(tol??0.5);}
+function checkSort(items,placed){const wrong=[],missing=[];items.forEach(([id,,b])=>{if(!placed[id])missing.push(id);else if(placed[id]!==b)wrong.push(id);});return {wrong,missing};}
+function stars(st){const pct=st.graded?st.first/st.graded:1;return pct>=.85?3:pct>=.6?2:1;}
+
+const H={
+ // Statement-style table: rows are [label, amount, flags] where flags may include 'in' (indent), 'tt' (total), 'q' (show ? instead of amount), 'h' (heading).
+ table(title,sub,rows){return `<div class="stmt"><h4>${title}</h4>${sub?`<small>${sub}</small>`:''}<table>${rows.map(([l,v,f=''])=>`<tr class="${f}"><td>${l}</td><td>${f.includes('h')?'':f.includes('q')?'?':v==null?'':(v<0?'('+money(-v)+')':money(v))}</td></tr>`).join('')}</table></div>`;},
+ // Trial balance from the lesson ledger; hide lets the student fill in totals.
+ tb(st,title,opts={}){const rows=Object.keys(ACC).filter(a=>st.led[a]&&bal(st,a)&&ACC[a][1]!=='T');let D=0,C=0;
+  const body=rows.map(a=>{const b=bal(st,a),d=dn(a)===(b>0);d?D+=Math.abs(b):C+=Math.abs(b);return `<tr><td>${ACC[a][0]}</td><td>${d?money(Math.abs(b)):''}</td><td>${d?'':money(Math.abs(b))}</td></tr>`;}).join('');
+  return `<div class="stmt tbl"><h4>${st.p.name}</h4><small>${title}</small><table><tr class="hd"><td>Account</td><td>Debit</td><td>Credit</td></tr>${body}<tr class="tt"><td>Totals</td><td>${opts.hide?'?':money(D)}</td><td>${opts.hide?'?':money(C)}</td></tr></table></div>`;},
+ tbTotals(st){let D=0;Object.keys(st.led).forEach(a=>{const b=bal(st,a);if(ACC[a][1]!=='T'&&dn(a)===(b>0))D+=Math.abs(b);});return r2(D);},
+ je(o){return Object.assign({k:'je'},o);},
+ closing(st){const rev=[],exp=[];Object.keys(st.led).forEach(a=>{const t=ACC[a][1],b=bal(st,a);if(!b)return;if(t==='R')rev.push([a,'dr',b]);if(t==='E'||t==='XR')exp.push([a,'cr',b]);});
+  const R=r2(rev.reduce((t,l)=>t+l[2],0)),X=r2(exp.reduce((t,l)=>t+l[2],0));return {rev:[...rev,['re','cr',R]],exp:[['re','dr',X],...exp],div:bal(st,'div')?[['re','dr',bal(st,'div')],['div','cr',bal(st,'div')]]:[]};}
+};
+
+const api={H,ACC,GROUPS,PROFILES,DEBIT_NORMAL,r2,num,money,dn,V,profile,newLesson,ensure,bal,total,netIncome,linesOf,checkJE,post,close,checkNum,checkSort,stars,lessons:[]};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;root.LL=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script>
+<script>// Source documents for the office simulation, rendered as paperwork the owner
+// would actually receive: letterhead invoices, register reports, checks, notes.
+(function (root) {
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const m2 = (n) => Number(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const addr = (p) => `${esc(p.street)}<br>${esc(p.city)}, ${esc(p.state)} ${esc(p.zip)}`;
+  const words = (n) => {
+    const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const t = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const h = (x) => (x >= 100 ? a[Math.floor(x / 100)] + ' Hundred' + (x % 100 ? ' ' : '') : '') + (x % 100 < 20 ? a[x % 100] : t[Math.floor((x % 100) / 10)] + (x % 10 ? '-' + a[x % 10] : ''));
+    const d = Math.floor(n), c = Math.round((n - d) * 100);
+    const th = Math.floor(d / 1000), r = d % 1000;
+    return ((th ? h(th) + ' Thousand' + (r ? ' ' : '') : '') + (r ? h(r) : th ? '' : 'Zero')) + ` and ${String(c).padStart(2, '0')}/100`;
+  };
+
+  const R = {
+    email: (d) => `<article class="doc d-email"><header><div class="em-subj">${esc(d.subject)}</div><div class="em-row"><b>${esc(d.fromName)}</b> &lt;${esc(d.from)}&gt;</div><div class="em-row">To: ${esc(d.to)}</div><div class="em-row em-date">${esc(d.date)}</div></header><div class="em-body">${d.body}</div>${d.sig ? `<div class="em-sig">${d.sig}</div>` : ''}${d.attach ? `<div class="em-att">${d.attach.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}</article>`,
+
+    text: (d) => `<article class="doc d-text"><div class="tx-head">${esc(d.fromName)}<small>${esc(d.phone)}</small></div>${d.msgs.map(([who, t]) => `<div class="tx-msg ${who === 'me' ? 'me' : ''}">${esc(t)}</div>`).join('')}<div class="tx-time">${esc(d.date)}</div></article>`,
+
+    invoice: (d) => {
+      const sub = d.lines.reduce((t, [, q, u]) => t + q * u, 0), tax = d.taxRate ? Math.round(sub * d.taxRate * 100) / 100 : 0, ship = d.freight || 0;
+      return `<article class="doc d-inv" style="--brand:${d.vendor.color || '#334155'}"><header class="inv-top"><div class="inv-logo"><b>${esc(d.vendor.name)}</b><span>${esc(d.vendor.tagline || '')}</span><small>${addr(d.vendor)}<br>${esc(d.vendor.phone)}</small></div><div class="inv-meta"><h2>${esc(d.title || 'INVOICE')}</h2><table><tr><td>Invoice #</td><td>${esc(d.no)}</td></tr><tr><td>Date</td><td>${esc(d.date)}</td></tr>${d.po ? `<tr><td>PO #</td><td>${esc(d.po)}</td></tr>` : ''}<tr><td>Terms</td><td>${esc(d.terms)}</td></tr>${d.due ? `<tr><td>Due</td><td>${esc(d.due)}</td></tr>` : ''}</table></div></header>
+<div class="inv-to"><div><small>BILL TO</small>${esc(d.billTo.name)}<br>${addr(d.billTo)}</div>${d.shipTo ? `<div><small>SHIP TO</small>${esc(d.shipTo)}</div>` : ''}</div>
+<table class="inv-lines"><thead><tr><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Unit price</th><th class="r">Amount</th></tr></thead><tbody>${d.lines.map(([desc, q, u, sku]) => `<tr><td>${esc(sku || '')}</td><td>${esc(desc)}</td><td class="r">${q}</td><td class="r">${m2(u)}</td><td class="r">${m2(q * u)}</td></tr>`).join('')}</tbody></table>
+<table class="inv-tot"><tr><td>Subtotal</td><td>${m2(sub)}</td></tr>${tax ? `<tr><td>Sales tax</td><td>${m2(tax)}</td></tr>` : ''}${ship ? `<tr><td>Freight</td><td>${m2(ship)}</td></tr>` : ''}<tr class="grand"><td>Total due</td><td>$${m2(sub + tax + ship)}</td></tr></table>
+${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${esc(d.footer || 'Thank you for your business.')}${d.remit ? `<br>Please remit to: ${esc(d.remit)}` : ''}</footer></article>`;
+    },
+
+    receipt: (d) => `<article class="doc d-rcpt"><div class="rc-c"><b>${esc(d.store)}</b><br>${addr(d.addr)}<br>${esc(d.phone || '')}</div><div class="rc-row"><span>${esc(d.date)}</span><span>${esc(d.time || '')}</span></div><div class="rc-row"><span>Trans #${esc(d.no)}</span><span>Reg ${esc(d.reg || '02')}</span></div><hr>${d.lines.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${m2(x)}</span></div>`).join('')}<hr>${d.tax ? `<div class="rc-row"><span>TAX</span><span>${m2(d.tax)}</span></div>` : ''}<div class="rc-row big"><span>TOTAL</span><span>${m2(d.lines.reduce((t, [, x]) => t + x, 0) + (d.tax || 0))}</span></div><div class="rc-row"><span>${esc(d.tender)}</span><span></span></div><div class="rc-c rc-foot">${esc(d.footer || 'THANK YOU')}</div></article>`,
+
+    register: (d) => `<article class="doc d-rcpt d-z"><div class="rc-c"><b>${esc(d.store)}</b><br>Z REPORT · ${esc(d.period)}</div><hr>${d.rows.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${typeof x === 'number' ? m2(x) : esc(x)}</span></div>`).join('')}<hr><div class="rc-row big"><span>NET SALES</span><span>${m2(d.net)}</span></div>${d.tenders.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${m2(x)}</span></div>`).join('')}<div class="rc-c rc-foot">Printed ${esc(d.printed)}<br>*** END OF REPORT ***</div></article>`,
+
+    check: (d) => `<article class="doc d-check"><div class="ck-top"><div><b>${esc(d.payer)}</b><br>${addr(d.payerAddr)}</div><div class="ck-no">${esc(d.no)}<br><small>Date</small> <u>${esc(d.date)}</u></div></div><div class="ck-pay"><small>PAY TO THE<br>ORDER OF</small><u>${esc(d.payee)}</u><span class="ck-amt">$ ${m2(d.amount)}</span></div><div class="ck-words"><u>${esc(words(d.amount))}</u> DOLLARS</div><div class="ck-bot"><div><b>${esc(d.bank)}</b><br><small>Memo</small> <u>${esc(d.memo || '')}</u></div><div class="ck-sig">${esc(d.signer || '')}</div></div><div class="ck-micr">&#8282;${esc(d.routing || '044000037')}&#8282; ${esc(d.acct || '2210048837')}&#8283; ${esc(d.no)}</div></article>`,
+
+    deposit: (d) => `<article class="doc d-dep"><header><b>${esc(d.bank)}</b><span>DEPOSIT TICKET</span></header><div class="dp-who">${esc(d.name)}<br><small>Account ${esc(d.acct)}</small></div><table>${d.rows.map(([t, x]) => `<tr><td>${esc(t)}</td><td>${m2(x)}</td></tr>`).join('')}<tr class="grand"><td>Total deposit</td><td>$${m2(d.rows.reduce((t, [, x]) => t + x, 0))}</td></tr></table><div class="dp-date">Date ${esc(d.date)}</div><div class="stamp recv">RECEIVED ${esc(d.date)}</div></article>`,
+
+    legal: (d) => `<article class="doc d-legal"><h2>${esc(d.title)}</h2>${d.sub ? `<div class="lg-sub">${esc(d.sub)}</div>` : ''}${d.paras.map((p, i) => `<p>${d.numbered ? `<b>${i + 1}.</b> ` : ''}${p}</p>`).join('')}<div class="lg-sigs">${d.sigs.map(([n, r]) => `<div><span class="lg-line">${esc(n)}</span><small>${esc(r)}</small></div>`).join('')}</div></article>`,
+
+    cert: (d) => `<article class="doc d-cert"><div class="ct-in"><div class="ct-no">No. ${esc(d.no)}</div><div class="ct-sh">${esc(d.shares.toLocaleString('en-US'))} Shares</div><h2>${esc(d.corp)}</h2><div class="ct-st">Incorporated under the laws of the State of ${esc(d.state)}</div><p>This certifies that <b>${esc(d.holder)}</b> is the owner of <b>${esc(words(d.shares).replace(/ and 00\/100$/, ''))} (${d.shares.toLocaleString('en-US')})</b> fully paid and non-assessable shares of Common Stock${d.par ? `, par value $${m2(d.par)} per share,` : ', without par value,'} of ${esc(d.corp)}.</p><div class="lg-sigs"><div><span class="lg-line">${esc(d.holder)}</span><small>President</small></div><div><span class="lg-line">${esc(d.secretary)}</span><small>Secretary</small></div></div></div></article>`,
+
+    statement: (d) => `<article class="doc d-inv d-stmt" style="--brand:${d.color || '#1e3a5f'}"><header class="inv-top"><div class="inv-logo"><b>${esc(d.bank)}</b><small>Business Checking Statement</small></div><div class="inv-meta"><table><tr><td>Account</td><td>${esc(d.acct)}</td></tr><tr><td>Period</td><td>${esc(d.period)}</td></tr></table></div></header><table class="inv-lines"><thead><tr><th>Date</th><th>Description</th><th class="r">Withdrawals</th><th class="r">Deposits</th><th class="r">Balance</th></tr></thead><tbody>${d.rows.map(([dt, t, w, dep, b]) => `<tr><td>${esc(dt)}</td><td>${esc(t)}</td><td class="r">${w ? m2(w) : ''}</td><td class="r">${dep ? m2(dep) : ''}</td><td class="r">${m2(b)}</td></tr>`).join('')}</tbody></table></article>`,
+  };
+
+  R.schedule = d => `<article class="doc d-legal"><header><b>${esc(d.name)}</b><small>${esc(d.date)}</small></header><h2>${esc(d.title)}</h2><table class="jt">${d.rows.map(([label, value]) => `<tr><td>${esc(label)}</td><td>${esc(typeof value === 'number' ? m2(value) : value)}</td></tr>`).join('')}</table><p>${esc(d.note)}</p></article>`;
+  root.SIMDOCS = {render: (spec) => (R[spec.type] ? R[spec.type](spec) : ''), words, m2};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.SIMDOCS;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>// Ledger Lane office simulation: the student's business as a persistent, seeded
+// simulation. Months are lists of dated inbox items (decisions and source
+// documents). No DOM access so every month can be played in Node.
+(function (root) {
+  const LL = root.LL || (typeof require !== 'undefined' ? require('./lessons-engine.js') : null);
+  const {ACC, checkJE, post, money, r2} = LL;
+
+  function rng(seed) {
+    let a = seed >>> 0 || 1;
+    return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+
+  const CITIES = {
+    columbus: {city: 'Columbus', state: 'OH', zip: '43215', street: 'N. High Street', area: '614'},
+    denver: {city: 'Denver', state: 'CO', zip: '80205', street: 'Larimer Street', area: '303'},
+    raleigh: {city: 'Raleigh', state: 'NC', zip: '27601', street: 'Glenwood Avenue', area: '919'},
+    austin: {city: 'Austin', state: 'TX', zip: '78702', street: 'E. Cesar Chavez Street', area: '512'},
+  };
+
+  const months = [];
+
+  function newGame(o) {
+    const seed = o.seed || Math.floor(Math.random() * 1e9);
+    const st = {
+      v: 1, seed, biz: {type: o.type || 'bike', name: (o.name || '').replace(/[<>]/g,'').trim().slice(0,40), founder: (o.founder || '').replace(/[<>]/g,'').trim().slice(0,40) || 'Owner', city: CITIES[o.city] ? o.city : 'columbus'},
+      m: 0, day: 1, led: {}, journal: [], book: [], done: {}, ch: {}, vars: {}, log: [], first: 0, graded: 0, tries: {}, misses: {},
+    };
+    st.biz.name = st.biz.name || LL.PROFILES[st.biz.type].name;
+    return st;
+  }
+
+  const place = (st) => CITIES[st.biz.city];
+  const prof = (st) => LL.profile({type: st.biz.type, name: st.biz.name, founder: st.biz.founder});
+  const rand = (st, key) => { let h = st.seed; for (const c of key) h = (Math.imul(h, 31) + c.charCodeAt(0)) | 0; return rng(h)(); };
+  const current = (st) => months[st.m];
+  const items = (st) => current(st).items.filter((it) => !it.when || it.when(st)).map((it) => {
+    if (it.day > st.day || it.kind === 'decision') return it;
+    st.paper ||= {};
+    if (!st.paper[it.id]) {
+      const data = {};
+      for (const key of ['doc', 'lines', 'fields']) if (it[key] != null) data[key] = V(it[key], st);
+      st.paper[it.id] = data;
+    }
+    return {...it, ...st.paper[it.id]};
+  });
+  const inbox = (st) => items(st).filter((it) => it.day <= st.day).sort((a, b) => a.day - b.day);
+  const open = (st) => inbox(st).filter((it) => !st.done[it.id]);
+  const V = (x, st) => (typeof x === 'function' ? x(st) : x);
+  const want = (st, it) => { const l = V(it.lines, st); return l ? l.filter((x) => r2(x[2]) !== 0).map(([a, s, x]) => [a, s, r2(x)]) : null; };
+
+  function dateOf(st, day) {
+    const mo = current(st).start;
+    return new Date(Date.UTC(mo[0], mo[1] - 1, day));
+  }
+  const fmtDate = (st, day, style = 'long') => dateOf(st, day).toLocaleDateString('en-US', {timeZone: 'UTC', ...(style === 'long' ? {month: 'long', day: 'numeric', year: 'numeric'} : style === 'short' ? {month: '2-digit', day: '2-digit', year: 'numeric'} : {weekday: 'long', month: 'long', day: 'numeric'})});
+
+  function record(st, it, lines) {
+    if (lines && lines.length) {
+      post(st, lines, it.id);
+      st.book.push({m: st.m, date: fmtDate(st, it.day, 'short'), day: it.day, id: it.id, memo: V(it.memo, st) || V(it.subject, st), lines});
+    }
+    st.done[it.id] = true;
+    if (it.after) it.after(st);
+  }
+
+  function grade(st, it, ok) {
+    if (st.tries[it.id] == null) { st.tries[it.id] = 0; st.graded++; if (ok) st.first++; }
+    st.tries[it.id]++;
+    if (!ok) st.misses[it.id] = (st.misses[it.id] || 0) + 1;
+  }
+
+  // action: {choice:{qid:value}} | {rows:[{a,d,c}]} | {noEntry:true} | {reveal:true}
+  function handle(st, id, action) {
+    const it = items(st).find((x) => x.id === id);
+    if (!it || st.done[id] || it.day > st.day) return {ok: false, text: 'This item is not available.'};
+    if (it.kind === 'decision') {
+      const qs = V(it.q, st), ch = action.choice || {};
+      if (qs.some((q) => !q.opts.some((o) => o.v === ch[q.id]))) return {ok: false, text: 'Choose a reply before sending.'};
+      qs.forEach((q) => (st.ch[q.id] = ch[q.id]));
+      if (it.apply) it.apply(st, ch);
+      st.log.push({day: it.day, text: V(it.outcome, st) || ''});
+      record(st, it, want(st, it));
+      return {ok: true, done: true, text: V(it.outcome, st) || ''};
+    }
+    if (it.kind === 'work') {
+      const fields = V(it.fields, st), values = action.values || {};
+      const ok = fields.every((f) => String(values[f.id] ?? '').trim() !== '' && Math.abs(LL.num(values[f.id]) - f.value) < 0.015);
+      grade(st, it, ok);
+      if (ok) { record(st, it, null); return {ok: true, done: true, text: 'Filed.'}; }
+      return {ok: false, text: 'The worksheet does not tie to the supporting records. Review the amounts before filing.'};
+    }
+    const w = want(st, it);
+    if (action.reveal) { if ((st.misses[id] || 0) < 2) return {ok: false, text: 'Try at least twice before you look at the answer.'}; return {ok: true, reveal: w}; }
+    if (action.noEntry) {
+      const ok = !w;
+      grade(st, it, ok);
+      if (ok) { record(st, it, null); return {ok: true, done: true, text: V(it.why, st) || 'Correct. Nothing changed in the accounting equation, so there is nothing to record.'}; }
+      return {ok: false, text: 'This document does change the business’s accounts. Record it.'};
+    }
+    if (!w) { grade(st, it, false); return {ok: false, text: V(it.hint, st) || 'Look again: did anything actually change hands? Not every document is a transaction.'}; }
+    const r = checkJE(st, action.rows || [], w);
+    grade(st, it, r.ok);
+    if (r.ok) { record(st, it, w); return {ok: true, done: true, text: V(it.why, st) || 'Posted.'}; }
+    return {ok: false, text: r.text + (V(it.hint, st) && st.misses[id] > 1 ? ' ' + V(it.hint, st) : '')};
+  }
+
+  const nextDay = (st) => { const d = items(st).filter((it) => it.day > st.day).map((it) => it.day); return d.length ? Math.min(...d) : null; };
+  function advance(st) {
+    if (open(st).length) return {ok: false, text: 'Finish everything in your inbox before you move on.'};
+    const d = nextDay(st);
+    if (d == null) { st.day = current(st).days; return {ok: true, monthEnd: true}; }
+    st.day = d;
+    return {ok: true, day: d, arrived: open(st).map((x) => x.id)};
+  }
+
+  const bal = (st, a) => LL.bal(st, a);
+  function summary(st) {
+    const sum = (t) => Object.keys(st.led).filter((a) => ACC[a][1] === t).reduce((s, a) => s + bal(st, a), 0);
+    const rev = sum('R') - sum('XR'), exp = sum('E');
+    return {cash: bal(st, 'cash'), revenue: r2(rev), expenses: r2(exp), netIncome: r2(rev - exp), first: st.first, graded: st.graded, score: st.graded ? Math.round((100 * st.first) / st.graded) : 0};
+  }
+  function trialBalance(st) {
+    return Object.keys(ACC).filter((a) => st.led[a] && bal(st, a)).map((a) => { const b = bal(st, a) * (LL.dn(a) ? 1 : -1); return [a, ACC[a][0], Math.max(b, 0), Math.max(-b, 0)]; });
+  }
+
+  function complete(st) {
+    if (open(st).length || nextDay(st) != null) return false;
+    st.results ||= {};
+    const base = st.mark || {first: 0, graded: 0};
+    const first = st.first - base.first, graded = st.graded - base.graded;
+    st.results[current(st).lessonId || 'ch2'] ||= {first, graded, score: graded ? Math.round(100 * first / graded) : 0};
+    st.ended = true;
+    return true;
+  }
+
+  function nextMonth(st) {
+    if (!st.ended || !months[st.m + 1]) return false;
+    st.m++; st.day = 1; st.ended = false; st.review = false;
+    st.mark = {first: st.first, graded: st.graded};
+    st.opening = JSON.parse(JSON.stringify(st.led));
+    return true;
+  }
+
+  root.SIM = {rng, CITIES, months, newGame, current, inbox, open, handle, advance, nextDay, summary, trialBalance, want, V, place, prof, rand, fmtDate, money, r2, bal, complete, nextMonth};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.SIM;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>// Month 1, Opening month: the owner incorporates, finds a location, borrows,
+// equips the business and opens for customers. Chapter 2 topics: recording
+// transactions, journal entries, posting and the trial balance.
+(function (root) {
+  const SIM = root.SIM || require('./sim-engine.js');
+  const {place, prof, rand, fmtDate, r2} = SIM;
+
+  const KIT = {
+    bike: {corpName: 'Harbor Point Couriers', corpDom: 'harborpointcouriers.com', corpWhat: 'a bike courier company', price: 85, base: 38, svc: 'Tune-up', corpQty: 14, corpDesc: 'Fleet tune-up, cargo bike', newEq: ['Shop equipment package: 2 repair stands, truing stand, wheel tools', 11800], usedEq: ['Used shop equipment (repair stands, truing stand, hand tools)', 6400], eqVendor: {name: 'Lakeshore Cycle Distributors', tagline: 'Wholesale bicycle parts & shop equipment', color: '#1f4e79'}, supVendor: {name: 'Velo Parts Supply Co.', tagline: 'Parts · Lubricants · Shop consumables', color: '#7a2e1f'}, sup: [['Chain lubricant, 16 oz', 24, 11.5, 'LUB-16'], ['Inner tubes, assorted sizes', 60, 6.25, 'TUB-AS'], ['Brake & shift cable kits', 40, 9.8, 'CBL-KT'], ['Shop rags, 50 lb box', 2, 48, 'RAG-50']], seller: 'Dan Kowalski (closing his shop)'},
+    fitness: {corpName: 'Whitaker & Lowe LLP', corpDom: 'whitakerlowe.com', corpWhat: 'a law firm', price: 120, base: 30, svc: 'Class pack (10 classes)', corpQty: 12, corpDesc: 'On-site group training session', newEq: ['Studio package: rack, benches, dumbbell set 5–50 lb, flooring', 12400], usedEq: ['Used studio equipment (rack, benches, dumbbells)', 6900], eqVendor: {name: 'Ironclad Fitness Equipment', tagline: 'Commercial strength & cardio', color: '#203a43'}, supVendor: {name: 'CleanCore Facility Supply', tagline: 'Janitorial · Towels · Studio supplies', color: '#2e5e4e'}, sup: [['Microfiber gym towels, dozen', 12, 21, 'TWL-12'], ['Equipment disinfectant, gallon', 10, 18.75, 'DIS-1G'], ['Resistance bands, set', 15, 22, 'BND-ST'], ['Hand sanitizer refills', 8, 14.5, 'SAN-RF']], seller: 'Coastal Fitness (gym closing)'},
+    landscape: {corpName: 'Maple Court Apartments', corpDom: 'maplecourtliving.com', corpWhat: 'an apartment community', price: 240, base: 14, svc: 'Lawn & bed maintenance visit', corpQty: 12, corpDesc: 'Common-area grounds maintenance', newEq: ['Commercial mower 52", string trimmers (2), backpack blower', 12600], usedEq: ['Used commercial mower 48", trimmer, blower', 6200], eqVendor: {name: 'Prairie Turf & Equipment', tagline: 'Outdoor power equipment sales & service', color: '#2f5d2f'}, supVendor: {name: 'Greenway Landscape Supply', tagline: 'Mulch · Seed · Fuel · Hardware', color: '#5b4a1f'}, sup: [['Trimmer line, 5 lb spool', 6, 42, 'TL-5'], ['2-cycle oil mix, case', 4, 64, 'OIL-2C'], ['Contractor bags, case of 50', 10, 27.5, 'BAG-50'], ['Grass seed, 50 lb', 6, 89, 'SD-50']], seller: 'Marty Lyle (retiring landscaper)'},
+    photo: {corpName: 'The Grandview Estate', corpDom: 'grandviewestate.com', corpWhat: 'a wedding and event venue', price: 275, base: 12, svc: 'Portrait session', corpQty: 12, corpDesc: 'Staff headshot session', newEq: ['Camera body, 2 lenses, strobe lighting kit, backdrop system', 11900], usedEq: ['Used camera body, lens, lighting kit', 6600], eqVendor: {name: 'Brightline Camera Supply', tagline: 'Pro photo & lighting', color: '#3a2f5b'}, supVendor: {name: 'Archive Print & Paper', tagline: 'Fine-art paper · Mats · Media', color: '#5b2f3a'}, sup: [['Lustre photo paper 8x10, 250 sh', 6, 96, 'PPR-810'], ['SD cards 128 GB', 8, 32, 'SD-128'], ['Seamless backdrop paper, 9 ft', 4, 79, 'BKD-9'], ['Mat boards, pack of 25', 4, 45, 'MAT-25']], seller: 'Rita Osei (upgrading her studio)'},
+  };
+  const ACCTS = ['cash', 'ar', 'supplies', 'prepaidrent', 'equip', 'ap', 'np', 'unearned', 'cs', 'div', 'rev', 'rent', 'adv', 'util', 'repairs', 'suppliesexp', 'wages', 'intexp', 'misc'];
+  const kit = (st) => KIT[st.biz.type];
+  const loc = (st) => ({prime: {street: '1180 ' + place(st).street, suite: 'Suite B', rent: 3200, traffic: 1.25, desc: 'corner storefront with heavy foot traffic'}, side: {street: '418 Willow Avenue', suite: 'Unit 3', rent: 1800, traffic: 0.9, desc: 'side-street unit, quieter but half a mile from the main corridor'}})[st.ch.site || 'side'];
+  const me = (st) => ({name: st.biz.name + ', Inc.', street: loc(st).street + (st.ch.site ? ', ' + loc(st).suite : ''), city: place(st).city, state: place(st).state, zip: place(st).zip});
+  const at = (st, street) => ({street, city: place(st).city, state: place(st).state, zip: place(st).zip});
+  const phone = (st, n) => `(${place(st).area}) 555-${String(n).padStart(4, '0')}`;
+  const email = (st) => st.biz.founder.toLowerCase().replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') + '@' + st.biz.name.toLowerCase().replace(/[^a-z]/g, '') + '.com';
+  const d = (st, day, s) => fmtDate(st, day, s);
+  const priceOf = (st) => r2(kit(st).price * ({low: 0.85, std: 1, high: 1.2})[st.ch.price || 'std']);
+  const mkt = {none: [0, 1, 'No paid marketing'], flyers: [350, 1.08, 'Printed flyers and door hangers'], social: [900, 1.2, 'Targeted social media ads']};
+  function week(st, w) {
+    const k = kit(st), demand = ({low: 1.25, std: 1, high: 0.78})[st.ch.price || 'std'];
+    const n = Math.max(3, Math.round(k.base * demand * loc(st).traffic * mkt[st.ch.mkt || 'none'][1] * (0.88 + 0.24 * rand(st, 'wk' + w)) * (w === 1 ? 0.75 : 1)));
+    const gross = r2(n * priceOf(st)), cash = r2(Math.round(gross * (0.28 + 0.1 * rand(st, 'cs' + w)) / 5) * 5);
+    return {n, gross, cash, card: r2(gross - cash)};
+  }
+  const z = (st, w, d1, d2, day) => { const x = week(st, w); return {type: 'register', store: st.biz.name.toUpperCase(), period: `${d(st, d1, 'short')} – ${d(st, d2, 'short')}`, rows: [['Transactions', String(x.n)], [kit(st).svc + ' @ ' + priceOf(st).toFixed(2), x.gross], ['Discounts', 0], ['Refunds', 0]], net: x.gross, tenders: [['Cash', x.cash], ['Credit/debit card', x.card]], printed: d(st, day, 'short') + ' 9:14 PM'}; };
+  const corpTotal = (st) => r2(kit(st).corpQty * priceOf(st) * 0.9);
+  const equip = (st) => (st.ch.equip === 'new' ? kit(st).newEq : kit(st).usedEq);
+  const supTotal = (st) => r2(kit(st).sup.reduce((t, [, q, u]) => t + q * u, 0));
+  const repairCost = (st) => (st.ch.equip === 'used' ? 640 : 0);
+  const bank = 'Heartland Community Bank';
+
+  const items = [
+    {id: 'm1-invest', day: 1, kind: 'decision', from: 'Ramsey & Cole, Attorneys', subject: 'Your incorporation is complete',
+      doc: (st) => ({type: 'email', subject: 'Your incorporation is complete', fromName: 'Karen Ramsey', from: 'kramsey@ramseycole-law.com', to: email(st), date: d(st, 1, 'day') + ', 9:02 AM',
+        body: `<p>${st.biz.founder.split(' ')[0]},</p><p>The Secretary of State approved the articles of incorporation for <b>${st.biz.name}, Inc.</b> this morning. The corporation is authorized to issue 100,000 shares of no-par common stock.</p><p>Before you open the business bank account, decide how much of your own money you are putting in. You will receive one share for every $10 you invest. Keep in mind this is the cushion that pays rent and equipment until customers start paying you.</p><p>Let me know the amount and I will prepare the stock certificate.</p>`, sig: 'Karen Ramsey<br>Ramsey &amp; Cole, Attorneys at Law', attach: ['Articles_of_Incorporation.pdf']}),
+      q: [{id: 'invest', label: 'How much of your savings will you invest?', opts: [{v: 20000, t: '$20,000', d: '2,000 shares. Leaves you more personal savings, but a thin cushion.'}, {v: 30000, t: '$30,000', d: '3,000 shares. A moderate cushion.'}, {v: 40000, t: '$40,000', d: '4,000 shares. Most of your savings, the most room for mistakes.'}]}],
+      outcome: (st) => `You invested $${st.ch.invest.toLocaleString()} in exchange for ${(st.ch.invest / 10).toLocaleString()} shares.`},
+    {id: 'm1-stock', day: 1, kind: 'doc', when: (st) => st.ch.invest > 0, from: 'Heartland Community Bank', subject: 'Deposit receipt: opening deposit', accts: ACCTS,
+      doc: (st) => [{type: 'cert', no: '001', shares: st.ch.invest / 10, corp: st.biz.name + ', Inc.', state: ({OH: 'Ohio', CO: 'Colorado', NC: 'North Carolina', TX: 'Texas'})[place(st).state], holder: st.biz.founder, secretary: 'Karen Ramsey', par: 0},
+        {type: 'deposit', bank, name: st.biz.name + ', Inc.', acct: '••••8837', rows: [['Check #1043 – ' + st.biz.founder, st.ch.invest]], date: d(st, 1, 'short')}],
+      lines: (st) => [['cash', 'dr', st.ch.invest], ['cs', 'cr', st.ch.invest]], memo: 'Issued common stock for cash',
+      why: 'The corporation received cash and gave the owner shares. Owners’ investments go to Common Stock, not revenue.'},
+    {id: 'm1-site', day: 2, kind: 'decision', from: 'Alana Brooks, Brooks Commercial Realty', subject: 'Two spaces that fit what you described',
+      doc: (st) => ({type: 'email', subject: 'Two spaces that fit what you described', fromName: 'Alana Brooks', from: 'abrooks@brookscre.com', to: email(st), date: d(st, 2, 'day') + ', 8:41 AM',
+        body: `<p>Hi ${st.biz.founder.split(' ')[0]}, here are the two I mentioned on the phone.</p><p><b>1180 ${place(st).street}, Suite B.</b> Corner storefront, about 1,400 sq ft, large windows, steady foot traffic all day. $3,200/month.</p><p><b>418 Willow Avenue, Unit 3.</b> About 1,200 sq ft, parking in back, half a mile off the main corridor so most customers will need to find you. $1,800/month.</p><p>Either landlord wants the first three months’ rent at signing. I can have a lease ready tomorrow.</p>`, sig: 'Alana Brooks<br>Brooks Commercial Realty · ' + phone(st, 2210)}),
+      q: [{id: 'site', label: 'Which space will you lease?', opts: [{v: 'prime', t: '1180 ' + 'Main corridor corner · $3,200/mo', d: 'More walk-in customers, higher fixed cost.'}, {v: 'side', t: '418 Willow Ave · $1,800/mo', d: 'Lower rent, fewer people find you.'}]}],
+      outcome: (st) => `You chose ${loc(st).street}.`},
+    {id: 'm1-lease', day: 3, kind: 'doc', from: 'Brooks Commercial Realty', subject: 'Signed lease and rent receipt', accts: ACCTS,
+      doc: (st) => [{type: 'legal', title: 'Commercial Lease Agreement', sub: `${loc(st).street}, ${loc(st).suite} · ${place(st).city}, ${place(st).state}`, numbered: true,
+        paras: [`<b>Parties.</b> This lease is between Willow &amp; High Properties LLC (“Landlord”) and ${st.biz.name}, Inc. (“Tenant”).`, `<b>Term.</b> Thirty-six months beginning ${d(st, 1)}.`, `<b>Rent.</b> $${loc(st).rent.toLocaleString()}.00 per month, due on the first of each month.`, `<b>Advance rent.</b> Tenant pays rent for the first three months, $${(loc(st).rent * 3).toLocaleString()}.00, at signing. Receipt is acknowledged below.`, '<b>Use.</b> Tenant will use the premises only for the business described in its application.'],
+        sigs: [['M. Delgado', 'Landlord'], [st.biz.founder, 'Tenant, President']]},
+        {type: 'receipt', store: 'Willow & High Properties LLC', addr: at(st, '77 E. Broad Street, Floor 4'), date: d(st, 3, 'short'), time: '11:20 AM', no: '20931', lines: [['Advance rent, months 1–3', loc(st).rent * 3]], tender: 'Business check #101'}],
+      lines: (st) => [['prepaidrent', 'dr', loc(st).rent * 3], ['cash', 'cr', loc(st).rent * 3]], memo: 'Paid three months of rent in advance',
+      hint: 'You paid for three months you have not used yet. That is an asset until the months pass.', why: 'Rent paid for future months is an asset, Prepaid Rent. It becomes Rent Expense as each month is used.'},
+    {id: 'm1-loan', day: 4, kind: 'decision', from: 'Heartland Community Bank', subject: 'Small business loan approval',
+      doc: (st) => ({type: 'email', subject: 'Small business loan approval', fromName: 'Greg Whitfield', from: 'gwhitfield@heartlandcb.com', to: email(st), date: d(st, 4, 'day') + ', 10:15 AM',
+        body: `<p>Good news: the credit committee approved ${st.biz.name}, Inc. for a term loan of up to <b>$25,000</b> at <b>7.5%</b> annual interest, repaid over three years.</p><p>You don’t have to take the full amount. Interest only accrues on what you borrow, but having cash on hand may matter if the first few months are slow.</p><p>Reply with the amount and I will send the note for signature.</p>`, sig: 'Greg Whitfield<br>Business Banking Officer'}),
+      q: [{id: 'loan', label: 'How much will you borrow?', opts: [{v: 0, t: 'Nothing', d: 'No interest, no debt. All risk sits on your investment.'}, {v: 15000, t: '$15,000', d: 'About $94 a month in interest.'}, {v: 25000, t: '$25,000', d: 'About $156 a month in interest. The most breathing room.'}]}],
+      outcome: (st) => (st.ch.loan ? `You borrowed $${st.ch.loan.toLocaleString()} from ${bank}.` : 'You declined the loan.')},
+    {id: 'm1-note', day: 5, kind: 'doc', when: (st) => st.ch.loan > 0, from: 'Heartland Community Bank', subject: 'Promissory note and loan proceeds', accts: ACCTS,
+      doc: (st) => [{type: 'legal', title: 'Promissory Note', sub: `$${st.ch.loan.toLocaleString()}.00 · ${place(st).city}, ${place(st).state} · ${d(st, 5)}`, paras: [`For value received, ${st.biz.name}, Inc. (“Borrower”) promises to pay to the order of ${bank} the principal sum of <b>${SIMDOCS_words(st.ch.loan)} Dollars</b>, with interest at 7.5% per year on the unpaid balance.`, 'Principal and interest are payable in 36 monthly installments beginning on the first day of the second month after the date of this note.', 'Loan proceeds will be deposited to Borrower’s business checking account ••••8837.'], sigs: [[st.biz.founder, 'President, ' + st.biz.name + ', Inc.']]}],
+      lines: (st) => [['cash', 'dr', st.ch.loan], ['np', 'cr', st.ch.loan]], memo: 'Borrowed from bank on a note', why: 'You received cash and now owe the bank. A signed note is recorded as Notes Payable.'},
+    {id: 'm1-equipq', day: 6, kind: 'decision', from: (st) => kit(st).eqVendor.name, subject: 'New package or used equipment?',
+      doc: (st) => [{type: 'invoice', title: 'QUOTE', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: 'Q-' + (31000 + Math.floor(rand(st, 'q') * 900)), date: d(st, 6, 'short'), terms: 'Valid 14 days', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], footer: 'Includes delivery, setup and a 2-year parts warranty.'},
+        {type: 'text', fromName: kit(st).seller, phone: phone(st, 8812), date: d(st, 6, 'day'), msgs: [['them', `Saw your post. I can let everything go for $${kit(st).usedEq[1].toLocaleString()}, you pick it up.`], ['them', 'It all works. A couple pieces are a few years old, no warranty though.']]}],
+      q: [{id: 'equip', label: 'Which equipment will you buy?', opts: [{v: 'new', t: () => 'New package', d: 'Warranty and reliable, much more cash out the door.'}, {v: 'used', t: 'Used from a private seller', d: 'Saves cash now. Older equipment, no warranty.'}]}],
+      outcome: (st) => (st.ch.equip === 'new' ? 'You ordered the new equipment package.' : 'You bought the used equipment.')},
+    {id: 'm1-equip', day: 7, kind: 'doc', from: (st) => (st.ch.equip === 'new' ? kit(st).eqVendor.name : kit(st).seller), subject: 'Equipment bill of sale, paid', accts: ACCTS,
+      doc: (st) => (st.ch.equip === 'new'
+        ? {type: 'invoice', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: String(88000 + Math.floor(rand(st, 'e') * 900)), date: d(st, 7, 'short'), terms: 'Paid at delivery', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], paid: d(st, 7, 'short') + ' CK#102'}
+        : {type: 'receipt', store: 'Bill of Sale', addr: at(st, 'Private sale'), date: d(st, 7, 'short'), no: '—', lines: [[kit(st).usedEq[0], kit(st).usedEq[1]]], tender: 'Business check #102', footer: 'Sold as is. Seller: ' + kit(st).seller}),
+      lines: (st) => [['equip', 'dr', equip(st)[1]], ['cash', 'cr', equip(st)[1]]], memo: 'Purchased equipment for cash', why: 'Equipment is a long-term asset. One asset went up and another, Cash, went down.'},
+    {id: 'm1-quote', day: 8, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Supplier price quote', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', title: 'PRICE QUOTE', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: 'EST-4471', date: d(st, 8, 'short'), terms: 'Quote valid 30 days', billTo: me(st), lines: kit(st).sup, footer: 'This is a price quote, not a bill. Reply to place your order.'}),
+      lines: null, why: 'A quote is only a price offer. Nothing was received, paid or owed yet, so there is no journal entry.', hint: 'Read the document type. Has anything been delivered, paid or promised yet?'},
+    {id: 'm1-supplies', day: 9, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Invoice for supplies delivered', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: '61-20' + Math.floor(100 + rand(st, 's') * 800), date: d(st, 9, 'short'), po: 'PO-0001', terms: 'Net 30', due: d(st, 9 + 30 > 30 ? 9 : 9, 'short').replace(/^(\d+)\//, (m, x) => String(+x + 1).padStart(2, '0') + '/'), billTo: me(st), lines: kit(st).sup, remit: kit(st).supVendor.name + ', PO Box 1180'}),
+      lines: (st) => [['supplies', 'dr', supTotal(st)], ['ap', 'cr', supTotal(st)]], memo: 'Purchased supplies on account', hint: 'Look at the terms. Did you pay today, or do you owe the vendor?', why: 'You received supplies now and owe the vendor in 30 days: Supplies up, Accounts Payable up.'},
+    {id: 'm1-market', day: 10, kind: 'decision', from: 'Jordan Pike', subject: 'Set your prices and marketing before you open',
+      doc: (st) => ({type: 'email', subject: 'Opening Monday: prices and marketing', fromName: 'Jordan Pike (your part-time help)', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 10, 'day') + ', 7:55 PM',
+        body: `<p>Shop’s set up and looks great. Two things before Monday:</p><p>1. What are we charging for a ${kit(st).svc.toLowerCase()}? The going rate around here is about $${kit(st).price}. Cheaper brings in more people, pricier means fewer customers but more per sale.</p><p>2. Are we doing any marketing? Northside Print quoted $350 for flyers and door hangers. A local agency will run targeted social ads for $900 this month.</p>`}),
+      q: (st) => [{id: 'price', label: `Price per ${kit(st).svc.toLowerCase()}`, opts: [{v: 'low', t: `$${r2(kit(st).price * 0.85)}`, d: 'Undercut the market. More customers.'}, {v: 'std', t: `$${kit(st).price}`, d: 'Market rate.'}, {v: 'high', t: `$${r2(kit(st).price * 1.2)}`, d: 'Premium. Fewer customers, more per sale.'}]}, {id: 'mkt', label: 'Marketing this month', opts: [{v: 'none', t: 'None', d: 'Word of mouth only.'}, {v: 'flyers', t: 'Flyers · $350', d: 'Small boost nearby.'}, {v: 'social', t: 'Social ads · $900', d: 'Largest boost.'}]}],
+      outcome: (st) => `Price set at $${priceOf(st)}. Marketing: ${mkt[st.ch.mkt][2].toLowerCase()}.`},
+    {id: 'm1-ad', day: 11, kind: 'doc', when: (st) => st.ch.mkt && st.ch.mkt !== 'none', from: (st) => (st.ch.mkt === 'social' ? 'Lantern Digital Marketing' : 'Northside Print & Sign'), subject: 'Marketing invoice, paid by card', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: st.ch.mkt === 'social' ? {name: 'Lantern Digital Marketing', tagline: 'Local search & social advertising', color: '#8a4b0f', ...at(st, '31 Gay Street, Suite 400'), phone: phone(st, 7020)} : {name: 'Northside Print & Sign', tagline: 'Printing · Signs · Mailers', color: '#0f4c5c', ...at(st, '2045 Summit Street'), phone: phone(st, 6119)}, no: String(5100 + Math.floor(rand(st, 'a') * 800)), date: d(st, 11, 'short'), terms: 'Due on receipt', billTo: me(st), lines: [[mkt[st.ch.mkt][2] + ', opening month', 1, mkt[st.ch.mkt][0], st.ch.mkt === 'social' ? 'SOC-30' : 'FLY-2K']], paid: d(st, 11, 'short') + ' VISA ••4471'}),
+      lines: (st) => [['adv', 'dr', mkt[st.ch.mkt][0]], ['cash', 'cr', mkt[st.ch.mkt][0]]], memo: 'Paid for advertising', why: 'Advertising for this month is used up now, so it is an expense. The business debit card takes cash out of the bank immediately.'},
+    {id: 'm1-hire', day: 12, kind: 'doc', from: 'Jordan Pike', subject: 'Signed offer letter', accts: ACCTS,
+      doc: (st) => ({type: 'email', subject: 'Re: Offer letter', fromName: 'Jordan Pike', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 12, 'day') + ', 6:30 PM', body: `<p>Signed and attached. $17/hour, about 20 hours a week, first paycheck on the 1st of next month like we talked about. Excited to get going!</p>`, attach: ['Offer_Letter_Signed.pdf']}),
+      lines: null, why: 'Signing an offer letter is an agreement about the future. No work has been done and nothing is owed yet, so nothing is recorded.', hint: 'Has Jordan worked any hours yet, or been paid?'},
+    {id: 'm1-z1', day: 15, kind: 'doc', from: 'Shop register', subject: 'Week 1 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 1, 8, 14, 14),
+      lines: (st) => [['cash', 'dr', week(st, 1).gross], ['rev', 'cr', week(st, 1).gross]], memo: 'Cash and card sales, week 1', hint: 'Card sales are deposited to your bank in a day or two, so treat them as cash.', why: 'You earned revenue by serving customers and collected the money. Card payments settle into the bank, so they are cash too.'},
+    {id: 'm1-corp', day: 16, kind: 'decision', from: (st) => kit(st).corpName, subject: 'Can you bill us monthly?',
+      doc: (st) => ({type: 'email', subject: 'Service for our team, invoiced?', fromName: 'Priya Natarajan', from: 'pnatarajan@' + kit(st).corpDom, to: email(st), date: d(st, 16, 'day') + ', 2:12 PM', body: `<p>Hello, I manage operations at ${kit(st).corpName}, ${kit(st).corpWhat} a few blocks from you. We’d like ${kit(st).corpQty} × “${kit(st).corpDesc.toLowerCase()}” this month at a 10% volume discount, $${corpTotal(st).toLocaleString()} total.</p><p>Our accounts payable department pays vendor invoices in 30 days. Could you invoice us when the work is done?</p>`, sig: 'Priya Natarajan<br>Operations Manager, ' + kit(st).corpName.replace(/&/g, '&amp;')}),
+      q: [{id: 'corp', label: 'Will you take the job on credit?', opts: [{v: 'yes', t: 'Accept and invoice them', d: 'A big sale, but you wait for the money.'}, {v: 'no', t: 'Decline politely', d: 'Keep the schedule open for walk-in customers who pay now.'}]}],
+      outcome: (st) => (st.ch.corp === 'yes' ? 'You accepted the job on 30-day terms.' : 'You declined the job.')},
+    {id: 'm1-corpinv', day: 19, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: 'Your invoice #1001', subject: 'Invoice you sent for completed work', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: {name: st.biz.name + ', Inc.', tagline: prof(st).type, color: '#13294b', ...at(st, me(st).street), phone: phone(st, 1001)}, no: '1001', date: d(st, 19, 'short'), terms: 'Net 30', billTo: {name: kit(st).corpName, ...at(st, '500 Harbor Point Plaza')}, lines: [[kit(st).corpDesc, kit(st).corpQty, r2(priceOf(st) * 0.9), 'SVC']], footer: 'Thank you. Payment due within 30 days.'}),
+      lines: (st) => [['ar', 'dr', corpTotal(st)], ['rev', 'cr', corpTotal(st)]], memo: 'Billed customer for services', hint: 'You finished the work but haven’t been paid. What do they owe you?', why: 'Revenue is recorded when the work is done, even before payment. The customer now owes you: Accounts Receivable.'},
+    {id: 'm1-util', day: 20, kind: 'doc', from: 'Metro Power & Light', subject: 'Electric bill, due next month', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', title: 'UTILITY BILL', vendor: {name: 'Metro Power & Light', tagline: 'Account 4402-118-' + (300 + Math.floor(rand(st, 'u') * 600)), color: '#0b5394', ...at(st, 'PO Box 2400'), phone: '1-800-555-0144'}, no: 'Statement ' + d(st, 20, 'short'), date: d(st, 20, 'short'), terms: 'Due in 21 days', billTo: me(st), lines: [['Electric service ' + d(st, 1, 'short') + ' – ' + d(st, 19, 'short') + ', 1,812 kWh', 1, st.ch.site === 'prime' ? 386.4 : 312.75, 'E-COM']], footer: 'Pay online, by phone, or by mail.'}),
+      lines: (st) => [['util', 'dr', st.ch.site === 'prime' ? 386.4 : 312.75], ['ap', 'cr', st.ch.site === 'prime' ? 386.4 : 312.75]], memo: 'Received utility bill', hint: 'The electricity has already been used, but you haven’t paid yet.', why: 'You used the electricity this month, so it is this month’s expense even though you pay next month.'},
+    {id: 'm1-repair', day: 21, kind: 'doc', when: (st) => st.ch.equip === 'used', from: 'Jordan Pike', subject: 'Equipment repair receipt', accts: ACCTS,
+      doc: (st) => [{type: 'text', fromName: 'Jordan Pike', phone: phone(st, 7781), date: d(st, 21, 'day') + ', 10:02 AM', msgs: [['them', 'Bad news, one of the used machines died this morning. Had to call the repair guy, he’s here now.'], ['me', 'Ugh. Pay him with the business card.']]}, {type: 'receipt', store: 'Ace Mobile Equipment Repair', addr: at(st, '88 Cleveland Avenue'), date: d(st, 21, 'short'), time: '12:47 PM', no: '7719', lines: [['Service call', 95], ['Labor 2.5 hr @ 98.00', 245], ['Replacement parts', 300]], tender: 'DEBIT ••4471 APPROVED'}],
+      lines: (st) => [['repairs', 'dr', repairCost(st)], ['cash', 'cr', repairCost(st)]], memo: 'Paid for equipment repair', hint: 'A repair restores the equipment; it doesn’t make it more valuable.', why: 'Ordinary repairs keep equipment working and are expensed. They don’t add to the equipment’s cost.'},
+    {id: 'm1-z2', day: 22, kind: 'doc', from: 'Shop register', subject: 'Week 2 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 2, 15, 21, 21),
+      lines: (st) => [['cash', 'dr', week(st, 2).gross], ['rev', 'cr', week(st, 2).gross]], memo: 'Cash and card sales, week 2', why: 'Revenue earned and collected this week.'},
+    {id: 'm1-custpay', day: 26, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: (st) => kit(st).corpName, subject: (st) => 'Check from ' + kit(st).corpName, accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: kit(st).corpName, payerAddr: at(st, '500 Harbor Point Plaza'), no: '20877', date: d(st, 26, 'short'), payee: st.biz.name + ', Inc.', amount: r2(corpTotal(st) / 2), bank: 'Fifth Lakes Bank', memo: 'Inv 1001 partial', signer: 'P. Natarajan'}),
+      lines: (st) => [['cash', 'dr', r2(corpTotal(st) / 2)], ['ar', 'cr', r2(corpTotal(st) / 2)]], memo: 'Collected part of customer invoice', hint: 'You already recorded the revenue when you sent the invoice.', why: 'The revenue was recorded on day 19. Collecting the money only turns the receivable into cash.'},
+    {id: 'm1-paysup', day: 27, kind: 'doc', from: 'Check register', subject: 'Check #103 to your supplier', accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: st.biz.name + ', Inc.', payerAddr: me(st), no: '103', date: d(st, 27, 'short'), payee: kit(st).supVendor.name, amount: supTotal(st), bank, memo: 'Inv 61-20 · PO-0001', signer: st.biz.founder}),
+      lines: (st) => [['ap', 'dr', supTotal(st)], ['cash', 'cr', supTotal(st)]], memo: 'Paid supplier on account', hint: 'The supplies were recorded when they arrived. What does this check settle?', why: 'Paying a bill you already recorded reduces Accounts Payable. No new expense.'},
+    {id: 'm1-z3', day: 29, kind: 'doc', from: 'Shop register', subject: 'Week 3 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 3, 22, 28, 28),
+      lines: (st) => [['cash', 'dr', week(st, 3).gross], ['rev', 'cr', week(st, 3).gross]], memo: 'Cash and card sales, week 3', why: 'Revenue earned and collected this week.'},
+    {id: 'm1-div', day: 30, kind: 'decision', from: 'Karen Ramsey, Ramsey & Cole', subject: 'Month-end: pay yourself a dividend?',
+      doc: (st) => ({type: 'email', subject: 'Month-end: pay yourself a dividend?', fromName: 'Karen Ramsey', from: 'kramsey@ramseycole-law.com', to: email(st), date: d(st, 30, 'day') + ', 4:05 PM', body: `<p>As the sole director you can declare a cash dividend to yourself as the shareholder. It comes out of the company’s cash, not its expenses. Many owners skip it until the business is steady; rent and the loan still need to be paid next month.</p><p>Current bank balance: <b>$${SIM.bal(st, 'cash').toLocaleString('en-US', {minimumFractionDigits: 2})}</b>.</p>`}),
+      q: (st) => [{id: 'div', label: 'Dividend to shareholders', opts: [{v: 0, t: 'No dividend', d: 'Keep the cash in the business.'}, {v: 500, t: '$500', d: 'A small reward for month one.'}, {v: 1500, t: '$1,500', d: 'Takes a real bite out of cash.'}]}],
+      outcome: (st) => (st.ch.div ? `You paid a $${st.ch.div.toLocaleString()} dividend.` : 'No dividend this month.')},
+    {id: 'm1-divpay', day: 30, kind: 'doc', when: (st) => st.ch.div > 0, from: 'Check register', subject: 'Check #104, dividend', accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: st.biz.name + ', Inc.', payerAddr: me(st), no: '104', date: d(st, 30, 'short'), payee: st.biz.founder, amount: st.ch.div, bank, memo: 'Cash dividend', signer: st.biz.founder}),
+      lines: (st) => [['div', 'dr', st.ch.div], ['cash', 'cr', st.ch.div]], memo: 'Paid cash dividend', hint: 'A dividend is a distribution to owners, not a cost of running the business.', why: 'Dividends reduce retained earnings directly. They are never an expense.'},
+  ];
+  function SIMDOCS_words(n) { return (root.SIMDOCS || require('./sim-docs.js')).words(n).replace(/ and 00\/100$/, ''); }
+
+  SIM.M1 = {kit, loc, me, at, phone, email, priceOf, week, supTotal, equip, bank};
+  SIM.months.push({id: 'm1', lessonId: 'ch2', n: 'Month 1', title: 'Opening month', start: [2026, 9], days: 30, topics: ['Recording transactions', 'Journal entries', 'Posting', 'Trial balance'], items});
+  if (typeof module !== 'undefined' && module.exports) module.exports = SIM;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>(function (root) {
+  const S = root.SIM, {r2, bal, money} = S;
+  const {me, at, loc, kit, priceOf, bank} = S.M1;
+  const equip = s => S.M1.equip(s)[1];
+  const dr = (a, x) => [a, 'dr', r2(x)], cr = (a, x) => [a, 'cr', r2(x)];
+  const date = (s, d) => S.fmtDate(s, d, 'short');
+  const email = (s, day, from, subject, body) => ({type: 'email', fromName: from, from: from.toLowerCase().replace(/[^a-z]+/g,'.').replace(/\.$/,'')+'@office.example', to: S.M1.email(s), date: date(s, day), subject, body});
+  const sheet = (s, title, rows, note = '') => ({type: 'schedule', name: s.biz.name + ', Inc.', title, date: date(s, s.day), rows, note});
+  const receipt = (s, day, store, no, desc, x) => ({type: 'receipt', store, addr: at(s, '240 Market Street'), date: date(s, day), no, tender: 'Business checking ····8837', lines: [[desc, r2(x)]]});
+  const invoice = (s, day, vendor, no, desc, x, terms = 'Net 30') => ({type: 'invoice', vendor: {name: vendor, ...at(s, '610 Commerce Drive')}, billTo: me(s), no, date: date(s, day), terms, lines: [[desc, 1, r2(x)]], footer: 'Reference the invoice number with your payment.'});
+  function doc(id, day, from, subject, make, lines, more = {}) { return {id, day, from, subject, kind: 'doc', doc: make, lines, ...more}; }
+  function reply(id, day, from, subject, body, key, opts, outcome, apply) {
+    return {id, day, from, subject, kind: 'decision', doc: s => email(s, day, from, subject, typeof body === 'function' ? body(s) : body), q: [{id: key, label: 'Send reply', opts: opts.map(([v, t, d]) => ({v, t, d}))}], outcome, apply};
+  }
+  function work(id, day, subject, make, fields, after) { return {id, day, from: 'Karen Ramsey · Ramsey & Cole', subject, kind: 'work', doc: make, fields, after}; }
+  const amount = (s, key, fallback) => Number(s.ch[key] ?? fallback);
+  const storeValue = (key, fn) => s => { s.vars[key] = fn(s); };
+  function month(id, number, title, start, topics, items, review = false) {
+    const m = {id: 'sim-' + id, lessonId: id, n: review ? 'Period close' : 'Month ' + number, title, start, days: new Date(Date.UTC(start[0], start[1], 0)).getUTCDate(), topics, items, review};
+    S.months.push(m); return m;
+  }
+  function operations(prefix, end, opts = {}) {
+    const volume = s => Math.round(kit(s).base * (s.ch.price === 'high' ? 0.85 : s.ch.price === 'low' ? 1.18 : 1) * (s.ch.capacity === 'expand' ? 1.25 : 1));
+    return [
+      doc(prefix + '-rent', 2, 'Willow Property Group', 'Monthly occupancy account', s => sheet(s, 'Tenant account · rent applied', [['Current month rent',loc(s).rent],['Payment method',bal(s,'prepaidrent')>=loc(s).rent?'Advance rent credit':'ACH debit, checking 8837']], 'Lease on file. Applying advance rent does not require another cash payment.'), s => [dr('rent', loc(s).rent), cr(bal(s,'prepaidrent')>=loc(s).rent?'prepaidrent':'cash', loc(s).rent)]),
+      ...[8, 15, 22].map((day, i) => doc(prefix + '-sales' + i, day, 'Register 02', 'Weekly service sales · batch ' + (i + 1), s => {
+        const n = volume(s) + i, x = r2(n * priceOf(s));
+        return {type: 'register', store: s.biz.name, period: date(s, day - 6) + ' – ' + date(s, day), rows: [['Completed services', String(n)], ['Unit price', priceOf(s)]], net: x, tenders: [['Bank deposits', x]], printed: date(s, day) + ' 18:05'};
+      }, s => [dr('cash', (volume(s) + i) * priceOf(s)), cr('rev', (volume(s) + i) * priceOf(s))])),
+      doc(prefix + '-utility', end - 2, 'Municipal Utilities', 'Electricity service invoice', s => invoice(s, end - 2, 'Municipal Utilities', prefix + '-U', 'Meter 4082 · current month service', 287), () => [dr('util', 287), cr('ap', 287)]),
+      ...(!opts.noPayroll ? [doc(prefix + '-pay', end - 3, 'Heartland Payroll', 'Payroll settlement · Jordan Pike', s => receipt(s, end - 3, 'Heartland Payroll', prefix + '-P', 'Jordan Pike · 80 hours at $18, no withholding in this introductory cycle', 1440), () => [dr('wages', 1440), cr('cash', 1440)])] : []),
+    ];
+  }
+
+  month('ch3', 2, 'Earn it, use it, accrue it', [2026, 10], ['Accruals', 'Prepayments', 'Depreciation', 'Adjusted trial balance'], [
+    reply('m2-hours', 1, 'Jordan Pike', 'October coverage', 'The afternoon slots are filling up. I can add a second shift, or keep my current hours. The extra shift costs $720 this month and adds 25% capacity to future service weeks.', 'capacity', [['steady', 'Keep the current schedule', 'Protect cash and turn away overflow work.'], ['expand', 'Add the afternoon shift', 'More capacity and a larger payroll.']], s => s.ch.capacity === 'expand' ? 'Jordan accepted the extra shift. Future service batches reflect the added capacity.' : 'Jordan kept the existing schedule.'),
+    ...operations('m2', 31),
+    doc('m2-prepaid', 31, 'Willow Property Group', 'Opening-month rent adjustment', s => sheet(s, 'Advance rent review · September', [['Monthly rent',loc(s).rent],['Opening lease prepayment covered','September, October, November'],['September occupancy','Complete; not yet expensed'],['October rent','Applied separately on October 2']], 'Record the unposted September usage. The remaining November credit stays on account.'), s => [dr('rent', loc(s).rent), cr('prepaidrent', loc(s).rent)]),
+    doc('m2-coverage', 5, 'Heartland Mutual', 'Annual insurance policy', s => invoice(s, 5, 'Heartland Mutual', 'HM-1026', '12 months coverage effective October 1; paid by ACH today', 1200, 'Paid'), () => [dr('prepaidins', 1200), cr('cash', 1200)]),
+    doc('m2-deposit', 9, 'Civic Events Office', 'November booking deposit', s => receipt(s, 9, s.biz.name, 'DEP-202', 'Customer ACH received for November services; nothing delivered yet', 900), () => [dr('cash', 900), cr('unearned', 900)]),
+    doc('m2-shift', 26, 'Heartland Payroll', 'Additional shift payment', s => receipt(s, 26, 'Heartland Payroll', 'PR-204', 'Jordan Pike · October additional shift', 720), () => [dr('wages', 720), cr('cash', 720)], {when: s => s.ch.capacity === 'expand'}),
+    doc('m2-count', 30, 'Jordan Pike', 'Signed supplies count', s => sheet(s, 'Supplies count · stockroom', [['Opening stock at cost', bal(s, 'supplies')], ['Counted stock remaining at cost', r2(bal(s, 'supplies') * 0.35)]], 'Counted by Jordan Pike. No purchases are in transit.'), s => [dr('suppliesexp', bal(s, 'supplies') * 0.65), cr('supplies', bal(s, 'supplies') * 0.65)]),
+    doc('m2-ins-used', 31, 'Heartland Mutual', 'October coverage confirmation', s => sheet(s, 'Coverage schedule', [['Annual premium', 1200], ['Term in months', 12], ['Completed months', 1]], 'October coverage has elapsed. Policy remains in force.'), () => [dr('insexp', 100), cr('prepaidins', 100)]),
+    doc('m2-dep', 31, 'Ramsey & Cole', 'Equipment depreciation schedule', s => sheet(s, 'Fixed asset register · original equipment', [['Cost', equip(s)], ['Residual value', 0], ['Useful life, months', 60], ['Months in service, including September', 2]], 'Straight-line, full-month convention. No depreciation has been recorded yet.'), s => [dr('depexp', r2(equip(s) / 60) * 2), cr('adep', r2(equip(s) / 60) * 2)]),
+    doc('m2-accrual', 31, 'Jordan Pike', 'Timecard · last two shifts', s => sheet(s, 'Approved timecard · October 30–31', [['Hours worked, unpaid', 12], ['Hourly rate', 18]], 'These hours are not included in the earlier payroll settlement. Payday is November 3.'), () => [dr('wages', 216), cr('wagespay', 216)]),
+    doc('m2-interest', 31, bank, 'Interest accrual notice', s => sheet(s, 'Note servicing · account 8837-L', [['Principal outstanding', bal(s, 'np')], ['Annual interest rate', '7.5%'], ['Accrual period, months', 2]], 'No interest has been paid since September origination. Full-month convention: principal × annual rate ÷ 12.'), s => [dr('intexp', bal(s, 'np') * 0.075 / 6), cr('intpay', bal(s, 'np') * 0.075 / 6)], {when: s => s.ch.loan > 0}),
+  ]);
+
+  function closeItems(prefix, day, final = false) {
+    const out = [work(prefix + '-report', day, 'File the financial package', s => sheet(s, 'Controller checklist', [['Package', final ? 'Year-end financial statements' : 'Quarter-end financial statements']], 'Use the Statements tab in Books. File these figures before closing temporary accounts.'), s => {
+      const f = S.statements(s);
+      return [['revenue', 'Net revenue', f.revenue], ['expenses', 'Expenses', f.expenses], ['profit', 'Net income / loss', f.netIncome], ['assets', 'Total assets', f.assets], ['liabilities', 'Total liabilities', f.liabilities], ['equity', 'Total equity', f.equity], ['operating', 'Operating cash flow', f.operating], ['investing', 'Investing cash flow', f.investing], ['financing', 'Financing cash flow', f.financing]].map(([id, label, value]) => ({id, label, value}));
+    }, s => { s.vars[prefix + '-report'] = S.statements(s); s.periodReports ||= {}; s.periodReports[s.m] = S.statements(s); })];
+    ['R', 'XR', 'E', 'XSE'].forEach((type, idx) => out.push(doc(prefix + '-close' + idx, day, 'Karen Ramsey · Ramsey & Cole', ['Close revenue accounts', 'Close contra-revenue accounts', 'Close expense accounts', 'Close dividends'][idx], s => sheet(s, 'Closing authorization · ' + type, Object.keys(s.led).filter(a => LL.ACC[a][1] === type && (type !== 'XSE' || a === 'div')).map(a => [LL.ACC[a][0], bal(s, a)]), 'Transfer revenue and expenses directly to Retained Earnings. Close dividends to Retained Earnings separately. Do not close permanent accounts.'), s => {
+      const lines = Object.keys(s.led).filter(a => LL.ACC[a][1] === type && (type !== 'XSE' || a === 'div') && bal(s, a)).map(a => LL.dn(a) ? cr(a, bal(s, a)) : dr(a, bal(s, a)));
+      const signed = lines.reduce((t, [, side, x]) => t + (side === 'dr' ? x : -x), 0);
+      return lines.length ? [...lines, signed > 0 ? cr('re', signed) : dr('re', -signed)] : null;
+    }, {when: s => s.done[idx ? prefix + '-close' + (idx - 1) : prefix + '-report']})));
+    out.push(work(prefix + '-post', day, 'File post-closing trial balance', s => sheet(s, 'Close checklist · permanent accounts', [['Status', 'Verify after posting all closing entries']], 'Use Trial balance. Revenue, expense and dividends balances must be zero.'), s => { const tb = S.trialBalance(s); return [{id: 'debit', label: 'Total debits', value: r2(tb.reduce((t, r) => t + r[2], 0))}, {id: 'credit', label: 'Total credits', value: r2(tb.reduce((t, r) => t + r[3], 0))}]; }));
+    out[out.length - 1].when = s => s.done[prefix + '-close3'];
+    return out;
+  }
+  function review(id, title, start, prefix) {
+    const m = month(id, '', title, start, ['Integrated transactions', 'Adjusting entries', 'Statements', 'Closing'], [
+      reply(prefix + '-supplier', 1, 'Morgan Ellis · Procurement', 'Year-end purchasing window', 'The supplier can deliver $600 of supplies now on account, or hold the order until the next period. Nothing ships until you approve.', prefix + '-order', [['now', 'Approve delivery now', 'Supplies and payable arrive this period.'], ['later', 'Hold until next period', 'No delivery and no liability this period.']], s => s.ch[prefix + '-order'] === 'now' ? 'Delivery authorized for this period.' : 'The order remains on hold.'),
+      ...[2, 3, 4, 5].map((day, i) => doc(prefix + '-jobs' + i, day, 'Operations desk', 'Completed job ticket ' + (i + 1), s => invoice(s, day, s.biz.name, prefix + '-J' + i, 'Completed client work · customer paid by bank transfer', 420 + i * 95, 'Paid'), () => [dr('cash', 420 + i * 95), cr('rev', 420 + i * 95)])),
+      doc(prefix + '-delivery', 6, 'Commerce Supply Co.', 'Supplies delivered', s => invoice(s, 6, 'Commerce Supply Co.', prefix + '-S', 'Consumable supplies received', 600), () => [dr('supplies', 600), cr('ap', 600)], {when: s => s.ch[prefix + '-order'] === 'now'}),
+      doc(prefix + '-advance', 7, 'Civic Events Office', 'Next-period retainer', s => receipt(s, 7, s.biz.name, prefix + '-D', 'Deposit received; work starts next period', 1200), () => [dr('cash', 1200), cr('unearned', 1200)]),
+      doc(prefix + '-fees', 8, bank, 'Account service fee', s => receipt(s, 8, bank, prefix + '-F', 'Business checking service charge', 35), () => [dr('bankfee', 35), cr('cash', 35)]),
+      doc(prefix + '-bill', 9, 'Northside IT', 'Workstation repair invoice', s => invoice(s, 9, 'Northside IT', prefix + '-IT', 'Restored workstation to original operating condition', 275), () => [dr('repairs', 275), cr('ap', 275)]),
+      doc(prefix + '-payment', 10, 'Accounts payable', 'Supplier payment confirmation', s => receipt(s, 10, 'Commerce Supply Co.', prefix + '-AP', 'ACH settlement of outstanding trade payables', bal(s, 'ap')), s => [dr('ap', bal(s, 'ap')), cr('cash', bal(s, 'ap'))]),
+      doc(prefix + '-insurance', 11, 'Heartland Mutual', 'Unexpired policy review', s => sheet(s, 'Coverage review', [['Insurance asset before adjustment', bal(s, 'prepaidins')], ['Coverage used since last adjustment', Math.min(100, bal(s, 'prepaidins'))]], 'No policy cancellation or refund.'), s => bal(s, 'prepaidins') ? [dr('insexp', Math.min(100, bal(s, 'prepaidins'))), cr('prepaidins', Math.min(100, bal(s, 'prepaidins')))] : null),
+      doc(prefix + '-count', 12, 'Jordan Pike', 'Closing stockroom count', s => sheet(s, 'Supplies count', [['Ledger cost before count', bal(s, 'supplies')], ['Physical count at cost', r2(bal(s, 'supplies') * 0.6)]], 'Signed by Jordan Pike. Difference represents supplies consumed.'), s => bal(s, 'supplies') ? [dr('suppliesexp', bal(s, 'supplies') * 0.4), cr('supplies', bal(s, 'supplies') * 0.4)] : null),
+      doc(prefix + '-accrual', 13, 'Heartland Payroll', 'Unpaid approved time', s => sheet(s, 'Time approval', [['Hours not yet paid', 9], ['Hourly rate', 18]], 'Payment is due next period.'), () => [dr('wages', 162), cr('wagespay', 162)]),
+      doc(prefix + '-note', 14, 'Ramsey & Cole', 'Cut-off review · unshipped order', s => email(s, 14, 'Karen Ramsey', 'Vendor cut-off confirmation', 'The $850 equipment order has not shipped. The vendor has not received payment and title has not transferred. Keep the purchase order on file.'), null),
+      ...closeItems(prefix, 15),
+    ], true);
+    const conditions = m.items.map(it => it.when);
+    m.items.forEach((it, i) => {
+      const condition = conditions[i];
+      const original = it.doc;
+      it.day = m.days;
+      it.doc = s => { const d=S.V(original,s); return {...d,date:date(s,m.days)}; };
+      it.when = s => m.items.slice(0, i).every((prev, j) => s.done[prev.id] || (conditions[j] && !conditions[j](s))) && (!condition || condition(s));
+    });
+    return m;
+  }
+  review('build1', 'First quarter · close the books', [2026, 11], 'q1');
+
+  month('ch4', 3, 'Keep control of cash', [2026, 11], ['Bank reconciliation', 'NSF payments', 'Petty cash', 'Internal controls'], [
+    ...operations('m3', 30),
+    doc('m3-wages', 3, 'Heartland Payroll', 'Prior-period wages paid', s => receipt(s, 3, 'Heartland Payroll', 'PR-301', 'Settlement of all wages accrued at the last close', bal(s, 'wagespay')), s => [dr('wagespay', bal(s, 'wagespay')), cr('cash', bal(s, 'wagespay'))]),
+    doc('m3-earned', 9, 'Civic Events Office', 'November job completed', s => sheet(s, 'Customer acceptance', [['Prepaid booking fulfilled', 900]], 'Civic Events Office accepted the completed work. Deposit was paid in October.'), () => [dr('unearned', 900), cr('rev', 900)]),
+    reply('m3-control', 10, 'Jordan Pike', 'Small purchases are piling up', 'We need a petty cash fund for minor purchases. I can keep a $200 locked fund and attach receipts, or use a $400 fund with a weekly count. Both require your approval for replenishment.', 'petty', [[200, 'Authorize a $200 fund', 'Weekly count and signed vouchers.'], [400, 'Authorize a $400 fund', 'More room for small purchases.']], s => 'Petty cash authorized at ' + money(s.ch.petty) + '.'),
+    doc('m3-fund', 11, 'Cash custodian', 'Petty cash establishment', s => receipt(s, 11, 'Heartland Community Bank', 'PC-301', 'Transfer to locked petty cash fund', s.ch.petty), s => [dr('pettycash', s.ch.petty), cr('cash', s.ch.petty)]),
+    doc('m3-vouchers', 18, 'Jordan Pike', 'Petty cash reimbursement', s => sheet(s, 'Petty cash count and vouchers', [['Fund authorization', s.ch.petty], ['Postage vouchers', 42], ['Emergency supplies vouchers', 28], ['Currency counted', s.ch.petty - 72]], 'Replenish to the authorized amount. No other vouchers are outstanding.'), () => [dr('misc', 42), dr('supplies', 28), dr('cashos', 2), cr('cash', 72)]),
+    doc('m3-check', 20, 'Mason Street Offices', 'Customer payment received', s => ({type: 'check', payer: 'Mason Street Offices', payerAddr: at(s, '88 Mason Street'), date: date(s, 20), no: '6108', payee: s.biz.name, amount: 600, bank, memo: 'Work completed today'}), () => [dr('cash', 600), cr('rev', 600)]),
+    doc('m3-nsf', 24, bank, 'Returned item notice', s => sheet(s, 'Returned deposit · check 6108', [['Mason Street Offices · insufficient funds', 600], ['Bank handling charge', 20]], 'Your bank debited both amounts from checking. Seek collection of the original $600 from the customer.'), () => [dr('ar', 600), dr('bankfee', 20), cr('cash', 620)]),
+    doc('m3-fee', 30, bank, 'Month-end service charge', s => receipt(s, 30, bank, 'FEE-311', 'Checking service fee', 25), () => [dr('bankfee', 25), cr('cash', 25)]),
+    work('m3-reconcile', 30, 'Reconcile checking · November', s => sheet(s, 'Heartland Community Bank · reconciliation packet', [['Bank statement ending balance', r2(bal(s, 'cash') + 175)], ['Deposit in transit, November 30', 250], ['Outstanding check 1028', 425], ['Book cash after service fee posting', bal(s, 'cash')]], 'All statement fees and returned items have been posted. No bank errors. Enter adjusted balances; do not journalize timing differences.'), s => [{id: 'bank', label: 'Adjusted bank balance', value: bal(s, 'cash')}, {id: 'book', label: 'Adjusted book balance', value: bal(s, 'cash')}]),
+  ]);
+
+  month('ch5', 4, 'Grow without losing collections', [2026, 12], ['Credit policy', 'Aging', 'Allowance', 'Write-offs', 'Notes receivable'], [
+    ...operations('m4', 31),
+    reply('m4-credit', 1, 'Harbor Point Offices', 'Monthly service contract', 'We can commit to a $3,000 package on net-30 terms, or pay $1,800 in advance for a smaller package. Full service is completed December 9. The credit contract carries more collection risk.', 'credit', [['net30', 'Accept $3,000 on net 30', 'Larger contract, with collection exposure.'], ['advance', 'Accept $1,800 cash package', 'Smaller contract, collected on delivery.']], s => 'Customer contract approved: ' + s.ch.credit + '.'),
+    doc('m4-contract', 9, 'Harbor Point Offices', 'Accepted service completion', s => invoice(s, 9, s.biz.name, 'HP-401', 'Contract work completed and accepted', s.ch.credit === 'net30' ? 3000 : 1800, s.ch.credit === 'net30' ? 'Net 30' : 'Paid on completion'), s => [dr(s.ch.credit === 'net30' ? 'ar' : 'cash', s.ch.credit === 'net30' ? 3000 : 1800), cr('rev', s.ch.credit === 'net30' ? 3000 : 1800)]),
+    doc('m4-collection', 12, 'Mason Street Offices', 'Replacement payment', s => receipt(s, 12, s.biz.name, 'RC-401', 'Replacement ACH for returned November check 6108', 600), () => [dr('cash', 600), cr('ar', 600)]),
+    doc('m4-annual', 14, 'Juniper Management', 'Multi-site service invoice', s => invoice(s, 14, s.biz.name, 'JM-402', 'Work completed for Juniper Management', 2400), () => [dr('ar', 2400), cr('rev', 2400)]),
+    doc('m4-partial', 20, 'Juniper Management', 'Partial remittance', s => receipt(s, 20, s.biz.name, 'RC-402', 'Juniper Management payment against JM-402', 1000), () => [dr('cash', 1000), cr('ar', 1000)]),
+    doc('m4-note', 23, 'Juniper Management', 'Signed note for balance due', s => ({type: 'legal', title: 'Promissory note · JM-402', paras: ['Juniper Management promises to pay $1,400 principal plus interest at 6% annually. Issued December 23; due March 23. This note replaces the remaining trade receivable.'], sigs: [['Tessa Moore', 'Juniper Management']]}), () => [dr('nr', 1400), cr('ar', 1400)]),
+    doc('m4-small', 24, 'Westgate Services', 'Credit invoice · emergency work', s => invoice(s, 24, s.biz.name, 'WG-403', 'Completed service', 500), () => [dr('ar', 500), cr('rev', 500)]),
+    doc('m4-aging', 30, 'Ramsey & Cole', 'Allowance review', s => sheet(s, 'Receivable aging · required ending allowance', [['Open trade receivables', bal(s, 'ar')], ['Estimated uncollectible percentage', '10%'], ['Allowance balance before adjustment', bal(s, 'allow')]], 'All open trade invoices are in the same risk pool in this cycle. Bring the allowance to 10% of open trade receivables; exclude the promissory note.'), s => [dr('bde', r2(bal(s, 'ar') * 0.1) - bal(s, 'allow')), cr('allow', r2(bal(s, 'ar') * 0.1) - bal(s, 'allow'))]),
+    doc('m4-writeoff', 31, 'Collections desk', 'Westgate account closed', s => sheet(s, 'Write-off approval · WG-403', [['Account balance', 500]], 'Westgate ceased operations. Collection counsel authorized a write-off under the allowance method.'), () => [dr('allow', 500), cr('ar', 500)]),
+  ]);
+
+  month('ch6', 5, 'Launch a product line', [2027, 1], ['Perpetual inventory', 'Returns', 'Freight', 'Cost of goods sold', 'Shrinkage'], [
+    ...operations('m5', 31),
+    reply('m5-stock', 1, 'Morgan Ellis · Commerce Supply', 'First retail shipment', 'We have a product line ready for your counter. Unit cost is $40. Choose an initial shipment of 30 or 50 units, net 30. A larger shelf improves availability but ties up cash.', 'units', [[30, 'Order 30 units', '$1,200 before freight.'], [50, 'Order 50 units', '$2,000 before freight.']], s => s.ch.units + ' units ordered.'),
+    doc('m5-purchase', 3, 'Commerce Supply Co.', 'Retail goods delivered', s => invoice(s, 3, 'Commerce Supply Co.', 'CS-501', 'Retail product units · ' + s.ch.units + ' at $40', s.ch.units * 40), s => [dr('inv', s.ch.units * 40), cr('ap', s.ch.units * 40)]),
+    doc('m5-freight', 4, 'Midstate Freight', 'Inbound freight paid', s => receipt(s, 4, 'Midstate Freight', 'MF-501', 'FOB shipping point · retail shipment CS-501', 120), () => [dr('inv', 120), cr('cash', 120)]),
+    doc('m5-cost', 5, 'Inventory desk', 'Landed-cost card', s => sheet(s, 'Inventory cost card · perpetual system', [['Units received', s.ch.units], ['Supplier cost per unit', 40], ['Freight allocated to lot', 120], ['Landed cost per unit', r2(40 + 120 / s.ch.units)]], 'Use this landed cost for every sale and return from this lot.'), null),
+    ...[10, 17].map((day, i) => doc('m5-retail' + i, day, 'Register 02', 'Retail sales batch ' + (i + 1), s => sheet(s, 'Retail sales and dispatch', [['Units sold', 10], ['Selling price per unit', 85], ['Landed cost per unit', r2(40 + 120 / s.ch.units)]], 'Paid immediately; use two linked entries in one journal: sale and inventory release. This introductory month excludes sales tax.'), s => [dr('cash', 850), cr('sales', 850), dr('cogs', (40 + 120 / s.ch.units) * 10), cr('inv', (40 + 120 / s.ch.units) * 10)])),
+    doc('m5-return', 20, 'Customer service', 'Refund and restock authorization', s => sheet(s, 'Return ticket RT-501', [['Sale price refunded', 85], ['Units returned, resalable', 1], ['Cost per unit', r2(40 + 120 / s.ch.units)]], 'Refund issued to customer. Restore the product to inventory at cost.'), s => [dr('returns', 85), cr('cash', 85), dr('inv', 40 + 120 / s.ch.units), cr('cogs', 40 + 120 / s.ch.units)]),
+    doc('m5-vendorpay', 25, 'Accounts payable', 'Vendor settlement', s => receipt(s, 25, 'Commerce Supply Co.', 'CS-501-P', 'Settlement of retail invoice CS-501', s.ch.units * 40), s => [dr('ap', s.ch.units * 40), cr('cash', s.ch.units * 40)]),
+    doc('m5-count', 31, 'Jordan Pike', 'Retail inventory count', s => sheet(s, 'Cycle count · lot CS-501', [['Units per perpetual record', s.ch.units - 19], ['Units physically counted', s.ch.units - 20], ['Cost per unit', r2(40 + 120 / s.ch.units)]], 'One unit missing. Charge shrinkage to Cost of Goods Sold.'), s => [dr('cogs', 40 + 120 / s.ch.units), cr('inv', 40 + 120 / s.ch.units)]),
+  ]);
+
+  month('ch7', 6, 'Put assets to work', [2027, 2], ['Capitalization', 'Depreciation', 'Disposals', 'Repairs'], [
+    ...operations('m6', 28),
+    reply('m6-van', 1, 'Nora Singh · Fleet Sales', 'Mobile service vehicle', 'We can supply a refurbished van for $12,000 cash or a newer van for $18,000 cash. The newer van has a longer service life. Either lets you take mobile work.', 'van', [[12000, 'Buy the refurbished van', '48-month life; $2,000 residual.'], [18000, 'Buy the newer van', '72-month life; $3,000 residual.']], s => 'Vehicle purchase authorized at ' + money(s.ch.van) + '.'),
+    doc('m6-buy', 3, 'Singh Commercial Vehicles', 'Vehicle bill of sale', s => invoice(s, 3, 'Singh Commercial Vehicles', 'SCV-601', 'Service van · title transferred, paid by ACH', s.ch.van, 'Paid'), s => [dr('vehicle', s.ch.van), cr('cash', s.ch.van)]),
+    doc('m6-title', 4, 'County Title Office', 'Title and registration receipt', s => receipt(s, 4, 'County Title Office', 'T-601', 'Initial title transfer cost, required to place van in service', 300), () => [dr('vehicle', 300), cr('cash', 300)]),
+    doc('m6-wrap', 6, 'Streetline Graphics', 'Vehicle branding invoice', s => invoice(s, 6, 'Streetline Graphics', 'SG-601', 'Removable advertising wrap; no added useful life', 750), () => [dr('adv', 750), cr('ap', 750)]),
+    doc('m6-repair', 12, 'Mason Auto Service', 'Van service receipt', s => receipt(s, 12, 'Mason Auto Service', 'MAS-601', 'Oil change and safety inspection', 180), () => [dr('repairs', 180), cr('cash', 180)]),
+    doc('m6-job', 19, 'Harbor Point Offices', 'Mobile service work accepted', s => invoice(s, 19, s.biz.name, 'HP-601', 'Completed mobile service visit', s.ch.van === 18000 ? 2400 : 1900), s => [dr('ar', s.ch.van === 18000 ? 2400 : 1900), cr('rev', s.ch.van === 18000 ? 2400 : 1900)]),
+    doc('m6-tool', 21, 'Local Equipment Exchange', 'Cash sale · spare tool', s => sheet(s, 'Asset sale packet', [['Tool original cost, included in equipment', 600], ['Accumulated depreciation allocated to tool', 20], ['Cash proceeds', 650]], 'Tool was part of the original equipment lot. Remove its cost and accumulated depreciation; recognize the difference.'), () => [dr('cash', 650), dr('adep', 20), cr('equip', 600), cr('gain', 70)]),
+    doc('m6-dep', 28, 'Ramsey & Cole', 'Van depreciation register', s => sheet(s, 'Vehicle register · full-month straight line', [['Capitalized cost', s.ch.van + 300], ['Residual value', s.ch.van === 18000 ? 3000 : 2000], ['Useful life, months', s.ch.van === 18000 ? 72 : 48], ['Months in service', 1]], 'No van depreciation has been posted.'), s => { const x = (s.ch.van + 300 - (s.ch.van === 18000 ? 3000 : 2000)) / (s.ch.van === 18000 ? 72 : 48); return [dr('depexp', x), cr('adep', x)]; }),
+  ]);
+  review('build2', 'Half-year · audit the business', [2027, 2], 'q2');
+
+  month('ch8', 7, 'Pay people and collect tax', [2027, 3], ['Payroll withholding', 'Employer taxes', 'Sales tax', 'Accrued liabilities'], [
+    ...operations('m7', 31, {noPayroll: true}),
+    reply('m7-team', 1, 'Jordan Pike', 'March staffing', 'I can cover 80 hours this month, or bring a relief employee for 40 additional hours. Gross pay is $18/hour. More coverage improves future service capacity.', 'staff', [[80, 'Approve 80 hours', 'One-person schedule.'], [120, 'Approve 120 hours', 'Relief coverage included.']], s => 'Payroll approved for ' + s.ch.staff + ' hours.'),
+    doc('m7-payroll', 12, 'Heartland Payroll', 'Payroll register · March', s => { const gross = s.ch.staff * 18; return sheet(s, 'Payroll register PR-701', [['Gross wages', gross], ['Employee FICA, 7.65%', r2(gross * 0.0765)], ['Federal withholding', 120], ['Net pay by ACH', r2(gross * 0.9235 - 120)]], 'Employer FICA matches employee FICA. Employer unemployment assessment for this payroll is $48. No state withholding in this exercise.'); }, s => { const g = s.ch.staff * 18, fica = r2(g * 0.0765); return [dr('wages', g), cr('ficapay', fica), cr('fitpay', 120), cr('cash', g - fica - 120)]; }),
+    doc('m7-employer', 13, 'Heartland Payroll', 'Employer payroll assessment', s => sheet(s, 'Employer assessment PR-701', [['Employer FICA', r2(s.ch.staff * 18 * 0.0765)], ['Unemployment taxes', 48]], 'Employer cost is additional to amounts withheld from employees.'), s => [dr('ptaxexp', r2(s.ch.staff * 18 * 0.0765) + 48), cr('ficapay', s.ch.staff * 18 * 0.0765), cr('utaxpay', 48)]),
+    doc('m7-retail', 16, 'Register 02', 'Taxable retail batch', s => sheet(s, 'Sales-tax batch TX-701', [['Taxable merchandise sales', 425], ['Tax collected, 6%', 25.5], ['Bank deposit', 450.5], ['Inventory cost released', 200]], 'This teaching business uses a flat 6% sales tax on merchandise only; service work is exempt. Tax collected is held for the state.'), () => [dr('cash', 450.5), cr('sales', 425), cr('salestaxpay', 25.5), dr('cogs', 200), cr('inv', 200)]),
+    doc('m7-taxpay', 24, 'Treasury payment portal', 'Payroll tax payment', s => receipt(s, 24, 'Treasury payment portal', 'TX-702', 'All FICA and federal withholding for PR-701', bal(s, 'ficapay') + bal(s, 'fitpay')), s => [dr('ficapay', bal(s, 'ficapay')), dr('fitpay', bal(s, 'fitpay')), cr('cash', bal(s, 'ficapay') + bal(s, 'fitpay'))]),
+    doc('m7-salesremit', 25, 'State Revenue Office', 'Sales tax remittance', s => receipt(s, 25, 'State Revenue Office', 'TX-703', 'Sales tax batch TX-701', 25.5), () => [dr('salestaxpay', 25.5), cr('cash', 25.5)]),
+    doc('m7-unemp', 26, 'State Workforce Office', 'Unemployment remittance', s => receipt(s, 26, 'State Workforce Office', 'TX-704', 'Unemployment assessment PR-701', 48), () => [dr('utaxpay', 48), cr('cash', 48)]),
+    doc('m7-warranty', 31, 'Customer care', 'Retail warranty reserve', s => sheet(s, 'Warranty estimate · March merchandise', [['Sales subject to warranty', 425], ['Estimated warranty cost rate', '2%']], 'Recognize expected warranty cost when the sales occur.'), () => [dr('warrexp', 8.5), cr('warrpay', 8.5)]),
+  ]);
+
+  month('ch9', 8, 'Finance the next stage', [2027, 4], ['Notes payable', 'Bond issuance', 'Interest', 'Debt settlement'], [
+    ...operations('m8', 30),
+    reply('m8-finance', 1, 'Avery Chen · Heartland Capital', 'Expansion funding offers', 'The expansion needs $20,000 of funding. We can arrange a 6% bank note at face value, or a five-year private bond placement with $20,000 face value and a 5% coupon, priced at 98. Bond discount is amortized straight-line monthly for this course.', 'funding', [['note', 'Accept the 6% bank note', '$20,000 proceeds.'], ['bond', 'Authorize the bond placement at 98', '$19,600 proceeds; $400 discount.']], s => 'Funding route selected: ' + s.ch.funding + '.'),
+    doc('m8-funds', 3, 'Heartland Capital', 'Funding settlement advice', s => sheet(s, 'Funding settlement', [['Face principal', 20000], ['Cash deposited', s.ch.funding === 'note' ? 20000 : 19600], ['Term, months', 60], ['Annual coupon', s.ch.funding === 'note' ? '6%' : '5%']], 'No issuance fees. Funds deposited today.'), s => s.ch.funding === 'note' ? [dr('cash', 20000), cr('np', 20000)] : [dr('cash', 19600), dr('bdisc', 400), cr('bonds', 20000)]),
+    doc('m8-project', 10, 'Midstate Installation', 'New equipment installation', s => invoice(s, 10, 'Midstate Installation', 'MI-801', 'Expansion equipment delivered and placed in service; ACH paid', 14000, 'Paid'), () => [dr('equip', 14000), cr('cash', 14000)]),
+    doc('m8-oldinterest', 14, bank, 'Accrued interest settlement', s => receipt(s, 14, bank, 'LN-801-I', 'Payment of all previously accrued interest', bal(s, 'intpay')), s => bal(s, 'intpay') ? [dr('intpay', bal(s, 'intpay')), cr('cash', bal(s, 'intpay'))] : null),
+    doc('m8-principal', 18, bank, 'Original note principal installment', s => receipt(s, 18, bank, 'LN-801-P', 'Principal reduction on original September note; not the expansion note', Math.min(1000, s.ch.loan || 0)), s => s.ch.loan ? [dr('np', 1000), cr('cash', 1000)] : null),
+    doc('m8-interest', 30, 'Heartland Capital', 'Expansion debt accrual', s => sheet(s, 'Debt rollforward · expansion funding only', [['Face principal', 20000], ['Annual coupon', s.ch.funding === 'note' ? '6%' : '5%'], ['Elapsed months since issue, full-month convention', 1], ['Bond discount, if applicable', s.ch.funding === 'bond' ? 400 : 0], ['Amortization term, months', 60]], 'Accrue one month of coupon interest. For bonds, add straight-line discount amortization to interest expense.'), s => s.ch.funding === 'note' ? [dr('intexp', 100), cr('intpay', 100)] : [dr('intexp', r2(20000 * 0.05 / 12) + r2(400 / 60)), cr('intpay', 20000 * 0.05 / 12), cr('bdisc', 400 / 60)]),
+  ]);
+
+  month('ch10', 9, 'Bring in an investor', [2027, 5], ['Common stock', 'APIC', 'Treasury stock', 'Dividends', 'Equity rollforward'], [
+    ...operations('m9', 31),
+    reply('m9-investor', 1, 'Elena Ortiz · Local Growth Partners', 'Equity term sheet', 'We can invest $12,000 for 1,000 new $1-par common shares, or $24,000 for 2,000 shares. Both offers price shares at $12. The larger offer provides cash but gives up more ownership.', 'shares', [[1000, 'Issue 1,000 new shares', '$12,000 in fresh equity.'], [2000, 'Issue 2,000 new shares', '$24,000 in fresh equity.']], s => 'Board authorized ' + s.ch.shares + ' shares.'),
+    doc('m9-issue', 4, 'Ramsey & Cole', 'Share subscription settled', s => sheet(s, 'Share register · new issue', [['New common shares', s.ch.shares], ['Par value per share', 1], ['Cash subscription price per share', 12]], 'Investor cash received in full. Record par separately from additional paid-in capital.'), s => [dr('cash', s.ch.shares * 12), cr('cs', s.ch.shares), cr('apic', s.ch.shares * 11)]),
+    doc('m9-treasury', 11, 'Transfer agent', 'Treasury share repurchase', s => receipt(s, 11, 'Transfer agent', 'EQ-901', '100 common shares repurchased at $13; use cost method', 1300), () => [dr('treasury', 1300), cr('cash', 1300)]),
+    doc('m9-reissue', 18, 'Transfer agent', 'Treasury share reissue', s => sheet(s, 'Treasury stock sale confirmation', [['Shares reissued', 40], ['Original repurchase cost per share', 13], ['Cash received per share', 15]], 'Excess over cost goes to Additional Paid-in Capital, Common. Do not report a gain in earnings.'), () => [dr('cash', 600), cr('treasury', 520), cr('apic', 80)]),
+    reply('m9-dividend', 23, 'Board secretary', 'Cash dividend resolution', 'The board can retain earnings for expansion or declare a $600 cash dividend payable May 29. A declaration creates an obligation before cash is paid.', 'dividend9', [[0, 'Retain cash in the business', 'No declaration.'], [600, 'Declare a $600 dividend', 'Payment scheduled May 29.']], s => s.ch.dividend9 ? 'The board declared the dividend.' : 'The board retained cash.'),
+    doc('m9-declare', 24, 'Board secretary', 'Board minutes · dividend declared', s => sheet(s, 'Dividend declaration', [['Authorized cash dividend', s.ch.dividend9]], 'Declaration date May 24. Payment date May 29.'), s => s.ch.dividend9 ? [dr('div', 600), cr('divpay', 600)] : null),
+    doc('m9-paydiv', 29, 'Transfer agent', 'Dividend payment advice', s => receipt(s, 29, 'Transfer agent', 'EQ-902', 'Dividend distribution authorized May 24', s.ch.dividend9), s => s.ch.dividend9 ? [dr('divpay', 600), cr('cash', 600)] : null),
+  ]);
+  review('build3', 'Third quarter · report to investors', [2027, 5], 'q3');
+
+  month('ch11', 10, 'Show where the cash went', [2027, 6], ['Operating cash flows', 'Investing', 'Financing', 'Financial statements'], [
+    ...operations('m10', 30),
+    reply('m10-growth', 1, 'Jordan Pike', 'Summer operating plan', 'We can keep our current footprint, or spend $500 on local advertising to fill the mobile schedule. The campaign adds $900 of completed work this month.', 'summer', [['steady', 'Keep the current footprint', 'No extra advertising.'], ['campaign', 'Launch the $500 campaign', 'Additional work arrives June 19.']], s => s.ch.summer === 'campaign' ? 'Campaign booked.' : 'Current footprint retained.'),
+    doc('m10-ad', 4, 'Neighborhood Media', 'Campaign receipt', s => receipt(s, 4, 'Neighborhood Media', 'NM-1001', 'Summer mobile service campaign', 500), () => [dr('adv', 500), cr('cash', 500)], {when: s => s.ch.summer === 'campaign'}),
+    doc('m10-bonus', 19, 'Operations desk', 'Campaign jobs completed', s => invoice(s, 19, s.biz.name, 'C-1001', 'Completed summer campaign work · paid', 900, 'Paid'), () => [dr('cash', 900), cr('rev', 900)], {when: s => s.ch.summer === 'campaign'}),
+    doc('m10-collect', 20, 'Collections desk', 'Trade receivables collected', s => receipt(s, 20, s.biz.name, 'RC-1001', 'Customer ACH settlements of all open trade invoices', bal(s, 'ar')), s => bal(s, 'ar') ? [dr('cash', bal(s, 'ar')), cr('ar', bal(s, 'ar'))] : null),
+    doc('m10-ap', 24, 'Accounts payable', 'Trade payables settled', s => receipt(s, 24, 'Vendor payments', 'AP-1001', 'All outstanding trade invoices paid', bal(s, 'ap')), s => bal(s, 'ap') ? [dr('ap', bal(s, 'ap')), cr('cash', bal(s, 'ap'))] : null),
+    doc('m10-land', 25, 'Mason County Title', 'Land purchase settlement', s => invoice(s, 25, 'Mason County Title', 'L-1001', 'Vacant expansion parcel · closing costs included, paid cash', 8000, 'Paid'), () => [dr('land', 8000), cr('cash', 8000)]),
+    work('m10-cf', 30, 'Send the lender a cash-flow package', s => email(s, 30, 'Avery Chen · Heartland Capital', 'Cash flow follow-up', 'Please file operating, investing and financing cash flows for this operating period, plus the net change and ending checking balance. Use Books → Statements. Include cash transactions only; do not classify noncash depreciation as a cash payment.'), s => { const f = S.statements(s); return ['operating', 'investing', 'financing', 'change', 'cash'].map(id => ({id, label: {operating: 'Operating cash flow', investing: 'Investing cash flow', financing: 'Financing cash flow', change: 'Net change in checking', cash: 'Ending checking balance'}[id], value: f[id]})); }),
+  ]);
+  const year = review('capstone', 'Year-end · hand over the books', [2027, 8], 'year');
+  year.topics = ['Year-end cut-off', 'Adjustments', 'Financial statements', 'Closing', 'Lender package'];
+  const firstReview = S.months.findIndex(m => m.lessonId === 'build1');
+  S.months.splice(3, 0, S.months.splice(firstReview, 1)[0]);
+  S.months[0].lessonId = 'ch2';
+  S.catalog = S.months.map((m, i) => ({id: m.lessonId, index: i, title: m.title, n: m.n, topics: m.topics, review: !!m.review}));
+  S.findLesson = id => S.catalog.find(m => m.id === (id === 'ch1' ? 'ch2' : id));
+
+  S.statements = function (s) {
+    const f = S.summary(s), sums = types => r2(Object.keys(s.led).filter(a => types.includes(LL.ACC[a][1])).reduce((t, a) => t + bal(s, a), 0));
+    f.assets = r2(sums(['A']) - sums(['XA'])); f.liabilities = r2(sums(['L']) - sums(['XL']));
+    f.equity = r2(sums(['SE']) - sums(['XSE']) + f.netIncome);
+    f.operating = 0; f.investing = 0; f.financing = 0;
+    for (const j of s.book.filter(j => (j.m ?? 0) === s.m)) {
+      const cash = j.lines.filter(([a]) => a === 'cash').reduce((t, [, side, x]) => t + (side === 'dr' ? x : -x), 0);
+      if (!cash) continue;
+      const finance = j.lines.filter(([a]) => ['np', 'bonds', 'bdisc', 'bprem', 'cs', 'ps', 'apic', 'apicp', 'treasury', 'div', 'divpay'].includes(a)).reduce((t, [, side, x]) => t + (side === 'cr' ? x : -x), 0);
+      const notePrincipal = j.lines.filter(([a]) => a === 'nr').reduce((t,[,side,x]) => t + (side === 'cr' ? x : -x),0);
+      const invest = notePrincipal || (j.lines.some(([a]) => ['equip', 'vehicle', 'land', 'building'].includes(a)) ? cash - finance : 0);
+      f.financing += finance; f.investing += invest; f.operating += cash - finance - invest;
+    }
+    for (const k of ['operating', 'investing', 'financing']) f[k] = r2(f[k]);
+    f.change = r2(f.operating + f.investing + f.financing);
+    return f;
+  };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>(function (root) {
+  const S = root.SIM;
+  S.replay = function (run) {
+    const c = run?.config;
+    if (!c || !['bike', 'fitness', 'landscape', 'photo'].includes(c.type) || !Number.isInteger(c.seed) || c.seed < 1 || c.seed > 1e9 || !Array.isArray(run.events) || run.events.length > 3000) throw Error('Invalid office record.');
+    if (typeof c.name !== 'string' || c.name.length > 40 || typeof c.founder !== 'string' || c.founder.length > 40 || /[<>]/.test(c.name+c.founder) || !S.CITIES[c.city]) throw Error('Invalid business details.');
+    const st = S.newGame(c);
+    for (const e of run.events) {
+      let ok = false;
+      if (e.kind === 'handle' && e.action && !e.action.reveal && !st.ended) {
+        const it = S.inbox(st).find(x => x.id === e.id && !st.done[x.id]);
+        if (!it) throw Error('This document is not available.');
+        const result = S.handle(st, e.id, e.action);
+        // Incorrect attempts are part of the record and must be replayed too.
+        ok = result.ok || st.tries[e.id] > 0;
+      } else if (e.kind === 'advance' && !st.ended) ok = S.advance(st).ok;
+      else if (e.kind === 'complete' && !st.ended) ok = S.complete(st);
+      else if (e.kind === 'next') ok = S.nextMonth(st);
+      if (!ok) throw Error('Invalid office progression.');
+    }
+    return st;
+  };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>// Ledger Lane office: the student's business, day by day. Paperwork arrives in
+// the inbox, the owner makes decisions and records what happened.
+(function () {
+  const {ACC, money} = LL, S = SIM, D = SIMDOCS;
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const BASE = 'll-office-v2', root = $('#office');
+  const cloud = new CloudClient(window.LEDGER_CLOUD || {}), params = new URLSearchParams(location.search);
+  let KEY = BASE, account = null, assignments = [], run = null, revision = 0, syncText = 'Saved in this browser', syncBusy = false, syncAgain = false, cloudBlocked = false;
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+  let scrollTop = false, st = null, sel = null, tab = 'office', rows = [], fresh = new Set(), shown = {cash: 0, rev: 0, ni: 0};
+  function save() {
+    localStorage.setItem(KEY, JSON.stringify({run, revision}));
+    if (account?.role === 'student' && !params.has('preview')) sync();
+  }
+  function act(kind, payload = {}) {
+    let result;
+    if (kind === 'handle') result = S.handle(st, payload.id, payload.action);
+    else if (kind === 'advance') result = S.advance(st);
+    else if (kind === 'complete') result = {ok: S.complete(st)};
+    else result = {ok: S.nextMonth(st)};
+    if (kind === 'handle' ? (result.ok || st.tries[payload.id]) : result.ok) run.events.push({kind, ...payload});
+    return result;
+  }
+  async function sync() {
+    if (cloudBlocked) return;
+    if (syncBusy) { syncAgain = true; return; }
+    syncBusy = true; syncText = 'Saving to account…';
+    const sent = JSON.parse(JSON.stringify(run));
+    try {
+      const r = await cloud.call('office-save', {revision, run: sent}); revision = r.revision; syncText = 'Saved to account · scores synced';
+      localStorage.setItem(KEY, JSON.stringify({run, revision}));
+    } catch(e) { syncText = 'Saved on this device · ' + e.message; if (/another tab|changed|Earlier office/.test(e.message)) cloudBlocked = true; }
+    syncBusy = false;
+    const el = $('#sync-status'); if (el) el.textContent = syncText;
+    if (syncAgain) { syncAgain = false; sync(); }
+  }
+  const V = (x) => S.V(x, st);
+  const TYPES = [['bike', 'Bike repair shop', 'Tune-ups and repairs for commuters and weekend riders.'], ['fitness', 'Fitness studio', 'Group classes and personal training.'], ['landscape', 'Landscaping company', 'Lawn care and yard projects for homeowners.'], ['photo', 'Photography studio', 'Portraits, headshots and event shoots.']];
+
+  function setup() {
+    document.body.dataset.v = 'setup';
+    root.innerHTML = `<div class="setup"><div class="setup-card"><a class="brand" href="index.html">Ledger Lane</a><h1>Start your business</h1><p class="lead">You will run this company all semester. Every decision you make shows up in the paperwork, and you keep the books.</p>
+<form id="setup"><fieldset><legend>What kind of business?</legend><div class="types">${TYPES.map(([v, t, d], i) => `<label class="type"><input type="radio" name="type" value="${v}" ${i ? '' : 'checked'}><b>${t}</b><span>${d}</span></label>`).join('')}</div></fieldset>
+<div class="two"><label>Business name<input name="name" maxlength="40" placeholder="Spoke &amp; Sprocket" required></label><label>Your name<input name="founder" maxlength="40" placeholder="Alex Rivera" required></label></div>
+<label>City<select name="city">${Object.entries(S.CITIES).map(([k, c]) => `<option value="${k}">${c.city}, ${c.state}</option>`).join('')}</select></label>
+<button class="btn primary big">Incorporate and open the office</button></form></div></div>`;
+    const f = $('#setup');
+    f.type.forEach((r) => (r.onchange = () => (f.name.placeholder = LL.PROFILES[r.value].name)));
+    f.onsubmit = (e) => { e.preventDefault(); const config = {type: f.type.value, name: f.name.value, founder: f.founder.value, city: f.city.value, seed: 1 + Math.floor(Math.random() * 999999999)}; run = {config, events: []}; st = S.newGame(config); save(); fresh = new Set(S.open(st).map((x) => x.id)); sel = null; const f0 = S.open(st)[0]; if (f0) select(f0.id); render(); };
+  }
+
+  const initials = (n) => n.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w)).slice(0, 2).map((w) => w[0].toUpperCase()).join('');
+  const sum = () => S.summary(st);
+  const APPS = {mail: ['Mail', 'M'], books: ['Books', 'B'], bank: ['Bank', '$'], msgs: ['Messages', '…']};
+  let wins = JSON.parse(localStorage.getItem(KEY + '-wins') || 'null') || ['mail', 'books'], btab = 'record', rec = null, msel = null, toasts = [];
+  const saveWins = () => localStorage.setItem(KEY + '-wins', JSON.stringify(wins));
+  const specsOf = (it) => { const x = V(it.doc); return Array.isArray(x) ? x : [x]; };
+  const chan = (it) => (specsOf(it)[0].type === 'text' ? 'msgs' : 'mail');
+  const visible = () => S.inbox(st);
+  const pending = (c) => visible().filter((it) => !st.done[it.id] && (!c || chan(it) === c));
+  const short = (day) => S.fmtDate(st, day, 'short').slice(0, 5);
+  const canNext = () => st.m + 1 < S.months.length && (account && (account.role !== 'student' || params.has('preview')) || assignments.some(a => S.findLesson(a.lessonId)?.index >= st.m + 1));
+
+  function taskbar() {
+    const m = S.current(st), dt = new Date(Date.UTC(m.start[0], m.start[1] - 1, st.day));
+    const wd = dt.toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric'});
+    const open = S.open(st).length, next = S.nextDay(st);
+    const badge = (a) => { const n = a === 'books' ? visible().filter((it) => it.kind === 'doc' && !st.done[it.id]).length : a === 'bank' ? 0 : pending(a).length; return n ? `<i class="badge">${n}</i>` : ''; };
+    return `<footer class="task"><div class="t-co"><i>${esc(initials(st.biz.name))}</i><span><b>${esc(st.biz.name)}, Inc.</b><small>${esc(S.prof(st).type)} · ${esc(S.place(st).city)}, ${esc(S.place(st).state)}</small></span></div>
+<nav class="dock">${Object.entries(APPS).map(([k, [t, g]]) => `<button data-app="${k}" class="${wins.includes(k) ? 'on' : ''}" title="${t}"><span class="ico ico-${k}">${g}</span><em>${t}</em>${badge(k)}</button>`).join('')}</nav>
+<div class="snap" title="Screen layout">${[1, 2, 3].map((n) => `<button data-snap="${n}" class="${wins.length === n ? 'on' : ''}" aria-label="${n} app${n > 1 ? 's' : ''} side by side">${'<span></span>'.repeat(n)}</button>`).join('')}</div>
+<div class="t-cash"><small>Cash</small><b id="k-cash">${money(shown.cash, 1)}</b><em id="k-delta"></em></div>
+<div class="t-day">${st.ended ? '' : open ? `<button class="btn" disabled title="Handle everything waiting on you first">${open} waiting</button>` : next != null ? `<button class="btn primary" id="next">Close up for the day</button>` : `<button class="btn primary" id="close">Close the month</button>`}<span class="clock"><b id="cal-d">${esc(wd)}</b><small>${open ? '9:00 AM' : '5:30 PM'}</small></span></div></footer>`;
+  }
+
+  const win = (k, body, extra = '') => `<section class="win w-${k}" data-win="${k}"><header class="win-h"><span class="ico ico-${k}">${APPS[k][1]}</span><b>${APPS[k][0]}</b>${extra}<span class="win-c">${wins.length > 1 ? `<button data-max="${k}" title="Full screen">▢</button><button data-min="${k}" title="Close">×</button>` : ''}</span></header><div class="win-b">${body}</div></section>`;
+
+  function listItem(it, cur) {
+    return `<li class="${st.done[it.id] ? 'done' : 'new'} ${cur === it.id ? 'sel' : ''} ${fresh.has(it.id) ? 'arrive' : ''}" data-mail="${it.id}"><b>${esc(V(it.from))}</b><small>${short(it.day)}</small><span>${esc(V(it.subject))}</span>${it.kind === 'decision' && !st.done[it.id] ? '<em>Reply needed</em>' : ''}</li>`;
+  }
+
+  function reader(it) {
+    if (!it) return `<div class="empty"><p>${pending().length ? 'Select a message to read it.' : 'You’re caught up for today.'}</p></div>`;
+    const specs = specsOf(it), head = specs[0].type === 'email' || specs[0].type === 'text';
+    const atts = head ? specs.slice(1) : specs;
+    let act = '';
+    if (it.kind === 'decision') {
+      act = st.done[it.id] ? `<div class="sent"><b>You replied</b><p>${esc(V(it.outcome))}</p></div>`
+        : `<form class="reply" id="decide"><h4>Reply</h4>${V(it.q).map((q) => `<fieldset><legend>${esc(q.label)}</legend><div class="chips">${q.opts.map((o) => `<label class="chip"><input type="radio" name="${q.id}" value="${o.v}"><b>${esc(S.V(o.t, st))}</b><span>${esc(o.d)}</span></label>`).join('')}</div></fieldset>`).join('')}<button class="btn primary">Send reply</button><p class="fb" id="fb"></p></form>`;
+    } else if (!st.done[it.id]) act = `<div class="torec"><span>Record this in Books${wins.includes('books') ? ', it’s open beside you' : ''}.</span>${wins.includes('books') ? '' : '<button class="btn primary" data-rec="' + it.id + '">Open in Books</button>'}</div>`;
+    return `<div class="read">${head ? '' : `<div class="mhead"><b>${esc(V(it.from))}</b><span>${esc(V(it.subject))}</span><small>${esc(S.fmtDate(st, it.day, 'day'))}</small></div>`}<div class="papers">${head ? D.render(specs[0]) : ''}${atts.length ? `<div class="atts">${head ? `<small class="att-l">${atts.length} attachment${atts.length > 1 ? 's' : ''}</small>` : ''}${atts.map((x) => D.render(x)).join('')}</div>` : ''}${st.done[it.id] && it.kind === 'doc' ? `<div class="stamp-big ${S.want(st, it) ? '' : 'none'}">${S.want(st, it) ? 'POSTED' : 'NO ENTRY'}</div>` : ''}</div>${act}</div>`;
+  }
+
+  function mailApp(c) {
+    const list = visible().filter((it) => chan(it) === c).reverse(), cur = c === 'mail' ? sel : msel;
+    const it = cur && list.find((x) => x.id === cur);
+    const n = list.filter((x) => !st.done[x.id]).length;
+    return win(c, `<div class="mail ${it ? 'has' : ''}"><ul class="mlist">${list.map((x) => listItem(x, cur)).join('') || '<li class="none">No messages yet.</li>'}</ul><div class="mread">${it ? `<button class="back" data-back="${c}">‹ ${APPS[c][0]}</button>` : ''}${reader(it)}</div></div>`, `<small class="win-s">${n ? n + ' unread' : 'All read'}</small>`);
+  }
+
+  function acctOpts(it, v) {
+    const list = V(it.accts) || Object.keys(ACC);
+    return `<option value="">Choose account…</option>${list.map((a) => `<option value="${a}" ${a === v ? 'selected' : ''}>${esc(ACC[a][0])}</option>`).join('')}`;
+  }
+  const entryTable = (j) => `<table class="jt">${j.lines.map(([a, s, x]) => `<tr class="${s}"><td>${esc(ACC[a][0])}</td><td>${s === 'dr' ? money(x, 1) : ''}</td><td>${s === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}</table>`;
+
+  function recordView() {
+    const todo = visible().filter((it) => it.kind !== 'decision');
+    const it = rec && todo.find((x) => x.id === rec);
+    const queue = `<div class="queue">${todo.filter((x) => !st.done[x.id]).map((x) => `<button data-rec="${x.id}" class="${rec === x.id ? 'on' : ''}">${esc(V(x.subject))}</button>`).join('')}</div>`;
+    if (!it) return queue + `<div class="empty"><p>${todo.some((x) => !st.done[x.id]) ? 'Pick a document to record.' : 'Your books are up to date.'}</p></div>`;
+    const pin = wins.includes(chan(it)) && (chan(it) === 'mail' ? sel : msel) === it.id ? '' : `<details class="pin"><summary>View the document</summary><div class="papers">${specsOf(it).map((x) => D.render(x)).join('')}</div></details>`;
+    if (st.done[it.id]) { const j = st.book.find((b) => b.id === it.id); return queue + `<div class="rec"><span class="tag ok">${it.kind === 'work' ? 'Filed' : j ? 'Posted' : 'No entry needed'}</span><h3>${esc(V(it.subject))}</h3>${j ? entryTable(j) : ''}<p class="why">${esc(V(it.why))}</p></div>`; }
+    if (it.kind === 'work') return queue + `<form class="rec" id="worksheet"><h3>${esc(V(it.subject))}</h3>${pin}<p>Complete the business worksheet from your records. Use Statements and Trial balance in Books as needed.</p>${V(it.fields).map(f => `<label>${esc(f.label)}<input name="${esc(f.id)}" inputmode="decimal" required></label>`).join('')}<button class="btn primary">File worksheet</button><p class="fb" id="fb"></p></form>`;
+    if (!rows.length) rows = [{a: '', d: '', c: ''}, {a: '', d: '', c: ''}];
+    const miss = st.misses[it.id] || 0;
+    return queue + `<div class="rec" id="recp"><div class="rec-h"><small>New journal entry · ${esc(short(it.day))}</small><h3>${esc(V(it.subject))}</h3><small class="muted">From ${esc(V(it.from))}</small></div>${pin}
+<div class="je" id="je"><div class="je-h"><span>Account</span><span>Debit</span><span>Credit</span></div>${rows.map((r, i) => `<div class="je-r ${r.c && !r.d ? 'cr' : ''}"><select data-i="${i}" data-k="a">${acctOpts(it, r.a)}</select><input data-i="${i}" data-k="d" inputmode="decimal" value="${esc(r.d)}" aria-label="Debit"><input data-i="${i}" data-k="c" inputmode="decimal" value="${esc(r.c)}" aria-label="Credit"></div>`).join('')}
+<div class="je-t"><button class="link" id="addrow">+ Add line</button><span id="je-tot"></span></div></div>
+<div class="acts"><button class="btn primary" id="post">Post entry</button><button class="btn" id="noentry">No entry needed</button></div><p class="fb" id="fb"></p>${miss >= 2 ? '<button class="link" id="reveal">Show me the entry</button>' : ''}</div>`;
+  }
+
+  function booksApp() {
+    const s = sum();
+    let body;
+    if (btab === 'record') body = recordView();
+    else if (btab === 'journal') body = st.book.length ? `<table class="gj"><thead><tr><th>Date</th><th>Account and explanation</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead>${st.book.map((j) => `<tbody>${j.lines.map(([a, sd, x], i) => `<tr><td>${i ? '' : esc(j.date || short(j.day))}</td><td class="${sd}">${esc(ACC[a][0])}</td><td class="r">${sd === 'dr' ? money(x, 1) : ''}</td><td class="r">${sd === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}<tr class="memo"><td></td><td colspan="3">${esc(j.memo)}</td></tr></tbody>`).join('')}</table>` : '<p class="muted pad">No entries yet.</p>';
+    else if (btab === 'ledger') body = `<div class="tgrid">${Object.keys(ACC).filter((a) => st.led[a]).map((a) => { const l = st.led[a]; return `<div class="t"><h4>${esc(ACC[a][0])}</h4><div class="tb"><div>${l.dr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div><div>${l.cr.map((x) => `<span>${money(x.x, 1)}</span>`).join('')}</div></div><div class="tbal ${LL.dn(a) ? '' : 'crb'}">${money(S.bal(st, a), 1)}</div></div>`; }).join('') || '<p class="muted">No postings yet.</p>'}</div>`;
+    else if (btab === 'statements') body = statementView();
+    else { const tb = S.trialBalance(st), Dt = tb.reduce((t, r) => t + r[2], 0), Ct = tb.reduce((t, r) => t + r[3], 0); body = `<p class="muted pad">${esc(st.biz.name)}, Inc. · ${esc(S.fmtDate(st, st.day))}</p><table class="gj tbt"><thead><tr><th>Account</th><th class="r">Debit</th><th class="r">Credit</th></tr></thead><tbody>${tb.map(([, n, d, c]) => `<tr><td>${esc(n)}</td><td class="r">${d ? money(d, 1) : ''}</td><td class="r">${c ? money(c, 1) : ''}</td></tr>`).join('')}<tr class="tot"><td>Total</td><td class="r">${money(Dt, 1)}</td><td class="r">${money(Ct, 1)}</td></tr></tbody></table>`; }
+    return win('books', `<nav class="btabs">${[['record', 'Record'], ['journal', 'Journal'], ['ledger', 'Ledger'], ['tb', 'Trial balance'], ['statements', 'Statements']].map(([k, t]) => `<button data-btab="${k}" class="${btab === k ? 'on' : ''}">${t}</button>`).join('')}<span class="bk"><small>Revenue</small><b id="k-rev">${money(shown.rev, 1)}</b><small>Net income</small><b id="k-ni">${money(shown.ni, 1)}</b></span></nav><div class="bbody">${body}</div>`, `<small class="win-s">${esc(st.biz.name)}, Inc.</small>`);
+  }
+
+  function statementView() {
+    const f = S.statements(st), signed = (a) => S.r2((st.led[a]?.dr || []).reduce((n,x)=>n+x.x,0) - (st.led[a]?.cr || []).reduce((n,x)=>n+x.x,0));
+    const rows = types => Object.entries(ACC).filter(([a,v]) => types.includes(v[1]) && signed(a)).map(([a,v]) => [v[0], ['L','SE','R'].includes(v[1]) ? -signed(a) : signed(a)]);
+    const table = (title, rows) => `<h3>${title}</h3><table class="gj"><tbody>${rows.map(([label,x])=>`<tr><td>${esc(label)}</td><td class="r">${money(x,1)}</td></tr>`).join('')}</tbody></table>`;
+    return `<div class="statements"><p>${esc(st.biz.name)}, Inc. · ${esc(S.fmtDate(st,st.day))}</p>${table('Income statement · since the last close',[...rows(['R','XR','E']),['Net income',f.netIncome]])}${table('Balance sheet',[...rows(['A','XA']),['Total assets',f.assets],...rows(['L']),['Total liabilities',f.liabilities],...rows(['SE','XSE']),['Unclosed net income',f.netIncome],['Total equity',f.equity]])}${table('Cash flows · current period',[['Operating activities',f.operating],['Investing activities',f.investing],['Financing activities',f.financing],['Net cash change',f.change],['Ending cash',f.cash]])}</div>`;
+  }
+
+  function bankApp() {
+    let run = 0;
+    const tx = st.book.filter((j) => j.lines.some((l) => l[0] === 'cash')).map((j) => { const x = j.lines.filter((l) => l[0] === 'cash').reduce((t, [, sd, v]) => t + (sd === 'dr' ? v : -v), 0); run += x; return {j, x, run}; }).reverse();
+    return win('bank', `<div class="bank"><div class="bk-h"><small>Heartland Community Bank · Business Checking ••••8837</small><span>Available balance</span><b>${money(S.bal(st, 'cash'), 1)}</b></div><table class="gj bk-t"><thead><tr><th>Date</th><th>Description</th><th class="r">Amount</th><th class="r">Balance</th></tr></thead><tbody>${tx.map(({j, x, run}) => `<tr><td>${esc(j.date || short(j.day))}</td><td>${esc(j.memo)}</td><td class="r ${x < 0 ? 'neg' : 'pos'}">${x < 0 ? '−' : '+'}${money(Math.abs(x), 1)}</td><td class="r">${money(run, 1)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">No activity yet.</td></tr>'}</tbody></table><p class="muted pad">Shows deposits and payments you have recorded in Books.</p></div>`);
+  }
+
+  function monthEnd() {
+    const s = st.periodReports?.[st.m] || S.statements(st), mo = S.current(st), result = st.results?.[mo.lessonId] || s;
+    const custs = st.book.filter((j) => /sales, week/.test(j.memo)).length;
+    return `<section class="report"><div class="rp-card"><small>${esc(mo.n)} report</small><h1>${esc(st.biz.name)} made it through ${esc(mo.title.toLowerCase())}</h1>
+<div class="rp-k"><div><small>Revenue</small><b>${money(s.revenue, 1)}</b></div><div><small>Expenses</small><b>${money(s.expenses, 1)}</b></div><div><small>Net income</small><b class="${s.netIncome < 0 ? 'neg' : ''}">${money(s.netIncome, 1)}</b></div><div><small>Cash in the bank</small><b>${money(s.cash, 1)}</b></div></div>
+<div class="rp-two"><div><h3>Your decisions</h3><ol class="rp-log">${st.log.map((l) => `<li>${esc(l.text)}</li>`).join('')}</ol></div><div><h3>Your bookkeeping</h3><p class="rp-score"><b>${result.first}</b> of ${result.graded} recorded correctly on the first try (${result.score}%).</p><p class="muted">${custs} weeks of register sales recorded. Your trial balance ${Math.abs(S.trialBalance(st).reduce((t, r) => t + r[2] - r[3], 0)) < 0.005 ? 'is in balance' : 'is out of balance'}.</p><button class="btn" id="rp-books">Review your books</button></div></div>
+<p class="muted rp-note">${S.months[st.m + 1] ? esc(S.months[st.m + 1].title) + (canNext() ? ' is ready. Your books and decisions carry forward.' : ' opens when assigned by your instructor.') : 'Year-end complete. Your business records remain available.'}</p>${canNext() ? '<button class="btn primary" id="continue">Continue to the next period</button>' : '<a class="btn" href="index.html">Return home</a>'}</div></section>`;
+  }
+
+  function render() {
+    if (!st) return setup();
+    document.body.dataset.v = 'office';
+    const it = sel && S.inbox(st).find((x) => x.id === sel);
+    const ws = st.ended && !st.review ? `<div class="wins n1">${monthEnd()}</div>` : `<div class="wins n${wins.length}">${wins.map((k) => (k === 'books' ? booksApp() : k === 'bank' ? bankApp() : mailApp(k))).join('')}</div>`;
+    root.innerHTML = `<div class="os"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div>`;
+    toasts = [];
+    wire(it);
+    animateKpis();
+    fresh.clear();
+  }
+
+  function select(id) {
+    const it = S.inbox(st).find((x) => x.id === id); if (!it) return;
+    if (chan(it) === 'mail') sel = id; else msel = id;
+    if (it.kind !== 'decision' && !st.done[id] && rec !== id) { rec = id; rows = []; btab = 'record'; }
+  }
+  function show(k, front) {
+    if (wins.includes(k)) return;
+    if (innerWidth < 820 || front) wins = [k, ...wins.filter((w) => w !== k)].slice(0, Math.max(1, wins.length));
+    else wins[wins.length - 1] = k;
+    saveWins();
+  }
+
+  function animateKpis() {
+    const s = sum(), to = {cash: s.cash, rev: s.revenue, ni: s.netIncome}, from = {...shown};
+    const delta = to.cash - from.cash;
+    if (Math.abs(delta) > 0.004 && $('#k-delta')) { const e = $('#k-delta'); e.textContent = (delta > 0 ? '+' : '−') + money(Math.abs(delta), 1); e.className = 'show ' + (delta > 0 ? 'up' : 'down'); }
+    const t0 = performance.now(), dur = 700;
+    const step = (t) => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); for (const x of ['cash', 'rev', 'ni']) { const el = $('#k-' + x); if (el) el.textContent = money(from[x] + (to[x] - from[x]) * e, 1); } if (k < 1) requestAnimationFrame(step); };
+    shown = to;
+    if (Object.keys(to).some((x) => from[x] !== to[x])) requestAnimationFrame(step);
+  }
+
+  function readRows() { $$('#je [data-i]').forEach((el) => { if (rows[+el.dataset.i]) rows[+el.dataset.i][el.dataset.k] = el.value; }); }
+  function totals() {
+    readRows();
+    const n = (v) => +String(v).replace(/[$,\s]/g, '') || 0, dsum = rows.reduce((t, r) => t + n(r.d), 0), csum = rows.reduce((t, r) => t + n(r.c), 0);
+    const el = $('#je-tot'); if (el) { el.textContent = `Debits ${money(dsum, 1)} · Credits ${money(csum, 1)}`; el.className = dsum && Math.abs(dsum - csum) < 0.005 ? 'bal' : ''; }
+  }
+  function feedback(r) { const fb = $('#fb'); if (!fb) return; fb.innerHTML = r.text; fb.className = 'fb ' + (r.ok ? 'ok' : 'bad'); if (!r.ok) { const p = $('#recp') || $('#decide') || $('#worksheet'); if (p) { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); } } }
+
+  function wire(it) {
+    $$('[data-app]').forEach((b) => (b.onclick = () => { const k = b.dataset.app; if (wins.includes(k)) { if (innerWidth < 820) { wins = [k, ...wins.filter((w) => w !== k)]; saveWins(); } } else show(k, true); st.review = st.ended ? true : st.review; render(); }));
+    $$('[data-snap]').forEach((b) => (b.onclick = () => { const n = +b.dataset.snap, pool = [...wins, ...['mail', 'books', 'bank', 'msgs'].filter((k) => !wins.includes(k))]; wins = pool.slice(0, n); saveWins(); render(); }));
+    $$('[data-min]').forEach((b) => (b.onclick = () => { wins = wins.filter((k) => k !== b.dataset.min); saveWins(); render(); }));
+    $$('[data-max]').forEach((b) => (b.onclick = () => { wins = [b.dataset.max]; saveWins(); render(); }));
+    $$('[data-mail]').forEach((li) => (li.onclick = () => { select(li.dataset.mail); render(); }));
+    $$('[data-back]').forEach((b) => (b.onclick = () => { if (b.dataset.back === 'mail') sel = null; else msel = null; render(); }));
+    $$('[data-rec]').forEach((b) => (b.onclick = () => { if (rec !== b.dataset.rec) rows = []; rec = b.dataset.rec; btab = 'record'; show('books'); render(); }));
+    $$('[data-btab]').forEach((b) => (b.onclick = () => { btab = b.dataset.btab; render(); }));
+    if ($('#rp-books')) $('#rp-books').onclick = () => { st.review = true; btab = 'journal'; if (!wins.includes('books')) wins = ['books']; render(); };
+    if ($('#reset')) $('#reset').onclick = () => { if (confirm('Start over with a new business? Your current books will be erased.')) { localStorage.removeItem(KEY); st = null; sel = msel = rec = null; shown = {cash: 0, rev: 0, ni: 0}; render(); } };
+    if ($('#next')) $('#next').onclick = () => {
+      const r = act('advance'); save(); const arr = r.arrived || [];
+      arr.forEach((id) => fresh.add(id)); sel = msel = rec = null; rows = [];
+      const items = arr.map((id) => S.inbox(st).find((x) => x.id === id));
+      toasts = items.slice(0, 3).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
+      if (items[0]) select(items[0].id);
+      root.classList.add('turning'); setTimeout(() => root.classList.remove('turning'), 650); render();
+    };
+    if ($('#close')) $('#close').onclick = () => { act('complete'); save(); render(); };
+    if ($('#continue')) $('#continue').onclick = () => { if (!canNext()) return; act('next'); sel = msel = rec = null; rows = []; btab = 'record'; const first = S.open(st)[0]; if(first) select(first.id); save(); render(); };
+    if ($('#report')) $('#report').onclick = () => { st.review = false; render(); };
+    if ($('#decide')) $('#decide').onsubmit = (e) => {
+      e.preventDefault(); const f = e.target, ch = {};
+      V(it.q).forEach((q) => { const v = f.querySelector(`input[name="${q.id}"]:checked`); if (v) ch[q.id] = q.opts.find((o) => String(o.v) === v.value).v; });
+      const r = act('handle', {id: it.id, action: {choice: ch}}); if (!r.ok) return feedback(r);
+      save(); const nu = S.open(st).filter((x) => x.id !== it.id);
+      nu.forEach((x) => fresh.add(x.id)); toasts = nu.slice(0, 2).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
+      render();
+    };
+    if ($('#je')) {
+      $('#je').oninput = totals; totals();
+      $('#addrow').onclick = () => { readRows(); rows.push({a: '', d: '', c: ''}); render(); };
+      const cur = S.inbox(st).find((x) => x.id === rec);
+      $('#post').onclick = () => { readRows(); finish(act('handle', {id: rec, action: {rows: JSON.parse(JSON.stringify(rows))}})); };
+      $('#noentry').onclick = () => { readRows(); finish(act('handle', {id: rec, action: {noEntry: true}})); };
+      if ($('#reveal')) $('#reveal').onclick = () => { const r = S.handle(st, rec, {reveal: true}); if (r.reveal) { rows = r.reveal.map(([a, sd, x]) => ({a, d: sd === 'dr' ? String(x) : '', c: sd === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } };
+      void cur;
+    }
+    if ($('#worksheet')) $('#worksheet').onsubmit = e => { e.preventDefault(); finish(act('handle', {id: rec, action: {values: Object.fromEntries(new FormData(e.target))}})); };
+    function finish(r) {
+      if (!r.ok) { save(); if ((st.misses[rec] || 0) === 2) render(); return feedback(r); }
+      save(); rows = []; const done = rec;
+      const nxt = S.open(st).find((x) => x.kind !== 'decision');
+      if (nxt && (sel === done || msel === done)) { /* keep the posted document visible with its stamp */ }
+      render();
+      const stamp = $('.stamp-big'); if (stamp) stamp.classList.add('hit');
+      const p = $('.w-books .rec'); if (p) p.classList.add('ok-pulse');
+    }
+  }
+
+  async function init() {
+    root.innerHTML = '<p class="pad">Opening your office…</p>';
+    if (cloud.configured && cloud.session) {
+      try {
+        const b = await cloud.call('bootstrap'); account = b.user; assignments = b.lessons || [];
+        KEY += '-' + account.id + (params.has('preview') || account.role !== 'student' ? '-preview' : '');
+        if (account.role === 'student' && !params.has('preview')) {
+          const remote = await cloud.call('office-load'), local = load(); revision = remote.revision;
+          run = remote.run;
+          if (local?.run && local.revision === revision && (!run || JSON.stringify(local.run.events.slice(0,run.events.length)) === JSON.stringify(run.events))) run = local.run;
+          syncText = 'Saved to account';
+        } else run = load()?.run;
+      } catch(e) { root.innerHTML = `<p class="pad" role="alert">${esc(e.message)} <a href="index.html#signin">Return to sign in</a></p>`; return; }
+    } else run = load()?.run;
+    try { st = run ? S.replay(run) : null; } catch(e) { root.innerHTML = `<p class="pad" role="alert">Your saved office could not be restored. Your record is still saved; please contact your instructor. ${esc(e.message)}</p>`; return; }
+    const target = S.findLesson(params.get('lesson'));
+    if (target && target.index > (st?.m || 0)) syncText += ` · ${target.title} follows earlier periods. Continue your business below.`;
+    const first = st && S.open(st)[0]; if (first) select(first.id);
+    render();
+    if (st && account?.role === 'student' && !params.has('preview')) sync();
+  }
+  init();
+})();
+</script>
+</body>
+</html>

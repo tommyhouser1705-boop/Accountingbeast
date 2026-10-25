@@ -1,6 +1,12 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.57.4';
 import './business-decisions.js';
 import './lesson-engine.js';
+import './lessons-engine.js';
+import './sim-docs.js';
+import './sim-engine.js';
+import './sim-month1.js';
+import './sim-course.js';
+import './sim-replay.js';
 import { handleAction } from './service.mjs';
 import {generateCourseAssignment} from './generator.mjs';
 const generationTimes=new Map<string,number>();
@@ -17,6 +23,7 @@ const store={
  async upsert(table:string,row:object){return check(await db.from(table).upsert(row).select().single());},
  async update(table:string,filter:object,row:object){return check(await db.from(table).update(row).match(filter));},
  async remove(table:string,filter:object){return check(await db.from(table).delete().match(filter));},
+ async saveOffice(student:string,revision:number,run:object){return check(await db.rpc('demo_save_office',{p_student:student,p_revision:revision,p_run:run}));},
  async commit(student:string,assignment:string,revision:number,state:object,action:string,submitted:object){return check(await db.rpc('demo_commit_run',{p_student:student,p_assignment:assignment,p_revision:revision,p_state:state,p_action:action,p_submitted:submitted}));}
 };
 Deno.serve(async request=>{
