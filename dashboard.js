@@ -16,19 +16,23 @@ function pageHead(title, sub, action = '') {
 
 function avg(list) { return list.length ? Math.round(list.reduce((t, x) => t + x.score, 0) / list.length) + '%' : '—'; }
 
+function officeHomeGuide(student) {
+  return `<details class="app-office-intro"><summary>${student ? 'Your business runs one day at a time. See how the office works.' : 'What your students experience: one business, all semester.'}</summary><div><img src="assets/screens/office-books.jpg" width="1600" height="1040" loading="lazy" alt="Example student office with an equipment invoice in Mail and a journal entry in Books"><section><h2>${student ? 'Read. Reply. Record. Close the day.' : 'Assign simulation periods, not isolated exercises.'}</h2><p>${student ? 'Open your assigned period to continue the same business. Handle requests in Mail and Messages, then record the paperwork in Books beside it. When today’s work is finished, choose Close up for the day for the next date and new mail.' : 'Students make business decisions, receive source documents and keep the books in a split-screen office. Their company and balances carry into later periods. Assign periods in course order; later periods follow the earlier business work.'}</p><p>${student ? 'The Office guide in the bottom bar is always available. Your accounting is graded, not your business choices.' : 'Completing an assigned period sends its first-attempt accounting score to the gradebook. Business choices aren’t graded.'}</p><a class="app-link" href="${student ? 'office.html' : 'lessons.html#library'}">${student ? 'Open My business' : 'Browse simulation periods'}</a><small>Actual platform screenshot · example business.</small></section></div></details>`;
+}
+
 function professorHome() {
   const cls = cloudClasses.find((c) => c.id === cloudClass), book = cloudBook[cloudClass], students = book?.students || [];
   const lessons = book?.lessons || cloudLessons.filter((l) => l.class_id === cloudClass);
   const owner = cloudAccount.role === 'owner';
   if (!dashPage || !['gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'gradebook' : 'classes';
-  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['gradebook', 'Gradebook'], ['lessons', 'Lessons', 'lessons.html#library'], ['students', 'Students'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="lessons.html">Try a lesson as a student</a>`;
+  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['gradebook', 'Gradebook'], ['lessons', 'Lessons', 'lessons.html#library'], ['students', 'Students'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="lessons.html">Preview the student office</a>`;
   const steps = [[cloudClasses.length > 0, 'Create a class', 'classes'], [students.length > 0, 'Add your students', 'students'], [lessons.length > 0, 'Assign a lesson from the library', 'lessons']];
   const setup = steps.every((s) => s[0]) ? '' : `<div class="app-setup"><b>Get your class ready</b><ol>${steps.map(([done, t, k]) => `<li class="${done ? 'done' : ''}">${done ? t : k === 'lessons' ? `<a href="lessons.html#library">${t}</a>` : `<button class="app-link" data-dash="${k}">${t}</button>`}</li>`).join('')}</ol></div>`;
   let main = '';
   if (dashPage === 'gradebook') {
     const body = !cloudClass ? '<p class="app-empty">Create a class to see its gradebook.</p>' : !book ? '<p class="app-empty">Loading the gradebook…</p>' : book.error ? `<p class="app-empty">${safe(book.error)}</p>` : !lessons.length ? '<p class="app-empty">No lessons assigned yet. Assign one from the lesson library and scores will appear here.</p>' : !students.length ? '<p class="app-empty">No students yet. Add them on the Students page.</p>'
       : `<div class="app-scroll"><table class="app-table"><thead><tr><th>Student</th>${lessons.map((l) => `<th class="num">${safe(l.title)}<small>${dueText(l.dueDate)}</small></th>`).join('')}<th class="num">Average</th></tr></thead><tbody>${students.map((s) => { const sc = lessons.map((l) => (s.lessonScores || []).find((x) => x.assignment_id === l.id)); return `<tr><td><strong>${safe(s.email)}</strong><small>${s.business ? safe(s.business.name) : 'Not signed in yet'}</small></td>${sc.map((x) => `<td class="num">${x ? scoreBadge(x) : '—'}</td>`).join('')}<td class="num"><strong>${avg(sc.filter(Boolean))}</strong></td></tr>`; }).join('')}</tbody></table></div><p class="app-note">Scores are first-attempt accuracy on graded tasks. Later attempts don’t change them.</p>`;
-    main = pageHead('Gradebook', cls ? safe(cls.name) : '', '<a class="app-btn" href="lessons.html#library">Assign a lesson</a>') + setup + body;
+    main = pageHead('Gradebook', cls ? safe(cls.name) : '', '<a class="app-btn" href="lessons.html#library">Assign a period</a>') + setup + body + officeHomeGuide(false);
   } else if (dashPage === 'students') {
     main = pageHead('Students', cls ? safe(cls.name) : 'Create a class first.') + `<form id="invite-student" class="app-inline"><input name="email" type="email" required maxlength="254" placeholder="student@school.edu" aria-label="Student email" ${!cloudClass ? 'disabled' : ''}><button class="app-btn" data-cloud-submit ${!cloudClass ? 'disabled' : ''}>Add student</button></form><p class="app-note">Adding an email doesn’t send a message. Share the site link; students create an account with that email and join automatically.</p>`
       + (students.length ? `<div class="app-scroll"><table class="app-table"><thead><tr><th>Email</th><th>Business</th><th class="num">Average</th><th></th></tr></thead><tbody>${students.map((s) => `<tr><td>${safe(s.email)}</td><td>${s.business ? safe(s.business.name) : '<span class="app-mut">Not signed in yet</span>'}</td><td class="num">${avg(s.lessonScores || [])}</td><td class="num"><button class="app-link" data-remove="${safe(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="app-empty">${cloudClass && !book ? 'Loading…' : 'No students in this class yet.'}</p>`);
@@ -38,6 +42,7 @@ function professorHome() {
   } else {
     main = pageHead('Instructor access', 'Approve an email so that person can create an account.') + `<form id="grant-access" class="app-inline"><input name="email" type="email" required maxlength="254" placeholder="professor@school.edu" aria-label="Email"><select name="role" aria-label="Role"><option value="professor">Professor</option><option value="student">Student</option></select><button class="app-btn" data-cloud-submit>Approve</button></form><button id="view-access" class="app-link">View approved accounts</button>`;
   }
+  if (dashPage === 'classes') main += officeHomeGuide(false);
   return appFrame(side, main);
 }
 
@@ -58,6 +63,7 @@ function studentHome() {
     const done = sorted.filter(score);
     main = pageHead('Grades', 'First-attempt scores. Your professor sees the same numbers.') + (done.length ? `<table class="app-table"><thead><tr><th>Lesson</th><th class="num">Score</th></tr></thead><tbody>${done.map((l) => `<tr><td>${safe(l.title)}</td><td class="num">${scoreBadge(score(l))}</td></tr>`).join('')}<tr class="app-total"><td>Average</td><td class="num">${avg(done.map(score))}</td></tr></tbody></table>` : '<p class="app-empty">No graded lessons yet. Scores appear here when you finish an assigned lesson.</p>');
   }
+  if (dashPage === 'assignments') main += officeHomeGuide(true);
   return appFrame(side, main);
 }
 

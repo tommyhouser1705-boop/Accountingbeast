@@ -1,4 +1,4 @@
-// Original illustrations and product introduction. No external assets required.
+// Product introduction and legacy workspace illustrations.
 let previewBusiness = 'coffee';
 const previewBusinesses = {
   coffee: { name: 'Tommy’s Coffee', type: 'Coffee shop', sign: 'TOMMY’S COFFEE', color: '#5b50d6', window: 'COFFEE & GOOD COMPANY', item: 'Coffee and pastries', invoice: 'Harbor Coffee Supply', amount: '$420.00' },
@@ -88,14 +88,24 @@ function previewRecord(b) {
 }
 
 const courseContents = [
-  ['Ch 1', 'Open Your Doors', '20–25 min'], ['Ch 2', 'Keep Your Own Books', 'Free sample'], ['Ch 3', 'Close Out the Year', '25–30 min'], ['Review 1', 'Full Cycle: One Month', '45–60 min'],
-  ['Ch 4', 'Protect Your Cash', '20–25 min'], ['Ch 5', 'Sell on Credit', '25–30 min'], ['Ch 6', 'Launch a Product Line', '25–30 min'], ['Ch 7', 'Buy a Vehicle', '25–30 min'], ['Review 2', 'Holiday Quarter', '45–60 min'],
-  ['Ch 8', 'Hire Your Team', '25–30 min'], ['Ch 9', 'Finance an Expansion', '25–30 min'], ['Ch 10', 'Bring In Investors', '25–30 min'], ['Ch 11', 'Where Did the Cash Go?', '20–25 min'], ['Review 3', 'Fund the Next Stage', '45–60 min'],
-  ['Final', 'Your First Full Year', '120–150 min'],
+  ['Month 1', 'Opening month', 'Free sample'],
+  ['Month 2', 'Earn it, use it, accrue it', 'Accruals & adjustments'],
+  ['Month 3', 'Keep control of cash', 'Bank reconciliation'],
+  ['Period close', 'First quarter · close the books', 'Statements & closing'],
+  ['Month 4', 'Grow without losing collections', 'Receivables & credit'],
+  ['Month 5', 'Launch a product line', 'Inventory & cost of goods sold'],
+  ['Month 6', 'Put assets to work', 'Fixed assets & depreciation'],
+  ['Period close', 'Half-year · audit the business', 'Statements & closing'],
+  ['Month 7', 'Pay people and collect tax', 'Payroll & sales tax'],
+  ['Month 8', 'Finance the next stage', 'Debt & interest'],
+  ['Month 9', 'Bring in an investor', 'Stock & equity'],
+  ['Period close', 'Third quarter · report to investors', 'Statements & closing'],
+  ['Month 10', 'Show where the cash went', 'Cash-flow reporting'],
+  ['Year-end', 'Year-end · hand over the books', 'Adjust, report & close'],
 ];
 
-function screenshot(file, alt, bar = true) {
-  return `<figure class="hp-frame">${bar ? '<div class="hp-bar"><i></i><i></i><i></i></div>' : ''}<img src="assets/screens/${file}" alt="${alt}" loading="lazy"></figure>`;
+function screenshot(file, alt, bar = true, eager = false) {
+  return `<figure class="hp-frame">${bar ? '<div class="hp-bar" aria-hidden="true"><i></i><i></i><i></i></div>' : ''}<img src="assets/screens/${file}" alt="${alt}" width="${file === 'instructor-gradebook.jpg' ? 1440 : 1600}" height="${file === 'instructor-gradebook.jpg' ? 900 : 1040}" loading="${eager ? 'eager' : 'lazy'}"${eager ? ' fetchpriority="high"' : ''}></figure>`;
 }
 
 function feature(id, kicker, title, text, points, visual, flip, extra = '') {
@@ -104,41 +114,111 @@ function feature(id, kicker, title, text, points, visual, flip, extra = '') {
 
 function publicWelcome() {
   return `<div class="hp">
-  <nav class="hp-nav"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">How it works</a><a class="hp-nl" href="#contents">Course</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try a sample lesson</button></div></nav>
-  <header class="hp-hero"><div class="hp-wrap"><div>
+  <nav class="hp-nav" aria-label="Main navigation"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">See the office</a><a class="hp-nl" href="#contents">Course</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try the simulation</button></div></nav>
+  <header class="hp-hero hp-office-hero"><div class="hp-wrap"><div class="hp-intro">
+    <p class="hp-subject">A business simulation for introductory accounting</p>
     <h1>Students run a business. Then they account for it.</h1>
-    <p class="hp-lead">Ledger Lane is an introductory financial accounting course where every student starts a company, makes its decisions all semester, and records the results in a real general journal.</p>
-    <div class="hp-actions"><button id="student" class="hp-btn">Try a sample lesson</button><button id="professor" class="hp-btn ghost">Instructor sign in</button></div>
-    <p class="hp-small">The sample is Chapter 2 and takes about 25 minutes. No account needed.</p></div>
-    <div class="hp-collage">${screenshot('decision.jpg', 'A lesson: choosing equipment and marketing for the business')}<div class="hp-float">${screenshot('journal-feedback.jpg', 'A journal entry with feedback on the error', false)}</div></div>
+    <p class="hp-lead">Their own company. An inbox full of decisions. Realistic invoices, receipts and bank notices. Students run the business day by day, then keep its books in the same workspace.</p>
+    <div class="hp-actions"><button id="student" class="hp-btn">Try the opening month</button><a class="hp-btn ghost" href="#how">See the office in action</a></div>
+    <p class="hp-small">One sample period. No account needed. Full course access through a class.</p></div>
+    <div class="hp-office-shot">${screenshot('office-books.jpg', 'The student office: an equipment invoice in Mail beside its general-journal entry in Books', true, true)}<p class="hp-shot-caption"><span>Mail on the left. Books on the right.</span> Actual platform screenshots · example business and class data.</p></div>
   </div></header>
-  <div class="hp-facts"><div class="hp-wrap"><span><b>11</b> chapter lessons</span><span><b>3</b> cumulative reviews</span><span><b>1</b> year-long final project</span><span>Graded on the first attempt</span></div></div>
+  <div class="hp-facts"><div class="hp-wrap"><span>One business all semester</span><span>14 simulation periods</span><span>No quizzes or multiple-choice questions</span><span>Graded on the accounting</span></div></div>
   <main class="hp-wrap">
-  ${feature('how', 'Chapter 1', 'Every student starts a business', 'Students choose what to run and name it. That company is theirs for the semester: it adds a product line, buys a vehicle, hires staff, borrows and brings in investors as the chapters go on.',
-    ['Four business types, each with its own revenue and later a product to sell', 'Set up as a corporation from day one: common stock, retained earnings, dividends', 'The business name and past decisions carry into every lesson'],
-    screenshot('create-business.jpg', 'Creating the business'), false)}
-  ${feature('', 'Every lesson', 'Decisions that change the numbers', 'Each lesson opens with real choices: which equipment to buy, how to market, whether to offer credit, how to finance an expansion. Students see the expected revenue and cash before they commit.',
-    ['Different choices produce different transactions to record', 'No two students work from the same answer key', 'The accounting stays the focus; the decisions give it a reason'],
-    screenshot('decision.jpg', 'Business decisions in a lesson'), true)}
-  ${feature('', 'The core skill', 'Real journal entries, with feedback that teaches', 'Students write general journal entries the way the course expects: date, accounts from the chart, debits and credits, compound entries. When something is off, the feedback says what and why.',
-    ['Flags the wrong side, a wrong account, a wrong amount or an unbalanced entry', 'T accounts and the accounting equation update the moment an entry posts', 'Adjusting entries, closing entries, trial balances and statements follow'],
-    `<div class="hp-pair">${screenshot('journal-feedback.jpg', 'Journal entry feedback', false)}${screenshot('ledger.jpg', 'T accounts updating after an entry posts', false)}</div>`, false)}
-  ${feature('instructors', 'For instructors', 'Assign it Monday. Grades are in by Friday.', 'Create a class, add students by email and assign lessons with due dates. Scores arrive in your gradebook as students submit, with no answer keys to check by hand.',
-    ['Prebuilt lessons for every chapter, ready to assign', 'First-attempt scores, so practice afterwards doesn’t change the grade', 'Preview any lesson as a student; export the gradebook to CSV'],
-    screenshot('gradebook.jpg', 'Instructor gradebook'), true,
-    '<p class="hp-actions"><button class="hp-btn ghost" data-signin>Instructor sign in</button><button id="explore-studio" class="hp-link">Browse the lesson library</button></p>')}
-  <section class="hp-sec"><h2>How a lesson works</h2><div class="hp-steps">
-    <div><b>1. The situation</b><span>A month in the life of the student’s business: what happened and what’s at stake.</span></div>
-    <div><b>2. The decision</b><span>Students pick a course of action and see the expected effect on revenue and cash.</span></div>
-    <div><b>3. The entries</b><span>They journalize each transaction; the ledger and equation update as they post.</span></div>
-    <div><b>4. The close</b><span>Trial balance, adjustments, statements or closing, then a score and a summary.</span></div></div></section>
-  <section class="hp-sec" id="contents"><h2>Course contents</h2><p class="hp-muted">Chapter lessons take 20–30 minutes; cumulative reviews 45–60; the final project spans a full year of the business.</p>
+  ${officeDemo()}
+  ${feature('students', 'For students', 'Not a new case study. Your business.', 'Choose a bike repair shop, fitness studio, landscaping company or photography studio. Name it, open the office and run it through operating months, quarter-end reviews and year-end.',
+    ['Your decisions change the paperwork and the amounts you record', 'The same company, journal and balances carry into later periods', 'A first-visit office guide shows you where to start'],
+    screenshot('office-setup.jpg', 'The actual setup screen, with four business types and fields for company name, owner and city'), false)}
+  ${feature('', 'The student workspace', 'The document and the books. Together.', 'Read a supplier’s invoice without leaving your journal entry. Mail, Books, Bank and Messages are apps on the owner’s computer, not a maze of separate pages.',
+    ['Keep two or three apps side by side on a larger screen', 'Use the app switcher on a phone', 'Post journal entries, inspect the ledger and trial balance, and prepare statements in Books'],
+    screenshot('office-books.jpg', 'Realistic vendor paperwork alongside a balanced journal entry in the split-screen office'), true)}
+  ${feature('instructors', 'For instructors', 'Assign the next period. See the accounting.', 'Create a class, add your students and assign simulation periods with due dates. Their businesses carry forward; completed periods send first-attempt accounting scores to your gradebook.',
+    ['Preview the office and each period before assigning', 'Business decisions aren’t graded; accounting accuracy is', 'Later retries don’t overwrite the first-attempt score'],
+    `<div>${screenshot('instructor-gradebook.jpg', 'The current instructor gradebook showing simulation periods, due dates and first-attempt scores for an example class')}<p class="hp-small">Actual instructor interface · illustrative students and scores, not a live class.</p></div>`, false,
+    '<p class="hp-actions"><button id="professor" class="hp-btn">Instructor sign in</button><button id="explore-studio" class="hp-link">Browse the period library</button></p>')}
+  <section class="hp-sec" id="contents"><h2>A semester in the life of one business.</h2><p class="hp-muted">10 operating months, three quarter-end reviews and a year-end close. Each period adds accounting work to the company students already run.</p>
     <div class="hp-toc">${courseContents.map(([n, t, m]) => `<div><span><em>${n}</em> ${t}</span><small${m === 'Free sample' ? ' class="free"' : ''}>${m}</small></div>`).join('')}</div>
-    <p><button id="instructor-demo" class="hp-link">Open the lesson library</button></p></section>
+    <p><button id="instructor-demo" class="hp-link">Explore the simulation periods</button></p></section>
+  <section class="hp-sec hp-faq" aria-labelledby="hp-questions"><h2 id="hp-questions">Before you step into the office</h2>
+    <details><summary>Is this a quiz or a business simulation?</summary><p>A simulation. Students respond to business requests, work from source documents, record journal entries and complete accounting worksheets. There are no multiple-choice knowledge questions.</p></details>
+    <details><summary>What happens when a student finishes today’s work?</summary><p>The office shows “Today’s work is finished.” Close up for the day advances to the next business date and brings in new mail and paperwork. At a period boundary, Finish this period opens the report.</p></details>
+    <details><summary>What can I try without an account?</summary><p>The opening month is the public sample. Full-course access requires a class account. Instructors sign in to preview the course and assign periods.</p></details>
+    <details><summary>What is graded?</summary><p>First-attempt accounting accuracy. Students can make different business decisions without being graded on those choices. Completing an assigned period sends its accounting score to the class gradebook.</p></details>
+  </section>
   </main>
-  <section class="hp-cta"><div class="hp-wrap"><div><h2>See a lesson for yourself.</h2><p>Chapter 2 is open to everyone. Instructors can request access to the full course.</p></div><div class="hp-actions"><button class="hp-btn light" data-sample>Try the sample lesson</button><button class="hp-btn outline" data-signin>Instructor sign in</button></div></div></section>
+  <section class="hp-cta"><div class="hp-wrap"><div><h2>Your office is ready.</h2><p>Start a business and try the opening month. No account needed.</p></div><div class="hp-actions"><button class="hp-btn light" data-sample>Try the simulation</button><button class="hp-btn outline" data-signin>Sign in to your class</button></div></div></section>
   <footer class="hp-wrap hp-foot">© 2026 Ledger Lane · Introductory financial accounting</footer>
   </div>`;
+}
+
+const officeDemoSteps = [
+  {label: 'Read & reply', title: 'A supplier needs your decision.', text: 'Compare a new equipment package with a used set. Choose a reply in Mail and send it. The business decision changes the paperwork that arrives next.', image: 'office-reply.jpg', alt: 'Mail shows an equipment quote, a used-equipment offer and reply choices for the business owner'},
+  {label: 'Record it', title: 'Your decision becomes a transaction.', text: 'The new equipment arrives with an $11,800 invoice. Read it in Mail and record Equipment and Cash in Books, right beside the document.', image: 'office-books.jpg', alt: 'An $11,800 equipment invoice beside a journal entry debiting Equipment and crediting Cash'},
+  {label: 'Close the day', title: 'Work finished? Close up for the day.', text: 'The entry is posted and today’s items are handled. The office shows the next date and a clear Close up for the day button. You control when the business moves on.', image: 'office-day-end.jpg', alt: 'Posted equipment paperwork and the general journal, with the Today’s work is finished banner and Close up for the day button'},
+  {label: 'New mail arrives', title: 'Tomorrow brings the next business event.', text: 'The calendar advances and new paperwork arrives. This supplier’s price quote isn’t a purchase yet: deciding when no entry is needed is part of keeping the books.', image: 'office-next-day.jpg', alt: 'The following business day, with a new supplier price quote in Mail and the Books entry form beside it'},
+];
+
+function officeDemo() {
+  const first = officeDemoSteps[0];
+  return `<section class="hp-demo hp-sec" id="how" aria-labelledby="hp-demo-title"><div class="hp-demo-head"><div><h2 id="hp-demo-title">See one decision play out.</h2><p>Step through the real office. No sign-in, no saved work.</p></div><button class="hp-btn ghost" id="hp-demo-play" aria-pressed="false" aria-controls="hp-demo-stage">Play short demo</button></div>
+    <div id="hp-office-demo" aria-label="Office screenshot demonstration"><div class="hp-demo-steps" role="group" aria-label="Demo steps">${officeDemoSteps.map((s, i) => `<button type="button" data-demo-step="${i}" aria-current="${i === 0 ? 'step' : 'false'}" aria-controls="hp-demo-stage"><span>${i + 1}</span>${s.label}</button>`).join('')}</div>
+    <div class="hp-demo-stage" id="hp-demo-stage"><div class="hp-demo-image" tabindex="0" role="region" aria-label="Office screenshot. Scroll horizontally on small screens to see both apps."><img id="hp-demo-image" src="assets/screens/${first.image}" alt="${first.alt}" width="1600" height="1040" loading="lazy"></div><div class="hp-demo-caption" aria-live="polite" aria-atomic="true"><p id="hp-demo-count">Step 1 of ${officeDemoSteps.length} · Screenshot demo</p><h3 id="hp-demo-heading">${first.title}</h3><p id="hp-demo-description">${first.text}</p></div></div>
+    <div class="hp-demo-foot"><p>Example business: Spoke &amp; Sprocket. <span class="hp-swipe">Swipe the screenshot to see both apps.</span></p><div><button class="hp-link" id="hp-demo-back" disabled>Previous</button><button class="hp-btn sm" id="hp-demo-next">Next step</button></div></div><p class="hp-small" id="hp-demo-motion" hidden>Automatic playback is off for your reduced-motion setting. Use the steps to explore.</p></div></section>`;
+}
+
+let stopOfficeDemo = () => {};
+function wireOfficeDemo() {
+  stopOfficeDemo();
+  const root = Q('#hp-office-demo');
+  if (!root) return;
+  const play = Q('#hp-demo-play'), prev = Q('#hp-demo-back'), next = Q('#hp-demo-next');
+  const buttons = [...root.querySelectorAll('[data-demo-step]')];
+  let index = 0, playing = false, timer = null, observer = null;
+  const reduced = () => !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  function pause() {
+    playing = false; clearTimeout(timer); timer = null;
+    play.textContent = 'Play short demo'; play.setAttribute('aria-pressed', 'false');
+    document.removeEventListener('visibilitychange', onVisibility);
+    observer?.disconnect(); observer = null;
+  }
+  function show(value) {
+    index = Math.max(0, Math.min(value, officeDemoSteps.length - 1));
+    const step = officeDemoSteps[index], img = Q('#hp-demo-image');
+    img.src = 'assets/screens/' + step.image; img.alt = step.alt;
+    Q('#hp-demo-count').textContent = `Step ${index + 1} of ${officeDemoSteps.length} · Screenshot demo`;
+    Q('#hp-demo-heading').textContent = step.title;
+    Q('#hp-demo-description').textContent = step.text;
+    buttons.forEach((b, i) => b.setAttribute('aria-current', i === index ? 'step' : 'false'));
+    prev.disabled = index === 0; next.disabled = index === officeDemoSteps.length - 1;
+  }
+  function onVisibility() { if (document.hidden) pause(); }
+  function tick() {
+    if (!root.isConnected || document.hidden || reduced()) return pause();
+    show(index + 1);
+    if (index === officeDemoSteps.length - 1) pause(); else timer = setTimeout(tick, 5000);
+  }
+  function refreshMotion() {
+    play.hidden = reduced(); Q('#hp-demo-motion').hidden = !reduced();
+  }
+  refreshMotion();
+  play.onclick = () => {
+    if (playing || reduced()) { pause(); refreshMotion(); return; }
+    if (index === officeDemoSteps.length - 1) show(0);
+    playing = true; play.textContent = 'Pause demo'; play.setAttribute('aria-pressed', 'true');
+    document.addEventListener('visibilitychange', onVisibility);
+    if (window.IntersectionObserver) {
+      observer = new window.IntersectionObserver(entries => { if (!entries[0].isIntersecting) pause(); });
+      observer.observe(root);
+    }
+    timer = setTimeout(tick, 5000);
+  };
+  buttons.forEach((b, i) => b.onclick = () => { pause(); show(i); });
+  prev.onclick = () => { pause(); show(index - 1); };
+  next.onclick = () => { pause(); show(index + 1); };
+  root.closest?.('.hp')?.addEventListener('click', e => {
+    if (e.target.closest('a, [data-signin], [data-sample], #student, #professor, #instructor-demo, #explore-studio')) pause();
+  });
+  stopOfficeDemo = pause;
 }
 
 function wireWelcome() {
@@ -147,4 +227,5 @@ function wireWelcome() {
   for (const id of ['#instructor-demo', '#explore-studio']) if (Q(id)) { Q(id).hidden = !!signedIn; Q(id).onclick = openStudio; }
   document.querySelectorAll('[data-sample]').forEach((b) => (b.onclick = () => Q('#student').click()));
   document.querySelectorAll('[data-signin]').forEach((b) => (b.onclick = () => Q('#professor').click()));
+  wireOfficeDemo();
 }
