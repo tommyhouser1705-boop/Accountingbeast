@@ -62,6 +62,47 @@
   const short = (day) => S.fmtDate(st, day, 'short').slice(0, 5);
   const canNext = () => st.m + 1 < S.months.length && (account && (account.role !== 'student' || params.has('preview')) || assignments.some(a => S.findLesson(a.lessonId)?.index >= st.m + 1));
 
+  let guideStep = null, guideDismissed = false;
+  const guideSteps = [
+    {title: 'Welcome to your office', text: 'You own this business. Read what comes in, make the business decisions, and record what happened. This guide is a demonstration only: it won’t change your business or your grade.', visual: '<div class="guide-apps"><span>Mail</span><span>Books</span><span>Bank</span><span>Messages</span></div>', tip: 'Your company and its books carry forward from one period to the next.'},
+    {title: 'Read the mail. Make the call.', text: 'Open the messages waiting in Mail or Messages. When someone needs a decision, choose your reply and click Send reply. Your choice can produce an invoice, receipt or other paperwork to record.', visual: '<div class="guide-mail"><small>Jordan Pike · Operations</small><b>We’re running low on supplies</b><p>Can you approve the next delivery?</p><span class="guide-reply">Reply: Approve delivery</span></div>', tip: 'Business decisions aren’t graded. Your accounting is.'},
+    {title: 'Keep the books beside the paperwork', text: 'Mail and Books open side by side on a larger screen. Record the transaction in Books and click Post entry. If a document isn’t a transaction, use No entry needed. On a phone, use the app buttons at the bottom to switch.', visual: '<div class="guide-split"><div><b>Mail</b><span>Invoice · supplies delivered</span><strong>$240.00</strong></div><div><b>Books</b><span>Supplies · debit $240</span><span>Accounts payable · credit $240</span><strong>Post entry</strong></div></div>', tip: 'The layout buttons at the bottom show one, two or three apps. Bank shows the cash activity you’ve recorded.'},
+    {title: 'Done today? Close up for the day.', text: 'Finish every item waiting on you. Then click Close up for the day to move to the next business date and receive new messages and documents. The simulation waits for you; it doesn’t advance by itself.', visual: '<ol class="guide-cycle"><li>Handle today’s items</li><li><strong>Close up for the day</strong></li><li>New mail arrives</li></ol>', tip: 'A banner appears when today’s work is finished. At the end of a period, Finish this period opens your report.'},
+  ];
+  function openGuide() {
+    guideStep = 0;
+    drawGuide();
+    $('#office-tour').showModal();
+    $('#guide-title').focus();
+  }
+  function dismissGuide() {
+    guideStep = null; guideDismissed = true;
+    try { localStorage.setItem(KEY + '-guide-v1', 'seen'); } catch {}
+    $('#office-tour').close();
+    $('#office-guide').focus();
+  }
+  function drawGuide() {
+    const step = guideSteps[guideStep], dialog = $('#office-tour');
+    dialog.innerHTML = `<div class="guide-content"><div class="guide-heading"><span>Office guide · ${guideStep + 1} of ${guideSteps.length}</span><button class="link" id="guide-skip">Skip guide</button></div><h2 id="guide-title" tabindex="-1">${step.title}</h2><p id="guide-description">${step.text}</p><div class="guide-demo"><small>Example only · not your business records</small>${step.visual}</div><p class="guide-tip">${step.tip}</p><div class="guide-actions">${guideStep ? '<button class="btn" id="guide-back">Back</button>' : ''}<button class="btn primary" id="guide-next">${guideStep === guideSteps.length - 1 ? 'Start working' : 'Next'}</button></div><p class="guide-reopen">You can reopen this anytime using Office guide in the bottom bar.</p></div>`;
+    $('#guide-skip').onclick = dismissGuide;
+    $('#guide-next').onclick = () => { if (guideStep === guideSteps.length - 1) dismissGuide(); else { guideStep++; drawGuide(); } };
+    if ($('#guide-back')) $('#guide-back').onclick = () => { guideStep--; drawGuide(); };
+    dialog.oncancel = e => { e.preventDefault(); dismissGuide(); };
+    $('#guide-title').focus();
+  }
+  function maybeShowGuide() {
+    if (guideDismissed || st.ended || params.has('preview') || account && account.role !== 'student') return;
+    let seen = false;
+    try { seen = localStorage.getItem(KEY + '-guide-v1') === 'seen'; } catch {}
+    if (!seen) openGuide();
+  }
+
+  function nextDayPrompt() {
+    if (st.ended || S.open(st).length) return '';
+    const next = S.nextDay(st);
+    return `<section class="day-ready" aria-labelledby="day-ready-title"><div role="status"><h2 id="day-ready-title">Today’s work is finished.</h2><p>${next != null ? `Close up for the day to continue to ${esc(S.fmtDate(st, next, 'day'))} and receive new mail and paperwork.` : 'You’ve reached the end of this period. Finish it to see your business results and bookkeeping report.'}</p></div><button class="btn primary" ${next != null ? 'data-next-day' : 'data-finish-period'}>${next != null ? 'Close up for the day' : 'Finish this period'}</button></section>`;
+  }
+
   function taskbar() {
     const m = S.current(st), dt = new Date(Date.UTC(m.start[0], m.start[1] - 1, st.day));
     const wd = dt.toLocaleDateString('en-US', {timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric'});
@@ -71,7 +112,7 @@
 <nav class="dock">${Object.entries(APPS).map(([k, [t, g]]) => `<button data-app="${k}" class="${wins.includes(k) ? 'on' : ''}" title="${t}"><span class="ico ico-${k}">${g}</span><em>${t}</em>${badge(k)}</button>`).join('')}</nav>
 <div class="snap" title="Screen layout">${[1, 2, 3].map((n) => `<button data-snap="${n}" class="${wins.length === n ? 'on' : ''}" aria-label="${n} app${n > 1 ? 's' : ''} side by side">${'<span></span>'.repeat(n)}</button>`).join('')}</div>
 <div class="t-cash"><small>Cash</small><b id="k-cash">${money(shown.cash, 1)}</b><em id="k-delta"></em></div>
-<div class="t-day">${st.ended ? '' : open ? `<button class="btn" disabled title="Handle everything waiting on you first">${open} waiting</button>` : next != null ? `<button class="btn primary" id="next">Close up for the day</button>` : `<button class="btn primary" id="close">Close the month</button>`}<span class="clock"><b id="cal-d">${esc(wd)}</b><small>${open ? '9:00 AM' : '5:30 PM'}</small></span></div></footer>`;
+<button class="office-help" id="office-guide" aria-haspopup="dialog">Office guide</button><div class="t-day">${st.ended ? '' : open ? `<div class="day-waiting"><button class="btn" disabled aria-describedby="waiting-help">${open} waiting</button><small id="waiting-help">Handle these items to end today.</small></div>` : next != null ? `<button class="btn primary" id="next" data-next-day>Close up for the day</button>` : `<button class="btn primary" id="close" data-finish-period>Finish this period</button>`}<span class="clock"><b id="cal-d">${esc(wd)}</b><small>${open ? '9:00 AM' : '5:30 PM'}</small></span></div></footer>`;
   }
 
   const win = (k, body, extra = '') => `<section class="win w-${k}" data-win="${k}"><header class="win-h"><span class="ico ico-${k}">${APPS[k][1]}</span><b>${APPS[k][0]}</b>${extra}<span class="win-c">${wins.length > 1 ? `<button data-max="${k}" title="Full screen">▢</button><button data-min="${k}" title="Close">×</button>` : ''}</span></header><div class="win-b">${body}</div></section>`;
@@ -159,11 +200,13 @@
     document.body.dataset.v = 'office';
     const it = sel && S.inbox(st).find((x) => x.id === sel);
     const ws = st.ended && !st.review ? `<div class="wins n1">${monthEnd()}</div>` : `<div class="wins n${wins.length}">${wins.map((k) => (k === 'books' ? booksApp() : k === 'bank' ? bankApp() : mailApp(k))).join('')}</div>`;
-    root.innerHTML = `<div class="os"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div>`;
+    const nextPrompt = nextDayPrompt();
+    root.innerHTML = `<div class="os ${nextPrompt ? 'day-finished' : ''}"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${nextPrompt}${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div><dialog class="office-tour" id="office-tour" aria-labelledby="guide-title" aria-describedby="guide-description"></dialog>`;
     toasts = [];
     wire(it);
     animateKpis();
     fresh.clear();
+    maybeShowGuide();
   }
 
   function select(id) {
@@ -197,6 +240,7 @@
   function feedback(r) { const fb = $('#fb'); if (!fb) return; fb.innerHTML = r.text; fb.className = 'fb ' + (r.ok ? 'ok' : 'bad'); if (!r.ok) { const p = $('#recp') || $('#decide') || $('#worksheet'); if (p) { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); } } }
 
   function wire(it) {
+    $('#office-guide').onclick = openGuide;
     $$('[data-app]').forEach((b) => (b.onclick = () => { const k = b.dataset.app; if (wins.includes(k)) { if (innerWidth < 820) { wins = [k, ...wins.filter((w) => w !== k)]; saveWins(); } } else show(k, true); st.review = st.ended ? true : st.review; render(); }));
     $$('[data-snap]').forEach((b) => (b.onclick = () => { const n = +b.dataset.snap, pool = [...wins, ...['mail', 'books', 'bank', 'msgs'].filter((k) => !wins.includes(k))]; wins = pool.slice(0, n); saveWins(); render(); }));
     $$('[data-min]').forEach((b) => (b.onclick = () => { wins = wins.filter((k) => k !== b.dataset.min); saveWins(); render(); }));
@@ -207,15 +251,15 @@
     $$('[data-btab]').forEach((b) => (b.onclick = () => { btab = b.dataset.btab; render(); }));
     if ($('#rp-books')) $('#rp-books').onclick = () => { st.review = true; btab = 'journal'; if (!wins.includes('books')) wins = ['books']; render(); };
     if ($('#reset')) $('#reset').onclick = () => { if (confirm('Start over with a new business? Your current books will be erased.')) { localStorage.removeItem(KEY); st = null; sel = msel = rec = null; shown = {cash: 0, rev: 0, ni: 0}; render(); } };
-    if ($('#next')) $('#next').onclick = () => {
+    $$('[data-next-day]').forEach(b => b.onclick = () => {
       const r = act('advance'); save(); const arr = r.arrived || [];
       arr.forEach((id) => fresh.add(id)); sel = msel = rec = null; rows = [];
       const items = arr.map((id) => S.inbox(st).find((x) => x.id === id));
       toasts = items.slice(0, 3).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
       if (items[0]) select(items[0].id);
       root.classList.add('turning'); setTimeout(() => root.classList.remove('turning'), 650); render();
-    };
-    if ($('#close')) $('#close').onclick = () => { act('complete'); save(); render(); };
+    });
+    $$('[data-finish-period]').forEach(b => b.onclick = () => { act('complete'); save(); render(); });
     if ($('#continue')) $('#continue').onclick = () => { if (!canNext()) return; act('next'); sel = msel = rec = null; rows = []; btab = 'record'; const first = S.open(st)[0]; if(first) select(first.id); save(); render(); };
     if ($('#report')) $('#report').onclick = () => { st.review = false; render(); };
     if ($('#decide')) $('#decide').onsubmit = (e) => {
