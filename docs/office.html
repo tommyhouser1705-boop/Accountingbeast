@@ -287,6 +287,15 @@ body[data-v=office]{overflow:hidden;background:#dfe5ee}
 .guide-tip{color:#465870;font-size:14px}
 .guide-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
 .office-tour .guide-reopen{margin:18px 0 0;color:var(--mute);font-size:12px}
+.post-confirm{width:min(640px,calc(100% - 28px))}
+.post-confirm h2{margin-top:0}
+.post-table{overflow:auto;max-height:40dvh;border:1px solid var(--line);border-radius:6px}
+.entry-review{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.entry-review th,.entry-review td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right}
+.entry-review th:first-child,.entry-review td:first-child{text-align:left;min-width:140px}
+.entry-review thead,.entry-review tfoot{background:#f3f6fa}
+.entry-review tfoot th,.entry-review tfoot td{border-bottom:0;font-weight:600}
+.post-table:focus-visible{outline:3px solid #72aaff;outline-offset:3px}
 .office-help:focus-visible,.day-ready button:focus-visible,.office-tour button:focus-visible{outline:3px solid #72aaff;outline-offset:3px}
 @media(min-width:821px) and (max-width:1300px){.t-co span{max-width:135px}.t-co b,.t-co small{overflow:hidden;text-overflow:ellipsis}.task{gap:10px}.dock em{display:none}}
 @media(min-width:821px) and (max-width:1050px){.t-co span{display:none}.os{grid-template-rows:minmax(0,1fr) auto}.os.day-finished{grid-template-rows:auto minmax(0,1fr) auto}.task{flex-wrap:wrap;padding:8px 14px}.t-day{margin-left:auto}}
@@ -1066,7 +1075,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
   const guideSteps = [
     {title: 'Welcome to your office', text: 'You own this business. Read what comes in, make the business decisions, and record what happened. This guide is a demonstration only: it won’t change your business or your grade.', visual: '<div class="guide-apps"><span>Mail</span><span>Books</span><span>Bank</span><span>Messages</span></div>', tip: 'Your company and its books carry forward from one period to the next.'},
     {title: 'Read the mail. Make the call.', text: 'Open the messages waiting in Mail or Messages. When someone needs a decision, choose your reply and click Send reply. Your choice can produce an invoice, receipt or other paperwork to record.', visual: '<div class="guide-mail"><small>Jordan Pike · Operations</small><b>We’re running low on supplies</b><p>Can you approve the next delivery?</p><span class="guide-reply">Reply: Approve delivery</span></div>', tip: 'Business decisions aren’t graded. Your accounting is.'},
-    {title: 'Keep the books beside the paperwork', text: 'Mail and Books open side by side on a larger screen. Record the transaction in Books and click Post entry. If a document isn’t a transaction, use No entry needed. On a phone, use the app buttons at the bottom to switch.', visual: '<div class="guide-split"><div><b>Mail</b><span>Invoice · supplies delivered</span><strong>$240.00</strong></div><div><b>Books</b><span>Supplies · debit $240</span><span>Accounts payable · credit $240</span><strong>Post entry</strong></div></div>', tip: 'The layout buttons at the bottom show one, two or three apps. Bank shows the cash activity you’ve recorded.'},
+    {title: 'Keep the books beside the paperwork', text: 'Mail and Books open side by side on a larger screen. Record the transaction in Books and click Post entry. Review the popup, then choose Confirm and post to submit it. Back to entry lets you edit without using an attempt. If a document isn’t a transaction, use No entry needed. On a phone, use the app buttons at the bottom to switch.', visual: '<div class="guide-split"><div><b>Mail</b><span>Invoice · supplies delivered</span><strong>$240.00</strong></div><div><b>Books</b><span>Supplies · debit $240</span><span>Accounts payable · credit $240</span><strong>Post entry</strong></div></div>', tip: 'The layout buttons at the bottom show one, two or three apps. Bank shows the cash activity you’ve recorded.'},
     {title: 'Done today? Close up for the day.', text: 'Finish every item waiting on you. Then click Close up for the day to move to the next business date and receive new messages and documents. The simulation waits for you; it doesn’t advance by itself.', visual: '<ol class="guide-cycle"><li>Handle today’s items</li><li><strong>Close up for the day</strong></li><li>New mail arrives</li></ol>', tip: 'A banner appears when today’s work is finished. At the end of a period, Finish this period opens your report.'},
   ];
   function openGuide() {
@@ -1152,7 +1161,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     const queue = `<div class="queue">${todo.filter((x) => !st.done[x.id]).map((x) => `<button data-rec="${x.id}" class="${rec === x.id ? 'on' : ''}">${esc(V(x.subject))}</button>`).join('')}</div>`;
     if (!it) return queue + `<div class="empty"><p>${todo.some((x) => !st.done[x.id]) ? 'Pick a document to record.' : 'Your books are up to date.'}</p></div>`;
     const pin = wins.includes(chan(it)) && (chan(it) === 'mail' ? sel : msel) === it.id ? '' : `<details class="pin"><summary>View the document</summary><div class="papers">${specsOf(it).map((x) => D.render(x)).join('')}</div></details>`;
-    if (st.done[it.id]) { const j = st.book.find((b) => b.id === it.id); return queue + `<div class="rec"><span class="tag ok">${it.kind === 'work' ? 'Filed' : j ? 'Posted' : 'No entry needed'}</span><h3>${esc(V(it.subject))}</h3>${j ? entryTable(j) : ''}<p class="why">${esc(V(it.why))}</p></div>`; }
+    if (st.done[it.id]) { const j = st.book.find((b) => b.id === it.id); return queue + `<div class="rec" tabindex="-1"><span class="tag ok">${it.kind === 'work' ? 'Filed' : j ? 'Posted' : 'No entry needed'}</span><h3>${esc(V(it.subject))}</h3>${j ? entryTable(j) : ''}<p class="why">${esc(V(it.why))}</p></div>`; }
     if (it.kind === 'work') return queue + `<form class="rec" id="worksheet"><h3>${esc(V(it.subject))}</h3>${pin}<p>Complete the business worksheet from your records. Use Statements and Trial balance in Books as needed.</p>${V(it.fields).map(f => `<label>${esc(f.label)}<input name="${esc(f.id)}" inputmode="decimal" required></label>`).join('')}<button class="btn primary">File worksheet</button><p class="fb" id="fb"></p></form>`;
     if (!rows.length) rows = [{a: '', d: '', c: ''}, {a: '', d: '', c: ''}];
     const miss = st.misses[it.id] || 0;
@@ -1201,7 +1210,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
     const it = sel && S.inbox(st).find((x) => x.id === sel);
     const ws = st.ended && !st.review ? `<div class="wins n1">${monthEnd()}</div>` : `<div class="wins n${wins.length}">${wins.map((k) => (k === 'books' ? booksApp() : k === 'bank' ? bankApp() : mailApp(k))).join('')}</div>`;
     const nextPrompt = nextDayPrompt();
-    root.innerHTML = `<div class="os ${nextPrompt ? 'day-finished' : ''}"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${nextPrompt}${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div><dialog class="office-tour" id="office-tour" aria-labelledby="guide-title" aria-describedby="guide-description"></dialog>`;
+    root.innerHTML = `<div class="os ${nextPrompt ? 'day-finished' : ''}"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${nextPrompt}${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div><dialog class="office-tour" id="office-tour" aria-labelledby="guide-title" aria-describedby="guide-description"></dialog><dialog class="office-tour post-confirm" id="post-confirm" aria-labelledby="post-confirm-title" aria-describedby="post-confirm-description"></dialog>`;
     toasts = [];
     wire(it);
     animateKpis();
@@ -1239,6 +1248,26 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
   }
   function feedback(r) { const fb = $('#fb'); if (!fb) return; fb.innerHTML = r.text; fb.className = 'fb ' + (r.ok ? 'ok' : 'bad'); if (!r.ok) { const p = $('#recp') || $('#decide') || $('#worksheet'); if (p) { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); } } }
 
+  function confirmEntry(finish) {
+    const dialog = $('#post-confirm');
+    if (dialog.open) return;
+    readRows();
+    const id = rec, entry = JSON.parse(JSON.stringify(rows)), it = S.inbox(st).find(x => x.id === id);
+    const total = key => entry.reduce((sum, row) => sum + (+String(row[key]).replace(/[$,\s]/g, '') || 0), 0);
+    dialog.innerHTML = `<div class="guide-content"><h2 id="post-confirm-title">Post this journal entry?</h2><p id="post-confirm-description">Confirming submits this entry for grading. Your first attempt determines the score for this item.</p><p><strong>${esc(V(it.subject))}</strong><br>${esc(S.fmtDate(st, it.day, 'day'))}</p><div class="post-table" tabindex="0" role="region" aria-label="Entry to post"><table class="entry-review"><thead><tr><th scope="col">Account</th><th scope="col">Debit</th><th scope="col">Credit</th></tr></thead><tbody>${entry.map(r => `<tr><td>${esc(ACC[r.a]?.[0] || 'No account selected')}</td><td>${esc(r.d || '—')}</td><td>${esc(r.c || '—')}</td></tr>`).join('')}</tbody><tfoot><tr><th scope="row">Totals</th><td>${money(total('d'), 1)}</td><td>${money(total('c'), 1)}</td></tr></tfoot></table></div><div class="guide-actions"><button type="button" class="btn" id="post-cancel">Back to entry</button><button type="button" class="btn primary" id="post-approve">Confirm and post</button></div></div>`;
+    const cancel = () => { dialog.close(); $('#post')?.focus(); };
+    $('#post-cancel').onclick = cancel;
+    dialog.oncancel = e => { e.preventDefault(); cancel(); };
+    $('#post-approve').onclick = () => {
+      if (!dialog.open) return;
+      dialog.close();
+      finish(act('handle', {id, action: {rows: entry}}));
+      ($('#post') || $('.w-books .rec'))?.focus();
+    };
+    dialog.showModal();
+    $('#post-cancel').focus();
+  }
+
   function wire(it) {
     $('#office-guide').onclick = openGuide;
     $$('[data-app]').forEach((b) => (b.onclick = () => { const k = b.dataset.app; if (wins.includes(k)) { if (innerWidth < 820) { wins = [k, ...wins.filter((w) => w !== k)]; saveWins(); } } else show(k, true); st.review = st.ended ? true : st.review; render(); }));
@@ -1274,7 +1303,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
       $('#je').oninput = totals; totals();
       $('#addrow').onclick = () => { readRows(); rows.push({a: '', d: '', c: ''}); render(); };
       const cur = S.inbox(st).find((x) => x.id === rec);
-      $('#post').onclick = () => { readRows(); finish(act('handle', {id: rec, action: {rows: JSON.parse(JSON.stringify(rows))}})); };
+      $('#post').onclick = () => confirmEntry(finish);
       $('#noentry').onclick = () => { readRows(); finish(act('handle', {id: rec, action: {noEntry: true}})); };
       if ($('#reveal')) $('#reveal').onclick = () => { const r = S.handle(st, rec, {reveal: true}); if (r.reveal) { rows = r.reveal.map(([a, sd, x]) => ({a, d: sd === 'dr' ? String(x) : '', c: sd === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } };
       void cur;

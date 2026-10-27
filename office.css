@@ -281,6 +281,15 @@ body[data-v=office]{overflow:hidden;background:#dfe5ee}
 .guide-tip{color:#465870;font-size:14px}
 .guide-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}
 .office-tour .guide-reopen{margin:18px 0 0;color:var(--mute);font-size:12px}
+.post-confirm{width:min(640px,calc(100% - 28px))}
+.post-confirm h2{margin-top:0}
+.post-table{overflow:auto;max-height:40dvh;border:1px solid var(--line);border-radius:6px}
+.entry-review{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.entry-review th,.entry-review td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right}
+.entry-review th:first-child,.entry-review td:first-child{text-align:left;min-width:140px}
+.entry-review thead,.entry-review tfoot{background:#f3f6fa}
+.entry-review tfoot th,.entry-review tfoot td{border-bottom:0;font-weight:600}
+.post-table:focus-visible{outline:3px solid #72aaff;outline-offset:3px}
 .office-help:focus-visible,.day-ready button:focus-visible,.office-tour button:focus-visible{outline:3px solid #72aaff;outline-offset:3px}
 @media(min-width:821px) and (max-width:1300px){.t-co span{max-width:135px}.t-co b,.t-co small{overflow:hidden;text-overflow:ellipsis}.task{gap:10px}.dock em{display:none}}
 @media(min-width:821px) and (max-width:1050px){.t-co span{display:none}.os{grid-template-rows:minmax(0,1fr) auto}.os.day-finished{grid-template-rows:auto minmax(0,1fr) auto}.task{flex-wrap:wrap;padding:8px 14px}.t-day{margin-left:auto}}

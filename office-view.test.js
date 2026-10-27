@@ -2,11 +2,12 @@ const test = require('node:test'), assert = require('node:assert/strict'), vm = 
 async function view(run, file = 'office.js', account = null, options = {}) {
   const nodes = new Map(), root = {innerHTML: '', classList: {add(){},remove(){}}};
   const node = key => {if(!nodes.has(key)){
-    const n={dataset:{},classList:{add(){},remove(){}},textContent:'',innerHTML:'',focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;}};
+    const n={dataset:{},value:'',classList:{add(){},remove(){}},textContent:'',innerHTML:'',focus(){document.activeElement=this;},showModal(){this.open=true;},close(){this.open=false;}};
     if(key==='#setup')Object.assign(n,{type:Object.assign([],{value:'bike'}),name:{value:'Lane Cycle'},founder:{value:'Jamie'},city:{value:'columbus'}});
     nodes.set(key,n);
   }return nodes.get(key);};
   const document = {body:{dataset:{}},querySelector(s){if(s==='#office'||s==='#app')return root;if(s.startsWith('#')&&[root,...nodes.values()].some(n=>n.innerHTML.includes(`id="${s.slice(1)}"`)))return node(s);return null;},querySelectorAll(s){
+    if(s==='#je [data-i]')return [...root.innerHTML.matchAll(/data-i="(\d+)" data-k="([adc])"/g)].map(m=>{const n=node('je:'+m[1]+':'+m[2]);n.dataset={i:m[1],k:m[2]};return n;});
     const key = /^\[data-([a-z-]+)\]$/.exec(s)?.[1];if(!key)return [];
     return [...root.innerHTML.matchAll(new RegExp(`data-${key}(?:="([^"]+)")?(?=[\\s>])`,'g'))].map((m,i)=>{const n=node(key+':'+(m[1]||i));n.dataset[key]=m[1];return n;});
   }};
@@ -14,7 +15,7 @@ async function view(run, file = 'office.js', account = null, options = {}) {
   const storage=options.storage||new Map();
   const key='ll-office-v2'+(account?'-'+account.id+(options.search?.includes('preview')||account.role!=='student'?'-preview':''):'');
   if(!storage.has(key))storage.set(key,JSON.stringify({run,revision:0}));
-  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action){return action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]};}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
+  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action,payload){options.calls?.push(JSON.parse(JSON.stringify({action,payload})));return action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]};}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
   for(const f of ['lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js','sim-replay.js',file])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),ctx,{filename:f});
   await new Promise(resolve=>setImmediate(resolve));
   return {root,nodes,ctx,storage};
@@ -52,6 +53,93 @@ function finishOpenItems(S,st,run) {
     run.events.push({kind:'handle',id:it.id,action});
   }
 }
+
+async function journalFixture(options = {}, account = null) {
+  const run = newRun(), base = await view(run), S = base.ctx.SIM, st = S.newGame(run.config);
+  while (S.open(st)[0].kind === 'decision') {
+    const it = S.open(st)[0], action = {choice:Object.fromEntries(S.V(it.q,st).map(q=>[q.id,q.opts[0].v]))};
+    assert.ok(S.handle(st,it.id,action).ok);
+    run.events.push({kind:'handle',id:it.id,action});
+  }
+  const it = S.open(st)[0], want = S.want(st,it);
+  assert.equal(it.kind,'doc');assert.ok(want);
+  const v = await view(run,'office.js',account,options);
+  v.nodes.get('#guide-skip')?.onclick();
+  const entry = want.map(([a,side,x])=>({a,d:side==='dr'?String(x):'',c:side==='cr'?String(x):''}));
+  return {v,id:it.id,entry,key:'ll-office-v2'+(account?'-'+account.id+(account.role!=='student'?'-preview':''):'')};
+}
+
+function fillEntry(v, entry) {
+  for (const input of v.ctx.document.querySelectorAll('#je [data-i]')) input.value = entry[+input.dataset.i]?.[input.dataset.k] || '';
+}
+
+test('Post entry opens a review; Back and Escape preserve inputs without saving or grading, including mobile and account mode',async()=>{
+  for (const account of [null,{id:'posting-student',role:'student'},{id:'posting-professor',role:'professor'}]) {
+    const calls=[],{v,entry,key}=await journalFixture({width:390,calls},account);
+    fillEntry(v,entry);
+    const before=v.storage.get(key),beforeCalls=JSON.stringify(calls);
+    v.nodes.get('#post').onclick();
+    const dialog=v.nodes.get('#post-confirm');
+    assert.equal(dialog.open,true);
+    assert.match(v.root.innerHTML,/aria-labelledby="post-confirm-title" aria-describedby="post-confirm-description"/);
+    assert.match(dialog.innerHTML,/Post this journal entry\?/);
+    assert.match(dialog.innerHTML,/Your first attempt determines the score/);
+    assert.match(dialog.innerHTML,/Cash/);assert.match(dialog.innerHTML,/Common Stock/);
+    assert.match(dialog.innerHTML,/Totals/);
+    assert.equal(v.ctx.document.activeElement,v.nodes.get('#post-cancel'));
+    assert.equal(v.storage.get(key),before);assert.equal(JSON.stringify(calls),beforeCalls);
+    v.nodes.get('#post-cancel').onclick();
+    assert.equal(dialog.open,false);assert.equal(v.ctx.document.activeElement,v.nodes.get('#post'));
+    for (const input of v.ctx.document.querySelectorAll('#je [data-i]')) assert.equal(input.value,entry[+input.dataset.i][input.dataset.k]);
+    v.nodes.get('#post').onclick();
+    let prevented=false;dialog.oncancel({preventDefault(){prevented=true;}});
+    assert.equal(prevented,true);assert.equal(dialog.open,false);
+    assert.equal(v.ctx.document.activeElement,v.nodes.get('#post'));
+    assert.equal(v.storage.get(key),before);assert.equal(JSON.stringify(calls),beforeCalls);
+  }
+});
+
+test('confirming posts and saves the reviewed entry once, then updates the journal and first-attempt score',async()=>{
+  const {v,id,entry,key}=await journalFixture(),S=v.ctx.SIM;
+  fillEntry(v,entry);
+  const before=S.replay(JSON.parse(v.storage.get(key)).run);
+  v.nodes.get('#post').onclick();
+  const approve=v.nodes.get('#post-approve');
+  approve.onclick();
+  const saved=v.storage.get(key),run=JSON.parse(saved).run,after=S.replay(run);
+  assert.equal(v.nodes.get('#post-confirm').open,false);
+  assert.equal(after.tries[id],1);assert.equal(after.first,before.first+1);assert.equal(after.graded,before.graded+1);
+  assert.equal(after.done[id],true);assert.equal(after.book.length,before.book.length+1);
+  assert.deepEqual(run.events.at(-1),JSON.parse(JSON.stringify({kind:'handle',id,action:{rows:entry}})));
+  assert.match(v.root.innerHTML,/Posted/);
+  approve.onclick();assert.equal(v.storage.get(key),saved,'repeated confirmation must not post or grade again');
+});
+
+test('an incorrect entry is graded only on confirmation; canceling a corrected retry does not alter the first score',async()=>{
+  const {v,id,entry,key}=await journalFixture(),S=v.ctx.SIM;
+  const before=S.replay(JSON.parse(v.storage.get(key)).run);
+  fillEntry(v,entry.map(r=>({...r,d:r.d?String(+r.d+1):'',c:r.c?String(+r.c+1):''})));
+  v.nodes.get('#post').onclick();v.nodes.get('#post-approve').onclick();
+  let saved=v.storage.get(key),after=S.replay(JSON.parse(saved).run);
+  assert.equal(after.tries[id],1);assert.equal(after.misses[id],1);
+  assert.equal(after.first,before.first);assert.equal(after.graded,before.graded+1);
+  assert.equal(after.book.length,before.book.length);assert.ok(!after.done[id]);
+  fillEntry(v,entry);v.nodes.get('#post').onclick();v.nodes.get('#post-cancel').onclick();
+  assert.equal(v.storage.get(key),saved);
+  v.nodes.get('#post').onclick();v.nodes.get('#post-approve').onclick();
+  after=S.replay(JSON.parse(v.storage.get(key)).run);
+  assert.equal(after.tries[id],2);assert.equal(after.done[id],true);
+  assert.equal(after.first,before.first);assert.equal(after.graded,before.graded+1);
+});
+
+test('the entry review escapes typed amounts rather than rendering them as markup',async()=>{
+  const {v,entry}=await journalFixture();
+  entry[0].d='<img src=x onerror=alert(1)>';
+  fillEntry(v,entry);v.nodes.get('#post').onclick();
+  const html=v.nodes.get('#post-confirm').innerHTML;
+  assert.match(html,/&lt;img src=x onerror=alert\(1\)&gt;/);
+  assert.doesNotMatch(html,/<img/);
+});
 
 test('new students see the guide immediately after creating their business, not during setup',async()=>{
   const v=await view(null);
