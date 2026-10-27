@@ -7,6 +7,7 @@ import './sim-engine.js';
 import './sim-month1.js';
 import './sim-course.js';
 import './sim-replay.js';
+import './sim-cases.js';
 import { handleAction } from './service.mjs';
 import {generateCourseAssignment} from './generator.mjs';
 const generationTimes=new Map<string,number>();

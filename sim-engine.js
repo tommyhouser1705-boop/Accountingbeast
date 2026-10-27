@@ -32,7 +32,7 @@
   const place = (st) => CITIES[st.biz.city];
   const prof = (st) => LL.profile({type: st.biz.type, name: st.biz.name, founder: st.biz.founder});
   const rand = (st, key) => { let h = st.seed; for (const c of key) h = (Math.imul(h, 31) + c.charCodeAt(0)) | 0; return rng(h)(); };
-  const current = (st) => months[st.m];
+  const current = (st) => st.casePeriod || months[st.m];
   const items = (st) => current(st).items.filter((it) => !it.when || it.when(st)).map((it) => {
     if (it.day > st.day || it.kind === 'decision') return it;
     st.paper ||= {};
@@ -134,6 +134,7 @@
   }
 
   function nextMonth(st) {
+    if (st.casePeriod) return false;
     if (!st.ended || !months[st.m + 1]) return false;
     st.m++; st.day = 1; st.ended = false; st.review = false;
     st.mark = {first: st.first, graded: st.graded};

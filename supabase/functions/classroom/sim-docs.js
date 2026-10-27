@@ -43,6 +43,7 @@ ${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${es
   };
 
   R.schedule = d => `<article class="doc d-legal"><header><b>${esc(d.name)}</b><small>${esc(d.date)}</small></header><h2>${esc(d.title)}</h2><table class="jt">${d.rows.map(([label, value]) => `<tr><td>${esc(label)}</td><td>${esc(typeof value === 'number' ? m2(value) : value)}</td></tr>`).join('')}</table><p>${esc(d.note)}</p></article>`;
+  R.record = d => `<article class="doc d-inv"><header class="inv-top"><div class="inv-logo"><b>${esc(d.issuer)}</b><small>Business records</small></div><div class="inv-meta"><h2>${esc(d.status)}</h2><small>Reference ${esc(d.no)}<br>${esc(d.date)}</small></div></header><h3>${esc(d.title)}</h3>${d.items?.length ? `<table class="inv-lines"><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>${d.items.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.quantity)}</td><td>${m2(x.price)}</td><td>${m2(x.total)}</td></tr>`).join('')}</tbody></table>` : ''}<table class="jt">${d.fields.map(f => `<tr><th>${esc(f.label)}</th><td>${esc(f.value)}</td></tr>`).join('')}</table><footer>Business copy · Keep with the supporting records.</footer></article>`;
   root.SIMDOCS = {render: (spec) => (R[spec.type] ? R[spec.type](spec) : ''), words, m2};
   if (typeof module !== 'undefined' && module.exports) module.exports = root.SIMDOCS;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

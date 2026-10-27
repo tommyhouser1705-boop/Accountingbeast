@@ -15,11 +15,23 @@ async function view(run, file = 'office.js', account = null, options = {}) {
   const storage=options.storage||new Map();
   const key='ll-office-v2'+(account?'-'+account.id+(options.search?.includes('preview')||account.role!=='student'?'-preview':''):'');
   if(!storage.has(key))storage.set(key,JSON.stringify({run,revision:0}));
-  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action,payload){options.calls?.push(JSON.parse(JSON.stringify({action,payload})));return action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]};}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
-  for(const f of ['lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js','sim-replay.js',file])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),ctx,{filename:f});
+  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},sessionStorage:{getItem:k=>storage.get(k)||null},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action,payload){options.calls?.push(JSON.parse(JSON.stringify({action,payload})));return options.responses?.[action]||(action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]});}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
+  ctx.structuredClone=structuredClone;
+  for(const f of ['business-decisions.js','lesson-engine.js','lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js','sim-replay.js','sim-cases.js',file])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),ctx,{filename:f});
   await new Promise(resolve=>setImmediate(resolve));
   return {root,nodes,ctx,storage};
 }
+test('supplemental office restores public state, displays reply labels and never saves over the standard business',async()=>{
+  const L=require('./lesson-engine');require('./lessons-engine');require('./sim-docs');require('./sim-engine');require('./sim-month1');require('./sim-course');require('./sim-replay');const C=require('./sim-cases');
+  const {generateCourseAssignment}=await import('./supabase/functions/classroom/generator.mjs'),{topicDraft,scenarioDraft}=require('./test-fixtures/interactive-assignment.cjs');let n=0;
+  const a=await generateCourseAssignment(L,{notes:'Supplies bought on account, supplier payments and month-end supplies counts.',year:2026,month:9,depth:'focused'},{key:'test',fetcher:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(++n===1?topicDraft():scenarioDraft())}}]})})});
+  const state=C.publicState(C.start(a,{type:'bike',name:'River Cycle',city:'columbus',seed:1})),calls=[];
+  const v=await view(null,'office.js',{id:'learner',role:'student'},{search:'?case=extra-case',calls,responses:{'case-load':{state,revision:0}}});
+  assert.match(v.root.innerHTML,/Supplemental case|Separate practice books/);assert.match(v.root.innerHTML,/Reply: .*lubricant/);assert.match(v.root.innerHTML,/Case instructions/);assert.doesNotMatch(v.root.innerHTML,/undefined|NaN|\[object Object\]/);
+  assert.ok(calls.some(c=>c.action==='case-load'));assert.ok(!calls.some(c=>/^office-/.test(c.action)));
+  const storage=new Map([['ledger-case-preview-teacher',JSON.stringify({assignment:a,type:'photo'})]]);
+  const preview=await view(null,'office.js',{id:'teacher',role:'professor'},{search:'?casePreview=1',storage});assert.match(preview.root.innerHTML,/Back to draft/);assert.match(preview.root.innerHTML,/Photo paper/);assert.doesNotMatch(preview.root.innerHTML,/Open a draft from/);
+});
 test('office renders real worksheet controls and finite statements across the entire course without a browser',async()=>{
   const config={type:'bike',name:'River Cycle',founder:'Alex Rivera',city:'columbus',seed:37};
   const init=await view({config,events:[]}),S=init.ctx.SIM,st=S.newGame(config),run={config,events:[]};let worksheets=0;

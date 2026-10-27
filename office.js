@@ -7,9 +7,11 @@
   const BASE = 'll-office-v2', root = $('#office');
   const cloud = new CloudClient(window.LEDGER_CLOUD || {}), params = new URLSearchParams(location.search);
   let KEY = BASE, account = null, assignments = [], run = null, revision = 0, syncText = 'Saved in this browser', syncBusy = false, syncAgain = false, cloudBlocked = false;
+  const caseId = params.get('case');
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
   let scrollTop = false, st = null, sel = null, tab = 'office', rows = [], fresh = new Set(), shown = {cash: 0, rev: 0, ni: 0};
   function save() {
+    if (caseId) return;
     localStorage.setItem(KEY, JSON.stringify({run, revision}));
     if (account?.role === 'student' && !params.has('preview')) sync();
   }
@@ -21,6 +23,17 @@
     else result = {ok: S.nextMonth(st)};
     if (kind === 'handle' ? (result.ok || st.tries[payload.id]) : result.ok) run.events.push({kind, ...payload});
     return result;
+  }
+  function send(kind, payload, done) {
+    if (!caseId) return done(payload.action?.reveal ? S.handle(st, payload.id, payload.action) : act(kind, payload));
+    if (syncBusy) return;
+    syncBusy = true;
+    const os = $('.os'); if (os) os.inert = true;
+    cloud.call('case-act', {assignmentId: caseId, revision, event: {kind, ...payload}}).then(r => {
+      st = r.state; revision = r.revision; syncText = 'Saved to account · supplemental case';
+      syncBusy = false; if (os) os.inert = false;
+      done(r.result);
+    }).catch(e => { syncBusy = false; if (os) os.inert = false; syncText = e.message; const el = $('#sync-status'); if (el) el.textContent = syncText; feedback({ok: false, text: esc(e.message)}); });
   }
   async function sync() {
     if (cloudBlocked) return;
@@ -60,7 +73,7 @@
   const visible = () => S.inbox(st);
   const pending = (c) => visible().filter((it) => !st.done[it.id] && (!c || chan(it) === c));
   const short = (day) => S.fmtDate(st, day, 'short').slice(0, 5);
-  const canNext = () => st.m + 1 < S.months.length && (account && (account.role !== 'student' || params.has('preview')) || assignments.some(a => S.findLesson(a.lessonId)?.index >= st.m + 1));
+  const canNext = () => !st.casePeriod && st.m + 1 < S.months.length && (account && (account.role !== 'student' || params.has('preview')) || assignments.some(a => S.findLesson(a.lessonId)?.index >= st.m + 1));
 
   let guideStep = null, guideDismissed = false;
   const guideSteps = [
@@ -130,7 +143,8 @@
       act = st.done[it.id] ? `<div class="sent"><b>You replied</b><p>${esc(V(it.outcome))}</p></div>`
         : `<form class="reply" id="decide"><h4>Reply</h4>${V(it.q).map((q) => `<fieldset><legend>${esc(q.label)}</legend><div class="chips">${q.opts.map((o) => `<label class="chip"><input type="radio" name="${q.id}" value="${o.v}"><b>${esc(S.V(o.t, st))}</b><span>${esc(o.d)}</span></label>`).join('')}</div></fieldset>`).join('')}<button class="btn primary">Send reply</button><p class="fb" id="fb"></p></form>`;
     } else if (!st.done[it.id]) act = `<div class="torec"><span>Record this in Books${wins.includes('books') ? ', it’s open beside you' : ''}.</span>${wins.includes('books') ? '' : '<button class="btn primary" data-rec="' + it.id + '">Open in Books</button>'}</div>`;
-    return `<div class="read">${head ? '' : `<div class="mhead"><b>${esc(V(it.from))}</b><span>${esc(V(it.subject))}</span><small>${esc(S.fmtDate(st, it.day, 'day'))}</small></div>`}<div class="papers">${head ? D.render(specs[0]) : ''}${atts.length ? `<div class="atts">${head ? `<small class="att-l">${atts.length} attachment${atts.length > 1 ? 's' : ''}</small>` : ''}${atts.map((x) => D.render(x)).join('')}</div>` : ''}${st.done[it.id] && it.kind === 'doc' ? `<div class="stamp-big ${S.want(st, it) ? '' : 'none'}">${S.want(st, it) ? 'POSTED' : 'NO ENTRY'}</div>` : ''}</div>${act}</div>`;
+    const posted = st.book.some(b => b.id === it.id);
+    return `<div class="read">${head ? '' : `<div class="mhead"><b>${esc(V(it.from))}</b><span>${esc(V(it.subject))}</span><small>${esc(S.fmtDate(st, it.day, 'day'))}</small></div>`}<div class="papers">${head ? D.render(specs[0]) : ''}${atts.length ? `<div class="atts">${head ? `<small class="att-l">${atts.length} attachment${atts.length > 1 ? 's' : ''}</small>` : ''}${atts.map((x) => D.render(x)).join('')}</div>` : ''}${st.done[it.id] && it.kind === 'doc' ? `<div class="stamp-big ${posted ? '' : 'none'}">${posted ? 'POSTED' : 'NO ENTRY'}</div>` : ''}</div>${act}</div>`;
   }
 
   function mailApp(c) {
@@ -141,7 +155,7 @@
   }
 
   function acctOpts(it, v) {
-    const list = V(it.accts) || Object.keys(ACC);
+    const list = V(it.accts) || Object.keys(ACC).filter(a => st.casePeriod || !a.startsWith('case'));
     return `<option value="">Choose account…</option>${list.map((a) => `<option value="${a}" ${a === v ? 'selected' : ''}>${esc(ACC[a][0])}</option>`).join('')}`;
   }
   const entryTable = (j) => `<table class="jt">${j.lines.map(([a, s, x]) => `<tr class="${s}"><td>${esc(ACC[a][0])}</td><td>${s === 'dr' ? money(x, 1) : ''}</td><td>${s === 'cr' ? money(x, 1) : ''}</td></tr>`).join('')}</table>`;
@@ -192,7 +206,7 @@
     return `<section class="report"><div class="rp-card"><small>${esc(mo.n)} report</small><h1>${esc(st.biz.name)} made it through ${esc(mo.title.toLowerCase())}</h1>
 <div class="rp-k"><div><small>Revenue</small><b>${money(s.revenue, 1)}</b></div><div><small>Expenses</small><b>${money(s.expenses, 1)}</b></div><div><small>Net income</small><b class="${s.netIncome < 0 ? 'neg' : ''}">${money(s.netIncome, 1)}</b></div><div><small>Cash in the bank</small><b>${money(s.cash, 1)}</b></div></div>
 <div class="rp-two"><div><h3>Your decisions</h3><ol class="rp-log">${st.log.map((l) => `<li>${esc(l.text)}</li>`).join('')}</ol></div><div><h3>Your bookkeeping</h3><p class="rp-score"><b>${result.first}</b> of ${result.graded} recorded correctly on the first try (${result.score}%).</p><p class="muted">${custs} weeks of register sales recorded. Your trial balance ${Math.abs(S.trialBalance(st).reduce((t, r) => t + r[2] - r[3], 0)) < 0.005 ? 'is in balance' : 'is out of balance'}.</p><button class="btn" id="rp-books">Review your books</button></div></div>
-<p class="muted rp-note">${S.months[st.m + 1] ? esc(S.months[st.m + 1].title) + (canNext() ? ' is ready. Your books and decisions carry forward.' : ' opens when assigned by your instructor.') : 'Year-end complete. Your business records remain available.'}</p>${canNext() ? '<button class="btn primary" id="continue">Continue to the next period</button>' : '<a class="btn" href="index.html">Return home</a>'}</div></section>`;
+<p class="muted rp-note">${st.casePeriod ? 'Supplemental case complete. Your standard course business and books are unchanged.' : S.months[st.m + 1] ? esc(S.months[st.m + 1].title) + (canNext() ? ' is ready. Your books and decisions carry forward.' : ' opens when assigned by your instructor.') : 'Year-end complete. Your business records remain available.'}</p>${canNext() ? '<button class="btn primary" id="continue">Continue to the next period</button>' : '<a class="btn" href="index.html">Return home</a>'}</div></section>`;
   }
 
   function render() {
@@ -201,7 +215,8 @@
     const it = sel && S.inbox(st).find((x) => x.id === sel);
     const ws = st.ended && !st.review ? `<div class="wins n1">${monthEnd()}</div>` : `<div class="wins n${wins.length}">${wins.map((k) => (k === 'books' ? booksApp() : k === 'bank' ? bankApp() : mailApp(k))).join('')}</div>`;
     const nextPrompt = nextDayPrompt();
-    root.innerHTML = `<div class="os ${nextPrompt ? 'day-finished' : ''}"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${nextPrompt}${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!account || account.role !== 'student' || params.has('preview') ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div><dialog class="office-tour" id="office-tour" aria-labelledby="guide-title" aria-describedby="guide-description"></dialog><dialog class="office-tour post-confirm" id="post-confirm" aria-labelledby="post-confirm-title" aria-describedby="post-confirm-description"></dialog>`;
+    const caseBanner = st.casePeriod ? `<div class="case-banner"><strong>${esc(st.casePeriod.title)}</strong> · Supplemental case · Separate practice books; your course business is unchanged. <a href="index.html#dash=${account?.role==='student'?'assignments':'builder'}">${account?.role==='student'?'Back to assignments':'Back to draft'}</a><details><summary>Case instructions</summary><p>${esc(st.casePeriod.instructions)}</p></details></div>` : '';
+    root.innerHTML = `${caseBanner}<div class="os ${nextPrompt ? 'day-finished' : ''}"><div class="desk-bg"><span>${esc(st.biz.name)}</span></div>${nextPrompt}${ws}<div class="toasts">${toasts.map((t, i) => `<div class="toast" style="animation-delay:${i * 0.25}s,${3 + i * 0.25}s"><span class="ico ico-${t.c}">${APPS[t.c][1]}</span><div><b>${esc(t.from)}</b><span>${esc(t.sub)}</span></div></div>`).join('')}</div>${taskbar()}</div><div class="office-save"><a href="index.html">Home</a><span id="sync-status" role="status">${esc(syncText)}</span>${st.ended ? '<button class="link" id="report">Period report</button>' : ''}${!st.casePeriod && (!account || account.role !== 'student' || params.has('preview')) ? '<button class="link" id="reset">Restart practice company</button>' : ''}</div><dialog class="office-tour" id="office-tour" aria-labelledby="guide-title" aria-describedby="guide-description"></dialog><dialog class="office-tour post-confirm" id="post-confirm" aria-labelledby="post-confirm-title" aria-describedby="post-confirm-description"></dialog>`;
     toasts = [];
     wire(it);
     animateKpis();
@@ -252,8 +267,7 @@
     $('#post-approve').onclick = () => {
       if (!dialog.open) return;
       dialog.close();
-      finish(act('handle', {id, action: {rows: entry}}));
-      ($('#post') || $('.w-books .rec'))?.focus();
+      send('handle', {id, action: {rows: entry}}, r => { finish(r); ($('#post') || $('.w-books .rec'))?.focus(); });
     };
     dialog.showModal();
     $('#post-cancel').focus();
@@ -271,35 +285,36 @@
     $$('[data-btab]').forEach((b) => (b.onclick = () => { btab = b.dataset.btab; render(); }));
     if ($('#rp-books')) $('#rp-books').onclick = () => { st.review = true; btab = 'journal'; if (!wins.includes('books')) wins = ['books']; render(); };
     if ($('#reset')) $('#reset').onclick = () => { if (confirm('Start over with a new business? Your current books will be erased.')) { localStorage.removeItem(KEY); st = null; sel = msel = rec = null; shown = {cash: 0, rev: 0, ni: 0}; render(); } };
-    $$('[data-next-day]').forEach(b => b.onclick = () => {
-      const r = act('advance'); save(); const arr = r.arrived || [];
+    $$('[data-next-day]').forEach(b => b.onclick = () => send('advance', {}, r => {
+      save(); const arr = r.arrived || [];
       arr.forEach((id) => fresh.add(id)); sel = msel = rec = null; rows = [];
       const items = arr.map((id) => S.inbox(st).find((x) => x.id === id));
       toasts = items.slice(0, 3).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
       if (items[0]) select(items[0].id);
       root.classList.add('turning'); setTimeout(() => root.classList.remove('turning'), 650); render();
-    });
-    $$('[data-finish-period]').forEach(b => b.onclick = () => { act('complete'); save(); render(); });
+    }));
+    $$('[data-finish-period]').forEach(b => b.onclick = () => send('complete', {}, () => { save(); render(); }));
     if ($('#continue')) $('#continue').onclick = () => { if (!canNext()) return; act('next'); sel = msel = rec = null; rows = []; btab = 'record'; const first = S.open(st)[0]; if(first) select(first.id); save(); render(); };
     if ($('#report')) $('#report').onclick = () => { st.review = false; render(); };
     if ($('#decide')) $('#decide').onsubmit = (e) => {
       e.preventDefault(); const f = e.target, ch = {};
       V(it.q).forEach((q) => { const v = f.querySelector(`input[name="${q.id}"]:checked`); if (v) ch[q.id] = q.opts.find((o) => String(o.v) === v.value).v; });
-      const r = act('handle', {id: it.id, action: {choice: ch}}); if (!r.ok) return feedback(r);
+      send('handle', {id: it.id, action: {choice: ch}}, r => { if (!r.ok) return feedback(r);
       save(); const nu = S.open(st).filter((x) => x.id !== it.id);
       nu.forEach((x) => fresh.add(x.id)); toasts = nu.slice(0, 2).map((x) => ({c: chan(x), from: V(x.from), sub: V(x.subject)}));
       render();
+      });
     };
     if ($('#je')) {
       $('#je').oninput = totals; totals();
       $('#addrow').onclick = () => { readRows(); rows.push({a: '', d: '', c: ''}); render(); };
       const cur = S.inbox(st).find((x) => x.id === rec);
       $('#post').onclick = () => confirmEntry(finish);
-      $('#noentry').onclick = () => { readRows(); finish(act('handle', {id: rec, action: {noEntry: true}})); };
-      if ($('#reveal')) $('#reveal').onclick = () => { const r = S.handle(st, rec, {reveal: true}); if (r.reveal) { rows = r.reveal.map(([a, sd, x]) => ({a, d: sd === 'dr' ? String(x) : '', c: sd === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } };
+      $('#noentry').onclick = () => { readRows(); send('handle', {id: rec, action: {noEntry: true}}, finish); };
+      if ($('#reveal')) $('#reveal').onclick = () => send('handle', {id: rec, action: {reveal: true}}, r => { if (r.reveal) { rows = r.reveal.map(([a, sd, x]) => ({a, d: sd === 'dr' ? String(x) : '', c: sd === 'cr' ? String(x) : ''})); render(); feedback({ok: true, text: 'Here is the entry. Post it to continue. This item no longer counts as correct on the first try.'}); } });
       void cur;
     }
-    if ($('#worksheet')) $('#worksheet').onsubmit = e => { e.preventDefault(); finish(act('handle', {id: rec, action: {values: Object.fromEntries(new FormData(e.target))}})); };
+    if ($('#worksheet')) $('#worksheet').onsubmit = e => { e.preventDefault(); send('handle', {id: rec, action: {values: Object.fromEntries(new FormData(e.target))}}, finish); };
     function finish(r) {
       if (!r.ok) { save(); if ((st.misses[rec] || 0) === 2) render(); return feedback(r); }
       save(); rows = []; const done = rec;
@@ -317,20 +332,27 @@
       try {
         const b = await cloud.call('bootstrap'); account = b.user; assignments = b.lessons || [];
         KEY += '-' + account.id + (params.has('preview') || account.role !== 'student' ? '-preview' : '');
-        if (account.role === 'student' && !params.has('preview')) {
+        if (caseId) {
+          const r = await cloud.call('case-load', {assignmentId: caseId}); st = r.state; revision = r.revision; syncText = 'Saved to account · supplemental case'; KEY += '-case-' + caseId;
+        } else if (params.has('casePreview')) {
+          if (account.role === 'student') throw Error('Instructor access is required for this preview.');
+          const draft = JSON.parse(sessionStorage.getItem('ledger-case-preview-' + account.id));
+          if (!draft?.assignment) throw Error('Open a draft from the instructor workspace to preview it.');
+          KEY += '-case-preview'; run = {config: {type: draft.type, name: 'Review Cycle', founder: 'Instructor', city: 'columbus', seed: 42}, events: []}; st = SIMCases.start(draft.assignment, run.config); syncText = 'Instructor preview · not graded or assigned';
+        } else if (account.role === 'student' && !params.has('preview')) {
           const remote = await cloud.call('office-load'), local = load(); revision = remote.revision;
           run = remote.run;
           if (local?.run && local.revision === revision && (!run || JSON.stringify(local.run.events.slice(0,run.events.length)) === JSON.stringify(run.events))) run = local.run;
           syncText = 'Saved to account';
         } else run = load()?.run;
       } catch(e) { root.innerHTML = `<p class="pad" role="alert">${esc(e.message)} <a href="index.html#signin">Return to sign in</a></p>`; return; }
-    } else run = load()?.run;
-    try { st = run ? S.replay(run) : null; } catch(e) { root.innerHTML = `<p class="pad" role="alert">Your saved office could not be restored. Your record is still saved; please contact your instructor. ${esc(e.message)}</p>`; return; }
+    } else if (caseId || params.has('casePreview')) { root.innerHTML = '<p class="pad">Sign in to open this case. <a href="index.html#signin">Sign in</a></p>'; return; } else run = load()?.run;
+    try { if (!st?.casePeriod) st = run ? S.replay(run) : null; } catch(e) { root.innerHTML = `<p class="pad" role="alert">Your saved office could not be restored. Your record is still saved; please contact your instructor. ${esc(e.message)}</p>`; return; }
     const target = S.findLesson(params.get('lesson'));
     if (target && target.index > (st?.m || 0)) syncText += ` · ${target.title} follows earlier periods. Continue your business below.`;
     const first = st && S.open(st)[0]; if (first) select(first.id);
     render();
-    if (st && account?.role === 'student' && !params.has('preview')) sync();
+    if (st && !st.casePeriod && account?.role === 'student' && !params.has('preview')) sync();
   }
   init();
 })();
