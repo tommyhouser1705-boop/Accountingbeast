@@ -33,12 +33,24 @@ test('public home page explains the product and shows real screenshots', () => {
   for (const b of Object.values(c.eval('previewBusinesses'))) assert.ok(Lessons.businesses[b.type], 'Each preview enters a supported business type');
 });
 
+test('homepage descriptions name the actual work rather than slogans', () => {
+  const c = ui(), html = c.publicWelcome();
+  assert.match(html, /A business simulation for accounting courses/);
+  assert.match(html, /Students create a company, respond to customer and supplier messages/);
+  assert.match(html, /Read documents and record entries side by side/);
+  assert.match(html, /Class assignments and gradebook/);
+  assert.match(html, /Cash controls and bank reconciliation/);
+  assert.match(html, /Student workspace walkthrough/);
+  assert.doesNotMatch(html, /Then they account for it|Not a new case study|The document and the books\. Together|See the accounting|A semester in the life|Your office is ready|Before you step into|Keep control of cash|Earn it, use it/);
+  for (const step of c.eval('officeDemoSteps')) assert.doesNotMatch(step.title, /Your decision becomes|Tomorrow brings|Work finished\?/);
+});
+
 test('public course contents match the active simulation, not the retired quiz library', () => {
   const c = ui();
   for (const file of ['lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js']) vm.runInContext(fs.readFileSync(file,'utf8'), c);
   const contents = c.eval('courseContents');
   assert.equal(contents.length, c.SIM.catalog.length);
-  assert.deepEqual(Array.from(contents, x => x[1]), Array.from(c.SIM.catalog, x => x.title));
+  assert.deepEqual(Array.from(contents, x => x[3]), Array.from(c.SIM.catalog, x => x.id));
   const html = c.publicWelcome();
   assert.match(html, /14 simulation periods/);
   assert.match(html, /Business decisions aren’t graded/);

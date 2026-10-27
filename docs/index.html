@@ -1259,20 +1259,20 @@ function previewRecord(b) {
 }
 
 const courseContents = [
-  ['Month 1', 'Opening month', 'Free sample'],
-  ['Month 2', 'Earn it, use it, accrue it', 'Accruals & adjustments'],
-  ['Month 3', 'Keep control of cash', 'Bank reconciliation'],
-  ['Period close', 'First quarter · close the books', 'Statements & closing'],
-  ['Month 4', 'Grow without losing collections', 'Receivables & credit'],
-  ['Month 5', 'Launch a product line', 'Inventory & cost of goods sold'],
-  ['Month 6', 'Put assets to work', 'Fixed assets & depreciation'],
-  ['Period close', 'Half-year · audit the business', 'Statements & closing'],
-  ['Month 7', 'Pay people and collect tax', 'Payroll & sales tax'],
-  ['Month 8', 'Finance the next stage', 'Debt & interest'],
-  ['Month 9', 'Bring in an investor', 'Stock & equity'],
-  ['Period close', 'Third quarter · report to investors', 'Statements & closing'],
-  ['Month 10', 'Show where the cash went', 'Cash-flow reporting'],
-  ['Year-end', 'Year-end · hand over the books', 'Adjust, report & close'],
+  ['Month 1', 'Opening transactions', 'Free sample', 'ch2'],
+  ['Month 2', 'Accruals and adjusting entries', 'Payroll, supplies & prepaid expenses', 'ch3'],
+  ['Month 3', 'Cash controls and bank reconciliation', 'Cash records & timing differences', 'ch4'],
+  ['Period close', 'Financial statements and closing', 'First-quarter review', 'build1'],
+  ['Month 4', 'Receivables and credit sales', 'Collections & uncollectible accounts', 'ch5'],
+  ['Month 5', 'Inventory and cost of goods sold', 'Purchases & stock counts', 'ch6'],
+  ['Month 6', 'Fixed assets and depreciation', 'Asset purchases & disposals', 'ch7'],
+  ['Period close', 'Financial statements and closing', 'Half-year review', 'build2'],
+  ['Month 7', 'Payroll and sales tax', 'Wages, withholdings & tax', 'ch8'],
+  ['Month 8', 'Debt financing', 'Loans, bonds & interest', 'ch9'],
+  ['Month 9', 'Stockholders’ equity', 'Shares & dividends', 'ch10'],
+  ['Period close', 'Financial statements and closing', 'Third-quarter review', 'build3'],
+  ['Month 10', 'Statement of cash flows', 'Operating, investing & financing activities', 'ch11'],
+  ['Year-end', 'Adjustments, reporting and closing', 'Cumulative review', 'capstone'],
 ];
 
 function screenshot(file, alt, bar = true, eager = false) {
@@ -1285,53 +1285,53 @@ function feature(id, kicker, title, text, points, visual, flip, extra = '') {
 
 function publicWelcome() {
   return `<div class="hp">
-  <nav class="hp-nav" aria-label="Main navigation"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">See the office</a><a class="hp-nl" href="#contents">Course</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try the simulation</button></div></nav>
+  <nav class="hp-nav" aria-label="Main navigation"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">Student workspace</a><a class="hp-nl" href="#contents">Course topics</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try sample</button></div></nav>
   <header class="hp-hero hp-office-hero"><div class="hp-wrap"><div class="hp-intro">
-    <p class="hp-subject">A business simulation for introductory accounting</p>
-    <h1>Students run a business. Then they account for it.</h1>
-    <p class="hp-lead">Their own company. An inbox full of decisions. Realistic invoices, receipts and bank notices. Students run the business day by day, then keep its books in the same workspace.</p>
-    <div class="hp-actions"><button id="student" class="hp-btn">Try the opening month</button><a class="hp-btn ghost" href="#how">See the office in action</a></div>
-    <p class="hp-small">One sample period. No account needed. Full course access through a class.</p></div>
+    <p class="hp-subject">Introductory financial accounting</p>
+    <h1>A business simulation for accounting courses</h1>
+    <p class="hp-lead">Students create a company, respond to customer and supplier messages, and record transactions from invoices, receipts and bank statements. They continue with the same company and books throughout the course.</p>
+    <div class="hp-actions"><button id="student" class="hp-btn">Try the opening month</button><a class="hp-btn ghost" href="#how">View the student workspace</a></div>
+    <p class="hp-small">The opening month is free to try without an account. The full course requires a class account.</p></div>
     <div class="hp-office-shot">${screenshot('office-books.jpg', 'The student office: an equipment invoice in Mail beside its general-journal entry in Books', true, true)}<p class="hp-shot-caption"><span>Mail on the left. Books on the right.</span> Actual platform screenshots · example business and class data.</p></div>
   </div></header>
-  <div class="hp-facts"><div class="hp-wrap"><span>One business all semester</span><span>14 simulation periods</span><span>No quizzes or multiple-choice questions</span><span>Graded on the accounting</span></div></div>
+  <div class="hp-facts"><div class="hp-wrap"><span>14 simulation periods</span><span>Progress saved between periods</span><span>Journal entries and worksheets</span><span>First-attempt accounting scores</span></div></div>
   <main class="hp-wrap">
   ${officeDemo()}
-  ${feature('students', 'For students', 'Not a new case study. Your business.', 'Choose a bike repair shop, fitness studio, landscaping company or photography studio. Name it, open the office and run it through operating months, quarter-end reviews and year-end.',
+  ${feature('students', 'For students', 'Create and manage a business', 'Choose a bike repair shop, fitness studio, landscaping company or photography studio. Name the company and manage its purchases, customer work and finances across the course.',
     ['Your decisions change the paperwork and the amounts you record', 'The same company, journal and balances carry into later periods', 'A first-visit office guide shows you where to start'],
     screenshot('office-setup.jpg', 'The actual setup screen, with four business types and fields for company name, owner and city'), false)}
-  ${feature('', 'The student workspace', 'The document and the books. Together.', 'Read a supplier’s invoice without leaving your journal entry. Mail, Books, Bank and Messages are apps on the owner’s computer, not a maze of separate pages.',
+  ${feature('', 'The student workspace', 'Read documents and record entries side by side', 'Mail, Books, Bank and Messages open inside the student workspace. Keep an invoice visible while entering its accounts and amounts in Books.',
     ['Keep two or three apps side by side on a larger screen', 'Use the app switcher on a phone', 'Post journal entries, inspect the ledger and trial balance, and prepare statements in Books'],
     screenshot('office-books.jpg', 'Realistic vendor paperwork alongside a balanced journal entry in the split-screen office'), true)}
-  ${feature('instructors', 'For instructors', 'Assign the next period. See the accounting.', 'Create a class, add your students and assign simulation periods with due dates. Their businesses carry forward; completed periods send first-attempt accounting scores to your gradebook.',
+  ${feature('instructors', 'For instructors', 'Class assignments and gradebook', 'Create a class, add students and assign simulation periods with due dates. Completing an assigned period sends its first-attempt accounting score to the gradebook.',
     ['Preview the office and each period before assigning', 'Business decisions aren’t graded; accounting accuracy is', 'Later retries don’t overwrite the first-attempt score'],
     `<div>${screenshot('instructor-gradebook.jpg', 'The current instructor gradebook showing simulation periods, due dates and first-attempt scores for an example class')}<p class="hp-small">Actual instructor interface · illustrative students and scores, not a live class.</p></div>`, false,
     '<p class="hp-actions"><button id="professor" class="hp-btn">Instructor sign in</button><button id="explore-studio" class="hp-link">Browse the period library</button></p>')}
-  <section class="hp-sec" id="contents"><h2>A semester in the life of one business.</h2><p class="hp-muted">10 operating months, three quarter-end reviews and a year-end close. Each period adds accounting work to the company students already run.</p>
+  <section class="hp-sec" id="contents"><h2>Course topics</h2><p class="hp-muted">The course covers 10 operating months, three quarter-end reviews and a year-end close. Each period uses the student’s existing company and books.</p>
     <div class="hp-toc">${courseContents.map(([n, t, m]) => `<div><span><em>${n}</em> ${t}</span><small${m === 'Free sample' ? ' class="free"' : ''}>${m}</small></div>`).join('')}</div>
-    <p><button id="instructor-demo" class="hp-link">Explore the simulation periods</button></p></section>
-  <section class="hp-sec hp-faq" aria-labelledby="hp-questions"><h2 id="hp-questions">Before you step into the office</h2>
+    <p><button id="instructor-demo" class="hp-link">View the period library</button></p></section>
+  <section class="hp-sec hp-faq" aria-labelledby="hp-questions"><h2 id="hp-questions">Common questions</h2>
     <details><summary>Is this a quiz or a business simulation?</summary><p>A simulation. Students respond to business requests, work from source documents, record journal entries and complete accounting worksheets. There are no multiple-choice knowledge questions.</p></details>
     <details><summary>What happens when a student finishes today’s work?</summary><p>The office shows “Today’s work is finished.” Close up for the day advances to the next business date and brings in new mail and paperwork. At a period boundary, Finish this period opens the report.</p></details>
     <details><summary>What can I try without an account?</summary><p>The opening month is the public sample. Full-course access requires a class account. Instructors sign in to preview the course and assign periods.</p></details>
     <details><summary>What is graded?</summary><p>First-attempt accounting accuracy. Students can make different business decisions without being graded on those choices. Completing an assigned period sends its accounting score to the class gradebook.</p></details>
   </section>
   </main>
-  <section class="hp-cta"><div class="hp-wrap"><div><h2>Your office is ready.</h2><p>Start a business and try the opening month. No account needed.</p></div><div class="hp-actions"><button class="hp-btn light" data-sample>Try the simulation</button><button class="hp-btn outline" data-signin>Sign in to your class</button></div></div></section>
+  <section class="hp-cta"><div class="hp-wrap"><div><h2>Try the opening month</h2><p>The sample includes business decisions, source documents and journal entries. No account is required.</p></div><div class="hp-actions"><button class="hp-btn light" data-sample>Open sample</button><button class="hp-btn outline" data-signin>Sign in to your class</button></div></div></section>
   <footer class="hp-wrap hp-foot">© 2026 Ledger Lane · Introductory financial accounting</footer>
   </div>`;
 }
 
 const officeDemoSteps = [
-  {label: 'Read & reply', title: 'A supplier needs your decision.', text: 'Compare a new equipment package with a used set. Choose a reply in Mail and send it. The business decision changes the paperwork that arrives next.', image: 'office-reply.jpg', alt: 'Mail shows an equipment quote, a used-equipment offer and reply choices for the business owner'},
-  {label: 'Record it', title: 'Your decision becomes a transaction.', text: 'The new equipment arrives with an $11,800 invoice. Read it in Mail and record Equipment and Cash in Books, right beside the document.', image: 'office-books.jpg', alt: 'An $11,800 equipment invoice beside a journal entry debiting Equipment and crediting Cash'},
-  {label: 'Close the day', title: 'Work finished? Close up for the day.', text: 'The entry is posted and today’s items are handled. The office shows the next date and a clear Close up for the day button. You control when the business moves on.', image: 'office-day-end.jpg', alt: 'Posted equipment paperwork and the general journal, with the Today’s work is finished banner and Close up for the day button'},
-  {label: 'New mail arrives', title: 'Tomorrow brings the next business event.', text: 'The calendar advances and new paperwork arrives. This supplier’s price quote isn’t a purchase yet: deciding when no entry is needed is part of keeping the books.', image: 'office-next-day.jpg', alt: 'The following business day, with a new supplier price quote in Mail and the Books entry form beside it'},
+  {label: 'Read & reply', title: 'Choose an equipment purchase', text: 'Compare a new equipment package with a used set, then send a reply in Mail. The selected purchase determines the invoice and amount to record.', image: 'office-reply.jpg', alt: 'Mail shows an equipment quote, a used-equipment offer and reply choices for the business owner'},
+  {label: 'Record it', title: 'Record the equipment purchase', text: 'The new equipment arrives with an $11,800 invoice. Read it in Mail and record Equipment and Cash in Books, beside the document. Review and confirm the entry before submitting it.', image: 'office-books.jpg', alt: 'An $11,800 equipment invoice beside a journal entry debiting Equipment and crediting Cash'},
+  {label: 'Close the day', title: 'Finish the current business day', text: 'After today’s items are handled, Close up for the day advances the simulation to the next business date.', image: 'office-day-end.jpg', alt: 'Posted equipment paperwork and the general journal, with the Today’s work is finished banner and Close up for the day button'},
+  {label: 'New mail arrives', title: 'Review the next day’s paperwork', text: 'New messages and documents arrive on the next business date. This supplier’s price quote is not a purchase, so it does not need a journal entry.', image: 'office-next-day.jpg', alt: 'The following business day, with a new supplier price quote in Mail and the Books entry form beside it'},
 ];
 
 function officeDemo() {
   const first = officeDemoSteps[0];
-  return `<section class="hp-demo hp-sec" id="how" aria-labelledby="hp-demo-title"><div class="hp-demo-head"><div><h2 id="hp-demo-title">See one decision play out.</h2><p>Step through the real office. No sign-in, no saved work.</p></div><button class="hp-btn ghost" id="hp-demo-play" aria-pressed="false" aria-controls="hp-demo-stage">Play short demo</button></div>
+  return `<section class="hp-demo hp-sec" id="how" aria-labelledby="hp-demo-title"><div class="hp-demo-head"><div><h2 id="hp-demo-title">Student workspace walkthrough</h2><p>Four screenshots from the opening month. No sign-in is required.</p></div><button class="hp-btn ghost" id="hp-demo-play" aria-pressed="false" aria-controls="hp-demo-stage">Play short demo</button></div>
     <div id="hp-office-demo" aria-label="Office screenshot demonstration"><div class="hp-demo-steps" role="group" aria-label="Demo steps">${officeDemoSteps.map((s, i) => `<button type="button" data-demo-step="${i}" aria-current="${i === 0 ? 'step' : 'false'}" aria-controls="hp-demo-stage"><span>${i + 1}</span>${s.label}</button>`).join('')}</div>
     <div class="hp-demo-stage" id="hp-demo-stage"><div class="hp-demo-image" tabindex="0" role="region" aria-label="Office screenshot. Scroll horizontally on small screens to see both apps."><img id="hp-demo-image" src="assets/screens/${first.image}" alt="${first.alt}" width="1600" height="1040" loading="lazy"></div><div class="hp-demo-caption" aria-live="polite" aria-atomic="true"><p id="hp-demo-count">Step 1 of ${officeDemoSteps.length} · Screenshot demo</p><h3 id="hp-demo-heading">${first.title}</h3><p id="hp-demo-description">${first.text}</p></div></div>
     <div class="hp-demo-foot"><p>Example business: Spoke &amp; Sprocket. <span class="hp-swipe">Swipe the screenshot to see both apps.</span></p><div><button class="hp-link" id="hp-demo-back" disabled>Previous</button><button class="hp-btn sm" id="hp-demo-next">Next step</button></div></div><p class="hp-small" id="hp-demo-motion" hidden>Automatic playback is off for your reduced-motion setting. Use the steps to explore.</p></div></section>`;
@@ -1863,7 +1863,7 @@ function pageHead(title, sub, action = '') {
 function avg(list) { return list.length ? Math.round(list.reduce((t, x) => t + x.score, 0) / list.length) + '%' : '—'; }
 
 function officeHomeGuide(student) {
-  return `<details class="app-office-intro"><summary>${student ? 'Your business runs one day at a time. See how the office works.' : 'What your students experience: one business, all semester.'}</summary><div><img src="assets/screens/office-books.jpg" width="1600" height="1040" loading="lazy" alt="Example student office with an equipment invoice in Mail and a journal entry in Books"><section><h2>${student ? 'Read. Reply. Record. Close the day.' : 'Assign simulation periods, not isolated exercises.'}</h2><p>${student ? 'Open your assigned period to continue the same business. Handle requests in Mail and Messages, then record the paperwork in Books beside it. When today’s work is finished, choose Close up for the day for the next date and new mail.' : 'Students make business decisions, receive source documents and keep the books in a split-screen office. Their company and balances carry into later periods. Assign periods in course order; later periods follow the earlier business work.'}</p><p>${student ? 'The Office guide in the bottom bar is always available. Your accounting is graded, not your business choices.' : 'Completing an assigned period sends its first-attempt accounting score to the gradebook. Business choices aren’t graded.'}</p><a class="app-link" href="${student ? 'office.html' : 'lessons.html#library'}">${student ? 'Open My business' : 'Browse simulation periods'}</a><small>Actual platform screenshot · example business.</small></section></div></details>`;
+  return `<details class="app-office-intro"><summary>${student ? 'How to use the student workspace' : 'About the student simulation'}</summary><div><img src="assets/screens/office-books.jpg" width="1600" height="1040" loading="lazy" alt="Example student office with an equipment invoice in Mail and a journal entry in Books"><section><h2>${student ? 'Completing an assigned period' : 'Assign simulation periods in course order'}</h2><p>${student ? 'Open your assigned period to continue the same business. Handle requests in Mail and Messages, then record the paperwork in Books beside it. Review and confirm each journal entry before submitting it. When today’s work is finished, choose Close up for the day for the next date and new mail.' : 'Students make business decisions, receive source documents and keep the books in a split-screen office. Their company and balances carry into later periods. Assign periods in course order; later periods follow the earlier business work.'}</p><p>${student ? 'The Office guide in the bottom bar is always available. Your accounting is graded, not your business choices.' : 'Completing an assigned period sends its first-attempt accounting score to the gradebook. Business choices aren’t graded.'}</p><a class="app-link" href="${student ? 'office.html' : 'lessons.html#library'}">${student ? 'Open My business' : 'Browse simulation periods'}</a><small>Actual platform screenshot · example business.</small></section></div></details>`;
 }
 
 function professorHome() {
