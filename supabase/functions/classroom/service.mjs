@@ -39,6 +39,15 @@ const isLib=a=>a?.definition?.kind==='library';
 const isCase=a=>a?.definition?.kind==='supplement';
 const caseMeta=a=>({id:a.id,class_id:a.class_id,title:a.definition.title,dueDate:a.definition.dueDate,deleted:!!a.definition.deleted});
 const caseScore=r=>({assignment_id:r.assignment_id,completed:!!r.state.completed,score:r.state.score,first:r.state.first,graded:r.state.graded,revision:r.revision});
+function officeBusiness(profile){
+ const config=profile?.office?.run?.config;
+ return config?{...profile.business,name:config.name,type:globalThis.LL.PROFILES[config.type]?.type||config.type,founder:config.founder,city:config.city}:profile?.business||null;
+}
+function officeProgress(profile){
+ if(!profile?.office?.run)return null;
+ try{const state=globalThis.SIM.replay(profile.office.run),period=globalThis.SIM.catalog[state.m];return {lessonId:period.id,period:period.title,day:state.day,first:state.first,graded:state.graded,completed:state.ended,updatedAt:profile.office.savedAt||null};}
+ catch{return {unavailable:true,updatedAt:profile.office.savedAt||null};}
+}
 export async function handleAction(store,L,user,action,p={}){
  if(!user?.id||!user.email)fail('Sign in to continue.',401);
  const address=email(user.email),grant=await store.one('demo_access',{email:address});
@@ -156,8 +165,9 @@ export async function handleAction(store,L,user,action,p={}){
  }
  if(action==='gradebook'){
   requireTeacher();await classAccess(p.classId);const invitations=await store.list('demo_invitations',{class_id:p.classId}),everything=await store.list('demo_assignments',{class_id:p.classId}),assignments=everything.filter(a=>!isLib(a)&&!isCase(a)),lessons=everything.filter(a=>isLib(a)&&!a.definition.deleted),cases=everything.filter(a=>isCase(a)&&!a.definition.deleted);
-  const students=await Promise.all(invitations.map(async i=>{const s=await store.one('demo_profiles',{email:i.email});return {email:i.email,business:s?.business||null,runs:s?(await store.list('demo_runs',{student_id:s.id})).filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})):[]};}));for(const s of students){const sp=await store.one('demo_profiles',{email:s.email});s.lessonScores=sp?(await store.list('demo_runs',{student_id:sp.id})).filter(r=>lessons.some(a=>a.id===r.assignment_id)).map(r=>({...r.state,assignment_id:r.assignment_id})):[];}
-  for(const s of students){const sp=await store.one('demo_profiles',{email:s.email});s.caseScores=sp?(await store.list('demo_runs',{student_id:sp.id})).filter(r=>cases.some(a=>a.id===r.assignment_id)).map(caseScore):[];}
+  const [profiles,runs]=await Promise.all([store.listIn('demo_profiles','email',invitations.map(i=>i.email)),store.listIn('demo_runs','assignment_id',everything.map(a=>a.id))]);
+  const byEmail=new Map(profiles.map(s=>[s.email,s])),byStudent=new Map();for(const run of runs){if(!byStudent.has(run.student_id))byStudent.set(run.student_id,[]);byStudent.get(run.student_id).push(run);}
+  const students=invitations.map(i=>{const s=byEmail.get(i.email),work=byStudent.get(s?.id)||[];return {email:i.email,accountCreated:!!s,business:officeBusiness(s),office:officeProgress(s),runs:work.filter(r=>assignments.some(a=>a.id===r.assignment_id)).map(r=>({...r,state:{...r.state,serverGrade:L.grade(r.state)}})),lessonScores:work.filter(r=>lessons.some(a=>a.id===r.assignment_id)).map(r=>({...r.state,assignment_id:r.assignment_id})),caseScores:work.filter(r=>cases.some(a=>a.id===r.assignment_id)).map(caseScore)};});
   return {assignments,lessons:lessons.map(a=>({...a.definition,id:a.id})),cases:cases.map(caseMeta),students};
  }
  if(action==='attempts'){

@@ -20,6 +20,14 @@ const store={
  async generate(input:any){const previous=generationTimes.get(input.actor+':'+(input.phase||'complete'))||0;if(Date.now()-previous<60000){const error:any=Error('Please wait a minute before creating another AI draft.');error.status=429;throw error;}generationTimes.set(input.actor+':'+(input.phase||'complete'),Date.now());if(generationTimes.size>10000)generationTimes.clear();return await generateCourseAssignment((globalThis as any).Lessons,input,{key:Deno.env.get('LEDGER_AI_API_KEY')});},
  async one(table:string,filter:object){return check(await db.from(table).select('*').match(filter).maybeSingle());},
  async list(table:string,filter:object){return check(await db.from(table).select('*').match(filter).limit(1000));},
+ async listIn(table:string,column:string,values:string[]){
+  const rows:any[]=[];
+  for(let offset=0;offset<values.length;offset+=100){
+   const batch=values.slice(offset,offset+100);
+   for(let start=0;;start+=1000){let query=db.from(table).select('*').in(column,batch).order(table==='demo_runs'?'student_id':'id');if(table==='demo_runs')query=query.order('assignment_id');const page=check(await query.range(start,start+999));rows.push(...page);if(page.length<1000)break;}
+  }
+  return rows;
+ },
  async insert(table:string,row:object){return check(await db.from(table).insert(row).select().single());},
  async upsert(table:string,row:object){return check(await db.from(table).upsert(row).select().single());},
  async update(table:string,filter:object,row:object){return check(await db.from(table).update(row).match(filter));},

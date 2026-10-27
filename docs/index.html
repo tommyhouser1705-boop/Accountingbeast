@@ -967,6 +967,8 @@ body[data-screen=app] main.shell,body[data-screen=app] #classroom{max-width:none
 .app .app-table td strong,.app .app-table td{color:#1d2433}
 .app .app-table td small{color:#6b7482}
 .app .app-link{margin:0;min-height:0;line-height:1.5;box-shadow:none}
+.app-sync{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px;margin-bottom:20px;font-size:12px;color:#647084}
+.app-sync button{flex:none}
 </style><style>.instructor-workspace{max-width:1180px;margin:auto;min-width:0}
 .teach-panel{background:#fff;border:1px solid #dfe5ee;border-radius:12px;padding:26px;margin:0 0 22px;min-width:0;box-shadow:0 2px 5px #13294b05}
 .teach-panel h2{font-size:20px;letter-spacing:-.025em;margin:0 0 16px;color:#13294b}
@@ -2540,12 +2542,12 @@ let cloudAccount=null,cloudClasses=[],cloudClass='',cloudScreen='',cloudBusy=fal
 let authMode='signin',authEmail='';
 const localPersist=persist,localRender=render,localShell=shell,localWireAssignment=wireAssignment,localProfilePage=profilePage,localEditProfile=editProfile,localProfessor=renderProfessor,localReviewDraft=reviewDraft;
 function accountError(e){if(cloudAccount&&[401,403].includes(e.status)){cloudAccount=null;cloudClasses=[];cloudClass='';data={profile:null,assignments:[],runs:{}};cloudScreen='login';role='home';render();}cloudMessage=e.message;const status=Q('#cloud-status');if(status)status.textContent=cloudMessage;}
-async function cloudTask(fn){if(cloudBusy)return;cloudBusy=true;document.querySelectorAll('[data-cloud-submit]').forEach(b=>b.disabled=true);try{cloudMessage='';const current=Q('#cloud-status');if(current)current.textContent='';await fn();}catch(e){accountError(e);}finally{cloudBusy=false;document.querySelectorAll('[data-cloud-submit]').forEach(b=>b.disabled=false);}}
+async function cloudTask(fn){if(cloudBusy)return;cloudBusy=true;document.querySelectorAll('[data-cloud-submit]').forEach(b=>b.disabled=true);try{cloudMessage='';const current=Q('#cloud-status');if(current)current.textContent='';await fn();}catch(e){accountError(e);}finally{cloudBusy=false;document.querySelectorAll('[data-cloud-submit]').forEach(b=>b.disabled=false);if(cloudAccount&&cloudAccount.role!=='student'&&cloudScreen==='dashboard')loadBook();}}
 persist=function(){if(!cloudAccount)localPersist();};
 function cloudFooter(){return cloudAccount?`Signed in as ${safe(cloudAccount.email)} · ${safe(cloudAccount.role)} · assignment submissions saved to your class`:'Demo mode · saved in this browser only · Reset demo starts over · sign in for a connected class';}
 shell=function(content){localShell(content);Q('.classroom-foot').innerHTML=cloudFooter();const tools=Q('.header-tools');if(cloudAccount){const rh=Q('#role-home');if(rh)rh.hidden=true;tools.insertAdjacentHTML('beforeend','<button class="quiet" id="account-dashboard">Home</button><button class="quiet" id="cloud-logout">Sign out</button>');Q('#account-dashboard').onclick=()=>{cloudScreen='dashboard';render();};Q('#cloud-logout').onclick=()=>cloudTask(async()=>{try{await cloud.logout();}finally{location.reload();}});}else{tools.insertAdjacentHTML('beforeend','<button class="secondary" id="cloud-login">Sign in</button>');Q('#cloud-login').onclick=()=>{cloudScreen='login';render();};}
 Q('#role-home').onclick=Q('#brand-home').onclick=e=>{e.preventDefault();cloudScreen=cloudAccount?'dashboard':'';if(!cloudAccount)role='home';render();};Q('main').insertAdjacentHTML('beforeend',`<div id="cloud-status" role="status">${safe(cloudMessage)}</div>`);};
-async function loadCloud(){const result=await cloud.call('bootstrap');cloudAccount=result.user;cloudClasses=result.classes;cloudClass=cloudClasses.some(c=>c.id===cloudClass)?cloudClass:cloudClasses[0]?.id||'';data={profile:result.business,assignments:result.assignments.map(x=>({...x.definition,classId:x.class_id})),runs:{}};cloudRevision={};for(const r of result.runs){data.runs[r.assignment_id]=r.state;cloudRevision[r.assignment_id]=r.revision;}active=null;record=null;teacherDraft=null;if(cloudAccount.role!=='student'){try{teacherDraft=JSON.parse(sessionStorage.getItem('ledger-teacher-draft-'+cloudAccount.id));}catch{}}teacherTab='builder';role=cloudAccount.role==='student'?'student':'professor';page='assignments';cloudLessons=result.lessons||[];cloudLessonScores=result.lessonScores||[];cloudCases=result.cases||[];cloudCaseScores=result.caseScores||[];cloudBook={};}
+async function loadCloud(){const result=await cloud.call('bootstrap');resetDashboardRefresh();cloudAccount=result.user;cloudClasses=result.classes;cloudClass=cloudClasses.some(c=>c.id===cloudClass)?cloudClass:cloudClasses[0]?.id||'';data={profile:result.business,assignments:result.assignments.map(x=>({...x.definition,classId:x.class_id})),runs:{}};cloudRevision={};for(const r of result.runs){data.runs[r.assignment_id]=r.state;cloudRevision[r.assignment_id]=r.revision;}active=null;record=null;teacherDraft=null;if(cloudAccount.role!=='student'){try{teacherDraft=JSON.parse(sessionStorage.getItem('ledger-teacher-draft-'+cloudAccount.id));}catch{}}teacherTab='builder';role=cloudAccount.role==='student'?'student':'professor';page='assignments';cloudLessons=result.lessons||[];cloudLessonScores=result.lessonScores||[];cloudCases=result.cases||[];cloudCaseScores=result.caseScores||[];cloudBook={};}
 render=function(){if(cloudScreen==='login'){renderLogin();return;}if(cloudAccount&&cloudScreen==='dashboard'){renderDashboard();return;}localRender();if(role==='home'&&cloudAccount&&Q('#professor')){Q('#professor').textContent='Open instructor workspace';Q('#student').textContent='Open my business';}if(role==='home'&&!cloudAccount&&Q('#professor'))Q('#professor').onclick=()=>{cloudScreen='login';cloudMessage='Instructors and students sign in with the email approved for their class.';render();};if(role==='home'&&cloudAccount){Q('#student').disabled=cloudAccount.role!=='student';Q('#professor').disabled=cloudAccount.role==='student';}if(cloudAccount&&role==='student'&&Q('#import')){Q('#import').textContent='Refresh class';Q('#import').onclick=()=>cloudTask(async()=>{await loadCloud();render();});if(Q('.business-summary .message'))Q('.business-summary .message').textContent='Assignments appear here when your professor publishes them. Your submitted work saves to your account.';if(!data.assignments.length&&Q('.assignment-list'))Q('.assignment-list').innerHTML='<section class="card"><h2>Your class is getting ready</h2><p>Your professor has not published an assignment yet. Open My classroom to see your classes.</p></section>';if(page==='portfolio')Q('.portfolio-card .foot').textContent='Your professor sees the server-recorded submissions in the class gradebook. Downloads are copies for your records.';}};
 function renderLogin(){const signup=authMode==='signup';shell(`<section class="account-layout"><aside class="account-story"><div class="tag">LEDGER LANE CLASSROOM</div><h1>One business. A full semester of accounting.</h1><p>Your lessons, business decisions and journal entries stay with your account.</p><ul class="account-points"><li>Fifteen prebuilt lessons aligned to introductory financial accounting</li><li>Real general-journal entries with specific feedback</li><li>Instructors assign lessons to their class with due dates</li></ul></aside><section class="account-panel"><div class="tag">${signup?'GET STARTED':'WELCOME BACK'}</div><h2>${signup?'Create your account':'Sign in to Ledger Lane'}</h2><p class="account-intro">${signup?'Use the email your professor approved for your class.':'Pick up where you left off.'}</p>${cloud.configured?`<form id="cloud-auth"><label class="field" for="cloud-email">Email address<input id="cloud-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.edu" value="${safe(authEmail)}"></label><label class="field" for="cloud-password">Password<div class="password-field"><input id="cloud-password" name="password" type="password" autocomplete="${signup?'new-password':'current-password'}" required ${signup?'minlength="12"':''}><button type="button" id="show-password" aria-label="Show password" aria-pressed="false">Show</button></div></label>${signup?'<p class="password-help">Use at least 12 characters.</p><label class="field" for="confirm-password">Confirm password<input id="confirm-password" type="password" autocomplete="new-password" required minlength="12"></label>':'<button type="button" id="cloud-recover" class="account-text-button">Forgot your password?</button>'}<button class="account-submit" data-cloud-submit>${signup?'Create account':'Sign in'}</button><div id="account-feedback-slot"></div></form><p class="account-switch">${signup?'Already have an account? <button type="button" id="cloud-signin">Sign in</button>':'New to Ledger Lane? <button type="button" id="cloud-signup">Create an account</button>'}</p><details class="account-access"><summary>Need help getting access?</summary><p>Students: ask your professor to add your email to the class. Professors: ask the person running your demo to approve your email.</p><p>If you’re waiting for a confirmation email, enter your email above and request a new link.</p><button type="button" id="cloud-resend" class="account-text-button" data-cloud-submit>Resend confirmation email</button></details>`:'<div class="message">Account sign-in is currently unavailable. You can still try the lessons without an account.</div>'}<div class="account-demo"><button id="back-practice" class="account-text-button">← Back to the home page</button><span></span></div></section></section>`);Q('.classroom-foot').textContent='Ledger Lane · An accounting classroom built around your business';Q('#back-practice').onclick=()=>{cloudScreen='';render();};if(!cloud.configured)return;
  const status=Q('#cloud-status');Q('#account-feedback-slot').append(status);status.setAttribute('aria-live','polite');Q('#cloud-email').oninput=e=>{authEmail=e.target.value;};
@@ -2556,10 +2558,83 @@ function renderLogin(){const signup=authMode==='signup';shell(`<section class="a
  if(Q('#cloud-recover'))Q('#cloud-recover').onclick=()=>cloudTask(async()=>{const el=Q('#cloud-email');if(!el.value||!el.reportValidity()){el.focus();return;}await cloud.recover(el.value.trim());Q('#cloud-status').textContent='If an account uses this email, a password-reset link is on its way. Check your inbox.';});}
 
 function classOptions(){return cloudClasses.map(c=>`<option value="${c.id}" ${c.id===cloudClass?'selected':''}>${safe(c.name)}</option>`).join('');}
-let cloudLessons=[],cloudLessonScores=[],cloudCases=[],cloudCaseScores=[],cloudBook={},cloudBookLoading='';
+let cloudLessons=[],cloudLessonScores=[],cloudCases=[],cloudCaseScores=[],cloudBook={};
 function dueText(d){if(!d)return 'No due date';return 'Due '+new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}
 function scoreBadge(x){return `<b class="ih-score ${x.score>=80?'good':x.score>=60?'ok':'low'}">${x.score}%</b>`;}
-function loadBook(){const id=cloudClass;if(!id||cloudBook[id]||cloudBookLoading===id)return;cloudBookLoading=id;cloud.call('gradebook',{classId:id}).then(r=>{cloudBook[id]=r;}).catch(e=>{cloudBook[id]={error:e.message,students:[],lessons:[]};}).finally(()=>{cloudBookLoading='';if(cloudAccount&&cloudScreen==='dashboard')render();});}
+// Refresh only visible, idle dashboards; never replace an active form.
+const dashboardRefreshMs=15000, dashboardRequests=new Map(), dashboardStatus=new Map();
+let dashboardTimer, dashboardListeners=false, dashboardPendingRender=false;
+function dashboardReady(){return cloudAccount&&cloudScreen==='dashboard'&&!document.hidden&&!cloudBusy&&!(typeof instructorBusy!=='undefined'&&instructorBusy)&&!(typeof dashPage!=='undefined'&&dashPage==='builder')&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!document.querySelector('dialog[open], .app-main form[data-refresh-dirty]');}
+function dashboardKey(){return cloudAccount?.id+':'+(cloudAccount?.role==='student'?'student':cloudClass);}
+function dashboardRefreshLabel(){
+  if(cloudAccount?.role!=='student'&&!cloudClass)return 'Choose a class to check updates.';
+ const status=dashboardStatus.get(dashboardKey());
+  if(status?.loading)return 'Checking class updates…';
+  if(status?.error)return status.updatedAt?'Couldn’t refresh. Showing the last successful update.':'Couldn’t load class data. Try Refresh class.';
+  if(typeof dashPage!=='undefined'&&dashPage==='builder'||document.querySelector('.app-main form[data-refresh-dirty]'))return 'Automatic updates paused while editing. Your draft is unchanged.';
+  return status?.updatedAt?'Updated '+new Date(status.updatedAt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'})+' · checks every 15 seconds while idle':cloudAccount?.role==='student'?'Class loaded · checks every 15 seconds while idle':'Checking class updates…';
+}
+function updateDashboardStatus(){const el=Q('#class-sync-status');if(el)el.textContent=dashboardRefreshLabel();const button=Q('#refresh-class');if(button)button.disabled=!!dashboardStatus.get(dashboardKey())?.loading||!!document.querySelector('.app-main form[data-refresh-dirty]')||typeof dashPage!=='undefined'&&dashPage==='builder';}
+async function refreshDashboardData(force=false){
+ if(!dashboardReady())return;
+ if(dashboardPendingRender){dashboardPendingRender=false;render();}
+ const account=cloudAccount,id=cloudClass,key=dashboardKey(),student=account.role==='student';
+ if(!student&&!id)return;
+ if(dashboardRequests.has(key))return dashboardRequests.get(key);
+ const previous=dashboardStatus.get(key)||{};
+ if(!force&&Date.now()-(previous.checkedAt||0)<dashboardRefreshMs)return;
+ const status={...previous,loading:true,checkedAt:Date.now()};dashboardStatus.set(key,status);updateDashboardStatus();
+ const current=()=>cloudAccount?.id===account.id&&cloudAccount?.role===account.role&&dashboardStatus.get(key)===status;
+ let changed=false;
+ const request=Promise.resolve().then(async()=>{
+  try{
+   const result=await cloud.call(student?'bootstrap':'gradebook',student?{}:{classId:id});
+   if(!current())return;
+   if(student){
+    changed=JSON.stringify([cloudClasses,cloudLessons,cloudLessonScores,cloudCases,cloudCaseScores,data.profile,data.assignments])!==JSON.stringify([result.classes,result.lessons||[],result.lessonScores||[],result.cases||[],result.caseScores||[],result.business,result.assignments.map(x=>({...x.definition,classId:x.class_id}))]);
+    cloudClasses=result.classes;cloudLessons=result.lessons||[];cloudLessonScores=result.lessonScores||[];cloudCases=result.cases||[];cloudCaseScores=result.caseScores||[];
+    data.profile=result.business;data.assignments=result.assignments.map(x=>({...x.definition,classId:x.class_id}));
+      }else{
+        changed=JSON.stringify(cloudBook[id])!==JSON.stringify(result);cloudBook[id]=result;
+        cloudLessons=[...cloudLessons.filter(x=>x.class_id!==id),...(result.lessons||[]).map(x=>({...x,class_id:id}))];
+        cloudCases=[...cloudCases.filter(x=>x.class_id!==id),...(result.cases||[]).map(x=>({...x,class_id:id}))];
+      }
+   status.updatedAt=Date.now();delete status.error;
+  }catch(error){
+   if(!current())return;
+   status.error=error.message;
+   if(!student&&!cloudBook[id]){cloudBook[id]={error:error.message,students:[],lessons:[]};changed=true;}
+   if([401,403].includes(error.status))accountError(error);
+  }finally{
+   if(dashboardRequests.get(key)===request)dashboardRequests.delete(key);
+   status.loading=false;
+   if(current()&&dashboardKey()===key){if(changed){if(dashboardReady()){dashboardPendingRender=false;render();}else dashboardPendingRender=true;}updateDashboardStatus();}
+  }
+ });
+ dashboardRequests.set(key,request);return request;
+}
+function loadBook(force=false){return refreshDashboardData(force);}
+function startDashboardRefresh(){
+ clearTimeout(dashboardTimer);
+ if(!dashboardListeners){
+  dashboardListeners=true;
+  const resume=()=>refreshDashboardData(true);
+  window.addEventListener('focus',resume);window.addEventListener('online',resume);document.addEventListener('visibilitychange',resume);
+  document.addEventListener('input',event=>{
+    const form=event.target.closest?.('.app-main form');if(!form)return;
+    const dirty=Array.from(form.elements).some(field=>{
+      if(field.tagName==='SELECT')return field.selectedIndex!==Math.max(0,Array.from(field.options).findIndex(x=>x.defaultSelected));
+      if(['checkbox','radio'].includes(field.type))return field.checked!==field.defaultChecked;
+      return ['INPUT','TEXTAREA'].includes(field.tagName)&&!['submit','button','reset'].includes(field.type)&&field.value!==field.defaultValue;
+    });
+    form.toggleAttribute('data-refresh-dirty',dirty);updateDashboardStatus();
+  });
+ }
+ if(!cloudAccount||cloudScreen!=='dashboard')return;
+ dashboardTimer=setTimeout(()=>{refreshDashboardData();startDashboardRefresh();},dashboardRefreshMs);
+}
+function resetDashboardRefresh(){dashboardStatus.clear();dashboardRequests.clear();dashboardPendingRender=false;clearTimeout(dashboardTimer);}
+function invalidateClassBook(id){delete cloudBook[id];dashboardStatus.delete(cloudAccount?.id+':'+id);}
 function stepItem(done,n,title,text,action){return `<li class="${done?'done':''}"><span class="ih-check">${done?'✓':n}</span><div><strong>${title}</strong><p>${text}</p></div>${done?'<em>Done</em>':action}</li>`;}
 function professorHome(){
  const cls=cloudClasses.find(c=>c.id===cloudClass),book=cloudBook[cloudClass],students=book?.students||[],lessons=book?.lessons||cloudLessons.filter(l=>l.class_id===cloudClass);
@@ -2578,8 +2653,8 @@ function renderDashboard(){const student=cloudAccount.role==='student';shell(stu
 Q('#enter-connected').onclick=()=>{location.href=student?'lessons.html':'lessons.html#library';};if(student)return;loadBook();
 if(Q('#cloud-class'))Q('#cloud-class').onchange=e=>{cloudClass=e.target.value;cloudMessage='';render();};
 Q('#create-class').onsubmit=e=>{e.preventDefault();const name=new FormData(e.target).get('name');cloudTask(async()=>{const c=await cloud.call('create-class',{name});await loadCloud();cloudClass=c.id;cloudMessage='Class created. Next, add your students.';render();});};
-Q('#invite-student').onsubmit=e=>{e.preventDefault();const email=new FormData(e.target).get('email');cloudTask(async()=>{await cloud.call('invite',{classId:cloudClass,email});delete cloudBook[cloudClass];cloudMessage='Student added. Share the site link and ask them to create an account with that email.';render();});};
-document.querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>{if(!confirm('Remove '+el.dataset.remove+' from this class?'))return;cloudTask(async()=>{await cloud.call('remove-student',{classId:cloudClass,email:el.dataset.remove});delete cloudBook[cloudClass];render();});});
+Q('#invite-student').onsubmit=e=>{e.preventDefault();const email=new FormData(e.target).get('email');cloudTask(async()=>{await cloud.call('invite',{classId:cloudClass,email});invalidateClassBook(cloudClass);cloudMessage='Student added. Share the site link and ask them to create an account with that email.';render();});};
+document.querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>{if(!confirm('Remove '+el.dataset.remove+' from this class?'))return;cloudTask(async()=>{await cloud.call('remove-student',{classId:cloudClass,email:el.dataset.remove});invalidateClassBook(cloudClass);render();});});
 if(Q('#grant-access'))Q('#grant-access').onsubmit=e=>{e.preventDefault();const p=Object.fromEntries(new FormData(e.target));cloudTask(async()=>{await cloud.call('authorize',{...p,active:true});cloudMessage='Account approved. Share the site link; they can create an account with this email.';render();});};if(Q('#view-access'))Q('#view-access').onclick=()=>cloudTask(accessList);}
 async function accessList(){const rows=await cloud.call('access-list'),d=Q('#lesson-dialog');d.innerHTML=`<h2>Approved demo accounts</h2>${rows.map(r=>`<div class="library-row"><div><strong>${safe(r.email)}</strong><p>${r.role} · ${r.active?'Enabled':'Disabled'}</p></div>${r.role==='owner'?'':`<button class="secondary" data-access="${safe(r.email)}">${r.active?'Disable':'Restore'}</button>`}</div>`).join('')}<button id="close-access" class="quiet">Close</button>`;d.showModal();Q('#close-access').onclick=()=>d.close();d.querySelectorAll('[data-access]').forEach(el=>el.onclick=()=>cloudTask(async()=>{const r=rows.find(r=>r.email===el.dataset.access);await cloud.call('authorize',{email:r.email,role:r.role,active:!r.active});d.close();await accessList();}));}
 async function gradebook(roster=false){const result=await cloud.call('gradebook',{classId:cloudClass}),d=Q('#lesson-dialog');d.innerHTML=`<h2>${roster?'Class roster':'Class gradebook'}</h2><p>${safe(cloudClasses.find(c=>c.id===cloudClass)?.name)} · Journal scores follow each assignment’s grading rules. Original submissions remain available.</p>${result.students.map(s=>`<section class="card"><h3>${safe(s.email)}</h3><p>${safe(s.business?.name||'Account/business not created yet')}</p>${roster?'<button class="secondary" data-remove="'+safe(s.email)+'">Remove from this class</button>':result.assignments.map(a=>{const r=s.runs.find(r=>r.assignment_id===a.id),g=r?.state.serverGrade;return `<div class="library-row"><div><strong>${safe(a.definition.title)}${a.definition.deleted?' · Deleted':''}</strong><p>${r?`${g.journal+g.effects+g.prediction}/100 · ${a.definition.version===3?'journal entries '+g.journal+'/100':'journal '+g.journal+'/80 · effects '+g.effects+'/15 · prediction '+g.prediction+'/5'} · ${r.state.completed?'Completed':'In progress'}`:'Not started'}</p></div>${r?`<button class="secondary" data-work="${s.runs.indexOf(r)}" data-student="${safe(s.email)}">Review work</button>`:''}</div>`;}).join('')}</section>`).join('')||'<p>No students invited yet.</p>'}<button id="close-gradebook" class="quiet">Close</button>`;d.showModal();Q('#close-gradebook').onclick=()=>d.close();d.querySelectorAll('[data-remove]').forEach(el=>el.onclick=()=>cloudTask(async()=>{await cloud.call('remove-student',{classId:cloudClass,email:el.dataset.remove});d.close();await gradebook(true);}));d.querySelectorAll('[data-work]').forEach(el=>el.onclick=()=>cloudTask(async()=>{const s=result.students.find(s=>s.email===el.dataset.student),r=s.runs[Number(el.dataset.work)];const attempts=await cloud.call('attempts',{studentId:r.student_id,assignmentId:r.assignment_id});d.innerHTML=`<h2>${safe(s.business?.name||s.email)} · submitted work</h2><p>${safe(r.state.assignment.title)}</p><h3>Latest journal</h3>${Object.entries(r.state.entries).map(([id,e])=>`<div class="card"><strong>${safe(id)} · ${safe(e.date)}</strong>${e.rows.map(x=>`<p>${safe(x.account)} · debit ${cash(x.debit)} · credit ${cash(x.credit)}</p>`).join('')}</div>`).join('')}<h3>Server submission history</h3>${attempts.sort((a,b)=>a.revision-b.revision).map(a=>`<details><summary>${a.revision} · ${safe(a.action)} · ${safe(a.created_at?new Date(a.created_at).toLocaleString():'Time unavailable')}</summary>${submissionDetails(a,r.state)}</details>`).join('')}<button id="back-gradebook">Back to gradebook</button>`;Q('#back-gradebook').onclick=()=>cloudTask(async()=>{d.close();await gradebook();});}));}
@@ -2676,7 +2751,8 @@ function dashNav(items) {
 
 function appFrame(side, main) {
   const msg = cloudMessage ? `<div class="app-msg" role="status">${safe(cloudMessage)}</div>` : '';
-  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${msg}${main}</main></div>`;
+  const sync = typeof dashboardRefreshLabel === 'function' ? `<div class="app-sync"><span id="class-sync-status" role="status">${safe(dashboardRefreshLabel())}</span><button id="refresh-class" class="app-link">Refresh class</button></div>` : '';
+  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
 }
 
 function pageHead(title, sub, action = '') {
@@ -2706,7 +2782,7 @@ function professorHome() {
     main = pageHead('Gradebook', cls ? safe(cls.name) : '', '<a class="app-btn" href="lessons.html#library">Assign a period</a>') + setup + body + officeHomeGuide(false);
   } else if (dashPage === 'students') {
     main = pageHead('Students', cls ? safe(cls.name) : 'Create a class first.') + `<form id="invite-student" class="app-inline"><input name="email" type="email" required maxlength="254" placeholder="student@school.edu" aria-label="Student email" ${!cloudClass ? 'disabled' : ''}><button class="app-btn" data-cloud-submit ${!cloudClass ? 'disabled' : ''}>Add student</button></form><p class="app-note">Adding an email doesn’t send a message. Share the site link; students create an account with that email and join automatically.</p>`
-      + (students.length ? `<div class="app-scroll"><table class="app-table"><thead><tr><th>Email</th><th>Business</th><th class="num">Average</th><th></th></tr></thead><tbody>${students.map((s) => `<tr><td>${safe(s.email)}</td><td>${s.business ? safe(s.business.name) : '<span class="app-mut">Not signed in yet</span>'}</td><td class="num">${avg(s.lessonScores || [])}</td><td class="num"><button class="app-link" data-remove="${safe(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="app-empty">${cloudClass && !book ? 'Loading…' : 'No students in this class yet.'}</p>`);
+      + (students.length ? `<div class="app-scroll"><table class="app-table"><thead><tr><th>Email</th><th>Business</th><th>Current work</th><th>Last saved</th><th class="num">Average</th><th></th></tr></thead><tbody>${students.map((s) => `<tr><td>${safe(s.email)}</td><td>${s.business ? safe(s.business.name) : '<span class="app-mut">Not created yet</span>'}</td><td>${rosterProgress(s)}</td><td>${rosterSaved(s)}</td><td class="num">${avg(s.lessonScores || [])}</td><td class="num"><button class="app-link" data-remove="${safe(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="app-empty">${cloudClass && !book ? 'Loading…' : 'No students in this class yet.'}</p>`);
   } else if (dashPage === 'classes') {
     main = pageHead('Classes', 'Each class has its own roster, assignments and gradebook.') + `<form id="create-class" class="app-inline"><input name="name" required maxlength="120" placeholder="e.g. ACCT 203 · Section 01" aria-label="New class name"><button class="app-btn" data-cloud-submit>Create class</button></form>`
       + (cloudClasses.length ? `<table class="app-table"><thead><tr><th>Class</th><th class="num">Lessons assigned</th><th></th></tr></thead><tbody>${cloudClasses.map((c) => `<tr><td><strong>${safe(c.name)}</strong></td><td class="num">${cloudLessons.filter((l) => l.class_id === c.id).length}</td><td class="num"><button class="app-link" data-open-class="${safe(c.id)}">Open gradebook</button></td></tr>`).join('')}</tbody></table>` : '<p class="app-empty">You don’t have a class yet. Create one to get started.</p>');
@@ -2717,6 +2793,15 @@ function professorHome() {
   return appFrame(side, main);
 }
 
+function rosterProgress(s) {
+  if (s.office?.unavailable) return 'Progress unavailable';
+  if (s.office) return `${safe(s.office.period)} · Day ${safe(s.office.day)}${s.office.completed ? ' · Completed' : ''}`;
+  return s.accountCreated || s.business ? 'Office not started' : 'Invited · no account yet';
+}
+function rosterSaved(s) {
+  const saved = s.office?.updatedAt;
+  return saved ? `<time datetime="${safe(saved)}">${safe(new Date(saved).toLocaleString('en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}))}</time>` : '—';
+}
 function studentHome() {
   if (!['assignments', 'grades'].includes(dashPage)) dashPage = 'assignments';
   const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'office.html']]);
@@ -2747,13 +2832,18 @@ function renderDashboard() {
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
   if (typeof wireInstructor === 'function' && !student) wireInstructor();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
+  if (typeof startDashboardRefresh === 'function') {
+    startDashboardRefresh();
+    updateDashboardStatus();
+    on('#refresh-class', 'onclick', () => refreshDashboardData(true));
+  }
   if (student) return;
   loadBook();
   on('#cloud-class', 'onchange', (e) => { cloudClass = e.target.value; cloudMessage = ''; render(); });
   document.querySelectorAll('[data-open-class]').forEach((b) => (b.onclick = () => { cloudClass = b.dataset.openClass; dashPage = 'gradebook'; render(); }));
   on('#create-class', 'onsubmit', (e) => { e.preventDefault(); const name = new FormData(e.target).get('name'); cloudTask(async () => { const c = await cloud.call('create-class', {name}); await loadCloud(); cloudClass = c.id; dashPage = 'students'; cloudMessage = 'Class created. Next, add your students.'; render(); }); });
-  on('#invite-student', 'onsubmit', (e) => { e.preventDefault(); const email = new FormData(e.target).get('email'); cloudTask(async () => { await cloud.call('invite', {classId: cloudClass, email}); delete cloudBook[cloudClass]; cloudMessage = 'Student added. Share the site link and ask them to create an account with that email.'; render(); }); });
-  document.querySelectorAll('[data-remove]').forEach((el) => (el.onclick = () => { if (!confirm('Remove ' + el.dataset.remove + ' from this class?')) return; cloudTask(async () => { await cloud.call('remove-student', {classId: cloudClass, email: el.dataset.remove}); delete cloudBook[cloudClass]; render(); }); }));
+  on('#invite-student', 'onsubmit', (e) => { e.preventDefault(); const email = new FormData(e.target).get('email'); cloudTask(async () => { await cloud.call('invite', {classId: cloudClass, email}); invalidateClassBook(cloudClass); cloudMessage = 'Student added. Share the site link and ask them to create an account with that email.'; render(); }); });
+  document.querySelectorAll('[data-remove]').forEach((el) => (el.onclick = () => { if (!confirm('Remove ' + el.dataset.remove + ' from this class?')) return; cloudTask(async () => { await cloud.call('remove-student', {classId: cloudClass, email: el.dataset.remove}); invalidateClassBook(cloudClass); render(); }); }));
   on('#grant-access', 'onsubmit', (e) => { e.preventDefault(); const p = Object.fromEntries(new FormData(e.target)); cloudTask(async () => { await cloud.call('authorize', {...p, active: true}); cloudMessage = 'Account approved. Share the site link; they can create an account with this email.'; render(); }); });
   on('#view-access', 'onclick', () => cloudTask(accessList));
 }
