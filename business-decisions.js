@@ -2,6 +2,7 @@
 let definitions={};
 const cents=n=>Math.round((n+Number.EPSILON)*100)/100;
 const stock={
+ 'Landscaping company':[['gloves','Work gloves','one pair',12],['bags','Yard-waste bags','20 bags',18],['feed','Plant feed','one bag',25]],
  'Design studio':[['paper','Sketch paper','one pad',12],['ink','Printer ink','one cartridge',32],['folders','Presentation folders','25 folders',18]],
  'Bike repair':[['lubricant','Bike lubricant','one bottle',12],['patches','Tube-repair patches','one pack',8],['cloths','Workshop cloths','12 cloths',15]],
  'Plant shop':[['soil','Potting soil','one bag',14],['pots','Grower pots','10 pots',18],['gloves','Gardening gloves','one pair',8]],

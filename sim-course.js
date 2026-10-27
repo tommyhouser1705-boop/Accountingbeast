@@ -195,10 +195,10 @@
     f.assets = r2(sums(['A']) - sums(['XA'])); f.liabilities = r2(sums(['L']) - sums(['XL']));
     f.equity = r2(sums(['SE']) - sums(['XSE']) + f.netIncome);
     f.operating = 0; f.investing = 0; f.financing = 0;
-    for (const j of s.book.filter(j => (j.m ?? 0) === s.m)) {
+    for (const j of s.book.filter(j => !j.opening && (j.m ?? 0) === s.m)) {
       const cash = j.lines.filter(([a]) => a === 'cash').reduce((t, [, side, x]) => t + (side === 'dr' ? x : -x), 0);
       if (!cash) continue;
-      const finance = j.lines.filter(([a]) => ['np', 'bonds', 'bdisc', 'bprem', 'cs', 'ps', 'apic', 'apicp', 'treasury', 'div', 'divpay'].includes(a)).reduce((t, [, side, x]) => t + (side === 'cr' ? x : -x), 0);
+      const finance = j.lines.filter(([a]) => ['np', 'bonds', 'bdisc', 'bprem', 'cs', 'ps', 'apic', 'apicp', 'treasury', 'div', 'divpay', 'casecapital', 'casedrawings'].includes(a)).reduce((t, [, side, x]) => t + (side === 'cr' ? x : -x), 0);
       const notePrincipal = j.lines.filter(([a]) => a === 'nr').reduce((t,[,side,x]) => t + (side === 'cr' ? x : -x),0);
       const invest = notePrincipal || (j.lines.some(([a]) => ['equip', 'vehicle', 'land', 'building'].includes(a)) ? cash - finance : 0);
       f.financing += finance; f.investing += invest; f.operating += cash - finance - invest;

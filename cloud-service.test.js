@@ -1,5 +1,51 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('./lesson-engine');
 require('./lessons-engine');require('./sim-docs');require('./sim-engine');require('./sim-month1');require('./sim-course');require('./sim-replay');
+const Cases=require('./sim-cases');
+async function supplementalDraft(){
+ const {generateCourseAssignment}=await import('./supabase/functions/classroom/generator.mjs'),{topicDraft,scenarioDraft}=require('./test-fixtures/interactive-assignment.cjs');let n=0;
+ return generateCourseAssignment(L,{notes:'Supplies bought on account, supplier payments and month-end supplies counts.',year:2026,month:9,depth:'focused'},{key:'test',fetcher:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(++n===1?topicDraft():scenarioDraft())}}]})})});
+}
+test('supplemental cases are authorized, reviewed, independently saved and server graded; standard books stay intact',async()=>{
+ const {call,c,store}=await fixture(),a=await supplementalDraft(),S=global.SIM;
+ const p={classId:c.id,title:'Extra supplies case',dueDate:'2026-11-12',assignment:a,reviewed:{documents:true,accounting:true}};
+ await assert.rejects(()=>call(student,'case-publish',p),e=>e.status===403);
+ await assert.rejects(()=>call(other,'case-publish',p),e=>e.status===403);
+ await assert.rejects(()=>call(prof,'case-publish',{...p,reviewed:{}}));
+ await assert.rejects(()=>call(prof,'case-publish',{...p,dueDate:'2026-99-99'}));
+ const published=await call(prof,'case-publish',p),id=published.id;
+ assert.equal((await call(prof,'case-publish',p)).id,id,'retrying publication does not create duplicates');
+ assert.equal((await call(prof,'case-work',{assignmentId:id,email:student.email})).state,null);
+ await assert.rejects(()=>call(student,'case-work',{assignmentId:id,email:student.email}),e=>e.status===403);
+ await assert.rejects(()=>call(other,'case-work',{assignmentId:id,email:student.email}),e=>e.status===403);
+ await assert.rejects(()=>call(prof,'case-work',{assignmentId:id,email:outsider.email}),e=>e.status===403);
+ await assert.rejects(()=>call(outsider,'case-load',{assignmentId:id}),e=>e.status===403);
+ await assert.rejects(()=>call(student,'case-load',{assignmentId:id}),/Create your company/);
+ const config={type:'bike',name:'River Cycle',founder:'Alex',city:'columbus',seed:23};
+ await call(student,'office-save',{revision:0,run:{config,events:[]}});
+ const standard=JSON.stringify(store.tables.demo_profiles.find(x=>x.id===student.id).office),lib=await call(prof,'lesson-assign',{classId:c.id,lessonId:'ch2',title:'Opening month'});
+ let {state,revision}=await call(student,'case-load',{assignmentId:id});
+ assert.equal(state.casePeriod.title,p.title);assert.equal(state.caseChoices,undefined);
+ assert.ok(state.casePeriod.items.every(x=>!x.lines));
+ let n=0,missed=false;
+ while(!state.ended&&n++<100){
+  const privateSt=Cases.replay(a,store.tables.demo_runs.find(x=>x.assignment_id===id)?.state.run||{config,events:[]}),it=S.open(privateSt)[0];let event;
+  if(!it)event={kind:S.nextDay(privateSt)==null?'complete':'advance'};
+  else if(it.kind==='decision')event={kind:'handle',id:it.id,action:{choice:Object.fromEntries(S.V(it.q,privateSt).map(q=>[q.id,q.opts[0].v]))}};
+  else {const w=S.want(privateSt,it);event={kind:'handle',id:it.id,action:w?{rows:w.map(([a,s,v])=>({a,d:s==='dr'?v:0,c:s==='cr'?v:0}))}:{noEntry:true}};
+   if(w&&!missed){event.action.rows=[];missed=true;}}
+  const r=await call(student,'case-act',{assignmentId:id,revision,event});state=r.state;revision=r.revision;
+ }
+ assert.equal(state.ended,true);const boot=await call(student,'bootstrap');
+ assert.equal(boot.caseScores[0].completed,true);assert.ok(boot.caseScores[0].score<100);
+ assert.equal(boot.cases[0].assignment,undefined);assert.equal(boot.assignments.some(x=>x.id===id),false);
+ assert.ok(boot.lessons.some(x=>x.id===lib.id));
+ const book=await call(prof,'gradebook',{classId:c.id});assert.equal(book.cases[0].id,id);assert.equal(book.students[0].caseScores[0].score,boot.caseScores[0].score);
+ const work=await call(prof,'case-work',{assignmentId:id,email:student.email});assert.equal(work.state.ended,true);assert.ok(work.attempts.length);assert.ok(work.attempts.some(a=>a.submitted.event.action?.rows?.length===0));
+ assert.equal(JSON.stringify(store.tables.demo_profiles.find(x=>x.id===student.id).office),standard);
+ await assert.rejects(()=>call(student,'case-act',{assignmentId:id,revision:0,event:{kind:'complete'}}),e=>e.status===409);
+ await call(prof,'delete-assignment',{assignmentId:id});await assert.rejects(()=>call(student,'case-load',{assignmentId:id}),e=>e.status===403);
+ await call(prof,'restore-assignment',{assignmentId:id});assert.equal((await call(student,'case-load',{assignmentId:id})).state.ended,true);
+});
 const uid=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 class Store{
  constructor(){this.tables={demo_access:[{email:'owner@example.edu',role:'owner',active:true},{email:'prof@example.edu',role:'professor',active:true},{email:'other@example.edu',role:'professor',active:true}],demo_profiles:[],demo_classes:[],demo_invitations:[],demo_assignments:[],demo_runs:[],demo_attempts:[]};}

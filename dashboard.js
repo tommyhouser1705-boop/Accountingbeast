@@ -11,7 +11,7 @@ function appFrame(side, main) {
 }
 
 function pageHead(title, sub, action = '') {
-  return `<div class="app-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${action}</div>`;
+  return `<div class="app-head"><div><h1>${safe(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${action}</div>`;
 }
 
 function avg(list) { return list.length ? Math.round(list.reduce((t, x) => t + x.score, 0) / list.length) + '%' : '—'; }
@@ -24,8 +24,10 @@ function professorHome() {
   const cls = cloudClasses.find((c) => c.id === cloudClass), book = cloudBook[cloudClass], students = book?.students || [];
   const lessons = book?.lessons || cloudLessons.filter((l) => l.class_id === cloudClass);
   const owner = cloudAccount.role === 'owner';
-  if (!dashPage || !['gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'gradebook' : 'classes';
-  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['gradebook', 'Gradebook'], ['lessons', 'Lessons', 'lessons.html#library'], ['students', 'Students'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="lessons.html">Preview the student office</a>`;
+  if (!dashPage || !['overview', 'plan', 'builder', 'gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'overview' : 'classes';
+  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Overview'], ['plan', 'Course plan'], ['gradebook', 'Gradebook'], ['students', 'Students'], ['builder', 'Create from notes'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2">Preview the student office</a>`;
+  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder'].includes(dashPage)) return instructorPage(side, cls, book);
+  if (typeof instructorGradebook === 'function' && dashPage === 'gradebook') return instructorGradebook(side, cls, book);
   const steps = [[cloudClasses.length > 0, 'Create a class', 'classes'], [students.length > 0, 'Add your students', 'students'], [lessons.length > 0, 'Assign a lesson from the library', 'lessons']];
   const setup = steps.every((s) => s[0]) ? '' : `<div class="app-setup"><b>Get your class ready</b><ol>${steps.map(([done, t, k]) => `<li class="${done ? 'done' : ''}">${done ? t : k === 'lessons' ? `<a href="lessons.html#library">${t}</a>` : `<button class="app-link" data-dash="${k}">${t}</button>`}</li>`).join('')}</ol></div>`;
   let main = '';
@@ -63,6 +65,7 @@ function studentHome() {
     const done = sorted.filter(score);
     main = pageHead('Grades', 'First-attempt scores. Your professor sees the same numbers.') + (done.length ? `<table class="app-table"><thead><tr><th>Lesson</th><th class="num">Score</th></tr></thead><tbody>${done.map((l) => `<tr><td>${safe(l.title)}</td><td class="num">${scoreBadge(score(l))}</td></tr>`).join('')}<tr class="app-total"><td>Average</td><td class="num">${avg(done.map(score))}</td></tr></tbody></table>` : '<p class="app-empty">No graded lessons yet. Scores appear here when you finish an assigned lesson.</p>');
   }
+  if (typeof studentCasesPanel === 'function') main += studentCasesPanel(dashPage === 'grades');
   if (dashPage === 'assignments') main += officeHomeGuide(true);
   return appFrame(side, main);
 }
@@ -73,6 +76,7 @@ function renderDashboard() {
   Q('#classroom').innerHTML = student ? studentHome() : professorHome();
   const on = (sel, ev, fn) => { const el = Q(sel); if (el) el[ev] = fn; };
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
+  if (typeof wireInstructor === 'function' && !student) wireInstructor();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
   if (student) return;
   loadBook();

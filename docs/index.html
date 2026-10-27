@@ -967,10 +967,70 @@ body[data-screen=app] main.shell,body[data-screen=app] #classroom{max-width:none
 .app .app-table td strong,.app .app-table td{color:#1d2433}
 .app .app-table td small{color:#6b7482}
 .app .app-link{margin:0;min-height:0;line-height:1.5;box-shadow:none}
+</style><style>.instructor-workspace{max-width:1180px;margin:auto;min-width:0}
+.teach-panel{background:#fff;border:1px solid #dfe5ee;border-radius:12px;padding:26px;margin:0 0 22px;min-width:0;box-shadow:0 2px 5px #13294b05}
+.teach-panel h2{font-size:20px;letter-spacing:-.025em;margin:0 0 16px;color:#13294b}
+.teach-panel h3{font-size:16px;margin:0 0 14px;color:#13294b}
+.teach-panel p{color:#44536a;font-size:14px;line-height:1.65;margin:10px 0 18px}
+.teach-current{display:flex;align-items:center;justify-content:space-between;gap:24px;background:#f6f9ff;border-color:#cddcf4;border-left:4px solid #285da4}
+.teach-current h2{font-size:25px;margin:9px 0}
+.teach-current p{margin-bottom:0}
+.teach-columns{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
+.teach-muted,.teach-panel .teach-muted{font-size:13px;color:#64748b;line-height:1.6}
+.teach-list{list-style:none;padding:0;margin:0}
+.teach-list li{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid #e5eaf1}
+.teach-list li:last-child{border-bottom:0}
+.teach-list strong,.teach-list small{display:block;font-size:14px}
+.teach-list small{color:#64748b;margin-top:5px;line-height:1.5}
+.teach-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:12px 0}
+.app-btn.alt{background:white;color:#173963;border-color:#ccd7e5}
+.app-btn.alt:hover{background:#f1f5fc}
+.app-btn:focus-visible,.instructor-workspace a:focus-visible{outline:3px solid #80adf0;outline-offset:3px}
+.teach-field{display:flex;flex-direction:column;gap:7px;font-size:14px;color:#263b56;margin:15px 0}
+.teach-field input,.teach-field textarea,.teach-field select,.teach-assign input{background:#fff;border:1px solid #bac7d8;border-radius:6px;padding:10px 12px;font:inherit;color:#1b2e46;max-width:100%;min-width:0;box-sizing:border-box}
+.teach-field textarea{resize:vertical;width:100%;line-height:1.6}
+.teach-field small{font-size:12px;color:#64748b}
+.teach-field input:focus,.teach-field textarea:focus,.teach-field select:focus{outline:2px solid #78a3e5;outline-offset:1px}
+.teach-topic{display:flex;gap:12px;align-items:flex-start;border-bottom:1px solid #e5eaf1;padding:18px 0;font-size:14px;line-height:1.6;cursor:pointer}
+.teach-topic input{margin:5px 0 0;width:17px;height:17px;flex-shrink:0;accent-color:#285da4}
+.teach-topic small,.teach-topic em{display:block;font-size:13px;color:#64748b;font-style:normal;margin-top:6px}
+.teach-topic em{color:#24568d}
+.teach-steps{display:flex;list-style:none;padding:0;margin:4px 0 26px;border-bottom:1px solid #dae2ee;gap:28px;color:#64748b;font-size:14px}
+.teach-steps li{padding:12px 0;border-bottom:3px solid transparent}
+.teach-steps [aria-current]{color:#174c92;border-color:#285da4;font-weight:600}
+.teach-status:not(:empty){background:#edf3fc;border:1px solid #cadbf3;padding:14px 18px;border-radius:6px;margin-bottom:22px;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.teach-source{white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font:13px/1.65 system-ui;background:#f7f9fc;padding:16px;border:1px solid #e2e8f0}
+.teach-panel details{margin:18px 0}
+.teach-panel summary{cursor:pointer;color:#244a7d;font-size:14px;font-weight:600;line-height:1.6}
+.teach-assign{margin-top:12px;padding:12px;background:#f2f6fc}
+.teach-assign label{font-size:12px;display:block;margin-bottom:10px}
+.teach-assign input{display:block;margin-top:5px;width:160px}
+.teach-review-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.teach-review-heading h2{margin:0}
+.teach-review-event{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;padding:28px 0;border-bottom:1px solid #dfe5ee;align-items:start}
+.teach-paper{background:#f1f3f6;padding:16px;min-width:0}
+.teach-paper .doc{background:#fff;border:1px solid #d5dae1;padding:26px;color:#263446;font:13px/1.6 Georgia,serif;box-shadow:0 3px 8px #172f4212;overflow-wrap:anywhere}
+.teach-paper .inv-top{display:flex;gap:20px;justify-content:space-between;border-bottom:2px solid #29496d;padding-bottom:16px}
+.teach-paper .inv-logo b,.teach-paper .inv-logo small{display:block}
+.teach-paper .inv-logo b{font:600 19px/1.4 Georgia,serif}
+.teach-paper .inv-meta{text-align:right}
+.teach-paper .inv-meta h2{font:600 13px/1.5 system-ui;margin:0}
+.teach-paper .doc h3{font:600 18px/1.5 Georgia,serif;margin:18px 0}
+.teach-paper table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
+.teach-paper th,.teach-paper td{border-bottom:1px solid #dce1e7;padding:9px 5px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.teach-paper .inv-lines th:first-child{width:40%}
+.teach-paper .jt th{width:42%;font-weight:400;color:#536076}
+.teach-paper footer{margin-top:25px;font-size:10px;color:#6e7b8c}
+.teach-filter{margin:0 0 16px;max-width:350px}
+.teach-empty{padding:25px 0;color:#64748b;font-size:14px}
+@media(min-width:1000px){body[data-screen=app] .app-main{max-width:1450px}.app-side{background:#fff;padding:26px 18px}.app-nav{gap:5px}.app-nav button{padding:11px 14px}.app-nav .on{background:#eaf1fc;box-shadow:none;color:#174c92}.app-class{padding:0 6px}.app-logo{padding:0 6px}}
+@media(max-width:1050px){.teach-review-event{grid-template-columns:1fr}.teach-panel{padding:20px}.teach-columns{grid-template-columns:1fr}}
+@media(max-width:700px){.teach-panel{padding:18px;border-radius:9px}.teach-current{display:block}.teach-current .app-btn{margin-top:18px}.teach-list li{align-items:start;flex-direction:column}.teach-steps{gap:15px;font-size:12px}.teach-review-heading{align-items:start}.teach-paper{padding:10px}.teach-paper .doc{padding:16px}.teach-paper .inv-top{gap:10px}.teach-paper .inv-logo b{font-size:15px}.teach-panel .app-scroll{max-width:100%}.teach-actions{align-items:flex-start}}
 </style></head><body><div id="classroom"></div><script>(function(root){
 let definitions={};
 const cents=n=>Math.round((n+Number.EPSILON)*100)/100;
 const stock={
+ 'Landscaping company':[['gloves','Work gloves','one pair',12],['bags','Yard-waste bags','20 bags',18],['feed','Plant feed','one bag',25]],
  'Design studio':[['paper','Sketch paper','one pad',12],['ink','Printer ink','one cartridge',32],['folders','Presentation folders','25 folders',18]],
  'Bike repair':[['lubricant','Bike lubricant','one bottle',12],['patches','Tube-repair patches','one pack',8],['cloths','Workshop cloths','12 cloths',15]],
  'Plant shop':[['soil','Potting soil','one bag',14],['pots','Grower pots','10 pots',18],['gloves','Gardening gloves','one pair',8]],
@@ -1169,6 +1229,769 @@ function generatedScenario(a,choice,business={name:'Your business',type:'Coffee 
 
 const api={isReportEvent,journalEvents,expandAccountChoices,trialBalance,enableSimulation,withBusinessActivity,neutralizeBusinessText,syncBusinessEntries,pendingDecision,decisionControls,pendingMonth,finalStage,finalDate,personalize,personalizeDocument,decisions:D,generatedIssues,validGenerated,generatedScenario,topic,businesses,colors,styles,districts,normalizeBusiness,concepts,analyzeNotes,generateAssignment,episodeChoices,defaultEpisodeChoice,validEpisodeChoice,availableEvents,topics,accounts,checkAssignment,suggestTopic,expected,validateRows,assess,balances,grade,day,end};if(typeof module!=='undefined')module.exports=api;else root.Lessons=api;
 })(globalThis);
+</script><script>// Ledger Lane lesson engine: the student's semester business, the chart of
+// accounts, journal-entry checking, posting and grading. No DOM access here so
+// every lesson can be verified in Node.
+(function(root){
+const ACC={
+ cash:['Cash','A'],pettycash:['Petty Cash','A'],ar:['Accounts Receivable','A'],allow:['Allowance for Doubtful Accounts','XA'],nr:['Notes Receivable','A'],ir:['Interest Receivable','A'],
+ supplies:['Supplies','A'],prepaidrent:['Prepaid Rent','A'],prepaidins:['Prepaid Insurance','A'],inv:['Inventory','A'],
+ equip:['Equipment','A'],vehicle:['Vehicle','A'],building:['Building','A'],land:['Land','A'],adep:['Accumulated Depreciation','XA'],
+ ap:['Accounts Payable','L'],wagespay:['Wages Payable','L'],salpay:['Salaries Payable','L'],intpay:['Interest Payable','L'],unearned:['Unearned Revenue','L'],
+ ficapay:['FICA Taxes Payable','L'],fitpay:['Federal Income Tax Withheld','L'],utaxpay:['Unemployment Taxes Payable','L'],salestaxpay:['Sales Tax Payable','L'],
+ warrpay:['Warranty Liability','L'],np:['Notes Payable','L'],divpay:['Dividends Payable','L'],taxpay:['Income Taxes Payable','L'],
+ bonds:['Bonds Payable','L'],bprem:['Premium on Bonds Payable','L'],bdisc:['Discount on Bonds Payable','XL'],
+ cs:['Common Stock','SE'],ps:['Preferred Stock','SE'],apic:['Additional Paid-in Capital, Common','SE'],apicp:['Additional Paid-in Capital, Preferred','SE'],
+ re:['Retained Earnings','SE'],div:['Dividends','XSE'],treasury:['Treasury Stock','XSE'],
+ rev:['Service Revenue','R'],sales:['Sales Revenue','R'],irev:['Interest Revenue','R'],gain:['Gain on Sale of Assets','R'],
+ disc:['Sales Discounts','XR'],returns:['Sales Returns and Allowances','XR'],
+ cogs:['Cost of Goods Sold','E'],wages:['Wages Expense','E'],salexp:['Salaries Expense','E'],ptaxexp:['Payroll Tax Expense','E'],rent:['Rent Expense','E'],
+ suppliesexp:['Supplies Expense','E'],insexp:['Insurance Expense','E'],util:['Utilities Expense','E'],adv:['Advertising Expense','E'],repairs:['Repairs and Maintenance Expense','E'],
+ depexp:['Depreciation Expense','E'],bde:['Bad Debt Expense','E'],intexp:['Interest Expense','E'],warrexp:['Warranty Expense','E'],misc:['Miscellaneous Expense','E'],
+ cashos:['Cash Over and Short','E'],bankfee:['Bank Service Charges','E'],taxexp:['Income Tax Expense','E'],loss:['Loss on Sale of Assets','E'],delivexp:['Delivery Expense','E'],
+ isum:['Income Summary','T']
+};
+const DEBIT_NORMAL=['A','E','XSE','XR','XL'];
+const GROUPS=[['Assets',['A','XA']],['Liabilities',['L','XL']],['Stockholders\u2019 equity',['SE','XSE']],['Revenues and gains',['R','XR']],['Expenses and losses',['E']],['Closing',['T']]];
+const PROFILES={
+ bike:{type:'Bike repair shop',name:'Spoke & Sprocket',jobs:'repairs and tune-ups',job:'tune-up',client:'rider',clients:'riders',product:'e-bikes',productOne:'e-bike',vehicle:'service van',gear:'repair stands and tools',corp:'a fleet of local delivery businesses',icon:'#2563eb'},
+ fitness:{type:'Fitness studio',name:'Peak Form Studio',jobs:'classes and personal training',job:'training package',client:'member',clients:'members',product:'smart rowing machines',productOne:'rowing machine',vehicle:'mobile training van',gear:'weights and studio equipment',corp:'a downtown law firm',icon:'#0f766e'},
+ landscape:{type:'Landscaping company',name:'Greenline Landscaping',jobs:'lawn care and design projects',job:'yard project',client:'homeowner',clients:'homeowners',product:'patio planters',productOne:'planter',vehicle:'crew truck',gear:'mowers and trimmers',corp:'an apartment management company',icon:'#047857'},
+ photo:{type:'Photography studio',name:'Golden Hour Studio',jobs:'portrait and event shoots',job:'photo shoot',client:'client',clients:'clients',product:'framed canvas prints',productOne:'canvas print',vehicle:'studio van',gear:'cameras and lighting',corp:'a regional wedding venue',icon:'#7c3aed'}
+};
+const r2=x=>Math.round(x*100)/100;
+const num=v=>{const s=String(v??'').replace(/[$,\s]/g,'');if(s==='')return 0;const neg=/^\(.*\)$/.test(s);const n=+s.replace(/[()]/g,'');return isFinite(n)?(neg?-n:n):NaN;};
+const money=(n,c)=>{const v=r2(n),neg=v<0,a=Math.abs(v);const s=c||a%1?a.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):a.toLocaleString('en-US');return (neg?'-':'')+'$'+s;};
+const dn=id=>DEBIT_NORMAL.includes(ACC[id][1]);
+const V=(x,st)=>typeof x==='function'?x(st,st.p):x;
+function profile(saved){const base=PROFILES[saved&&saved.type]||PROFILES.bike;return {...base,key:saved&&PROFILES[saved.type]?saved.type:'bike',name:(saved&&saved.name||'').trim()||base.name,founder:(saved&&saved.founder||'').trim()||'you'};}
+function newLesson(lesson,saved){
+ const st={id:lesson.id,p:profile(saved),led:{},ch:{},i:0,first:0,graded:0,tries:0,posted:false,done:false,answers:{},journal:[]};
+ Object.assign(st.ch,lesson.defaults||{});
+ const open=V(lesson.open||{},st);for(const a in open)if(open[a]){ensure(st,a);st.led[a][dn(a)===(open[a]>0)?'dr':'cr'].push({x:Math.abs(open[a]),open:true});}
+ return st;
+}
+function ensure(st,a){if(!ACC[a])throw new Error('Unknown account '+a);if(!st.led[a])st.led[a]={dr:[],cr:[]};}
+const sum=l=>l.reduce((t,e)=>t+e.x,0);
+function bal(st,a){const l=st.led[a];if(!l)return 0;const d=sum(l.dr),c=sum(l.cr);return r2(dn(a)?d-c:c-d);}
+const total=(st,types)=>r2(Object.keys(st.led).filter(a=>types.includes(ACC[a][1])).reduce((t,a)=>t+bal(st,a),0));
+const netIncome=st=>r2(total(st,['R'])-total(st,['XR'])-total(st,['E']));
+function linesOf(step,st){return V(step.lines,st).filter(l=>Math.round(l[2]*100)!==0).map(([a,s,x])=>[a,s,r2(x)]);}
+function checkJE(st,rows,want){
+ const w={},net={};want.forEach(([a,s,x])=>w[a]=r2((w[a]||0)+(s==='dr'?x:-x)));
+ const u=rows.map(r=>({a:r.a,d:num(r.d),c:num(r.c)})).filter(r=>r.a||r.d||r.c);
+ if(u.some(r=>isNaN(r.d)||isNaN(r.c)))return {ok:false,text:'Enter amounts as numbers, for example 1250 or 1,250.00.'};
+ if(!u.length)return {ok:false,text:'Enter the entry before you post it.'};
+ if(u.some(r=>!r.a))return {ok:false,text:'Choose an account for every line that has an amount.'};
+ if(u.some(r=>r.d&&r.c))return {ok:false,text:'Each line takes a debit <b>or</b> a credit, not both.'};
+ if(u.some(r=>r.d<0||r.c<0))return {ok:false,text:'Amounts are always positive. The column shows the direction.'};
+ if(u.some(r=>!r.d&&!r.c))return {ok:false,text:'One of your lines has an account but no amount.'};
+ if(!u.some(r=>r.d)||!u.some(r=>r.c))return {ok:false,text:'Every entry needs at least one debit and one credit.'};
+ const D=r2(u.reduce((t,r)=>t+r.d,0)),C=r2(u.reduce((t,r)=>t+r.c,0));
+ if(D!==C)return {ok:false,text:`Total debits (${money(D)}) must equal total credits (${money(C)}).`};
+ u.forEach(r=>net[r.a]=r2((net[r.a]||0)+r.d-r.c));
+ const keys=[...new Set([...Object.keys(w),...Object.keys(net)])].filter(k=>(w[k]||0)||(net[k]||0));
+ if(keys.every(k=>(net[k]||0)===(w[k]||0)))return {ok:true};
+ const t=[];
+ keys.forEach(k=>{const a=w[k]||0,n=net[k]||0,name=ACC[k][0];
+  if(!a&&n)t.push(`<b>${name}</b> does not belong in this entry.`);
+  else if(a&&!n)t.push(`An account is missing. Look for one more <b>${a>0?'debit':'credit'}</b>.`);
+  else if(Math.sign(a)!==Math.sign(n))t.push(`<b>${name}</b> is on the wrong side. It is a ${dn(k)?'debit':'credit'}-balance account; think about whether this transaction increases or decreases it.`);
+  else if(a!==n)t.push(`<b>${name}</b> is the right account, but the amount is off.`);});
+ return {ok:false,text:[...new Set(t)].slice(0,2).join('<br>')};
+}
+function post(st,lines,tag){lines.forEach(([a,s,x])=>{ensure(st,a);st.led[a][s].push({x,tag});});st.journal.push({tag,lines});}
+function close(st,tag){ // closing entries for the lesson's own ledger
+ const L=[];let ni=0;Object.keys(st.led).forEach(a=>{const t=ACC[a][1],b=bal(st,a);if(!b)return;if(t==='R'){L.push([a,'dr',b]);ni+=b;}if(t==='XR'||t==='E'){L.push([a,'cr',b]);ni-=b;}});
+ return L;
+}
+function checkNum(ans,given,tol){const g=num(given);if(String(given??'').trim()===''||isNaN(g))return false;return Math.abs(g-ans)<=(tol??0.5);}
+function checkSort(items,placed){const wrong=[],missing=[];items.forEach(([id,,b])=>{if(!placed[id])missing.push(id);else if(placed[id]!==b)wrong.push(id);});return {wrong,missing};}
+function stars(st){const pct=st.graded?st.first/st.graded:1;return pct>=.85?3:pct>=.6?2:1;}
+
+const H={
+ // Statement-style table: rows are [label, amount, flags] where flags may include 'in' (indent), 'tt' (total), 'q' (show ? instead of amount), 'h' (heading).
+ table(title,sub,rows){return `<div class="stmt"><h4>${title}</h4>${sub?`<small>${sub}</small>`:''}<table>${rows.map(([l,v,f=''])=>`<tr class="${f}"><td>${l}</td><td>${f.includes('h')?'':f.includes('q')?'?':v==null?'':(v<0?'('+money(-v)+')':money(v))}</td></tr>`).join('')}</table></div>`;},
+ // Trial balance from the lesson ledger; hide lets the student fill in totals.
+ tb(st,title,opts={}){const rows=Object.keys(ACC).filter(a=>st.led[a]&&bal(st,a)&&ACC[a][1]!=='T');let D=0,C=0;
+  const body=rows.map(a=>{const b=bal(st,a),d=dn(a)===(b>0);d?D+=Math.abs(b):C+=Math.abs(b);return `<tr><td>${ACC[a][0]}</td><td>${d?money(Math.abs(b)):''}</td><td>${d?'':money(Math.abs(b))}</td></tr>`;}).join('');
+  return `<div class="stmt tbl"><h4>${st.p.name}</h4><small>${title}</small><table><tr class="hd"><td>Account</td><td>Debit</td><td>Credit</td></tr>${body}<tr class="tt"><td>Totals</td><td>${opts.hide?'?':money(D)}</td><td>${opts.hide?'?':money(C)}</td></tr></table></div>`;},
+ tbTotals(st){let D=0;Object.keys(st.led).forEach(a=>{const b=bal(st,a);if(ACC[a][1]!=='T'&&dn(a)===(b>0))D+=Math.abs(b);});return r2(D);},
+ je(o){return Object.assign({k:'je'},o);},
+ closing(st){const rev=[],exp=[];Object.keys(st.led).forEach(a=>{const t=ACC[a][1],b=bal(st,a);if(!b)return;if(t==='R')rev.push([a,'dr',b]);if(t==='E'||t==='XR')exp.push([a,'cr',b]);});
+  const R=r2(rev.reduce((t,l)=>t+l[2],0)),X=r2(exp.reduce((t,l)=>t+l[2],0));return {rev:[...rev,['re','cr',R]],exp:[['re','dr',X],...exp],div:bal(st,'div')?[['re','dr',bal(st,'div')],['div','cr',bal(st,'div')]]:[]};}
+};
+
+const api={H,ACC,GROUPS,PROFILES,DEBIT_NORMAL,r2,num,money,dn,V,profile,newLesson,ensure,bal,total,netIncome,linesOf,checkJE,post,close,checkNum,checkSort,stars,lessons:[]};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;root.LL=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script><script>// Source documents for the office simulation, rendered as paperwork the owner
+// would actually receive: letterhead invoices, register reports, checks, notes.
+(function (root) {
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const m2 = (n) => Number(n).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const addr = (p) => `${esc(p.street)}<br>${esc(p.city)}, ${esc(p.state)} ${esc(p.zip)}`;
+  const words = (n) => {
+    const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const t = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    const h = (x) => (x >= 100 ? a[Math.floor(x / 100)] + ' Hundred' + (x % 100 ? ' ' : '') : '') + (x % 100 < 20 ? a[x % 100] : t[Math.floor((x % 100) / 10)] + (x % 10 ? '-' + a[x % 10] : ''));
+    const d = Math.floor(n), c = Math.round((n - d) * 100);
+    const th = Math.floor(d / 1000), r = d % 1000;
+    return ((th ? h(th) + ' Thousand' + (r ? ' ' : '') : '') + (r ? h(r) : th ? '' : 'Zero')) + ` and ${String(c).padStart(2, '0')}/100`;
+  };
+
+  const R = {
+    email: (d) => `<article class="doc d-email"><header><div class="em-subj">${esc(d.subject)}</div><div class="em-row"><b>${esc(d.fromName)}</b> &lt;${esc(d.from)}&gt;</div><div class="em-row">To: ${esc(d.to)}</div><div class="em-row em-date">${esc(d.date)}</div></header><div class="em-body">${d.body}</div>${d.sig ? `<div class="em-sig">${d.sig}</div>` : ''}${d.attach ? `<div class="em-att">${d.attach.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}</article>`,
+
+    text: (d) => `<article class="doc d-text"><div class="tx-head">${esc(d.fromName)}<small>${esc(d.phone)}</small></div>${d.msgs.map(([who, t]) => `<div class="tx-msg ${who === 'me' ? 'me' : ''}">${esc(t)}</div>`).join('')}<div class="tx-time">${esc(d.date)}</div></article>`,
+
+    invoice: (d) => {
+      const sub = d.lines.reduce((t, [, q, u]) => t + q * u, 0), tax = d.taxRate ? Math.round(sub * d.taxRate * 100) / 100 : 0, ship = d.freight || 0;
+      return `<article class="doc d-inv" style="--brand:${d.vendor.color || '#334155'}"><header class="inv-top"><div class="inv-logo"><b>${esc(d.vendor.name)}</b><span>${esc(d.vendor.tagline || '')}</span><small>${addr(d.vendor)}<br>${esc(d.vendor.phone)}</small></div><div class="inv-meta"><h2>${esc(d.title || 'INVOICE')}</h2><table><tr><td>Invoice #</td><td>${esc(d.no)}</td></tr><tr><td>Date</td><td>${esc(d.date)}</td></tr>${d.po ? `<tr><td>PO #</td><td>${esc(d.po)}</td></tr>` : ''}<tr><td>Terms</td><td>${esc(d.terms)}</td></tr>${d.due ? `<tr><td>Due</td><td>${esc(d.due)}</td></tr>` : ''}</table></div></header>
+<div class="inv-to"><div><small>BILL TO</small>${esc(d.billTo.name)}<br>${addr(d.billTo)}</div>${d.shipTo ? `<div><small>SHIP TO</small>${esc(d.shipTo)}</div>` : ''}</div>
+<table class="inv-lines"><thead><tr><th>Item</th><th>Description</th><th class="r">Qty</th><th class="r">Unit price</th><th class="r">Amount</th></tr></thead><tbody>${d.lines.map(([desc, q, u, sku]) => `<tr><td>${esc(sku || '')}</td><td>${esc(desc)}</td><td class="r">${q}</td><td class="r">${m2(u)}</td><td class="r">${m2(q * u)}</td></tr>`).join('')}</tbody></table>
+<table class="inv-tot"><tr><td>Subtotal</td><td>${m2(sub)}</td></tr>${tax ? `<tr><td>Sales tax</td><td>${m2(tax)}</td></tr>` : ''}${ship ? `<tr><td>Freight</td><td>${m2(ship)}</td></tr>` : ''}<tr class="grand"><td>Total due</td><td>$${m2(sub + tax + ship)}</td></tr></table>
+${d.paid ? `<div class="stamp paid">PAID ${esc(d.paid)}</div>` : ''}<footer>${esc(d.footer || 'Thank you for your business.')}${d.remit ? `<br>Please remit to: ${esc(d.remit)}` : ''}</footer></article>`;
+    },
+
+    receipt: (d) => `<article class="doc d-rcpt"><div class="rc-c"><b>${esc(d.store)}</b><br>${addr(d.addr)}<br>${esc(d.phone || '')}</div><div class="rc-row"><span>${esc(d.date)}</span><span>${esc(d.time || '')}</span></div><div class="rc-row"><span>Trans #${esc(d.no)}</span><span>Reg ${esc(d.reg || '02')}</span></div><hr>${d.lines.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${m2(x)}</span></div>`).join('')}<hr>${d.tax ? `<div class="rc-row"><span>TAX</span><span>${m2(d.tax)}</span></div>` : ''}<div class="rc-row big"><span>TOTAL</span><span>${m2(d.lines.reduce((t, [, x]) => t + x, 0) + (d.tax || 0))}</span></div><div class="rc-row"><span>${esc(d.tender)}</span><span></span></div><div class="rc-c rc-foot">${esc(d.footer || 'THANK YOU')}</div></article>`,
+
+    register: (d) => `<article class="doc d-rcpt d-z"><div class="rc-c"><b>${esc(d.store)}</b><br>Z REPORT · ${esc(d.period)}</div><hr>${d.rows.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${typeof x === 'number' ? m2(x) : esc(x)}</span></div>`).join('')}<hr><div class="rc-row big"><span>NET SALES</span><span>${m2(d.net)}</span></div>${d.tenders.map(([t, x]) => `<div class="rc-row"><span>${esc(t)}</span><span>${m2(x)}</span></div>`).join('')}<div class="rc-c rc-foot">Printed ${esc(d.printed)}<br>*** END OF REPORT ***</div></article>`,
+
+    check: (d) => `<article class="doc d-check"><div class="ck-top"><div><b>${esc(d.payer)}</b><br>${addr(d.payerAddr)}</div><div class="ck-no">${esc(d.no)}<br><small>Date</small> <u>${esc(d.date)}</u></div></div><div class="ck-pay"><small>PAY TO THE<br>ORDER OF</small><u>${esc(d.payee)}</u><span class="ck-amt">$ ${m2(d.amount)}</span></div><div class="ck-words"><u>${esc(words(d.amount))}</u> DOLLARS</div><div class="ck-bot"><div><b>${esc(d.bank)}</b><br><small>Memo</small> <u>${esc(d.memo || '')}</u></div><div class="ck-sig">${esc(d.signer || '')}</div></div><div class="ck-micr">&#8282;${esc(d.routing || '044000037')}&#8282; ${esc(d.acct || '2210048837')}&#8283; ${esc(d.no)}</div></article>`,
+
+    deposit: (d) => `<article class="doc d-dep"><header><b>${esc(d.bank)}</b><span>DEPOSIT TICKET</span></header><div class="dp-who">${esc(d.name)}<br><small>Account ${esc(d.acct)}</small></div><table>${d.rows.map(([t, x]) => `<tr><td>${esc(t)}</td><td>${m2(x)}</td></tr>`).join('')}<tr class="grand"><td>Total deposit</td><td>$${m2(d.rows.reduce((t, [, x]) => t + x, 0))}</td></tr></table><div class="dp-date">Date ${esc(d.date)}</div><div class="stamp recv">RECEIVED ${esc(d.date)}</div></article>`,
+
+    legal: (d) => `<article class="doc d-legal"><h2>${esc(d.title)}</h2>${d.sub ? `<div class="lg-sub">${esc(d.sub)}</div>` : ''}${d.paras.map((p, i) => `<p>${d.numbered ? `<b>${i + 1}.</b> ` : ''}${p}</p>`).join('')}<div class="lg-sigs">${d.sigs.map(([n, r]) => `<div><span class="lg-line">${esc(n)}</span><small>${esc(r)}</small></div>`).join('')}</div></article>`,
+
+    cert: (d) => `<article class="doc d-cert"><div class="ct-in"><div class="ct-no">No. ${esc(d.no)}</div><div class="ct-sh">${esc(d.shares.toLocaleString('en-US'))} Shares</div><h2>${esc(d.corp)}</h2><div class="ct-st">Incorporated under the laws of the State of ${esc(d.state)}</div><p>This certifies that <b>${esc(d.holder)}</b> is the owner of <b>${esc(words(d.shares).replace(/ and 00\/100$/, ''))} (${d.shares.toLocaleString('en-US')})</b> fully paid and non-assessable shares of Common Stock${d.par ? `, par value $${m2(d.par)} per share,` : ', without par value,'} of ${esc(d.corp)}.</p><div class="lg-sigs"><div><span class="lg-line">${esc(d.holder)}</span><small>President</small></div><div><span class="lg-line">${esc(d.secretary)}</span><small>Secretary</small></div></div></div></article>`,
+
+    statement: (d) => `<article class="doc d-inv d-stmt" style="--brand:${d.color || '#1e3a5f'}"><header class="inv-top"><div class="inv-logo"><b>${esc(d.bank)}</b><small>Business Checking Statement</small></div><div class="inv-meta"><table><tr><td>Account</td><td>${esc(d.acct)}</td></tr><tr><td>Period</td><td>${esc(d.period)}</td></tr></table></div></header><table class="inv-lines"><thead><tr><th>Date</th><th>Description</th><th class="r">Withdrawals</th><th class="r">Deposits</th><th class="r">Balance</th></tr></thead><tbody>${d.rows.map(([dt, t, w, dep, b]) => `<tr><td>${esc(dt)}</td><td>${esc(t)}</td><td class="r">${w ? m2(w) : ''}</td><td class="r">${dep ? m2(dep) : ''}</td><td class="r">${m2(b)}</td></tr>`).join('')}</tbody></table></article>`,
+  };
+
+  R.schedule = d => `<article class="doc d-legal"><header><b>${esc(d.name)}</b><small>${esc(d.date)}</small></header><h2>${esc(d.title)}</h2><table class="jt">${d.rows.map(([label, value]) => `<tr><td>${esc(label)}</td><td>${esc(typeof value === 'number' ? m2(value) : value)}</td></tr>`).join('')}</table><p>${esc(d.note)}</p></article>`;
+  R.record = d => `<article class="doc d-inv"><header class="inv-top"><div class="inv-logo"><b>${esc(d.issuer)}</b><small>Business records</small></div><div class="inv-meta"><h2>${esc(d.status)}</h2><small>Reference ${esc(d.no)}<br>${esc(d.date)}</small></div></header><h3>${esc(d.title)}</h3>${d.items?.length ? `<table class="inv-lines"><thead><tr><th>Description</th><th>Qty</th><th>Unit price</th><th>Amount</th></tr></thead><tbody>${d.items.map(x => `<tr><td>${esc(x.name)}</td><td>${esc(x.quantity)}</td><td>${m2(x.price)}</td><td>${m2(x.total)}</td></tr>`).join('')}</tbody></table>` : ''}<table class="jt">${d.fields.map(f => `<tr><th>${esc(f.label)}</th><td>${esc(f.value)}</td></tr>`).join('')}</table><footer>Business copy · Keep with the supporting records.</footer></article>`;
+  root.SIMDOCS = {render: (spec) => (R[spec.type] ? R[spec.type](spec) : ''), words, m2};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.SIMDOCS;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script><script>// Ledger Lane office simulation: the student's business as a persistent, seeded
+// simulation. Months are lists of dated inbox items (decisions and source
+// documents). No DOM access so every month can be played in Node.
+(function (root) {
+  const LL = root.LL || (typeof require !== 'undefined' ? require('./lessons-engine.js') : null);
+  const {ACC, checkJE, post, money, r2} = LL;
+
+  function rng(seed) {
+    let a = seed >>> 0 || 1;
+    return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+
+  const CITIES = {
+    columbus: {city: 'Columbus', state: 'OH', zip: '43215', street: 'N. High Street', area: '614'},
+    denver: {city: 'Denver', state: 'CO', zip: '80205', street: 'Larimer Street', area: '303'},
+    raleigh: {city: 'Raleigh', state: 'NC', zip: '27601', street: 'Glenwood Avenue', area: '919'},
+    austin: {city: 'Austin', state: 'TX', zip: '78702', street: 'E. Cesar Chavez Street', area: '512'},
+  };
+
+  const months = [];
+
+  function newGame(o) {
+    const seed = o.seed || Math.floor(Math.random() * 1e9);
+    const st = {
+      v: 1, seed, biz: {type: o.type || 'bike', name: (o.name || '').replace(/[<>]/g,'').trim().slice(0,40), founder: (o.founder || '').replace(/[<>]/g,'').trim().slice(0,40) || 'Owner', city: CITIES[o.city] ? o.city : 'columbus'},
+      m: 0, day: 1, led: {}, journal: [], book: [], done: {}, ch: {}, vars: {}, log: [], first: 0, graded: 0, tries: {}, misses: {},
+    };
+    st.biz.name = st.biz.name || LL.PROFILES[st.biz.type].name;
+    return st;
+  }
+
+  const place = (st) => CITIES[st.biz.city];
+  const prof = (st) => LL.profile({type: st.biz.type, name: st.biz.name, founder: st.biz.founder});
+  const rand = (st, key) => { let h = st.seed; for (const c of key) h = (Math.imul(h, 31) + c.charCodeAt(0)) | 0; return rng(h)(); };
+  const current = (st) => st.casePeriod || months[st.m];
+  const items = (st) => current(st).items.filter((it) => !it.when || it.when(st)).map((it) => {
+    if (it.day > st.day || it.kind === 'decision') return it;
+    st.paper ||= {};
+    if (!st.paper[it.id]) {
+      const data = {};
+      for (const key of ['doc', 'lines', 'fields']) if (it[key] != null) data[key] = V(it[key], st);
+      st.paper[it.id] = data;
+    }
+    return {...it, ...st.paper[it.id]};
+  });
+  const inbox = (st) => items(st).filter((it) => it.day <= st.day).sort((a, b) => a.day - b.day);
+  const open = (st) => inbox(st).filter((it) => !st.done[it.id]);
+  const V = (x, st) => (typeof x === 'function' ? x(st) : x);
+  const want = (st, it) => { const l = V(it.lines, st); return l ? l.filter((x) => r2(x[2]) !== 0).map(([a, s, x]) => [a, s, r2(x)]) : null; };
+
+  function dateOf(st, day) {
+    const mo = current(st).start;
+    return new Date(Date.UTC(mo[0], mo[1] - 1, day));
+  }
+  const fmtDate = (st, day, style = 'long') => dateOf(st, day).toLocaleDateString('en-US', {timeZone: 'UTC', ...(style === 'long' ? {month: 'long', day: 'numeric', year: 'numeric'} : style === 'short' ? {month: '2-digit', day: '2-digit', year: 'numeric'} : {weekday: 'long', month: 'long', day: 'numeric'})});
+
+  function record(st, it, lines) {
+    if (lines && lines.length) {
+      post(st, lines, it.id);
+      st.book.push({m: st.m, date: fmtDate(st, it.day, 'short'), day: it.day, id: it.id, memo: V(it.memo, st) || V(it.subject, st), lines});
+    }
+    st.done[it.id] = true;
+    if (it.after) it.after(st);
+  }
+
+  function grade(st, it, ok) {
+    if (st.tries[it.id] == null) { st.tries[it.id] = 0; st.graded++; if (ok) st.first++; }
+    st.tries[it.id]++;
+    if (!ok) st.misses[it.id] = (st.misses[it.id] || 0) + 1;
+  }
+
+  // action: {choice:{qid:value}} | {rows:[{a,d,c}]} | {noEntry:true} | {reveal:true}
+  function handle(st, id, action) {
+    const it = items(st).find((x) => x.id === id);
+    if (!it || st.done[id] || it.day > st.day) return {ok: false, text: 'This item is not available.'};
+    if (it.kind === 'decision') {
+      const qs = V(it.q, st), ch = action.choice || {};
+      if (qs.some((q) => !q.opts.some((o) => o.v === ch[q.id]))) return {ok: false, text: 'Choose a reply before sending.'};
+      qs.forEach((q) => (st.ch[q.id] = ch[q.id]));
+      if (it.apply) it.apply(st, ch);
+      st.log.push({day: it.day, text: V(it.outcome, st) || ''});
+      record(st, it, want(st, it));
+      return {ok: true, done: true, text: V(it.outcome, st) || ''};
+    }
+    if (it.kind === 'work') {
+      const fields = V(it.fields, st), values = action.values || {};
+      const ok = fields.every((f) => String(values[f.id] ?? '').trim() !== '' && Math.abs(LL.num(values[f.id]) - f.value) < 0.015);
+      grade(st, it, ok);
+      if (ok) { record(st, it, null); return {ok: true, done: true, text: 'Filed.'}; }
+      return {ok: false, text: 'The worksheet does not tie to the supporting records. Review the amounts before filing.'};
+    }
+    const w = want(st, it);
+    if (action.reveal) { if ((st.misses[id] || 0) < 2) return {ok: false, text: 'Try at least twice before you look at the answer.'}; return {ok: true, reveal: w}; }
+    if (action.noEntry) {
+      const ok = !w;
+      grade(st, it, ok);
+      if (ok) { record(st, it, null); return {ok: true, done: true, text: V(it.why, st) || 'Correct. Nothing changed in the accounting equation, so there is nothing to record.'}; }
+      return {ok: false, text: 'This document does change the business’s accounts. Record it.'};
+    }
+    if (!w) { grade(st, it, false); return {ok: false, text: V(it.hint, st) || 'Look again: did anything actually change hands? Not every document is a transaction.'}; }
+    const r = checkJE(st, action.rows || [], w);
+    grade(st, it, r.ok);
+    if (r.ok) { record(st, it, w); return {ok: true, done: true, text: V(it.why, st) || 'Posted.'}; }
+    return {ok: false, text: r.text + (V(it.hint, st) && st.misses[id] > 1 ? ' ' + V(it.hint, st) : '')};
+  }
+
+  const nextDay = (st) => { const d = items(st).filter((it) => it.day > st.day).map((it) => it.day); return d.length ? Math.min(...d) : null; };
+  function advance(st) {
+    if (open(st).length) return {ok: false, text: 'Finish everything in your inbox before you move on.'};
+    const d = nextDay(st);
+    if (d == null) { st.day = current(st).days; return {ok: true, monthEnd: true}; }
+    st.day = d;
+    return {ok: true, day: d, arrived: open(st).map((x) => x.id)};
+  }
+
+  const bal = (st, a) => LL.bal(st, a);
+  function summary(st) {
+    const sum = (t) => Object.keys(st.led).filter((a) => ACC[a][1] === t).reduce((s, a) => s + bal(st, a), 0);
+    const rev = sum('R') - sum('XR'), exp = sum('E');
+    return {cash: bal(st, 'cash'), revenue: r2(rev), expenses: r2(exp), netIncome: r2(rev - exp), first: st.first, graded: st.graded, score: st.graded ? Math.round((100 * st.first) / st.graded) : 0};
+  }
+  function trialBalance(st) {
+    return Object.keys(ACC).filter((a) => st.led[a] && bal(st, a)).map((a) => { const b = bal(st, a) * (LL.dn(a) ? 1 : -1); return [a, ACC[a][0], Math.max(b, 0), Math.max(-b, 0)]; });
+  }
+
+  function complete(st) {
+    if (open(st).length || nextDay(st) != null) return false;
+    st.results ||= {};
+    const base = st.mark || {first: 0, graded: 0};
+    const first = st.first - base.first, graded = st.graded - base.graded;
+    st.results[current(st).lessonId || 'ch2'] ||= {first, graded, score: graded ? Math.round(100 * first / graded) : 0};
+    st.ended = true;
+    return true;
+  }
+
+  function nextMonth(st) {
+    if (st.casePeriod) return false;
+    if (!st.ended || !months[st.m + 1]) return false;
+    st.m++; st.day = 1; st.ended = false; st.review = false;
+    st.mark = {first: st.first, graded: st.graded};
+    st.opening = JSON.parse(JSON.stringify(st.led));
+    return true;
+  }
+
+  root.SIM = {rng, CITIES, months, newGame, current, inbox, open, handle, advance, nextDay, summary, trialBalance, want, V, place, prof, rand, fmtDate, money, r2, bal, complete, nextMonth};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.SIM;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script><script>// Month 1, Opening month: the owner incorporates, finds a location, borrows,
+// equips the business and opens for customers. Chapter 2 topics: recording
+// transactions, journal entries, posting and the trial balance.
+(function (root) {
+  const SIM = root.SIM || require('./sim-engine.js');
+  const {place, prof, rand, fmtDate, r2} = SIM;
+
+  const KIT = {
+    bike: {corpName: 'Harbor Point Couriers', corpDom: 'harborpointcouriers.com', corpWhat: 'a bike courier company', price: 85, base: 38, svc: 'Tune-up', corpQty: 14, corpDesc: 'Fleet tune-up, cargo bike', newEq: ['Shop equipment package: 2 repair stands, truing stand, wheel tools', 11800], usedEq: ['Used shop equipment (repair stands, truing stand, hand tools)', 6400], eqVendor: {name: 'Lakeshore Cycle Distributors', tagline: 'Wholesale bicycle parts & shop equipment', color: '#1f4e79'}, supVendor: {name: 'Velo Parts Supply Co.', tagline: 'Parts · Lubricants · Shop consumables', color: '#7a2e1f'}, sup: [['Chain lubricant, 16 oz', 24, 11.5, 'LUB-16'], ['Inner tubes, assorted sizes', 60, 6.25, 'TUB-AS'], ['Brake & shift cable kits', 40, 9.8, 'CBL-KT'], ['Shop rags, 50 lb box', 2, 48, 'RAG-50']], seller: 'Dan Kowalski (closing his shop)'},
+    fitness: {corpName: 'Whitaker & Lowe LLP', corpDom: 'whitakerlowe.com', corpWhat: 'a law firm', price: 120, base: 30, svc: 'Class pack (10 classes)', corpQty: 12, corpDesc: 'On-site group training session', newEq: ['Studio package: rack, benches, dumbbell set 5–50 lb, flooring', 12400], usedEq: ['Used studio equipment (rack, benches, dumbbells)', 6900], eqVendor: {name: 'Ironclad Fitness Equipment', tagline: 'Commercial strength & cardio', color: '#203a43'}, supVendor: {name: 'CleanCore Facility Supply', tagline: 'Janitorial · Towels · Studio supplies', color: '#2e5e4e'}, sup: [['Microfiber gym towels, dozen', 12, 21, 'TWL-12'], ['Equipment disinfectant, gallon', 10, 18.75, 'DIS-1G'], ['Resistance bands, set', 15, 22, 'BND-ST'], ['Hand sanitizer refills', 8, 14.5, 'SAN-RF']], seller: 'Coastal Fitness (gym closing)'},
+    landscape: {corpName: 'Maple Court Apartments', corpDom: 'maplecourtliving.com', corpWhat: 'an apartment community', price: 240, base: 14, svc: 'Lawn & bed maintenance visit', corpQty: 12, corpDesc: 'Common-area grounds maintenance', newEq: ['Commercial mower 52", string trimmers (2), backpack blower', 12600], usedEq: ['Used commercial mower 48", trimmer, blower', 6200], eqVendor: {name: 'Prairie Turf & Equipment', tagline: 'Outdoor power equipment sales & service', color: '#2f5d2f'}, supVendor: {name: 'Greenway Landscape Supply', tagline: 'Mulch · Seed · Fuel · Hardware', color: '#5b4a1f'}, sup: [['Trimmer line, 5 lb spool', 6, 42, 'TL-5'], ['2-cycle oil mix, case', 4, 64, 'OIL-2C'], ['Contractor bags, case of 50', 10, 27.5, 'BAG-50'], ['Grass seed, 50 lb', 6, 89, 'SD-50']], seller: 'Marty Lyle (retiring landscaper)'},
+    photo: {corpName: 'The Grandview Estate', corpDom: 'grandviewestate.com', corpWhat: 'a wedding and event venue', price: 275, base: 12, svc: 'Portrait session', corpQty: 12, corpDesc: 'Staff headshot session', newEq: ['Camera body, 2 lenses, strobe lighting kit, backdrop system', 11900], usedEq: ['Used camera body, lens, lighting kit', 6600], eqVendor: {name: 'Brightline Camera Supply', tagline: 'Pro photo & lighting', color: '#3a2f5b'}, supVendor: {name: 'Archive Print & Paper', tagline: 'Fine-art paper · Mats · Media', color: '#5b2f3a'}, sup: [['Lustre photo paper 8x10, 250 sh', 6, 96, 'PPR-810'], ['SD cards 128 GB', 8, 32, 'SD-128'], ['Seamless backdrop paper, 9 ft', 4, 79, 'BKD-9'], ['Mat boards, pack of 25', 4, 45, 'MAT-25']], seller: 'Rita Osei (upgrading her studio)'},
+  };
+  const ACCTS = ['cash', 'ar', 'supplies', 'prepaidrent', 'equip', 'ap', 'np', 'unearned', 'cs', 'div', 'rev', 'rent', 'adv', 'util', 'repairs', 'suppliesexp', 'wages', 'intexp', 'misc'];
+  const kit = (st) => KIT[st.biz.type];
+  const loc = (st) => ({prime: {street: '1180 ' + place(st).street, suite: 'Suite B', rent: 3200, traffic: 1.25, desc: 'corner storefront with heavy foot traffic'}, side: {street: '418 Willow Avenue', suite: 'Unit 3', rent: 1800, traffic: 0.9, desc: 'side-street unit, quieter but half a mile from the main corridor'}})[st.ch.site || 'side'];
+  const me = (st) => ({name: st.biz.name + ', Inc.', street: loc(st).street + (st.ch.site ? ', ' + loc(st).suite : ''), city: place(st).city, state: place(st).state, zip: place(st).zip});
+  const at = (st, street) => ({street, city: place(st).city, state: place(st).state, zip: place(st).zip});
+  const phone = (st, n) => `(${place(st).area}) 555-${String(n).padStart(4, '0')}`;
+  const email = (st) => st.biz.founder.toLowerCase().replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '') + '@' + st.biz.name.toLowerCase().replace(/[^a-z]/g, '') + '.com';
+  const d = (st, day, s) => fmtDate(st, day, s);
+  const priceOf = (st) => r2(kit(st).price * ({low: 0.85, std: 1, high: 1.2})[st.ch.price || 'std']);
+  const mkt = {none: [0, 1, 'No paid marketing'], flyers: [350, 1.08, 'Printed flyers and door hangers'], social: [900, 1.2, 'Targeted social media ads']};
+  function week(st, w) {
+    const k = kit(st), demand = ({low: 1.25, std: 1, high: 0.78})[st.ch.price || 'std'];
+    const n = Math.max(3, Math.round(k.base * demand * loc(st).traffic * mkt[st.ch.mkt || 'none'][1] * (0.88 + 0.24 * rand(st, 'wk' + w)) * (w === 1 ? 0.75 : 1)));
+    const gross = r2(n * priceOf(st)), cash = r2(Math.round(gross * (0.28 + 0.1 * rand(st, 'cs' + w)) / 5) * 5);
+    return {n, gross, cash, card: r2(gross - cash)};
+  }
+  const z = (st, w, d1, d2, day) => { const x = week(st, w); return {type: 'register', store: st.biz.name.toUpperCase(), period: `${d(st, d1, 'short')} – ${d(st, d2, 'short')}`, rows: [['Transactions', String(x.n)], [kit(st).svc + ' @ ' + priceOf(st).toFixed(2), x.gross], ['Discounts', 0], ['Refunds', 0]], net: x.gross, tenders: [['Cash', x.cash], ['Credit/debit card', x.card]], printed: d(st, day, 'short') + ' 9:14 PM'}; };
+  const corpTotal = (st) => r2(kit(st).corpQty * priceOf(st) * 0.9);
+  const equip = (st) => (st.ch.equip === 'new' ? kit(st).newEq : kit(st).usedEq);
+  const supTotal = (st) => r2(kit(st).sup.reduce((t, [, q, u]) => t + q * u, 0));
+  const repairCost = (st) => (st.ch.equip === 'used' ? 640 : 0);
+  const bank = 'Heartland Community Bank';
+
+  const items = [
+    {id: 'm1-invest', day: 1, kind: 'decision', from: 'Ramsey & Cole, Attorneys', subject: 'Your incorporation is complete',
+      doc: (st) => ({type: 'email', subject: 'Your incorporation is complete', fromName: 'Karen Ramsey', from: 'kramsey@ramseycole-law.com', to: email(st), date: d(st, 1, 'day') + ', 9:02 AM',
+        body: `<p>${st.biz.founder.split(' ')[0]},</p><p>The Secretary of State approved the articles of incorporation for <b>${st.biz.name}, Inc.</b> this morning. The corporation is authorized to issue 100,000 shares of no-par common stock.</p><p>Before you open the business bank account, decide how much of your own money you are putting in. You will receive one share for every $10 you invest. Keep in mind this is the cushion that pays rent and equipment until customers start paying you.</p><p>Let me know the amount and I will prepare the stock certificate.</p>`, sig: 'Karen Ramsey<br>Ramsey &amp; Cole, Attorneys at Law', attach: ['Articles_of_Incorporation.pdf']}),
+      q: [{id: 'invest', label: 'How much of your savings will you invest?', opts: [{v: 20000, t: '$20,000', d: '2,000 shares. Leaves you more personal savings, but a thin cushion.'}, {v: 30000, t: '$30,000', d: '3,000 shares. A moderate cushion.'}, {v: 40000, t: '$40,000', d: '4,000 shares. Most of your savings, the most room for mistakes.'}]}],
+      outcome: (st) => `You invested $${st.ch.invest.toLocaleString()} in exchange for ${(st.ch.invest / 10).toLocaleString()} shares.`},
+    {id: 'm1-stock', day: 1, kind: 'doc', when: (st) => st.ch.invest > 0, from: 'Heartland Community Bank', subject: 'Deposit receipt: opening deposit', accts: ACCTS,
+      doc: (st) => [{type: 'cert', no: '001', shares: st.ch.invest / 10, corp: st.biz.name + ', Inc.', state: ({OH: 'Ohio', CO: 'Colorado', NC: 'North Carolina', TX: 'Texas'})[place(st).state], holder: st.biz.founder, secretary: 'Karen Ramsey', par: 0},
+        {type: 'deposit', bank, name: st.biz.name + ', Inc.', acct: '••••8837', rows: [['Check #1043 – ' + st.biz.founder, st.ch.invest]], date: d(st, 1, 'short')}],
+      lines: (st) => [['cash', 'dr', st.ch.invest], ['cs', 'cr', st.ch.invest]], memo: 'Issued common stock for cash',
+      why: 'The corporation received cash and gave the owner shares. Owners’ investments go to Common Stock, not revenue.'},
+    {id: 'm1-site', day: 2, kind: 'decision', from: 'Alana Brooks, Brooks Commercial Realty', subject: 'Two spaces that fit what you described',
+      doc: (st) => ({type: 'email', subject: 'Two spaces that fit what you described', fromName: 'Alana Brooks', from: 'abrooks@brookscre.com', to: email(st), date: d(st, 2, 'day') + ', 8:41 AM',
+        body: `<p>Hi ${st.biz.founder.split(' ')[0]}, here are the two I mentioned on the phone.</p><p><b>1180 ${place(st).street}, Suite B.</b> Corner storefront, about 1,400 sq ft, large windows, steady foot traffic all day. $3,200/month.</p><p><b>418 Willow Avenue, Unit 3.</b> About 1,200 sq ft, parking in back, half a mile off the main corridor so most customers will need to find you. $1,800/month.</p><p>Either landlord wants the first three months’ rent at signing. I can have a lease ready tomorrow.</p>`, sig: 'Alana Brooks<br>Brooks Commercial Realty · ' + phone(st, 2210)}),
+      q: [{id: 'site', label: 'Which space will you lease?', opts: [{v: 'prime', t: '1180 ' + 'Main corridor corner · $3,200/mo', d: 'More walk-in customers, higher fixed cost.'}, {v: 'side', t: '418 Willow Ave · $1,800/mo', d: 'Lower rent, fewer people find you.'}]}],
+      outcome: (st) => `You chose ${loc(st).street}.`},
+    {id: 'm1-lease', day: 3, kind: 'doc', from: 'Brooks Commercial Realty', subject: 'Signed lease and rent receipt', accts: ACCTS,
+      doc: (st) => [{type: 'legal', title: 'Commercial Lease Agreement', sub: `${loc(st).street}, ${loc(st).suite} · ${place(st).city}, ${place(st).state}`, numbered: true,
+        paras: [`<b>Parties.</b> This lease is between Willow &amp; High Properties LLC (“Landlord”) and ${st.biz.name}, Inc. (“Tenant”).`, `<b>Term.</b> Thirty-six months beginning ${d(st, 1)}.`, `<b>Rent.</b> $${loc(st).rent.toLocaleString()}.00 per month, due on the first of each month.`, `<b>Advance rent.</b> Tenant pays rent for the first three months, $${(loc(st).rent * 3).toLocaleString()}.00, at signing. Receipt is acknowledged below.`, '<b>Use.</b> Tenant will use the premises only for the business described in its application.'],
+        sigs: [['M. Delgado', 'Landlord'], [st.biz.founder, 'Tenant, President']]},
+        {type: 'receipt', store: 'Willow & High Properties LLC', addr: at(st, '77 E. Broad Street, Floor 4'), date: d(st, 3, 'short'), time: '11:20 AM', no: '20931', lines: [['Advance rent, months 1–3', loc(st).rent * 3]], tender: 'Business check #101'}],
+      lines: (st) => [['prepaidrent', 'dr', loc(st).rent * 3], ['cash', 'cr', loc(st).rent * 3]], memo: 'Paid three months of rent in advance',
+      hint: 'You paid for three months you have not used yet. That is an asset until the months pass.', why: 'Rent paid for future months is an asset, Prepaid Rent. It becomes Rent Expense as each month is used.'},
+    {id: 'm1-loan', day: 4, kind: 'decision', from: 'Heartland Community Bank', subject: 'Small business loan approval',
+      doc: (st) => ({type: 'email', subject: 'Small business loan approval', fromName: 'Greg Whitfield', from: 'gwhitfield@heartlandcb.com', to: email(st), date: d(st, 4, 'day') + ', 10:15 AM',
+        body: `<p>Good news: the credit committee approved ${st.biz.name}, Inc. for a term loan of up to <b>$25,000</b> at <b>7.5%</b> annual interest, repaid over three years.</p><p>You don’t have to take the full amount. Interest only accrues on what you borrow, but having cash on hand may matter if the first few months are slow.</p><p>Reply with the amount and I will send the note for signature.</p>`, sig: 'Greg Whitfield<br>Business Banking Officer'}),
+      q: [{id: 'loan', label: 'How much will you borrow?', opts: [{v: 0, t: 'Nothing', d: 'No interest, no debt. All risk sits on your investment.'}, {v: 15000, t: '$15,000', d: 'About $94 a month in interest.'}, {v: 25000, t: '$25,000', d: 'About $156 a month in interest. The most breathing room.'}]}],
+      outcome: (st) => (st.ch.loan ? `You borrowed $${st.ch.loan.toLocaleString()} from ${bank}.` : 'You declined the loan.')},
+    {id: 'm1-note', day: 5, kind: 'doc', when: (st) => st.ch.loan > 0, from: 'Heartland Community Bank', subject: 'Promissory note and loan proceeds', accts: ACCTS,
+      doc: (st) => [{type: 'legal', title: 'Promissory Note', sub: `$${st.ch.loan.toLocaleString()}.00 · ${place(st).city}, ${place(st).state} · ${d(st, 5)}`, paras: [`For value received, ${st.biz.name}, Inc. (“Borrower”) promises to pay to the order of ${bank} the principal sum of <b>${SIMDOCS_words(st.ch.loan)} Dollars</b>, with interest at 7.5% per year on the unpaid balance.`, 'Principal and interest are payable in 36 monthly installments beginning on the first day of the second month after the date of this note.', 'Loan proceeds will be deposited to Borrower’s business checking account ••••8837.'], sigs: [[st.biz.founder, 'President, ' + st.biz.name + ', Inc.']]}],
+      lines: (st) => [['cash', 'dr', st.ch.loan], ['np', 'cr', st.ch.loan]], memo: 'Borrowed from bank on a note', why: 'You received cash and now owe the bank. A signed note is recorded as Notes Payable.'},
+    {id: 'm1-equipq', day: 6, kind: 'decision', from: (st) => kit(st).eqVendor.name, subject: 'New package or used equipment?',
+      doc: (st) => [{type: 'invoice', title: 'QUOTE', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: 'Q-' + (31000 + Math.floor(rand(st, 'q') * 900)), date: d(st, 6, 'short'), terms: 'Valid 14 days', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], footer: 'Includes delivery, setup and a 2-year parts warranty.'},
+        {type: 'text', fromName: kit(st).seller, phone: phone(st, 8812), date: d(st, 6, 'day'), msgs: [['them', `Saw your post. I can let everything go for $${kit(st).usedEq[1].toLocaleString()}, you pick it up.`], ['them', 'It all works. A couple pieces are a few years old, no warranty though.']]}],
+      q: [{id: 'equip', label: 'Which equipment will you buy?', opts: [{v: 'new', t: () => 'New package', d: 'Warranty and reliable, much more cash out the door.'}, {v: 'used', t: 'Used from a private seller', d: 'Saves cash now. Older equipment, no warranty.'}]}],
+      outcome: (st) => (st.ch.equip === 'new' ? 'You ordered the new equipment package.' : 'You bought the used equipment.')},
+    {id: 'm1-equip', day: 7, kind: 'doc', from: (st) => (st.ch.equip === 'new' ? kit(st).eqVendor.name : kit(st).seller), subject: 'Equipment bill of sale, paid', accts: ACCTS,
+      doc: (st) => (st.ch.equip === 'new'
+        ? {type: 'invoice', vendor: {...kit(st).eqVendor, ...at(st, '2290 Industrial Parkway'), phone: phone(st, 4410)}, no: String(88000 + Math.floor(rand(st, 'e') * 900)), date: d(st, 7, 'short'), terms: 'Paid at delivery', billTo: me(st), lines: [[kit(st).newEq[0], 1, kit(st).newEq[1], 'PKG-1']], paid: d(st, 7, 'short') + ' CK#102'}
+        : {type: 'receipt', store: 'Bill of Sale', addr: at(st, 'Private sale'), date: d(st, 7, 'short'), no: '—', lines: [[kit(st).usedEq[0], kit(st).usedEq[1]]], tender: 'Business check #102', footer: 'Sold as is. Seller: ' + kit(st).seller}),
+      lines: (st) => [['equip', 'dr', equip(st)[1]], ['cash', 'cr', equip(st)[1]]], memo: 'Purchased equipment for cash', why: 'Equipment is a long-term asset. One asset went up and another, Cash, went down.'},
+    {id: 'm1-quote', day: 8, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Supplier price quote', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', title: 'PRICE QUOTE', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: 'EST-4471', date: d(st, 8, 'short'), terms: 'Quote valid 30 days', billTo: me(st), lines: kit(st).sup, footer: 'This is a price quote, not a bill. Reply to place your order.'}),
+      lines: null, why: 'A quote is only a price offer. Nothing was received, paid or owed yet, so there is no journal entry.', hint: 'Read the document type. Has anything been delivered, paid or promised yet?'},
+    {id: 'm1-supplies', day: 9, kind: 'doc', from: (st) => kit(st).supVendor.name, subject: 'Invoice for supplies delivered', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: {...kit(st).supVendor, ...at(st, '605 Commerce Drive'), phone: phone(st, 3301)}, no: '61-20' + Math.floor(100 + rand(st, 's') * 800), date: d(st, 9, 'short'), po: 'PO-0001', terms: 'Net 30', due: d(st, 9 + 30 > 30 ? 9 : 9, 'short').replace(/^(\d+)\//, (m, x) => String(+x + 1).padStart(2, '0') + '/'), billTo: me(st), lines: kit(st).sup, remit: kit(st).supVendor.name + ', PO Box 1180'}),
+      lines: (st) => [['supplies', 'dr', supTotal(st)], ['ap', 'cr', supTotal(st)]], memo: 'Purchased supplies on account', hint: 'Look at the terms. Did you pay today, or do you owe the vendor?', why: 'You received supplies now and owe the vendor in 30 days: Supplies up, Accounts Payable up.'},
+    {id: 'm1-market', day: 10, kind: 'decision', from: 'Jordan Pike', subject: 'Set your prices and marketing before you open',
+      doc: (st) => ({type: 'email', subject: 'Opening Monday: prices and marketing', fromName: 'Jordan Pike (your part-time help)', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 10, 'day') + ', 7:55 PM',
+        body: `<p>Shop’s set up and looks great. Two things before Monday:</p><p>1. What are we charging for a ${kit(st).svc.toLowerCase()}? The going rate around here is about $${kit(st).price}. Cheaper brings in more people, pricier means fewer customers but more per sale.</p><p>2. Are we doing any marketing? Northside Print quoted $350 for flyers and door hangers. A local agency will run targeted social ads for $900 this month.</p>`}),
+      q: (st) => [{id: 'price', label: `Price per ${kit(st).svc.toLowerCase()}`, opts: [{v: 'low', t: `$${r2(kit(st).price * 0.85)}`, d: 'Undercut the market. More customers.'}, {v: 'std', t: `$${kit(st).price}`, d: 'Market rate.'}, {v: 'high', t: `$${r2(kit(st).price * 1.2)}`, d: 'Premium. Fewer customers, more per sale.'}]}, {id: 'mkt', label: 'Marketing this month', opts: [{v: 'none', t: 'None', d: 'Word of mouth only.'}, {v: 'flyers', t: 'Flyers · $350', d: 'Small boost nearby.'}, {v: 'social', t: 'Social ads · $900', d: 'Largest boost.'}]}],
+      outcome: (st) => `Price set at $${priceOf(st)}. Marketing: ${mkt[st.ch.mkt][2].toLowerCase()}.`},
+    {id: 'm1-ad', day: 11, kind: 'doc', when: (st) => st.ch.mkt && st.ch.mkt !== 'none', from: (st) => (st.ch.mkt === 'social' ? 'Lantern Digital Marketing' : 'Northside Print & Sign'), subject: 'Marketing invoice, paid by card', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: st.ch.mkt === 'social' ? {name: 'Lantern Digital Marketing', tagline: 'Local search & social advertising', color: '#8a4b0f', ...at(st, '31 Gay Street, Suite 400'), phone: phone(st, 7020)} : {name: 'Northside Print & Sign', tagline: 'Printing · Signs · Mailers', color: '#0f4c5c', ...at(st, '2045 Summit Street'), phone: phone(st, 6119)}, no: String(5100 + Math.floor(rand(st, 'a') * 800)), date: d(st, 11, 'short'), terms: 'Due on receipt', billTo: me(st), lines: [[mkt[st.ch.mkt][2] + ', opening month', 1, mkt[st.ch.mkt][0], st.ch.mkt === 'social' ? 'SOC-30' : 'FLY-2K']], paid: d(st, 11, 'short') + ' VISA ••4471'}),
+      lines: (st) => [['adv', 'dr', mkt[st.ch.mkt][0]], ['cash', 'cr', mkt[st.ch.mkt][0]]], memo: 'Paid for advertising', why: 'Advertising for this month is used up now, so it is an expense. The business debit card takes cash out of the bank immediately.'},
+    {id: 'm1-hire', day: 12, kind: 'doc', from: 'Jordan Pike', subject: 'Signed offer letter', accts: ACCTS,
+      doc: (st) => ({type: 'email', subject: 'Re: Offer letter', fromName: 'Jordan Pike', from: 'jordan.pike@gmail.com', to: email(st), date: d(st, 12, 'day') + ', 6:30 PM', body: `<p>Signed and attached. $17/hour, about 20 hours a week, first paycheck on the 1st of next month like we talked about. Excited to get going!</p>`, attach: ['Offer_Letter_Signed.pdf']}),
+      lines: null, why: 'Signing an offer letter is an agreement about the future. No work has been done and nothing is owed yet, so nothing is recorded.', hint: 'Has Jordan worked any hours yet, or been paid?'},
+    {id: 'm1-z1', day: 15, kind: 'doc', from: 'Shop register', subject: 'Week 1 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 1, 8, 14, 14),
+      lines: (st) => [['cash', 'dr', week(st, 1).gross], ['rev', 'cr', week(st, 1).gross]], memo: 'Cash and card sales, week 1', hint: 'Card sales are deposited to your bank in a day or two, so treat them as cash.', why: 'You earned revenue by serving customers and collected the money. Card payments settle into the bank, so they are cash too.'},
+    {id: 'm1-corp', day: 16, kind: 'decision', from: (st) => kit(st).corpName, subject: 'Can you bill us monthly?',
+      doc: (st) => ({type: 'email', subject: 'Service for our team, invoiced?', fromName: 'Priya Natarajan', from: 'pnatarajan@' + kit(st).corpDom, to: email(st), date: d(st, 16, 'day') + ', 2:12 PM', body: `<p>Hello, I manage operations at ${kit(st).corpName}, ${kit(st).corpWhat} a few blocks from you. We’d like ${kit(st).corpQty} × “${kit(st).corpDesc.toLowerCase()}” this month at a 10% volume discount, $${corpTotal(st).toLocaleString()} total.</p><p>Our accounts payable department pays vendor invoices in 30 days. Could you invoice us when the work is done?</p>`, sig: 'Priya Natarajan<br>Operations Manager, ' + kit(st).corpName.replace(/&/g, '&amp;')}),
+      q: [{id: 'corp', label: 'Will you take the job on credit?', opts: [{v: 'yes', t: 'Accept and invoice them', d: 'A big sale, but you wait for the money.'}, {v: 'no', t: 'Decline politely', d: 'Keep the schedule open for walk-in customers who pay now.'}]}],
+      outcome: (st) => (st.ch.corp === 'yes' ? 'You accepted the job on 30-day terms.' : 'You declined the job.')},
+    {id: 'm1-corpinv', day: 19, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: 'Your invoice #1001', subject: 'Invoice you sent for completed work', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', vendor: {name: st.biz.name + ', Inc.', tagline: prof(st).type, color: '#13294b', ...at(st, me(st).street), phone: phone(st, 1001)}, no: '1001', date: d(st, 19, 'short'), terms: 'Net 30', billTo: {name: kit(st).corpName, ...at(st, '500 Harbor Point Plaza')}, lines: [[kit(st).corpDesc, kit(st).corpQty, r2(priceOf(st) * 0.9), 'SVC']], footer: 'Thank you. Payment due within 30 days.'}),
+      lines: (st) => [['ar', 'dr', corpTotal(st)], ['rev', 'cr', corpTotal(st)]], memo: 'Billed customer for services', hint: 'You finished the work but haven’t been paid. What do they owe you?', why: 'Revenue is recorded when the work is done, even before payment. The customer now owes you: Accounts Receivable.'},
+    {id: 'm1-util', day: 20, kind: 'doc', from: 'Metro Power & Light', subject: 'Electric bill, due next month', accts: ACCTS,
+      doc: (st) => ({type: 'invoice', title: 'UTILITY BILL', vendor: {name: 'Metro Power & Light', tagline: 'Account 4402-118-' + (300 + Math.floor(rand(st, 'u') * 600)), color: '#0b5394', ...at(st, 'PO Box 2400'), phone: '1-800-555-0144'}, no: 'Statement ' + d(st, 20, 'short'), date: d(st, 20, 'short'), terms: 'Due in 21 days', billTo: me(st), lines: [['Electric service ' + d(st, 1, 'short') + ' – ' + d(st, 19, 'short') + ', 1,812 kWh', 1, st.ch.site === 'prime' ? 386.4 : 312.75, 'E-COM']], footer: 'Pay online, by phone, or by mail.'}),
+      lines: (st) => [['util', 'dr', st.ch.site === 'prime' ? 386.4 : 312.75], ['ap', 'cr', st.ch.site === 'prime' ? 386.4 : 312.75]], memo: 'Received utility bill', hint: 'The electricity has already been used, but you haven’t paid yet.', why: 'You used the electricity this month, so it is this month’s expense even though you pay next month.'},
+    {id: 'm1-repair', day: 21, kind: 'doc', when: (st) => st.ch.equip === 'used', from: 'Jordan Pike', subject: 'Equipment repair receipt', accts: ACCTS,
+      doc: (st) => [{type: 'text', fromName: 'Jordan Pike', phone: phone(st, 7781), date: d(st, 21, 'day') + ', 10:02 AM', msgs: [['them', 'Bad news, one of the used machines died this morning. Had to call the repair guy, he’s here now.'], ['me', 'Ugh. Pay him with the business card.']]}, {type: 'receipt', store: 'Ace Mobile Equipment Repair', addr: at(st, '88 Cleveland Avenue'), date: d(st, 21, 'short'), time: '12:47 PM', no: '7719', lines: [['Service call', 95], ['Labor 2.5 hr @ 98.00', 245], ['Replacement parts', 300]], tender: 'DEBIT ••4471 APPROVED'}],
+      lines: (st) => [['repairs', 'dr', repairCost(st)], ['cash', 'cr', repairCost(st)]], memo: 'Paid for equipment repair', hint: 'A repair restores the equipment; it doesn’t make it more valuable.', why: 'Ordinary repairs keep equipment working and are expensed. They don’t add to the equipment’s cost.'},
+    {id: 'm1-z2', day: 22, kind: 'doc', from: 'Shop register', subject: 'Week 2 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 2, 15, 21, 21),
+      lines: (st) => [['cash', 'dr', week(st, 2).gross], ['rev', 'cr', week(st, 2).gross]], memo: 'Cash and card sales, week 2', why: 'Revenue earned and collected this week.'},
+    {id: 'm1-custpay', day: 26, kind: 'doc', when: (st) => st.ch.corp === 'yes', from: (st) => kit(st).corpName, subject: (st) => 'Check from ' + kit(st).corpName, accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: kit(st).corpName, payerAddr: at(st, '500 Harbor Point Plaza'), no: '20877', date: d(st, 26, 'short'), payee: st.biz.name + ', Inc.', amount: r2(corpTotal(st) / 2), bank: 'Fifth Lakes Bank', memo: 'Inv 1001 partial', signer: 'P. Natarajan'}),
+      lines: (st) => [['cash', 'dr', r2(corpTotal(st) / 2)], ['ar', 'cr', r2(corpTotal(st) / 2)]], memo: 'Collected part of customer invoice', hint: 'You already recorded the revenue when you sent the invoice.', why: 'The revenue was recorded on day 19. Collecting the money only turns the receivable into cash.'},
+    {id: 'm1-paysup', day: 27, kind: 'doc', from: 'Check register', subject: 'Check #103 to your supplier', accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: st.biz.name + ', Inc.', payerAddr: me(st), no: '103', date: d(st, 27, 'short'), payee: kit(st).supVendor.name, amount: supTotal(st), bank, memo: 'Inv 61-20 · PO-0001', signer: st.biz.founder}),
+      lines: (st) => [['ap', 'dr', supTotal(st)], ['cash', 'cr', supTotal(st)]], memo: 'Paid supplier on account', hint: 'The supplies were recorded when they arrived. What does this check settle?', why: 'Paying a bill you already recorded reduces Accounts Payable. No new expense.'},
+    {id: 'm1-z3', day: 29, kind: 'doc', from: 'Shop register', subject: 'Week 3 sales (Z report)', accts: ACCTS, doc: (st) => z(st, 3, 22, 28, 28),
+      lines: (st) => [['cash', 'dr', week(st, 3).gross], ['rev', 'cr', week(st, 3).gross]], memo: 'Cash and card sales, week 3', why: 'Revenue earned and collected this week.'},
+    {id: 'm1-div', day: 30, kind: 'decision', from: 'Karen Ramsey, Ramsey & Cole', subject: 'Month-end: pay yourself a dividend?',
+      doc: (st) => ({type: 'email', subject: 'Month-end: pay yourself a dividend?', fromName: 'Karen Ramsey', from: 'kramsey@ramseycole-law.com', to: email(st), date: d(st, 30, 'day') + ', 4:05 PM', body: `<p>As the sole director you can declare a cash dividend to yourself as the shareholder. It comes out of the company’s cash, not its expenses. Many owners skip it until the business is steady; rent and the loan still need to be paid next month.</p><p>Current bank balance: <b>$${SIM.bal(st, 'cash').toLocaleString('en-US', {minimumFractionDigits: 2})}</b>.</p>`}),
+      q: (st) => [{id: 'div', label: 'Dividend to shareholders', opts: [{v: 0, t: 'No dividend', d: 'Keep the cash in the business.'}, {v: 500, t: '$500', d: 'A small reward for month one.'}, {v: 1500, t: '$1,500', d: 'Takes a real bite out of cash.'}]}],
+      outcome: (st) => (st.ch.div ? `You paid a $${st.ch.div.toLocaleString()} dividend.` : 'No dividend this month.')},
+    {id: 'm1-divpay', day: 30, kind: 'doc', when: (st) => st.ch.div > 0, from: 'Check register', subject: 'Check #104, dividend', accts: ACCTS,
+      doc: (st) => ({type: 'check', payer: st.biz.name + ', Inc.', payerAddr: me(st), no: '104', date: d(st, 30, 'short'), payee: st.biz.founder, amount: st.ch.div, bank, memo: 'Cash dividend', signer: st.biz.founder}),
+      lines: (st) => [['div', 'dr', st.ch.div], ['cash', 'cr', st.ch.div]], memo: 'Paid cash dividend', hint: 'A dividend is a distribution to owners, not a cost of running the business.', why: 'Dividends reduce retained earnings directly. They are never an expense.'},
+  ];
+  function SIMDOCS_words(n) { return (root.SIMDOCS || require('./sim-docs.js')).words(n).replace(/ and 00\/100$/, ''); }
+
+  SIM.M1 = {kit, loc, me, at, phone, email, priceOf, week, supTotal, equip, bank};
+  SIM.months.push({id: 'm1', lessonId: 'ch2', n: 'Month 1', title: 'Opening month', start: [2026, 9], days: 30, topics: ['Recording transactions', 'Journal entries', 'Posting', 'Trial balance'], items});
+  if (typeof module !== 'undefined' && module.exports) module.exports = SIM;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script><script>(function (root) {
+  const S = root.SIM, {r2, bal, money} = S;
+  const {me, at, loc, kit, priceOf, bank} = S.M1;
+  const equip = s => S.M1.equip(s)[1];
+  const dr = (a, x) => [a, 'dr', r2(x)], cr = (a, x) => [a, 'cr', r2(x)];
+  const date = (s, d) => S.fmtDate(s, d, 'short');
+  const email = (s, day, from, subject, body) => ({type: 'email', fromName: from, from: from.toLowerCase().replace(/[^a-z]+/g,'.').replace(/\.$/,'')+'@office.example', to: S.M1.email(s), date: date(s, day), subject, body});
+  const sheet = (s, title, rows, note = '') => ({type: 'schedule', name: s.biz.name + ', Inc.', title, date: date(s, s.day), rows, note});
+  const receipt = (s, day, store, no, desc, x) => ({type: 'receipt', store, addr: at(s, '240 Market Street'), date: date(s, day), no, tender: 'Business checking ····8837', lines: [[desc, r2(x)]]});
+  const invoice = (s, day, vendor, no, desc, x, terms = 'Net 30') => ({type: 'invoice', vendor: {name: vendor, ...at(s, '610 Commerce Drive')}, billTo: me(s), no, date: date(s, day), terms, lines: [[desc, 1, r2(x)]], footer: 'Reference the invoice number with your payment.'});
+  function doc(id, day, from, subject, make, lines, more = {}) { return {id, day, from, subject, kind: 'doc', doc: make, lines, ...more}; }
+  function reply(id, day, from, subject, body, key, opts, outcome, apply) {
+    return {id, day, from, subject, kind: 'decision', doc: s => email(s, day, from, subject, typeof body === 'function' ? body(s) : body), q: [{id: key, label: 'Send reply', opts: opts.map(([v, t, d]) => ({v, t, d}))}], outcome, apply};
+  }
+  function work(id, day, subject, make, fields, after) { return {id, day, from: 'Karen Ramsey · Ramsey & Cole', subject, kind: 'work', doc: make, fields, after}; }
+  const amount = (s, key, fallback) => Number(s.ch[key] ?? fallback);
+  const storeValue = (key, fn) => s => { s.vars[key] = fn(s); };
+  function month(id, number, title, start, topics, items, review = false) {
+    const m = {id: 'sim-' + id, lessonId: id, n: review ? 'Period close' : 'Month ' + number, title, start, days: new Date(Date.UTC(start[0], start[1], 0)).getUTCDate(), topics, items, review};
+    S.months.push(m); return m;
+  }
+  function operations(prefix, end, opts = {}) {
+    const volume = s => Math.round(kit(s).base * (s.ch.price === 'high' ? 0.85 : s.ch.price === 'low' ? 1.18 : 1) * (s.ch.capacity === 'expand' ? 1.25 : 1));
+    return [
+      doc(prefix + '-rent', 2, 'Willow Property Group', 'Monthly occupancy account', s => sheet(s, 'Tenant account · rent applied', [['Current month rent',loc(s).rent],['Payment method',bal(s,'prepaidrent')>=loc(s).rent?'Advance rent credit':'ACH debit, checking 8837']], 'Lease on file. Applying advance rent does not require another cash payment.'), s => [dr('rent', loc(s).rent), cr(bal(s,'prepaidrent')>=loc(s).rent?'prepaidrent':'cash', loc(s).rent)]),
+      ...[8, 15, 22].map((day, i) => doc(prefix + '-sales' + i, day, 'Register 02', 'Weekly service sales · batch ' + (i + 1), s => {
+        const n = volume(s) + i, x = r2(n * priceOf(s));
+        return {type: 'register', store: s.biz.name, period: date(s, day - 6) + ' – ' + date(s, day), rows: [['Completed services', String(n)], ['Unit price', priceOf(s)]], net: x, tenders: [['Bank deposits', x]], printed: date(s, day) + ' 18:05'};
+      }, s => [dr('cash', (volume(s) + i) * priceOf(s)), cr('rev', (volume(s) + i) * priceOf(s))])),
+      doc(prefix + '-utility', end - 2, 'Municipal Utilities', 'Electricity service invoice', s => invoice(s, end - 2, 'Municipal Utilities', prefix + '-U', 'Meter 4082 · current month service', 287), () => [dr('util', 287), cr('ap', 287)]),
+      ...(!opts.noPayroll ? [doc(prefix + '-pay', end - 3, 'Heartland Payroll', 'Payroll settlement · Jordan Pike', s => receipt(s, end - 3, 'Heartland Payroll', prefix + '-P', 'Jordan Pike · 80 hours at $18, no withholding in this introductory cycle', 1440), () => [dr('wages', 1440), cr('cash', 1440)])] : []),
+    ];
+  }
+
+  month('ch3', 2, 'Earn it, use it, accrue it', [2026, 10], ['Accruals', 'Prepayments', 'Depreciation', 'Adjusted trial balance'], [
+    reply('m2-hours', 1, 'Jordan Pike', 'October coverage', 'The afternoon slots are filling up. I can add a second shift, or keep my current hours. The extra shift costs $720 this month and adds 25% capacity to future service weeks.', 'capacity', [['steady', 'Keep the current schedule', 'Protect cash and turn away overflow work.'], ['expand', 'Add the afternoon shift', 'More capacity and a larger payroll.']], s => s.ch.capacity === 'expand' ? 'Jordan accepted the extra shift. Future service batches reflect the added capacity.' : 'Jordan kept the existing schedule.'),
+    ...operations('m2', 31),
+    doc('m2-prepaid', 31, 'Willow Property Group', 'Opening-month rent adjustment', s => sheet(s, 'Advance rent review · September', [['Monthly rent',loc(s).rent],['Opening lease prepayment covered','September, October, November'],['September occupancy','Complete; not yet expensed'],['October rent','Applied separately on October 2']], 'Record the unposted September usage. The remaining November credit stays on account.'), s => [dr('rent', loc(s).rent), cr('prepaidrent', loc(s).rent)]),
+    doc('m2-coverage', 5, 'Heartland Mutual', 'Annual insurance policy', s => invoice(s, 5, 'Heartland Mutual', 'HM-1026', '12 months coverage effective October 1; paid by ACH today', 1200, 'Paid'), () => [dr('prepaidins', 1200), cr('cash', 1200)]),
+    doc('m2-deposit', 9, 'Civic Events Office', 'November booking deposit', s => receipt(s, 9, s.biz.name, 'DEP-202', 'Customer ACH received for November services; nothing delivered yet', 900), () => [dr('cash', 900), cr('unearned', 900)]),
+    doc('m2-shift', 26, 'Heartland Payroll', 'Additional shift payment', s => receipt(s, 26, 'Heartland Payroll', 'PR-204', 'Jordan Pike · October additional shift', 720), () => [dr('wages', 720), cr('cash', 720)], {when: s => s.ch.capacity === 'expand'}),
+    doc('m2-count', 30, 'Jordan Pike', 'Signed supplies count', s => sheet(s, 'Supplies count · stockroom', [['Opening stock at cost', bal(s, 'supplies')], ['Counted stock remaining at cost', r2(bal(s, 'supplies') * 0.35)]], 'Counted by Jordan Pike. No purchases are in transit.'), s => [dr('suppliesexp', bal(s, 'supplies') * 0.65), cr('supplies', bal(s, 'supplies') * 0.65)]),
+    doc('m2-ins-used', 31, 'Heartland Mutual', 'October coverage confirmation', s => sheet(s, 'Coverage schedule', [['Annual premium', 1200], ['Term in months', 12], ['Completed months', 1]], 'October coverage has elapsed. Policy remains in force.'), () => [dr('insexp', 100), cr('prepaidins', 100)]),
+    doc('m2-dep', 31, 'Ramsey & Cole', 'Equipment depreciation schedule', s => sheet(s, 'Fixed asset register · original equipment', [['Cost', equip(s)], ['Residual value', 0], ['Useful life, months', 60], ['Months in service, including September', 2]], 'Straight-line, full-month convention. No depreciation has been recorded yet.'), s => [dr('depexp', r2(equip(s) / 60) * 2), cr('adep', r2(equip(s) / 60) * 2)]),
+    doc('m2-accrual', 31, 'Jordan Pike', 'Timecard · last two shifts', s => sheet(s, 'Approved timecard · October 30–31', [['Hours worked, unpaid', 12], ['Hourly rate', 18]], 'These hours are not included in the earlier payroll settlement. Payday is November 3.'), () => [dr('wages', 216), cr('wagespay', 216)]),
+    doc('m2-interest', 31, bank, 'Interest accrual notice', s => sheet(s, 'Note servicing · account 8837-L', [['Principal outstanding', bal(s, 'np')], ['Annual interest rate', '7.5%'], ['Accrual period, months', 2]], 'No interest has been paid since September origination. Full-month convention: principal × annual rate ÷ 12.'), s => [dr('intexp', bal(s, 'np') * 0.075 / 6), cr('intpay', bal(s, 'np') * 0.075 / 6)], {when: s => s.ch.loan > 0}),
+  ]);
+
+  function closeItems(prefix, day, final = false) {
+    const out = [work(prefix + '-report', day, 'File the financial package', s => sheet(s, 'Controller checklist', [['Package', final ? 'Year-end financial statements' : 'Quarter-end financial statements']], 'Use the Statements tab in Books. File these figures before closing temporary accounts.'), s => {
+      const f = S.statements(s);
+      return [['revenue', 'Net revenue', f.revenue], ['expenses', 'Expenses', f.expenses], ['profit', 'Net income / loss', f.netIncome], ['assets', 'Total assets', f.assets], ['liabilities', 'Total liabilities', f.liabilities], ['equity', 'Total equity', f.equity], ['operating', 'Operating cash flow', f.operating], ['investing', 'Investing cash flow', f.investing], ['financing', 'Financing cash flow', f.financing]].map(([id, label, value]) => ({id, label, value}));
+    }, s => { s.vars[prefix + '-report'] = S.statements(s); s.periodReports ||= {}; s.periodReports[s.m] = S.statements(s); })];
+    ['R', 'XR', 'E', 'XSE'].forEach((type, idx) => out.push(doc(prefix + '-close' + idx, day, 'Karen Ramsey · Ramsey & Cole', ['Close revenue accounts', 'Close contra-revenue accounts', 'Close expense accounts', 'Close dividends'][idx], s => sheet(s, 'Closing authorization · ' + type, Object.keys(s.led).filter(a => LL.ACC[a][1] === type && (type !== 'XSE' || a === 'div')).map(a => [LL.ACC[a][0], bal(s, a)]), 'Transfer revenue and expenses directly to Retained Earnings. Close dividends to Retained Earnings separately. Do not close permanent accounts.'), s => {
+      const lines = Object.keys(s.led).filter(a => LL.ACC[a][1] === type && (type !== 'XSE' || a === 'div') && bal(s, a)).map(a => LL.dn(a) ? cr(a, bal(s, a)) : dr(a, bal(s, a)));
+      const signed = lines.reduce((t, [, side, x]) => t + (side === 'dr' ? x : -x), 0);
+      return lines.length ? [...lines, signed > 0 ? cr('re', signed) : dr('re', -signed)] : null;
+    }, {when: s => s.done[idx ? prefix + '-close' + (idx - 1) : prefix + '-report']})));
+    out.push(work(prefix + '-post', day, 'File post-closing trial balance', s => sheet(s, 'Close checklist · permanent accounts', [['Status', 'Verify after posting all closing entries']], 'Use Trial balance. Revenue, expense and dividends balances must be zero.'), s => { const tb = S.trialBalance(s); return [{id: 'debit', label: 'Total debits', value: r2(tb.reduce((t, r) => t + r[2], 0))}, {id: 'credit', label: 'Total credits', value: r2(tb.reduce((t, r) => t + r[3], 0))}]; }));
+    out[out.length - 1].when = s => s.done[prefix + '-close3'];
+    return out;
+  }
+  function review(id, title, start, prefix) {
+    const m = month(id, '', title, start, ['Integrated transactions', 'Adjusting entries', 'Statements', 'Closing'], [
+      reply(prefix + '-supplier', 1, 'Morgan Ellis · Procurement', 'Year-end purchasing window', 'The supplier can deliver $600 of supplies now on account, or hold the order until the next period. Nothing ships until you approve.', prefix + '-order', [['now', 'Approve delivery now', 'Supplies and payable arrive this period.'], ['later', 'Hold until next period', 'No delivery and no liability this period.']], s => s.ch[prefix + '-order'] === 'now' ? 'Delivery authorized for this period.' : 'The order remains on hold.'),
+      ...[2, 3, 4, 5].map((day, i) => doc(prefix + '-jobs' + i, day, 'Operations desk', 'Completed job ticket ' + (i + 1), s => invoice(s, day, s.biz.name, prefix + '-J' + i, 'Completed client work · customer paid by bank transfer', 420 + i * 95, 'Paid'), () => [dr('cash', 420 + i * 95), cr('rev', 420 + i * 95)])),
+      doc(prefix + '-delivery', 6, 'Commerce Supply Co.', 'Supplies delivered', s => invoice(s, 6, 'Commerce Supply Co.', prefix + '-S', 'Consumable supplies received', 600), () => [dr('supplies', 600), cr('ap', 600)], {when: s => s.ch[prefix + '-order'] === 'now'}),
+      doc(prefix + '-advance', 7, 'Civic Events Office', 'Next-period retainer', s => receipt(s, 7, s.biz.name, prefix + '-D', 'Deposit received; work starts next period', 1200), () => [dr('cash', 1200), cr('unearned', 1200)]),
+      doc(prefix + '-fees', 8, bank, 'Account service fee', s => receipt(s, 8, bank, prefix + '-F', 'Business checking service charge', 35), () => [dr('bankfee', 35), cr('cash', 35)]),
+      doc(prefix + '-bill', 9, 'Northside IT', 'Workstation repair invoice', s => invoice(s, 9, 'Northside IT', prefix + '-IT', 'Restored workstation to original operating condition', 275), () => [dr('repairs', 275), cr('ap', 275)]),
+      doc(prefix + '-payment', 10, 'Accounts payable', 'Supplier payment confirmation', s => receipt(s, 10, 'Commerce Supply Co.', prefix + '-AP', 'ACH settlement of outstanding trade payables', bal(s, 'ap')), s => [dr('ap', bal(s, 'ap')), cr('cash', bal(s, 'ap'))]),
+      doc(prefix + '-insurance', 11, 'Heartland Mutual', 'Unexpired policy review', s => sheet(s, 'Coverage review', [['Insurance asset before adjustment', bal(s, 'prepaidins')], ['Coverage used since last adjustment', Math.min(100, bal(s, 'prepaidins'))]], 'No policy cancellation or refund.'), s => bal(s, 'prepaidins') ? [dr('insexp', Math.min(100, bal(s, 'prepaidins'))), cr('prepaidins', Math.min(100, bal(s, 'prepaidins')))] : null),
+      doc(prefix + '-count', 12, 'Jordan Pike', 'Closing stockroom count', s => sheet(s, 'Supplies count', [['Ledger cost before count', bal(s, 'supplies')], ['Physical count at cost', r2(bal(s, 'supplies') * 0.6)]], 'Signed by Jordan Pike. Difference represents supplies consumed.'), s => bal(s, 'supplies') ? [dr('suppliesexp', bal(s, 'supplies') * 0.4), cr('supplies', bal(s, 'supplies') * 0.4)] : null),
+      doc(prefix + '-accrual', 13, 'Heartland Payroll', 'Unpaid approved time', s => sheet(s, 'Time approval', [['Hours not yet paid', 9], ['Hourly rate', 18]], 'Payment is due next period.'), () => [dr('wages', 162), cr('wagespay', 162)]),
+      doc(prefix + '-note', 14, 'Ramsey & Cole', 'Cut-off review · unshipped order', s => email(s, 14, 'Karen Ramsey', 'Vendor cut-off confirmation', 'The $850 equipment order has not shipped. The vendor has not received payment and title has not transferred. Keep the purchase order on file.'), null),
+      ...closeItems(prefix, 15),
+    ], true);
+    const conditions = m.items.map(it => it.when);
+    m.items.forEach((it, i) => {
+      const condition = conditions[i];
+      const original = it.doc;
+      it.day = m.days;
+      it.doc = s => { const d=S.V(original,s); return {...d,date:date(s,m.days)}; };
+      it.when = s => m.items.slice(0, i).every((prev, j) => s.done[prev.id] || (conditions[j] && !conditions[j](s))) && (!condition || condition(s));
+    });
+    return m;
+  }
+  review('build1', 'First quarter · close the books', [2026, 11], 'q1');
+
+  month('ch4', 3, 'Keep control of cash', [2026, 11], ['Bank reconciliation', 'NSF payments', 'Petty cash', 'Internal controls'], [
+    ...operations('m3', 30),
+    doc('m3-wages', 3, 'Heartland Payroll', 'Prior-period wages paid', s => receipt(s, 3, 'Heartland Payroll', 'PR-301', 'Settlement of all wages accrued at the last close', bal(s, 'wagespay')), s => [dr('wagespay', bal(s, 'wagespay')), cr('cash', bal(s, 'wagespay'))]),
+    doc('m3-earned', 9, 'Civic Events Office', 'November job completed', s => sheet(s, 'Customer acceptance', [['Prepaid booking fulfilled', 900]], 'Civic Events Office accepted the completed work. Deposit was paid in October.'), () => [dr('unearned', 900), cr('rev', 900)]),
+    reply('m3-control', 10, 'Jordan Pike', 'Small purchases are piling up', 'We need a petty cash fund for minor purchases. I can keep a $200 locked fund and attach receipts, or use a $400 fund with a weekly count. Both require your approval for replenishment.', 'petty', [[200, 'Authorize a $200 fund', 'Weekly count and signed vouchers.'], [400, 'Authorize a $400 fund', 'More room for small purchases.']], s => 'Petty cash authorized at ' + money(s.ch.petty) + '.'),
+    doc('m3-fund', 11, 'Cash custodian', 'Petty cash establishment', s => receipt(s, 11, 'Heartland Community Bank', 'PC-301', 'Transfer to locked petty cash fund', s.ch.petty), s => [dr('pettycash', s.ch.petty), cr('cash', s.ch.petty)]),
+    doc('m3-vouchers', 18, 'Jordan Pike', 'Petty cash reimbursement', s => sheet(s, 'Petty cash count and vouchers', [['Fund authorization', s.ch.petty], ['Postage vouchers', 42], ['Emergency supplies vouchers', 28], ['Currency counted', s.ch.petty - 72]], 'Replenish to the authorized amount. No other vouchers are outstanding.'), () => [dr('misc', 42), dr('supplies', 28), dr('cashos', 2), cr('cash', 72)]),
+    doc('m3-check', 20, 'Mason Street Offices', 'Customer payment received', s => ({type: 'check', payer: 'Mason Street Offices', payerAddr: at(s, '88 Mason Street'), date: date(s, 20), no: '6108', payee: s.biz.name, amount: 600, bank, memo: 'Work completed today'}), () => [dr('cash', 600), cr('rev', 600)]),
+    doc('m3-nsf', 24, bank, 'Returned item notice', s => sheet(s, 'Returned deposit · check 6108', [['Mason Street Offices · insufficient funds', 600], ['Bank handling charge', 20]], 'Your bank debited both amounts from checking. Seek collection of the original $600 from the customer.'), () => [dr('ar', 600), dr('bankfee', 20), cr('cash', 620)]),
+    doc('m3-fee', 30, bank, 'Month-end service charge', s => receipt(s, 30, bank, 'FEE-311', 'Checking service fee', 25), () => [dr('bankfee', 25), cr('cash', 25)]),
+    work('m3-reconcile', 30, 'Reconcile checking · November', s => sheet(s, 'Heartland Community Bank · reconciliation packet', [['Bank statement ending balance', r2(bal(s, 'cash') + 175)], ['Deposit in transit, November 30', 250], ['Outstanding check 1028', 425], ['Book cash after service fee posting', bal(s, 'cash')]], 'All statement fees and returned items have been posted. No bank errors. Enter adjusted balances; do not journalize timing differences.'), s => [{id: 'bank', label: 'Adjusted bank balance', value: bal(s, 'cash')}, {id: 'book', label: 'Adjusted book balance', value: bal(s, 'cash')}]),
+  ]);
+
+  month('ch5', 4, 'Grow without losing collections', [2026, 12], ['Credit policy', 'Aging', 'Allowance', 'Write-offs', 'Notes receivable'], [
+    ...operations('m4', 31),
+    reply('m4-credit', 1, 'Harbor Point Offices', 'Monthly service contract', 'We can commit to a $3,000 package on net-30 terms, or pay $1,800 in advance for a smaller package. Full service is completed December 9. The credit contract carries more collection risk.', 'credit', [['net30', 'Accept $3,000 on net 30', 'Larger contract, with collection exposure.'], ['advance', 'Accept $1,800 cash package', 'Smaller contract, collected on delivery.']], s => 'Customer contract approved: ' + s.ch.credit + '.'),
+    doc('m4-contract', 9, 'Harbor Point Offices', 'Accepted service completion', s => invoice(s, 9, s.biz.name, 'HP-401', 'Contract work completed and accepted', s.ch.credit === 'net30' ? 3000 : 1800, s.ch.credit === 'net30' ? 'Net 30' : 'Paid on completion'), s => [dr(s.ch.credit === 'net30' ? 'ar' : 'cash', s.ch.credit === 'net30' ? 3000 : 1800), cr('rev', s.ch.credit === 'net30' ? 3000 : 1800)]),
+    doc('m4-collection', 12, 'Mason Street Offices', 'Replacement payment', s => receipt(s, 12, s.biz.name, 'RC-401', 'Replacement ACH for returned November check 6108', 600), () => [dr('cash', 600), cr('ar', 600)]),
+    doc('m4-annual', 14, 'Juniper Management', 'Multi-site service invoice', s => invoice(s, 14, s.biz.name, 'JM-402', 'Work completed for Juniper Management', 2400), () => [dr('ar', 2400), cr('rev', 2400)]),
+    doc('m4-partial', 20, 'Juniper Management', 'Partial remittance', s => receipt(s, 20, s.biz.name, 'RC-402', 'Juniper Management payment against JM-402', 1000), () => [dr('cash', 1000), cr('ar', 1000)]),
+    doc('m4-note', 23, 'Juniper Management', 'Signed note for balance due', s => ({type: 'legal', title: 'Promissory note · JM-402', paras: ['Juniper Management promises to pay $1,400 principal plus interest at 6% annually. Issued December 23; due March 23. This note replaces the remaining trade receivable.'], sigs: [['Tessa Moore', 'Juniper Management']]}), () => [dr('nr', 1400), cr('ar', 1400)]),
+    doc('m4-small', 24, 'Westgate Services', 'Credit invoice · emergency work', s => invoice(s, 24, s.biz.name, 'WG-403', 'Completed service', 500), () => [dr('ar', 500), cr('rev', 500)]),
+    doc('m4-aging', 30, 'Ramsey & Cole', 'Allowance review', s => sheet(s, 'Receivable aging · required ending allowance', [['Open trade receivables', bal(s, 'ar')], ['Estimated uncollectible percentage', '10%'], ['Allowance balance before adjustment', bal(s, 'allow')]], 'All open trade invoices are in the same risk pool in this cycle. Bring the allowance to 10% of open trade receivables; exclude the promissory note.'), s => [dr('bde', r2(bal(s, 'ar') * 0.1) - bal(s, 'allow')), cr('allow', r2(bal(s, 'ar') * 0.1) - bal(s, 'allow'))]),
+    doc('m4-writeoff', 31, 'Collections desk', 'Westgate account closed', s => sheet(s, 'Write-off approval · WG-403', [['Account balance', 500]], 'Westgate ceased operations. Collection counsel authorized a write-off under the allowance method.'), () => [dr('allow', 500), cr('ar', 500)]),
+  ]);
+
+  month('ch6', 5, 'Launch a product line', [2027, 1], ['Perpetual inventory', 'Returns', 'Freight', 'Cost of goods sold', 'Shrinkage'], [
+    ...operations('m5', 31),
+    reply('m5-stock', 1, 'Morgan Ellis · Commerce Supply', 'First retail shipment', 'We have a product line ready for your counter. Unit cost is $40. Choose an initial shipment of 30 or 50 units, net 30. A larger shelf improves availability but ties up cash.', 'units', [[30, 'Order 30 units', '$1,200 before freight.'], [50, 'Order 50 units', '$2,000 before freight.']], s => s.ch.units + ' units ordered.'),
+    doc('m5-purchase', 3, 'Commerce Supply Co.', 'Retail goods delivered', s => invoice(s, 3, 'Commerce Supply Co.', 'CS-501', 'Retail product units · ' + s.ch.units + ' at $40', s.ch.units * 40), s => [dr('inv', s.ch.units * 40), cr('ap', s.ch.units * 40)]),
+    doc('m5-freight', 4, 'Midstate Freight', 'Inbound freight paid', s => receipt(s, 4, 'Midstate Freight', 'MF-501', 'FOB shipping point · retail shipment CS-501', 120), () => [dr('inv', 120), cr('cash', 120)]),
+    doc('m5-cost', 5, 'Inventory desk', 'Landed-cost card', s => sheet(s, 'Inventory cost card · perpetual system', [['Units received', s.ch.units], ['Supplier cost per unit', 40], ['Freight allocated to lot', 120], ['Landed cost per unit', r2(40 + 120 / s.ch.units)]], 'Use this landed cost for every sale and return from this lot.'), null),
+    ...[10, 17].map((day, i) => doc('m5-retail' + i, day, 'Register 02', 'Retail sales batch ' + (i + 1), s => sheet(s, 'Retail sales and dispatch', [['Units sold', 10], ['Selling price per unit', 85], ['Landed cost per unit', r2(40 + 120 / s.ch.units)]], 'Paid immediately; use two linked entries in one journal: sale and inventory release. This introductory month excludes sales tax.'), s => [dr('cash', 850), cr('sales', 850), dr('cogs', (40 + 120 / s.ch.units) * 10), cr('inv', (40 + 120 / s.ch.units) * 10)])),
+    doc('m5-return', 20, 'Customer service', 'Refund and restock authorization', s => sheet(s, 'Return ticket RT-501', [['Sale price refunded', 85], ['Units returned, resalable', 1], ['Cost per unit', r2(40 + 120 / s.ch.units)]], 'Refund issued to customer. Restore the product to inventory at cost.'), s => [dr('returns', 85), cr('cash', 85), dr('inv', 40 + 120 / s.ch.units), cr('cogs', 40 + 120 / s.ch.units)]),
+    doc('m5-vendorpay', 25, 'Accounts payable', 'Vendor settlement', s => receipt(s, 25, 'Commerce Supply Co.', 'CS-501-P', 'Settlement of retail invoice CS-501', s.ch.units * 40), s => [dr('ap', s.ch.units * 40), cr('cash', s.ch.units * 40)]),
+    doc('m5-count', 31, 'Jordan Pike', 'Retail inventory count', s => sheet(s, 'Cycle count · lot CS-501', [['Units per perpetual record', s.ch.units - 19], ['Units physically counted', s.ch.units - 20], ['Cost per unit', r2(40 + 120 / s.ch.units)]], 'One unit missing. Charge shrinkage to Cost of Goods Sold.'), s => [dr('cogs', 40 + 120 / s.ch.units), cr('inv', 40 + 120 / s.ch.units)]),
+  ]);
+
+  month('ch7', 6, 'Put assets to work', [2027, 2], ['Capitalization', 'Depreciation', 'Disposals', 'Repairs'], [
+    ...operations('m6', 28),
+    reply('m6-van', 1, 'Nora Singh · Fleet Sales', 'Mobile service vehicle', 'We can supply a refurbished van for $12,000 cash or a newer van for $18,000 cash. The newer van has a longer service life. Either lets you take mobile work.', 'van', [[12000, 'Buy the refurbished van', '48-month life; $2,000 residual.'], [18000, 'Buy the newer van', '72-month life; $3,000 residual.']], s => 'Vehicle purchase authorized at ' + money(s.ch.van) + '.'),
+    doc('m6-buy', 3, 'Singh Commercial Vehicles', 'Vehicle bill of sale', s => invoice(s, 3, 'Singh Commercial Vehicles', 'SCV-601', 'Service van · title transferred, paid by ACH', s.ch.van, 'Paid'), s => [dr('vehicle', s.ch.van), cr('cash', s.ch.van)]),
+    doc('m6-title', 4, 'County Title Office', 'Title and registration receipt', s => receipt(s, 4, 'County Title Office', 'T-601', 'Initial title transfer cost, required to place van in service', 300), () => [dr('vehicle', 300), cr('cash', 300)]),
+    doc('m6-wrap', 6, 'Streetline Graphics', 'Vehicle branding invoice', s => invoice(s, 6, 'Streetline Graphics', 'SG-601', 'Removable advertising wrap; no added useful life', 750), () => [dr('adv', 750), cr('ap', 750)]),
+    doc('m6-repair', 12, 'Mason Auto Service', 'Van service receipt', s => receipt(s, 12, 'Mason Auto Service', 'MAS-601', 'Oil change and safety inspection', 180), () => [dr('repairs', 180), cr('cash', 180)]),
+    doc('m6-job', 19, 'Harbor Point Offices', 'Mobile service work accepted', s => invoice(s, 19, s.biz.name, 'HP-601', 'Completed mobile service visit', s.ch.van === 18000 ? 2400 : 1900), s => [dr('ar', s.ch.van === 18000 ? 2400 : 1900), cr('rev', s.ch.van === 18000 ? 2400 : 1900)]),
+    doc('m6-tool', 21, 'Local Equipment Exchange', 'Cash sale · spare tool', s => sheet(s, 'Asset sale packet', [['Tool original cost, included in equipment', 600], ['Accumulated depreciation allocated to tool', 20], ['Cash proceeds', 650]], 'Tool was part of the original equipment lot. Remove its cost and accumulated depreciation; recognize the difference.'), () => [dr('cash', 650), dr('adep', 20), cr('equip', 600), cr('gain', 70)]),
+    doc('m6-dep', 28, 'Ramsey & Cole', 'Van depreciation register', s => sheet(s, 'Vehicle register · full-month straight line', [['Capitalized cost', s.ch.van + 300], ['Residual value', s.ch.van === 18000 ? 3000 : 2000], ['Useful life, months', s.ch.van === 18000 ? 72 : 48], ['Months in service', 1]], 'No van depreciation has been posted.'), s => { const x = (s.ch.van + 300 - (s.ch.van === 18000 ? 3000 : 2000)) / (s.ch.van === 18000 ? 72 : 48); return [dr('depexp', x), cr('adep', x)]; }),
+  ]);
+  review('build2', 'Half-year · audit the business', [2027, 2], 'q2');
+
+  month('ch8', 7, 'Pay people and collect tax', [2027, 3], ['Payroll withholding', 'Employer taxes', 'Sales tax', 'Accrued liabilities'], [
+    ...operations('m7', 31, {noPayroll: true}),
+    reply('m7-team', 1, 'Jordan Pike', 'March staffing', 'I can cover 80 hours this month, or bring a relief employee for 40 additional hours. Gross pay is $18/hour. More coverage improves future service capacity.', 'staff', [[80, 'Approve 80 hours', 'One-person schedule.'], [120, 'Approve 120 hours', 'Relief coverage included.']], s => 'Payroll approved for ' + s.ch.staff + ' hours.'),
+    doc('m7-payroll', 12, 'Heartland Payroll', 'Payroll register · March', s => { const gross = s.ch.staff * 18; return sheet(s, 'Payroll register PR-701', [['Gross wages', gross], ['Employee FICA, 7.65%', r2(gross * 0.0765)], ['Federal withholding', 120], ['Net pay by ACH', r2(gross * 0.9235 - 120)]], 'Employer FICA matches employee FICA. Employer unemployment assessment for this payroll is $48. No state withholding in this exercise.'); }, s => { const g = s.ch.staff * 18, fica = r2(g * 0.0765); return [dr('wages', g), cr('ficapay', fica), cr('fitpay', 120), cr('cash', g - fica - 120)]; }),
+    doc('m7-employer', 13, 'Heartland Payroll', 'Employer payroll assessment', s => sheet(s, 'Employer assessment PR-701', [['Employer FICA', r2(s.ch.staff * 18 * 0.0765)], ['Unemployment taxes', 48]], 'Employer cost is additional to amounts withheld from employees.'), s => [dr('ptaxexp', r2(s.ch.staff * 18 * 0.0765) + 48), cr('ficapay', s.ch.staff * 18 * 0.0765), cr('utaxpay', 48)]),
+    doc('m7-retail', 16, 'Register 02', 'Taxable retail batch', s => sheet(s, 'Sales-tax batch TX-701', [['Taxable merchandise sales', 425], ['Tax collected, 6%', 25.5], ['Bank deposit', 450.5], ['Inventory cost released', 200]], 'This teaching business uses a flat 6% sales tax on merchandise only; service work is exempt. Tax collected is held for the state.'), () => [dr('cash', 450.5), cr('sales', 425), cr('salestaxpay', 25.5), dr('cogs', 200), cr('inv', 200)]),
+    doc('m7-taxpay', 24, 'Treasury payment portal', 'Payroll tax payment', s => receipt(s, 24, 'Treasury payment portal', 'TX-702', 'All FICA and federal withholding for PR-701', bal(s, 'ficapay') + bal(s, 'fitpay')), s => [dr('ficapay', bal(s, 'ficapay')), dr('fitpay', bal(s, 'fitpay')), cr('cash', bal(s, 'ficapay') + bal(s, 'fitpay'))]),
+    doc('m7-salesremit', 25, 'State Revenue Office', 'Sales tax remittance', s => receipt(s, 25, 'State Revenue Office', 'TX-703', 'Sales tax batch TX-701', 25.5), () => [dr('salestaxpay', 25.5), cr('cash', 25.5)]),
+    doc('m7-unemp', 26, 'State Workforce Office', 'Unemployment remittance', s => receipt(s, 26, 'State Workforce Office', 'TX-704', 'Unemployment assessment PR-701', 48), () => [dr('utaxpay', 48), cr('cash', 48)]),
+    doc('m7-warranty', 31, 'Customer care', 'Retail warranty reserve', s => sheet(s, 'Warranty estimate · March merchandise', [['Sales subject to warranty', 425], ['Estimated warranty cost rate', '2%']], 'Recognize expected warranty cost when the sales occur.'), () => [dr('warrexp', 8.5), cr('warrpay', 8.5)]),
+  ]);
+
+  month('ch9', 8, 'Finance the next stage', [2027, 4], ['Notes payable', 'Bond issuance', 'Interest', 'Debt settlement'], [
+    ...operations('m8', 30),
+    reply('m8-finance', 1, 'Avery Chen · Heartland Capital', 'Expansion funding offers', 'The expansion needs $20,000 of funding. We can arrange a 6% bank note at face value, or a five-year private bond placement with $20,000 face value and a 5% coupon, priced at 98. Bond discount is amortized straight-line monthly for this course.', 'funding', [['note', 'Accept the 6% bank note', '$20,000 proceeds.'], ['bond', 'Authorize the bond placement at 98', '$19,600 proceeds; $400 discount.']], s => 'Funding route selected: ' + s.ch.funding + '.'),
+    doc('m8-funds', 3, 'Heartland Capital', 'Funding settlement advice', s => sheet(s, 'Funding settlement', [['Face principal', 20000], ['Cash deposited', s.ch.funding === 'note' ? 20000 : 19600], ['Term, months', 60], ['Annual coupon', s.ch.funding === 'note' ? '6%' : '5%']], 'No issuance fees. Funds deposited today.'), s => s.ch.funding === 'note' ? [dr('cash', 20000), cr('np', 20000)] : [dr('cash', 19600), dr('bdisc', 400), cr('bonds', 20000)]),
+    doc('m8-project', 10, 'Midstate Installation', 'New equipment installation', s => invoice(s, 10, 'Midstate Installation', 'MI-801', 'Expansion equipment delivered and placed in service; ACH paid', 14000, 'Paid'), () => [dr('equip', 14000), cr('cash', 14000)]),
+    doc('m8-oldinterest', 14, bank, 'Accrued interest settlement', s => receipt(s, 14, bank, 'LN-801-I', 'Payment of all previously accrued interest', bal(s, 'intpay')), s => bal(s, 'intpay') ? [dr('intpay', bal(s, 'intpay')), cr('cash', bal(s, 'intpay'))] : null),
+    doc('m8-principal', 18, bank, 'Original note principal installment', s => receipt(s, 18, bank, 'LN-801-P', 'Principal reduction on original September note; not the expansion note', Math.min(1000, s.ch.loan || 0)), s => s.ch.loan ? [dr('np', 1000), cr('cash', 1000)] : null),
+    doc('m8-interest', 30, 'Heartland Capital', 'Expansion debt accrual', s => sheet(s, 'Debt rollforward · expansion funding only', [['Face principal', 20000], ['Annual coupon', s.ch.funding === 'note' ? '6%' : '5%'], ['Elapsed months since issue, full-month convention', 1], ['Bond discount, if applicable', s.ch.funding === 'bond' ? 400 : 0], ['Amortization term, months', 60]], 'Accrue one month of coupon interest. For bonds, add straight-line discount amortization to interest expense.'), s => s.ch.funding === 'note' ? [dr('intexp', 100), cr('intpay', 100)] : [dr('intexp', r2(20000 * 0.05 / 12) + r2(400 / 60)), cr('intpay', 20000 * 0.05 / 12), cr('bdisc', 400 / 60)]),
+  ]);
+
+  month('ch10', 9, 'Bring in an investor', [2027, 5], ['Common stock', 'APIC', 'Treasury stock', 'Dividends', 'Equity rollforward'], [
+    ...operations('m9', 31),
+    reply('m9-investor', 1, 'Elena Ortiz · Local Growth Partners', 'Equity term sheet', 'We can invest $12,000 for 1,000 new $1-par common shares, or $24,000 for 2,000 shares. Both offers price shares at $12. The larger offer provides cash but gives up more ownership.', 'shares', [[1000, 'Issue 1,000 new shares', '$12,000 in fresh equity.'], [2000, 'Issue 2,000 new shares', '$24,000 in fresh equity.']], s => 'Board authorized ' + s.ch.shares + ' shares.'),
+    doc('m9-issue', 4, 'Ramsey & Cole', 'Share subscription settled', s => sheet(s, 'Share register · new issue', [['New common shares', s.ch.shares], ['Par value per share', 1], ['Cash subscription price per share', 12]], 'Investor cash received in full. Record par separately from additional paid-in capital.'), s => [dr('cash', s.ch.shares * 12), cr('cs', s.ch.shares), cr('apic', s.ch.shares * 11)]),
+    doc('m9-treasury', 11, 'Transfer agent', 'Treasury share repurchase', s => receipt(s, 11, 'Transfer agent', 'EQ-901', '100 common shares repurchased at $13; use cost method', 1300), () => [dr('treasury', 1300), cr('cash', 1300)]),
+    doc('m9-reissue', 18, 'Transfer agent', 'Treasury share reissue', s => sheet(s, 'Treasury stock sale confirmation', [['Shares reissued', 40], ['Original repurchase cost per share', 13], ['Cash received per share', 15]], 'Excess over cost goes to Additional Paid-in Capital, Common. Do not report a gain in earnings.'), () => [dr('cash', 600), cr('treasury', 520), cr('apic', 80)]),
+    reply('m9-dividend', 23, 'Board secretary', 'Cash dividend resolution', 'The board can retain earnings for expansion or declare a $600 cash dividend payable May 29. A declaration creates an obligation before cash is paid.', 'dividend9', [[0, 'Retain cash in the business', 'No declaration.'], [600, 'Declare a $600 dividend', 'Payment scheduled May 29.']], s => s.ch.dividend9 ? 'The board declared the dividend.' : 'The board retained cash.'),
+    doc('m9-declare', 24, 'Board secretary', 'Board minutes · dividend declared', s => sheet(s, 'Dividend declaration', [['Authorized cash dividend', s.ch.dividend9]], 'Declaration date May 24. Payment date May 29.'), s => s.ch.dividend9 ? [dr('div', 600), cr('divpay', 600)] : null),
+    doc('m9-paydiv', 29, 'Transfer agent', 'Dividend payment advice', s => receipt(s, 29, 'Transfer agent', 'EQ-902', 'Dividend distribution authorized May 24', s.ch.dividend9), s => s.ch.dividend9 ? [dr('divpay', 600), cr('cash', 600)] : null),
+  ]);
+  review('build3', 'Third quarter · report to investors', [2027, 5], 'q3');
+
+  month('ch11', 10, 'Show where the cash went', [2027, 6], ['Operating cash flows', 'Investing', 'Financing', 'Financial statements'], [
+    ...operations('m10', 30),
+    reply('m10-growth', 1, 'Jordan Pike', 'Summer operating plan', 'We can keep our current footprint, or spend $500 on local advertising to fill the mobile schedule. The campaign adds $900 of completed work this month.', 'summer', [['steady', 'Keep the current footprint', 'No extra advertising.'], ['campaign', 'Launch the $500 campaign', 'Additional work arrives June 19.']], s => s.ch.summer === 'campaign' ? 'Campaign booked.' : 'Current footprint retained.'),
+    doc('m10-ad', 4, 'Neighborhood Media', 'Campaign receipt', s => receipt(s, 4, 'Neighborhood Media', 'NM-1001', 'Summer mobile service campaign', 500), () => [dr('adv', 500), cr('cash', 500)], {when: s => s.ch.summer === 'campaign'}),
+    doc('m10-bonus', 19, 'Operations desk', 'Campaign jobs completed', s => invoice(s, 19, s.biz.name, 'C-1001', 'Completed summer campaign work · paid', 900, 'Paid'), () => [dr('cash', 900), cr('rev', 900)], {when: s => s.ch.summer === 'campaign'}),
+    doc('m10-collect', 20, 'Collections desk', 'Trade receivables collected', s => receipt(s, 20, s.biz.name, 'RC-1001', 'Customer ACH settlements of all open trade invoices', bal(s, 'ar')), s => bal(s, 'ar') ? [dr('cash', bal(s, 'ar')), cr('ar', bal(s, 'ar'))] : null),
+    doc('m10-ap', 24, 'Accounts payable', 'Trade payables settled', s => receipt(s, 24, 'Vendor payments', 'AP-1001', 'All outstanding trade invoices paid', bal(s, 'ap')), s => bal(s, 'ap') ? [dr('ap', bal(s, 'ap')), cr('cash', bal(s, 'ap'))] : null),
+    doc('m10-land', 25, 'Mason County Title', 'Land purchase settlement', s => invoice(s, 25, 'Mason County Title', 'L-1001', 'Vacant expansion parcel · closing costs included, paid cash', 8000, 'Paid'), () => [dr('land', 8000), cr('cash', 8000)]),
+    work('m10-cf', 30, 'Send the lender a cash-flow package', s => email(s, 30, 'Avery Chen · Heartland Capital', 'Cash flow follow-up', 'Please file operating, investing and financing cash flows for this operating period, plus the net change and ending checking balance. Use Books → Statements. Include cash transactions only; do not classify noncash depreciation as a cash payment.'), s => { const f = S.statements(s); return ['operating', 'investing', 'financing', 'change', 'cash'].map(id => ({id, label: {operating: 'Operating cash flow', investing: 'Investing cash flow', financing: 'Financing cash flow', change: 'Net change in checking', cash: 'Ending checking balance'}[id], value: f[id]})); }),
+  ]);
+  const year = review('capstone', 'Year-end · hand over the books', [2027, 8], 'year');
+  year.topics = ['Year-end cut-off', 'Adjustments', 'Financial statements', 'Closing', 'Lender package'];
+  const firstReview = S.months.findIndex(m => m.lessonId === 'build1');
+  S.months.splice(3, 0, S.months.splice(firstReview, 1)[0]);
+  S.months[0].lessonId = 'ch2';
+  S.catalog = S.months.map((m, i) => ({id: m.lessonId, index: i, title: m.title, n: m.n, topics: m.topics, review: !!m.review}));
+  S.findLesson = id => S.catalog.find(m => m.id === (id === 'ch1' ? 'ch2' : id));
+
+  S.statements = function (s) {
+    const f = S.summary(s), sums = types => r2(Object.keys(s.led).filter(a => types.includes(LL.ACC[a][1])).reduce((t, a) => t + bal(s, a), 0));
+    f.assets = r2(sums(['A']) - sums(['XA'])); f.liabilities = r2(sums(['L']) - sums(['XL']));
+    f.equity = r2(sums(['SE']) - sums(['XSE']) + f.netIncome);
+    f.operating = 0; f.investing = 0; f.financing = 0;
+    for (const j of s.book.filter(j => !j.opening && (j.m ?? 0) === s.m)) {
+      const cash = j.lines.filter(([a]) => a === 'cash').reduce((t, [, side, x]) => t + (side === 'dr' ? x : -x), 0);
+      if (!cash) continue;
+      const finance = j.lines.filter(([a]) => ['np', 'bonds', 'bdisc', 'bprem', 'cs', 'ps', 'apic', 'apicp', 'treasury', 'div', 'divpay', 'casecapital', 'casedrawings'].includes(a)).reduce((t, [, side, x]) => t + (side === 'cr' ? x : -x), 0);
+      const notePrincipal = j.lines.filter(([a]) => a === 'nr').reduce((t,[,side,x]) => t + (side === 'cr' ? x : -x),0);
+      const invest = notePrincipal || (j.lines.some(([a]) => ['equip', 'vehicle', 'land', 'building'].includes(a)) ? cash - finance : 0);
+      f.financing += finance; f.investing += invest; f.operating += cash - finance - invest;
+    }
+    for (const k of ['operating', 'investing', 'financing']) f[k] = r2(f[k]);
+    f.change = r2(f.operating + f.investing + f.financing);
+    return f;
+  };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script><script>(function (root) {
+  const S = root.SIM;
+  S.replay = function (run) {
+    const c = run?.config;
+    if (!c || !['bike', 'fitness', 'landscape', 'photo'].includes(c.type) || !Number.isInteger(c.seed) || c.seed < 1 || c.seed > 1e9 || !Array.isArray(run.events) || run.events.length > 3000) throw Error('Invalid office record.');
+    if (typeof c.name !== 'string' || c.name.length > 40 || typeof c.founder !== 'string' || c.founder.length > 40 || /[<>]/.test(c.name+c.founder) || !S.CITIES[c.city]) throw Error('Invalid business details.');
+    const st = S.newGame(c);
+    for (const e of run.events) {
+      let ok = false;
+      if (e.kind === 'handle' && e.action && !e.action.reveal && !st.ended) {
+        const it = S.inbox(st).find(x => x.id === e.id && !st.done[x.id]);
+        if (!it) throw Error('This document is not available.');
+        const result = S.handle(st, e.id, e.action);
+        // Incorrect attempts are part of the record and must be replayed too.
+        ok = result.ok || st.tries[e.id] > 0;
+      } else if (e.kind === 'advance' && !st.ended) ok = S.advance(st).ok;
+      else if (e.kind === 'complete' && !st.ended) ok = S.complete(st);
+      else if (e.kind === 'next') ok = S.nextMonth(st);
+      if (!ok) throw Error('Invalid office progression.');
+    }
+    return st;
+  };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script><script>// Supplemental practice books. The standard business replay is never changed.
+(function (root) {
+  const S = root.SIM, L = root.Lessons || (typeof require !== 'undefined' ? require('./lesson-engine.js') : null), LL = root.LL;
+  const clone = x => JSON.parse(JSON.stringify(x));
+  LL.ACC.casecapital = ['Owner Capital', 'SE'];
+  LL.ACC.casedrawings = ['Owner Drawings', 'XSE'];
+  const aliases = {'owner withdrawals': 'casedrawings'};
+  const account = name => Object.keys(LL.ACC).find(k => LL.ACC[k][0].toLowerCase() === name.toLowerCase()) || aliases[name.toLowerCase()];
+  const lines = rows => rows.filter(r => r.debit || r.credit).map(r => {
+    const a = account(r.account);
+    if (!a) throw Error('The office does not support the account “' + r.account + '”. Revise the draft before assigning.');
+    return [a, r.debit ? 'dr' : 'cr', LL.r2(r.debit || r.credit)];
+  });
+  const business = config => ({name: config.name, type: config.type === 'bike' ? 'Bike repair' : config.type === 'landscape' ? 'Landscaping company' : LL.PROFILES[config.type].type});
+  const personal = (x, b) => L.personalize(x, b);
+  function options(c, a, b) {
+    const n = v => Math.max(c.min, Math.min(c.max, c.min + Math.round((v - c.min) / c.step) * c.step));
+    const defaults = L.decisions.defaultChoice(a, b)[c.id];
+    const values = c.kind === 'basket' ? [0.5, 1, 1.5].map(scale => Object.fromEntries(Object.entries(defaults).map(([k, v]) => [k, n(v * scale)]))) : [c.min, c.defaultValue, c.max];
+    const unique = [...new Map(values.map(v => [JSON.stringify(v), v])).values()];
+    return unique.map((value, i) => {
+      const desc = c.kind === 'basket' ? L.decisions.catalog(c, b).filter(x => value[x.id]).map(x => value[x.id] + ' × ' + x.name).join(', ') || 'Do not order' : c.kind === 'money' ? LL.money(value, 1) : c.kind === 'date' ? 'Schedule for ' + L.decisions.dateValue(a, c, value) : String(value) + (/%|percent/i.test(c.label) ? '%' : '');
+      return {v: i, label: 'Reply: ' + desc, desc: personal(c.purpose, b), value};
+    });
+  }
+  function validate(a) {
+    if (!L.checkAssignment(a) || !a.interactive) throw Error('Create a checked, interactive draft before assigning it.');
+    a.blueprint.accounts.forEach(x => { if (!account(x.name)) lines([{account: x.name, debit: 1}]); });
+    for (const type of Object.keys(LL.PROFILES)) {
+      const b = business({type, name: 'Review business'}), defaults = L.decisions.defaultChoice(a, b);
+      const choices = [defaults];
+      for (const c of a.interactive.controls) for (const opt of options(c, a, b)) choices.push({...defaults, [c.id]: opt.value});
+      for (const choice of choices) {
+        if (!L.decisions.validChoice(a, choice, b)) throw Error('A reply option is outside the draft’s allowed quantities. Revise this draft.');
+        const issues = L.decisions.economicIssues(a, choice, b);
+        if (issues.length) throw Error('Review the accounting history: ' + issues.join('; '));
+      }
+    }
+    return true;
+  }
+  function start(a, config) {
+    const st = S.newGame(config), b = business(config), controls = a.interactive.controls;
+    const origin = Date.UTC(a.year, a.month - 1, 1), day = date => Math.round((Date.parse(date + 'T00:00:00Z') - origin) / 86400000) + 1;
+    const stage = c => L.decisions.controlStage(a, c), defaults = L.decisions.defaultChoice(a, b);
+    st.caseChoices = clone(defaults);
+    const scenario = () => L.expected(a, st.caseChoices, b);
+    const initial = scenario();
+    const events = initial.events.filter(e => !e.autoPosted && !L.decisions.isReportEvent(e));
+    const find = id => scenario().events.find(e => e.id === id);
+    const eventDay = e => day(e.date);
+    const ready = e => controls.filter(c => stage(c) <= e.stage).every(c => st.done['reply-' + c.id]);
+    const items = controls.map(c => {
+      const relevant = events.filter(e => e.stage >= stage(c));
+      const date = c.kind === 'date' ? L.decisions.dateValue(a, c, c.min) : relevant[0]?.date;
+      const opts = options(c, a, b);
+      return {id: 'reply-' + c.id, day: Math.max(1, Math.min(...relevant.map(eventDay), date ? day(date) : 1) - 1), kind: 'decision', from: 'Jordan Pike · Operations', subject: personal(c.label, b),
+        when: () => controls.filter(x => stage(x) < stage(c)).every(x => st.done['reply-' + x.id]),
+        doc: () => ({type: 'email', fromName: 'Jordan Pike', from: 'operations@business.example', to: b.name, subject: personal(c.label, b), date: S.fmtDate(st, st.day), body: '<p>' + escape(personal(c.purpose, b)) + '</p><p>Send your instructions using a reply below. We’ll keep the paperwork with the books.</p>', sig: 'Jordan Pike · Operations'}),
+        q: [{id: c.id, label: personal(c.label, b), opts: opts.map(({v, label, desc}) => ({v, t: label, d: desc}))}],
+        apply: (_, ch) => { st.caseChoices[c.id] = clone(opts[ch[c.id]].value); }, outcome: 'Instructions sent. The related paperwork will arrive in your inbox.'};
+    });
+    for (const e of events) items.push({id: e.id, kind: 'doc', get day() { return eventDay(find(e.id)); }, when: () => ready(e), from: () => L.personalizeDocument(find(e.id).detail.document, b).issuer,
+      subject: personal(e.title, b), doc: () => {
+        const now = find(e.id), d = L.personalizeDocument(now.detail.document, b);
+        return {type: 'record', title: personal(e.title, b), no: e.id.toUpperCase(), date: now.date, ...d};
+      }, lines: () => { const now = find(e.id), rows = L.decisions.suppliesCountLines(now) || now.lines; return rows.length ? lines(rows) : null; }});
+    st.casePeriod = {title: a.title, instructions: personal(a.instructions,b), n: 'Supplemental case', label: 'Supplemental case', lessonId: 'supplement', start: [a.year, a.month], days: Math.round((Date.UTC(a.year, a.month - 1 + (a.periodMonths || 1), 1) - origin) / 86400000), items};
+    const opening = lines(initial.openingBalances || a.blueprint.opening);
+    if (opening.length) { LL.post(st, opening, 'case-opening'); st.book.push({id:'case-opening',opening:true,day:1,date:S.fmtDate(st,1),memo:'Opening balances · separate practice books',lines:opening}); }
+    st.opening = clone(st.led);
+    return st;
+  }
+  function escape(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function apply(st, e) {
+    if (!e || st.ended) throw Error('This case is finished.');
+    let result;
+    if (e.kind === 'handle' && e.action && !e.action.reveal) result = S.handle(st, e.id, e.action);
+    else if (e.kind === 'advance') result = S.advance(st);
+    else if (e.kind === 'complete') result = {ok: S.complete(st)};
+    else throw Error('Invalid case action.');
+    if (!result.ok && !(e.kind === 'handle' && st.tries[e.id])) throw Error(result.text || 'Finish the available work first.');
+    return result;
+  }
+  function replay(a, run) {
+    // The standard replay validates business identity without running its events.
+    S.replay({config: run.config, events: []});
+    if (!Array.isArray(run.events) || run.events.length > 1000) throw Error('Invalid case record.');
+    const st = start(a, run.config);
+    for (const e of run.events) apply(st, e);
+    return st;
+  }
+  function publicState(st) {
+    const visible = new Set(S.inbox(st).map(x => x.id)), out = {};
+    for (const [k, v] of Object.entries(st)) if (!['casePeriod', 'caseChoices', 'paper'].includes(k)) out[k] = clone(v);
+    out.casePeriod = {...st.casePeriod, items: st.casePeriod.items.filter(it => !it.when || it.when(st)).map(it => {
+      if (!visible.has(it.id)) return {id: it.id, kind: it.kind, day: it.day};
+      const row = {id: it.id, kind: it.kind, day: it.day};
+      for (const key of ['subject', 'from', 'doc', 'q', 'outcome']) if (it[key] != null) row[key] = clone(S.V(it[key], st));
+      return row;
+    })};
+    return out;
+  }
+  root.SIMCases = {start, validate, replay, apply, publicState, business};
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.SIMCases;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
 </script><script>// Product introduction and legacy workspace illustrations.
 let previewBusiness = 'coffee';
 const previewBusinesses = {
@@ -1722,7 +2545,7 @@ persist=function(){if(!cloudAccount)localPersist();};
 function cloudFooter(){return cloudAccount?`Signed in as ${safe(cloudAccount.email)} · ${safe(cloudAccount.role)} · assignment submissions saved to your class`:'Demo mode · saved in this browser only · Reset demo starts over · sign in for a connected class';}
 shell=function(content){localShell(content);Q('.classroom-foot').innerHTML=cloudFooter();const tools=Q('.header-tools');if(cloudAccount){const rh=Q('#role-home');if(rh)rh.hidden=true;tools.insertAdjacentHTML('beforeend','<button class="quiet" id="account-dashboard">Home</button><button class="quiet" id="cloud-logout">Sign out</button>');Q('#account-dashboard').onclick=()=>{cloudScreen='dashboard';render();};Q('#cloud-logout').onclick=()=>cloudTask(async()=>{try{await cloud.logout();}finally{location.reload();}});}else{tools.insertAdjacentHTML('beforeend','<button class="secondary" id="cloud-login">Sign in</button>');Q('#cloud-login').onclick=()=>{cloudScreen='login';render();};}
 Q('#role-home').onclick=Q('#brand-home').onclick=e=>{e.preventDefault();cloudScreen=cloudAccount?'dashboard':'';if(!cloudAccount)role='home';render();};Q('main').insertAdjacentHTML('beforeend',`<div id="cloud-status" role="status">${safe(cloudMessage)}</div>`);};
-async function loadCloud(){const result=await cloud.call('bootstrap');cloudAccount=result.user;cloudClasses=result.classes;cloudClass=cloudClasses.some(c=>c.id===cloudClass)?cloudClass:cloudClasses[0]?.id||'';data={profile:result.business,assignments:result.assignments.map(x=>({...x.definition,classId:x.class_id})),runs:{}};cloudRevision={};for(const r of result.runs){data.runs[r.assignment_id]=r.state;cloudRevision[r.assignment_id]=r.revision;}active=null;record=null;teacherDraft=null;if(cloudAccount.role!=='student'){try{teacherDraft=JSON.parse(sessionStorage.getItem('ledger-teacher-draft-'+cloudAccount.id));}catch{}}teacherTab='builder';role=cloudAccount.role==='student'?'student':'professor';page='assignments';cloudLessons=result.lessons||[];cloudLessonScores=result.lessonScores||[];cloudBook={};}
+async function loadCloud(){const result=await cloud.call('bootstrap');cloudAccount=result.user;cloudClasses=result.classes;cloudClass=cloudClasses.some(c=>c.id===cloudClass)?cloudClass:cloudClasses[0]?.id||'';data={profile:result.business,assignments:result.assignments.map(x=>({...x.definition,classId:x.class_id})),runs:{}};cloudRevision={};for(const r of result.runs){data.runs[r.assignment_id]=r.state;cloudRevision[r.assignment_id]=r.revision;}active=null;record=null;teacherDraft=null;if(cloudAccount.role!=='student'){try{teacherDraft=JSON.parse(sessionStorage.getItem('ledger-teacher-draft-'+cloudAccount.id));}catch{}}teacherTab='builder';role=cloudAccount.role==='student'?'student':'professor';page='assignments';cloudLessons=result.lessons||[];cloudLessonScores=result.lessonScores||[];cloudCases=result.cases||[];cloudCaseScores=result.caseScores||[];cloudBook={};}
 render=function(){if(cloudScreen==='login'){renderLogin();return;}if(cloudAccount&&cloudScreen==='dashboard'){renderDashboard();return;}localRender();if(role==='home'&&cloudAccount&&Q('#professor')){Q('#professor').textContent='Open instructor workspace';Q('#student').textContent='Open my business';}if(role==='home'&&!cloudAccount&&Q('#professor'))Q('#professor').onclick=()=>{cloudScreen='login';cloudMessage='Instructors and students sign in with the email approved for their class.';render();};if(role==='home'&&cloudAccount){Q('#student').disabled=cloudAccount.role!=='student';Q('#professor').disabled=cloudAccount.role==='student';}if(cloudAccount&&role==='student'&&Q('#import')){Q('#import').textContent='Refresh class';Q('#import').onclick=()=>cloudTask(async()=>{await loadCloud();render();});if(Q('.business-summary .message'))Q('.business-summary .message').textContent='Assignments appear here when your professor publishes them. Your submitted work saves to your account.';if(!data.assignments.length&&Q('.assignment-list'))Q('.assignment-list').innerHTML='<section class="card"><h2>Your class is getting ready</h2><p>Your professor has not published an assignment yet. Open My classroom to see your classes.</p></section>';if(page==='portfolio')Q('.portfolio-card .foot').textContent='Your professor sees the server-recorded submissions in the class gradebook. Downloads are copies for your records.';}};
 function renderLogin(){const signup=authMode==='signup';shell(`<section class="account-layout"><aside class="account-story"><div class="tag">LEDGER LANE CLASSROOM</div><h1>One business. A full semester of accounting.</h1><p>Your lessons, business decisions and journal entries stay with your account.</p><ul class="account-points"><li>Fifteen prebuilt lessons aligned to introductory financial accounting</li><li>Real general-journal entries with specific feedback</li><li>Instructors assign lessons to their class with due dates</li></ul></aside><section class="account-panel"><div class="tag">${signup?'GET STARTED':'WELCOME BACK'}</div><h2>${signup?'Create your account':'Sign in to Ledger Lane'}</h2><p class="account-intro">${signup?'Use the email your professor approved for your class.':'Pick up where you left off.'}</p>${cloud.configured?`<form id="cloud-auth"><label class="field" for="cloud-email">Email address<input id="cloud-email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.edu" value="${safe(authEmail)}"></label><label class="field" for="cloud-password">Password<div class="password-field"><input id="cloud-password" name="password" type="password" autocomplete="${signup?'new-password':'current-password'}" required ${signup?'minlength="12"':''}><button type="button" id="show-password" aria-label="Show password" aria-pressed="false">Show</button></div></label>${signup?'<p class="password-help">Use at least 12 characters.</p><label class="field" for="confirm-password">Confirm password<input id="confirm-password" type="password" autocomplete="new-password" required minlength="12"></label>':'<button type="button" id="cloud-recover" class="account-text-button">Forgot your password?</button>'}<button class="account-submit" data-cloud-submit>${signup?'Create account':'Sign in'}</button><div id="account-feedback-slot"></div></form><p class="account-switch">${signup?'Already have an account? <button type="button" id="cloud-signin">Sign in</button>':'New to Ledger Lane? <button type="button" id="cloud-signup">Create an account</button>'}</p><details class="account-access"><summary>Need help getting access?</summary><p>Students: ask your professor to add your email to the class. Professors: ask the person running your demo to approve your email.</p><p>If you’re waiting for a confirmation email, enter your email above and request a new link.</p><button type="button" id="cloud-resend" class="account-text-button" data-cloud-submit>Resend confirmation email</button></details>`:'<div class="message">Account sign-in is currently unavailable. You can still try the lessons without an account.</div>'}<div class="account-demo"><button id="back-practice" class="account-text-button">← Back to the home page</button><span></span></div></section></section>`);Q('.classroom-foot').textContent='Ledger Lane · An accounting classroom built around your business';Q('#back-practice').onclick=()=>{cloudScreen='';render();};if(!cloud.configured)return;
  const status=Q('#cloud-status');Q('#account-feedback-slot').append(status);status.setAttribute('aria-live','polite');Q('#cloud-email').oninput=e=>{authEmail=e.target.value;};
@@ -1733,7 +2556,7 @@ function renderLogin(){const signup=authMode==='signup';shell(`<section class="a
  if(Q('#cloud-recover'))Q('#cloud-recover').onclick=()=>cloudTask(async()=>{const el=Q('#cloud-email');if(!el.value||!el.reportValidity()){el.focus();return;}await cloud.recover(el.value.trim());Q('#cloud-status').textContent='If an account uses this email, a password-reset link is on its way. Check your inbox.';});}
 
 function classOptions(){return cloudClasses.map(c=>`<option value="${c.id}" ${c.id===cloudClass?'selected':''}>${safe(c.name)}</option>`).join('');}
-let cloudLessons=[],cloudLessonScores=[],cloudBook={},cloudBookLoading='';
+let cloudLessons=[],cloudLessonScores=[],cloudCases=[],cloudCaseScores=[],cloudBook={},cloudBookLoading='';
 function dueText(d){if(!d)return 'No due date';return 'Due '+new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});}
 function scoreBadge(x){return `<b class="ih-score ${x.score>=80?'good':x.score>=60?'ok':'low'}">${x.score}%</b>`;}
 function loadBook(){const id=cloudClass;if(!id||cloudBook[id]||cloudBookLoading===id)return;cloudBookLoading=id;cloud.call('gradebook',{classId:id}).then(r=>{cloudBook[id]=r;}).catch(e=>{cloudBook[id]={error:e.message,students:[],lessons:[]};}).finally(()=>{cloudBookLoading='';if(cloudAccount&&cloudScreen==='dashboard')render();});}
@@ -1857,7 +2680,7 @@ function appFrame(side, main) {
 }
 
 function pageHead(title, sub, action = '') {
-  return `<div class="app-head"><div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${action}</div>`;
+  return `<div class="app-head"><div><h1>${safe(title)}</h1>${sub ? `<p>${sub}</p>` : ''}</div>${action}</div>`;
 }
 
 function avg(list) { return list.length ? Math.round(list.reduce((t, x) => t + x.score, 0) / list.length) + '%' : '—'; }
@@ -1870,8 +2693,10 @@ function professorHome() {
   const cls = cloudClasses.find((c) => c.id === cloudClass), book = cloudBook[cloudClass], students = book?.students || [];
   const lessons = book?.lessons || cloudLessons.filter((l) => l.class_id === cloudClass);
   const owner = cloudAccount.role === 'owner';
-  if (!dashPage || !['gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'gradebook' : 'classes';
-  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['gradebook', 'Gradebook'], ['lessons', 'Lessons', 'lessons.html#library'], ['students', 'Students'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="lessons.html">Preview the student office</a>`;
+  if (!dashPage || !['overview', 'plan', 'builder', 'gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'overview' : 'classes';
+  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Overview'], ['plan', 'Course plan'], ['gradebook', 'Gradebook'], ['students', 'Students'], ['builder', 'Create from notes'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2">Preview the student office</a>`;
+  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder'].includes(dashPage)) return instructorPage(side, cls, book);
+  if (typeof instructorGradebook === 'function' && dashPage === 'gradebook') return instructorGradebook(side, cls, book);
   const steps = [[cloudClasses.length > 0, 'Create a class', 'classes'], [students.length > 0, 'Add your students', 'students'], [lessons.length > 0, 'Assign a lesson from the library', 'lessons']];
   const setup = steps.every((s) => s[0]) ? '' : `<div class="app-setup"><b>Get your class ready</b><ol>${steps.map(([done, t, k]) => `<li class="${done ? 'done' : ''}">${done ? t : k === 'lessons' ? `<a href="lessons.html#library">${t}</a>` : `<button class="app-link" data-dash="${k}">${t}</button>`}</li>`).join('')}</ol></div>`;
   let main = '';
@@ -1909,6 +2734,7 @@ function studentHome() {
     const done = sorted.filter(score);
     main = pageHead('Grades', 'First-attempt scores. Your professor sees the same numbers.') + (done.length ? `<table class="app-table"><thead><tr><th>Lesson</th><th class="num">Score</th></tr></thead><tbody>${done.map((l) => `<tr><td>${safe(l.title)}</td><td class="num">${scoreBadge(score(l))}</td></tr>`).join('')}<tr class="app-total"><td>Average</td><td class="num">${avg(done.map(score))}</td></tr></tbody></table>` : '<p class="app-empty">No graded lessons yet. Scores appear here when you finish an assigned lesson.</p>');
   }
+  if (typeof studentCasesPanel === 'function') main += studentCasesPanel(dashPage === 'grades');
   if (dashPage === 'assignments') main += officeHomeGuide(true);
   return appFrame(side, main);
 }
@@ -1919,6 +2745,7 @@ function renderDashboard() {
   Q('#classroom').innerHTML = student ? studentHome() : professorHome();
   const on = (sel, ev, fn) => { const el = Q(sel); if (el) el[ev] = fn; };
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
+  if (typeof wireInstructor === 'function' && !student) wireInstructor();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
   if (student) return;
   loadBook();
@@ -1929,5 +2756,144 @@ function renderDashboard() {
   document.querySelectorAll('[data-remove]').forEach((el) => (el.onclick = () => { if (!confirm('Remove ' + el.dataset.remove + ' from this class?')) return; cloudTask(async () => { await cloud.call('remove-student', {classId: cloudClass, email: el.dataset.remove}); delete cloudBook[cloudClass]; render(); }); }));
   on('#grant-access', 'onsubmit', (e) => { e.preventDefault(); const p = Object.fromEntries(new FormData(e.target)); cloudTask(async () => { await cloud.call('authorize', {...p, active: true}); cloudMessage = 'Account approved. Share the site link; they can create an account with this email.'; render(); }); });
   on('#view-access', 'onclick', () => cloudTask(accessList));
+}
+</script><script>// Class-scoped instructor drafts stay private until the explicit publish step.
+const instructorDrafts = new Map();
+let instructorBusy = false, instructorStatus = '';
+let studentWork = null, gradeFilter = '';
+function draftKey() { return 'ledger-notes-workspace-' + cloudAccount.id + '-' + cloudClass; }
+function notesWorkspace() {
+  const key = draftKey();
+  if (!instructorDrafts.has(key)) {
+    let saved; try { saved = JSON.parse(sessionStorage.getItem(key)); } catch {}
+    instructorDrafts.set(key, saved || {step: 0, notes: '', source: '', request: '', year: new Date().getFullYear(), month: 9, reviewed: {documents: false, accounting: false}});
+  }
+  return instructorDrafts.get(key);
+}
+function saveNotesDraft() {
+  try { sessionStorage.setItem(draftKey(), JSON.stringify(notesWorkspace())); }
+  catch { instructorStatus = 'This tab cannot save the draft. Keep it open until you finish reviewing.'; }
+}
+function studioButton(text, action, primary = false, extra = '') {
+  const reviewed=notesWorkspace().reviewed;
+  return `<button type="button" class="app-btn ${primary ? '' : 'alt'}" data-studio="${action}" ${instructorBusy || action==='publish'&&(!reviewed.documents||!reviewed.accounting) ? 'disabled' : ''} ${extra}>${text}</button>`;
+}
+function courseCases() { return cloudCases.filter(c => c.class_id === cloudClass); }
+function topicSupport(t) {
+  return (!t.practice || t.practice === 'transactions') && !/consolidat|derivative|foreign currency|hedg(?:e|ing)|pension|lease liability/i.test(t.name + ' ' + t.method);
+}
+function instructorPage(side, cls, book) {
+  const students = book?.students || [], assigned = cloudLessons.filter(l => l.class_id === cloudClass), cases = courseCases();
+  const go = (text, page) => `<button class="app-btn alt" data-dash="${page}">${text}</button>`;
+  let main;
+  if (dashPage === 'overview') {
+    const latest = [...assigned].sort((a, b) => String(b.dueDate || '').localeCompare(String(a.dueDate || '')))[0];
+    const done = latest ? students.filter(s => s.lessonScores?.some(x => x.assignment_id === latest.id)).length : 0;
+    main = pageHead(cls?.name || 'Your classes', 'Plan the course, review student work and create supplemental cases.', go('Create from notes', 'builder'))
+      + `<section class="teach-panel teach-current"><div><span class="teach-muted">${latest ? 'Most recent assigned period' : 'Course setup'}</span><h2>${safe(latest?.title || 'Assign the opening month')}</h2><p>${latest ? `${done} of ${students.length} students finished · ${dueText(latest.dueDate)}` : 'Create a class, add students and assign the opening month. The same business continues through all 14 periods.'}</p></div>${go(latest ? 'Open gradebook' : 'Open course plan', latest ? 'gradebook' : 'plan')}</section>`
+      + `<div class="teach-columns"><section class="teach-panel"><h2>Course work</h2><ul class="teach-list"><li><div><strong>${assigned.length} standard periods assigned</strong><small>The continuing business and books stay together.</small></div>${go('Course plan', 'plan')}</li><li><div><strong>${cases.filter(c => !c.deleted).length} supplemental cases</strong><small>Additional practice, with separate books and grades.</small></div>${go('Create a case', 'builder')}</li></ul></section><section class="teach-panel"><h2>Class roster</h2><p>${students.length} students${!book ? ' · Loading class data…' : ''}</p><p>First-attempt accounting scores are in the gradebook. Business choices are not graded.</p>${go('Manage students', 'students')}${book?.error ? `<p role="alert">${safe(book.error)}</p>` : ''}</section></div>`;
+  } else if (dashPage === 'plan') {
+    main = pageHead('Course plan', 'Standard periods keep one continuing business. Notes-based cases are additional practice.', go('Create from notes', 'builder'))
+      + `<section class="teach-panel"><h2>Standard course · 14 periods</h2><div class="app-scroll"><table class="app-table"><thead><tr><th>Period</th><th>Accounting work</th><th>Assignment</th><th>Actions</th></tr></thead><tbody>${SIM.catalog.map((p, i) => {
+        const a = assigned.find(a => a.lessonId === p.id || p.id === 'ch2' && a.lessonId === 'ch1');
+        return `<tr><td><small>Period ${i + 1}</small><strong>${safe(p.n)} · ${safe(p.title)}</strong></td><td>${safe(p.topics.join(', '))}</td><td>${a ? dueText(a.dueDate) : 'Not assigned'}</td><td><div class="teach-actions"><a class="app-link" href="office.html?preview=${p.id}" target="_blank" rel="noopener">Preview</a>${studioButton(a ? 'Edit due date' : 'Assign', 'assign-' + p.id, false, !cloudClass ? 'disabled' : '')}</div><form class="teach-assign" data-period="${p.id}" hidden><label>Due date<input name="dueDate" type="date" value="${safe(a?.dueDate || '')}"></label><button class="app-btn" ${!cloudClass ? 'disabled' : ''}>${a ? 'Save date' : 'Assign period'}</button></form></td></tr>`;
+      }).join('')}</tbody></table></div></section><section class="teach-panel"><h2>Supplemental cases</h2><p>These never replace a course period or change the student’s continuing books.</p>${cases.length ? `<ul class="teach-list">${cases.map(c => `<li><div><strong>${safe(c.title)}</strong><small>${c.deleted ? 'Hidden · student work retained' : dueText(c.dueDate)}</small></div><div class="teach-actions">${c.assignment ? studioButton('Review copy', 'copy-' + c.id) : ''}${studioButton(c.deleted ? 'Restore' : 'Hide', 'visibility-' + c.id)}</div></li>`).join('')}</ul>` : '<p class="teach-muted">No supplemental cases assigned.</p>'}</section>`;
+  } else main = notesBuilder(cls);
+  return appFrame(side, `<div class="instructor-workspace">${main}</div>`);
+}
+function notesBuilder(cls) {
+  const d = notesWorkspace(), step = d.assignment ? 2 : d.topics ? 1 : 0;
+  let body;
+  if (step === 0) body = `<div class="teach-columns"><section class="teach-panel"><h2>Source notes</h2><label class="teach-field">Upload PDF, DOCX, TXT or Markdown<input id="notes-file" type="file" accept=".pdf,.docx,.txt,.md"></label><p class="teach-muted">Text is extracted in this browser. Only the text you review below is sent for generation. Max 10 MB; text-based PDFs only.</p><label class="teach-field">Notes<textarea id="case-notes" minlength="40" maxlength="30000" rows="12" placeholder="Paste the accounting notes students have already covered…">${safe(d.notes)}</textarea></label><p class="teach-muted"><span id="notes-count">${d.notes.length}</span> / 30,000 characters${d.source ? ' · ' + safe(d.source) : ''}</p><label class="teach-field">Instructor focus (optional)<textarea id="case-request" maxlength="2000" rows="2">${safe(d.request)}</textarea></label><div class="teach-actions"><label class="teach-field">Practice year<input id="case-year" type="number" min="2020" max="2100" value="${d.year}"></label><label class="teach-field">Starting month<select id="case-month">${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${d.month===i+1?'selected':''}>${new Date(2026,i,1).toLocaleString('en-US',{month:'long'})}</option>`).join('')}</select></label></div>${studioButton('Read topics from notes', 'topics', true)}</section><aside class="teach-panel teach-explainer"><h2>What this creates</h2><p>A supplemental case in the student’s office: business requests, reply-button decisions, source documents and journal entries.</p><p>The continuing 14-period course stays unchanged. Case balances are separate practice books for the same company.</p><p>You’ll review the scope, paperwork and accounting key before assigning it to <strong>${safe(cls?.name || 'a class')}</strong>.</p><small>The draft is saved privately in this browser tab and can be resumed after reloading. Nothing is assigned automatically.</small></aside></div>`;
+  else if (step === 1) body = `<section class="teach-panel"><h2>Choose the taught accounting work</h2><p>Only transaction topics can become graded journal work. Other material stays visible as context; this builder does not create quiz questions or grade standalone statement preparation.</p>${d.topics.topics.map((t,i) => `<label class="teach-topic"><input type="checkbox" data-topic="${i}" ${d.selected.includes(i)?'checked':''} ${topicSupport(t)?'':'disabled'}><span><strong>${safe(t.name)}</strong><small>${safe(t.principle)} ${safe(t.method)}</small><em>${topicSupport(t)?'Journal-entry practice supported':'Context only · not separately graded in this builder'}</em></span></label>`).join('')}<details><summary>Review the source text</summary><pre class="teach-source">${safe(d.notes)}</pre></details><div class="teach-actions">${studioButton('Back to notes','notes')}${studioButton('Generate case draft','generate',true)}</div></section>`;
+  else body = `<section class="teach-panel"><label class="teach-field">Student instructions<textarea id="case-instructions" maxlength="2000" rows="3">${safe(d.assignment.instructions)}</textarea></label><small class="teach-muted">Edit the wording here, or request changes to the documents and accounting below.</small></section>` + draftReview(d, cls);
+  return pageHead('Create from your notes', 'Additional cases only. Your standard course and existing student work are unchanged.')
+    + `<ol class="teach-steps" aria-label="Assignment creation steps">${['Source notes','Set the scope','Review and assign'].map((s,i)=>`<li ${step===i?'aria-current="step"':''}>${i+1}. ${s}</li>`).join('')}</ol><div id="instructor-status" class="teach-status" role="status" aria-live="polite">${safe(instructorStatus)}</div>${body}`;
+}
+function draftReview(d, cls) {
+  const b = {name:'Review Cycle',type:d.business || 'Bike repair'}, raw=d.assignment;
+  const a = {...raw,instructions:Lessons.personalize(raw.instructions,b),interactive:{...raw.interactive,controls:raw.interactive.controls.map(c=>({...c,label:Lessons.personalize(c.label,b),purpose:Lessons.personalize(c.purpose,b)}))}}, choice = reviewChoice(d, b), scenario = Lessons.expected(a,choice,b);
+  return `<section class="teach-panel"><div class="teach-review-heading"><h2>Review the student’s case</h2><a class="app-btn alt" id="preview-case" href="office.html?casePreview=1" target="_blank" rel="noopener">Open office preview</a></div><p>${safe(a.instructions)}</p><p class="teach-muted">Preview uses example company balances, not a real student’s books. Review the opening balances, documents and key below. Business replies are not graded.</p><label class="teach-field">Example business<select id="review-business">${['Bike repair','Fitness studio','Landscaping company','Photography studio'].map(x=>`<option ${b.type===x?'selected':''}>${x}</option>`).join('')}</select></label><div class="teach-actions">${studioButton('Review smaller choices','low')}${studioButton('Review default choices','default')}${studioButton('Review larger choices','high')}</div><details open><summary>Business replies to review</summary>${a.interactive.controls.map(c=>`<label class="teach-field">${safe(c.label)}<select data-review-choice="${c.id}"><option value="low" ${d.paths?.[c.id]==='low'?'selected':''}>Smaller / earliest</option><option value="default" ${!d.paths?.[c.id]||d.paths[c.id]==='default'?'selected':''}>Default</option><option value="high" ${d.paths?.[c.id]==='high'?'selected':''}>Larger / latest</option></select><small>${safe(c.purpose)}</small></label>`).join('')}</details><details><summary>Opening balances (separate practice books)</summary>${keyTable(a.blueprint.opening)}</details><div class="teach-review-list">${scenario.events.filter(e=>!e.autoPosted&&!Lessons.decisions.isReportEvent(e)).map(e=>`<article class="teach-review-event"><div class="teach-paper">${SIMDOCS.render({type:'record',title:e.title,no:e.id.toUpperCase(),date:e.date,...e.document})}</div><section><h3>Accounting key · ${safe(e.date)}</h3>${e.lines.length?keyTable(e.lines):'<p>No entry. This document is not a transaction.</p>'}</section></article>`).join('')}</div><details><summary>Notes and topic coverage</summary><ul>${a.teachingTopics.map((t,i)=>`<li>${safe(t.name)} · ${a.topicCoverage.some(c=>c.topicIndex===i)?'Covered by source records':'Context only'}</li>`).join('')}</ul><pre class="teach-source">${safe(d.notes)}</pre></details></section><section class="teach-panel"><h2>Request a revision</h2><label class="teach-field">Changes to this private draft<textarea id="case-revision" maxlength="2000" rows="3" placeholder="For example, use a 30-day supplier invoice and a later payment confirmation."></textarea></label>${studioButton('Revise draft','revise')}<p class="teach-muted">A revision requires a fresh review. Published copies and student work are never changed.</p></section><section class="teach-panel"><h2>Assign to ${safe(cls?.name||'a class')}</h2><label class="teach-field">Title<input id="case-title" maxlength="120" value="${safe(d.title || a.title)}"></label><label class="teach-field">Due date (optional)<input id="case-due" type="date" value="${safe(d.dueDate||'')}"></label><label class="teach-topic"><input id="review-documents" type="checkbox" ${d.reviewed.documents?'checked':''}><span>I reviewed the source documents and business replies.</span></label><label class="teach-topic"><input id="review-accounting" type="checkbox" ${d.reviewed.accounting?'checked':''}><span>I checked the opening balances and accounting key across the relevant reply paths.</span></label><p class="teach-muted">A separate gradebook column is added. No standard period is replaced.</p><div class="teach-actions">${studioButton('Back to scope','scope')}${studioButton('Assign supplemental case','publish',true,!cls?'disabled':'')}</div></section>`;
+}
+function keyTable(rows) {
+  return `<div class="app-scroll"><table class="app-table"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${safe(r.account)}</td><td class="num">${r.debit?cash(r.debit):'—'}</td><td class="num">${r.credit?cash(r.credit):'—'}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function reviewChoice(d,b) {
+  const a=d.assignment, choice=Lessons.decisions.defaultChoice(a,b);
+  for(const c of a.interactive.controls){const path=d.paths?.[c.id];if(!path||path==='default')continue;
+    const n=v=>Math.max(c.min,Math.min(c.max,c.min+Math.round((v-c.min)/c.step)*c.step));
+    choice[c.id]=c.kind==='basket'?Object.fromEntries(Object.entries(choice[c.id]).map(([k,v])=>[k,n(v*(path==='low'?.5:1.5))])):path==='low'?c.min:c.max;
+  }return choice;
+}
+async function studioTask(label, fn) {
+  if(instructorBusy)return;instructorBusy=true;instructorStatus=label;render();
+  const key=draftKey();
+  try{await fn();}catch(e){instructorStatus=e.message;}finally{instructorBusy=false;if(key===draftKey())saveNotesDraft();render();}
+}
+function wireInstructor() {
+  const on=(s,e,fn)=>{const el=Q(s);if(el)el[e]=fn;};
+  if(instructorBusy)document.querySelectorAll('.app-main input,.app-main textarea,.app-main select,.app-main button,.app-side button,.app-side select').forEach(el=>el.disabled=true);
+  on('#grade-filter','oninput',e=>{gradeFilter=e.target.value;const term=gradeFilter.toLowerCase();document.querySelectorAll('[data-grade-student]').forEach(row=>row.hidden=!row.dataset.gradeStudent.toLowerCase().includes(term));});
+  document.querySelectorAll('[data-case-work]').forEach(el=>el.onclick=()=>studioTask('Loading accounting submissions…',async()=>{const result=await cloud.call('case-work',{assignmentId:el.dataset.caseWork,email:el.dataset.student});studentWork={...result,email:el.dataset.student,classId:cloudClass};}));
+  document.querySelectorAll('[data-studio]').forEach(el=>el.onclick=()=>{
+    const action=el.dataset.studio,d=notesWorkspace();instructorStatus='';
+    if(action.startsWith('assign-')){const form=Q(`[data-period="${action.slice(7)}"]`);form.hidden=!form.hidden;return;}
+    if(action.startsWith('visibility-')){const c=courseCases().find(c=>c.id===action.slice(11));if(!c||!confirm(c.deleted?'Restore this case with the saved student work?':'Hide this case? Saved student work will be retained.'))return;return studioTask('Updating assignment…',async()=>{await cloud.call(c.deleted?'restore-assignment':'delete-assignment',{assignmentId:c.id});await loadCloud();instructorStatus='Assignment updated.';});}
+    if(action.startsWith('copy-')){const c=courseCases().find(c=>c.id===action.slice(5));d.assignment=structuredClone(c.assignment);d.assignment.id=crypto.randomUUID();d.notes=c.assignment.notes;d.title=c.title;d.dueDate='';d.year=c.assignment.year;d.month=c.assignment.month;d.topics={topics:c.assignment.teachingTopics,sourceParagraphs:[0]};d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));d.reviewed={documents:false,accounting:false};dashPage='builder';saveNotesDraft();render();return;}
+    if(action==='notes'){delete d.topics;delete d.assignment;}
+    else if(action==='scope'){delete d.assignment;d.reviewed={documents:false,accounting:false};}
+    else if(['low','default','high'].includes(action)){d.paths=Object.fromEntries(d.assignment.interactive.controls.map(c=>[c.id,action]));}
+    else if(action==='topics')return studioTask('Reading accounting topics. Your notes stay saved while this runs…',async()=>{
+      if(d.notes.trim().length<40||d.notes.length>30000)throw Error('Paste or upload 40–30,000 characters of notes.');
+      const r=await cloud.call('generate',{notes:d.notes,phase:'draft',year:d.year,month:d.month,timelineMode:'manual',depth:'focused',request:d.request});d.topics=r.draft;d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));instructorStatus='Review the extracted topics before generating a case.';
+    });
+    else if(action==='generate'||action==='revise'){
+      const revision=Q('#case-revision')?.value.trim();return studioTask(action==='revise'?'Revising and checking the draft…':'Generating source documents and checking the accounting…',async()=>{
+        if(!d.selected?.length)throw Error('Select at least one supported transaction topic.');
+        if(action==='revise'&&!revision)throw Error('Describe the changes to the draft.');
+        const input={notes:d.notes,year:d.year,month:d.month,timelineMode:'manual',depth:'focused',request:d.request,phase:action==='revise'?'revise':'review',...(action==='revise'?{currentDraft:d.assignment,request:revision}:{draft:{...d.topics,topics:d.topics.topics.filter((_,i)=>d.selected.includes(i))}})};
+        const a=await cloud.call('generate',input);SIMCases.validate(a);d.assignment=a;d.title=a.title.slice(0,120);d.paths={};d.reviewed={documents:false,accounting:false};instructorStatus='Draft ready. Nothing has been assigned.';
+      });
+    }else if(action==='publish')return studioTask('Assigning the reviewed supplemental case…',async()=>{
+      if(!cloudClass)throw Error('Create or select a class first.');if(!d.reviewed.documents||!d.reviewed.accounting)throw Error('Confirm both document and accounting reviews before assigning.');
+      await cloud.call('case-publish',{classId:cloudClass,title:d.title||d.assignment.title,dueDate:d.dueDate||null,assignment:d.assignment,reviewed:d.reviewed});
+      instructorDrafts.delete(draftKey());sessionStorage.removeItem(draftKey());await loadCloud();dashPage='plan';instructorStatus='Supplemental case assigned. The standard course is unchanged.';cloudMessage=instructorStatus;
+    });
+    saveNotesDraft();render();
+  });
+  document.querySelectorAll('.teach-assign').forEach(f=>f.onsubmit=e=>{e.preventDefault();const p=SIM.catalog.find(p=>p.id===f.dataset.period),dueDate=new FormData(f).get('dueDate');studioTask('Saving the course assignment…',async()=>{await cloud.call('lesson-assign',{classId:cloudClass,lessonId:p.id,title:p.n+' · '+p.title,dueDate});await loadCloud();instructorStatus='Period assigned.';cloudMessage=instructorStatus;});});
+  if(dashPage!=='builder')return;
+  const d=notesWorkspace();
+  for(const [id,key] of [['case-notes','notes'],['case-request','request'],['case-title','title'],['case-due','dueDate'],['case-year','year'],['case-month','month']])on('#'+id,'oninput',e=>{d[key]=['year','month'].includes(key)?Number(e.target.value):e.target.value;saveNotesDraft();if(key==='notes'&&Q('#notes-count'))Q('#notes-count').textContent=d.notes.length;});
+  on('#case-instructions','oninput',e=>{d.assignment.instructions=e.target.value;d.reviewed={documents:false,accounting:false};for(const key of ['documents','accounting'])if(Q('#review-'+key))Q('#review-'+key).checked=false;if(Q('[data-studio="publish"]'))Q('[data-studio="publish"]').disabled=true;saveNotesDraft();});
+  on('#notes-file','onchange',e=>{const file=e.target.files[0];if(!file)return;studioTask('Extracting the file text in your browser…',async()=>{const text=await readCourseNotes(file);if(text.length>30000)throw Error('This file contains more than 30,000 characters. Upload a shorter section or paste an excerpt.');d.notes=text;d.source=file.name;instructorStatus='Text loaded. Review it before reading topics.';});});
+  document.querySelectorAll('[data-topic]').forEach(el=>el.onchange=()=>{d.selected=[...document.querySelectorAll('[data-topic]:checked')].map(x=>Number(x.dataset.topic));saveNotesDraft();});
+  for(const key of ['documents','accounting'])on('#review-'+key,'onchange',e=>{d.reviewed[key]=e.target.checked;if(Q('[data-studio="publish"]'))Q('[data-studio="publish"]').disabled=!d.reviewed.documents||!d.reviewed.accounting;saveNotesDraft();});
+  on('#review-business','onchange',e=>{d.business=e.target.value;saveNotesDraft();render();});
+  document.querySelectorAll('[data-review-choice]').forEach(el=>el.onchange=e=>{d.paths={...d.paths,[el.dataset.reviewChoice]:e.target.value};saveNotesDraft();render();});
+  on('#preview-case','onclick',e=>{e.preventDefault();sessionStorage.setItem('ledger-case-preview-'+cloudAccount.id,JSON.stringify({assignment:d.assignment,type:Object.keys(LL.PROFILES).find(k=>LL.PROFILES[k].type===d.business)||'bike'}));location.href='office.html?casePreview=1';});
+}
+function instructorGradebook(side, cls, book) {
+  const periods=book?.lessons||cloudLessons.filter(l=>l.class_id===cloudClass),cases=book?.cases||courseCases().filter(c=>!c.deleted);
+  const columns=[...periods,...cases.map(c=>({...c,kind:'supplement'}))],students=book?.students||[];
+  let body=!cls?'<p class="teach-empty">Create or select a class first.</p>':!book?'<p class="teach-empty">Loading the gradebook…</p>':book.error?`<p role="alert">${safe(book.error)}</p>`:!columns.length?'<p class="teach-empty">Assign a course period or a supplemental case to begin.</p>':!students.length?'<p class="teach-empty">Add your students on the Students page.</p>':`<label class="teach-field teach-filter">Find a student<input id="grade-filter" type="search" value="${safe(gradeFilter)}" placeholder="Email or business name"></label><div class="app-scroll"><table class="app-table"><thead><tr><th scope="col">Student</th>${columns.map(c=>`<th scope="col" class="num">${safe(c.title)}<small>${c.kind==='supplement'?'Supplemental case · ':''}${dueText(c.dueDate)}</small></th>`).join('')}<th scope="col" class="num">Average</th></tr></thead><tbody>${students.map(s=>{
+    const scores=columns.map(c=>(c.kind==='supplement'?s.caseScores:s.lessonScores)?.find(x=>x.assignment_id===c.id));
+    return `<tr data-grade-student="${safe(s.email+' '+(s.business?.name||''))}" ${!(s.email+' '+(s.business?.name||'')).toLowerCase().includes(gradeFilter.toLowerCase())?'hidden':''}><th scope="row"><strong>${safe(s.email)}</strong><small>${safe(s.business?.name||'Not signed in yet')}</small></th>${columns.map((c,i)=>`<td class="num">${scores[i]?.completed===false?'In progress':scores[i]?scoreBadge(scores[i]):'—'}${c.kind==='supplement'&&scores[i]?`<small><button class="app-link" data-case-work="${c.id}" data-student="${safe(s.email)}">View attempts</button></small>`:''}</td>`).join('')}<td class="num">${avg(scores.filter(x=>x&&x.completed!==false))}</td></tr>`;
+  }).join('')}</tbody></table></div><p class="app-note">Only completed work enters the average. Scores use the first accounting attempt; business replies are not graded.</p>`;
+  if(studentWork?.classId===cloudClass)body+=workReview(studentWork);
+  return appFrame(side,`<div class="instructor-workspace">${pageHead('Gradebook',safe(cls?.name||''),'<button class="app-btn alt" data-dash="plan">Open course plan</button>')}<div class="teach-status" role="status">${safe(instructorStatus)}</div><section class="teach-panel">${body}</section></div>`);
+}
+function workReview(work) {
+  const st=work.state;
+  return `<section class="teach-panel"><h2>${safe(work.email)} · Supplemental work</h2>${!st?'<p>This student has not opened the case.</p>':`<p>${st.ended?'Completed':'In progress'} · ${st.first} of ${st.graded} correct on the first try.</p>${work.attempts.filter(a=>a.submitted.event?.kind==='handle').map(a=>{
+    const e=a.submitted.event,it=st.casePeriod.items.find(x=>x.id===e.id);
+    return `<details><summary>${safe(it?.subject||e.id)} · Submission ${a.revision}</summary>${e.action.rows?keyTable(e.action.rows.map(r=>({account:LL.ACC[r.a]?.[0]||r.a,debit:r.d,credit:r.c}))):`<p>${e.action.noEntry?'No entry needed':e.action.choice?'Business instructions sent (not graded).':'No journal lines.'}</p>`}</details>`;
+  }).join('')}`}</section>`;
+}
+function studentCasesPanel(grades) {
+  const cases=cloudCases.filter(c=>!c.deleted),score=c=>cloudCaseScores.find(s=>s.assignment_id===c.id);
+  if(!cases.length)return '';
+  const rows=grades?cases.filter(c=>score(c)?.completed):cases;
+  return `<section class="teach-panel"><h2>Supplemental cases</h2><p class="app-note">Additional practice for your company, with separate books. Your standard course progress is unchanged.</p>${rows.length?`<div class="app-scroll"><table class="app-table"><thead><tr><th>Case</th><th>Due</th><th class="num">${grades?'Score':'Status'}</th></tr></thead><tbody>${rows.sort((a,b)=>String(a.dueDate||'9').localeCompare(String(b.dueDate||'9'))).map(c=>{const s=score(c);return `<tr><td><strong>${safe(c.title)}</strong></td><td>${dueText(c.dueDate).replace('Due ','')}</td><td class="num">${s?.completed?scoreBadge(s):''}${!grades?` <a class="app-link" href="office.html?case=${encodeURIComponent(c.id)}">${s?.completed?'Review':s?'Continue':'Start'}</a>`:''}</td></tr>`;}).join('')}</tbody></table></div>`:'<p class="teach-muted">No completed supplemental cases yet.</p>'}</section>`;
 }
 </script></body></html>
