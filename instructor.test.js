@@ -87,7 +87,7 @@ test('student review failures remain retryable and do not replace the roster',as
 });
 test('a delayed student review does not interrupt assignment editing after navigating away',async()=>{
  const c=view();c.show('overview');let finish,renders=0;c.cloud.call=()=>new Promise(resolve=>finish=resolve);c.render=()=>renders++;
- const pending=c.loadStudentWork('a@example.edu');assert.equal(renders,1);c.dashPage='builder';finish({submissions:[]});await pending;assert.equal(renders,1);
+ const pending=c.loadStudentWork('a@example.edu');assert.equal(renders,1);vm.runInContext("dashPage='builder'",c);finish({submissions:[]});await pending;assert.equal(renders,1);
 });
 test('builder separates review from assignment and going back preserves the draft without another generation call',async()=>{
  const c=view(),a=await generated();c.show('builder');const d=c.notesWorkspace();d.assignment=a;d.notes=a.notes;d.topics={topics:a.teachingTopics};d.selected=[0];d.reviewed={documents:false,accounting:false};

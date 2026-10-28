@@ -3179,7 +3179,7 @@ function wireInstructor() {
   document.querySelectorAll('[data-new-assignment]').forEach(el=>el.onclick=()=>Q('#new-assignment')?.showModal());
   document.querySelectorAll('[data-assignment-tab]').forEach(el=>el.onclick=()=>{assignmentTab=el.dataset.assignmentTab;render();});
   document.querySelectorAll('[data-review-student]').forEach(el=>el.onclick=()=>loadStudentWork(el.dataset.reviewStudent));
-  document.querySelectorAll('[data-close-review]').forEach(el=>el.onclick=()=>{workRequest++;selectedStudent=null;studentWork=null;render();});
+  document.querySelectorAll('[data-close-review]').forEach(el=>el.onclick=()=>{workRequest++;selectedStudent=null;studentWork=null;render();if(typeof matchMedia==='function'&&matchMedia('(max-width:1050px)').matches)Q('.teach-review-layout > .teach-panel')?.scrollIntoView({block:'start',behavior:'instant'});});
   on('#roster-filter','oninput',e=>{rosterFilter=e.target.value;applyRosterFilter();});
   document.querySelectorAll('[data-roster-scope]').forEach(el=>el.onclick=()=>{rosterScope=el.dataset.rosterScope;document.querySelectorAll('[data-roster-scope]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.rosterScope===rosterScope));applyRosterFilter();});
   applyRosterFilter();
