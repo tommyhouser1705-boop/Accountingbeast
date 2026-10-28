@@ -970,6 +970,163 @@ body[data-screen=app] main.shell,body[data-screen=app] #classroom{max-width:none
 .app-sync{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px 16px;margin-bottom:20px;font-size:12px;color:#647084}
 .app-sync button{flex:none}
 </style><style>.instructor-workspace{max-width:1180px;margin:auto;min-width:0}
+.instructor-app{background:#f6f8fc;grid-template-columns:220px minmax(0,1fr)}
+.instructor-app .app-side{background:#fff;padding:28px 18px;gap:22px}
+.instructor-app .app-logo{font:700 24px/1.2 Georgia,serif;letter-spacing:-.04em}
+.teach-area-label{margin:-16px 0 0 7px;color:#718096;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.instructor-app .app-class{font-size:11px;font-weight:600;gap:8px;letter-spacing:.04em;text-transform:uppercase}
+.instructor-app .app-class select{padding:11px 9px;font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;border-color:#d7dfeb;border-radius:8px}
+.instructor-app .app-nav{gap:6px}
+.instructor-app .app-nav button{padding:12px 13px;font-size:13px;font-weight:500;border-radius:8px;box-shadow:none}
+.instructor-app .app-nav .on{background:#eaf1fe;color:#225ab0;font-weight:650}
+.teach-side-tools{border-top:1px solid #e8edf4;padding-top:17px}
+.teach-side-tools .app-nav button,.instructor-app .app-try{font-size:12px;color:#69768b}
+.instructor-app .app-try{display:block;padding:14px 13px;line-height:1.7}
+body[data-screen=app] .instructor-app .app-main{padding:22px 32px 64px;max-width:none;width:100%}
+.instructor-workspace{max-width:1440px}
+.instructor-app .app-sync{padding-bottom:16px;margin-bottom:28px;border-bottom:1px solid #e2e8f1;font-size:11px}
+.instructor-app .app-sync button{font-size:12px;font-weight:600}
+.instructor-app .app-head{margin-bottom:28px;align-items:center}
+.instructor-app .app-head h1{font:650 29px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.04em;color:#182e50}
+.instructor-app .app-head p{font-size:13px;color:#718096;margin-top:5px}
+.instructor-app .app-btn{padding:10px 15px;border-radius:8px;background:#245caa;border-color:#245caa;letter-spacing:0;box-shadow:0 2px 3px #234b8510}
+.instructor-app .app-btn.alt{background:white;border-color:#d7dfeb;color:#29436a;box-shadow:none}
+.instructor-app .app-btn:hover{background:#194b91}
+.instructor-app .app-btn.alt:hover{background:#f1f5fc}
+.instructor-app button,.instructor-app input,.instructor-app select,.instructor-app textarea{font-family:inherit}
+.instructor-app button:focus-visible,.instructor-app a:focus-visible,.instructor-app input:focus-visible,.instructor-app select:focus-visible{outline:3px solid #7eabeb;outline-offset:3px}
+.teach-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.teach-metrics>div{background:#fff;border:1px solid #e1e7f0;border-radius:12px;padding:21px}
+.teach-metrics small,.teach-metrics span{display:block;font-size:11px;line-height:1.5;color:#748096}
+.teach-metrics small{color:#4e5f77;font-weight:600}
+.teach-metrics strong{display:block;font-size:32px;font-weight:650;letter-spacing:-.06em;line-height:1.6;color:#1a3154}
+.teach-metrics em{font-style:normal;font-size:17px;color:#9aa6b8;font-weight:400;letter-spacing:0}
+.teach-current-strip{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#edf3fd;border:1px solid #d9e5f6;border-radius:11px;padding:20px 24px;margin-bottom:26px}
+.teach-current-strip small,.teach-eyebrow{font-size:10px;line-height:1.5;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:#5175a3}
+.teach-current-strip h2{margin:7px 0 5px;font-size:17px;line-height:1.5;letter-spacing:-.02em;color:#193c6b}
+.teach-current-strip p{font-size:12px;color:#627791;margin:0;line-height:1.6}
+.teach-review-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(310px,1fr);gap:22px;align-items:start}
+.teach-review-layout .teach-panel{margin:0;box-shadow:0 3px 10px #20395f03;border-color:#e0e7f0}
+.teach-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.teach-section-head h2{font-size:16px;margin:0;line-height:1.5}
+.teach-section-head h2 small{font-size:12px;color:#96a1b1;font-weight:500;margin-left:8px}
+.teach-section-head p{font-size:11px!important;margin:6px 0 0!important;color:#7b8799!important}
+.teach-section-head h3{font-size:13px;margin:0}
+.teach-list-tools{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 10px}
+.teach-search{flex:1;min-width:140px}
+.teach-search input{font:inherit;font-size:12px;width:100%;box-sizing:border-box;background:#fff;padding:10px 12px;border:1px solid #dbe2ec;border-radius:7px;min-width:0;color:#314865}
+.teach-segments{display:flex;align-items:center;background:#f1f4f9;border-radius:7px;padding:3px;gap:2px}
+.teach-segments button{padding:7px 10px;border:0;border-radius:5px;background:transparent;color:#748199;font-size:11px;line-height:1.4;font-weight:500;cursor:pointer;white-space:nowrap;margin:0}
+.teach-segments button[aria-pressed=true]{background:#fff;color:#2a5389;box-shadow:0 1px 4px #2a426714}
+.teach-activity{display:flex;align-items:center;gap:12px;padding:19px 0;border:0;border-bottom:1px solid #edf0f5;background:white;width:100%;text-align:left;cursor:pointer;color:#213b60;margin:0;border-radius:0;box-shadow:none;font:inherit;white-space:normal}
+.teach-activity:hover,.teach-activity[aria-current=true]{background:#f5f8fe}
+.teach-person{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
+.teach-person>span:last-child{min-width:0}
+.teach-person strong{font-size:12px;line-height:1.5;font-weight:650;display:block;overflow-wrap:anywhere}
+.teach-person small{display:block;font-size:11px;line-height:1.6;color:#8993a4;margin-top:3px;overflow-wrap:anywhere}
+.teach-avatar{display:grid;place-items:center;width:33px;height:33px;flex:none;background:#eaf0fb;color:#5276a4;border-radius:9px;font-size:12px;font-weight:600}
+.teach-activity:nth-child(3n+2) .teach-avatar{background:#e8f3f0;color:#488579}
+.teach-activity:nth-child(3n+3) .teach-avatar{background:#f3eef9;color:#8770a9}
+.teach-activity-work{display:flex;flex-direction:column;gap:5px;max-width:45%;font-size:11px;line-height:1.5;color:#6e7e93;overflow-wrap:anywhere}
+.teach-activity-work small{font-size:10px;color:#8d98a9}
+.teach-row-arrow{font-size:15px;color:#9aabc0;flex:none}
+.teach-pill{display:inline-block;align-self:flex-start;border-radius:5px;padding:4px 7px;font-size:10px;font-weight:600;line-height:1.5;letter-spacing:0;color:#66758b;background:#eef1f6;white-space:normal}
+.teach-pill.working{background:#edf3ff;color:#396cba}
+.teach-pill.complete{background:#e9f5ef;color:#397b61}
+.teach-pill.attention{background:#fff4e4;color:#99662c}
+.teach-pill.supplement{background:#f0ebfb;color:#7b60a9}
+.teach-review-panel{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;scrollbar-width:thin}
+.teach-review-placeholder{min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:15px}
+.teach-review-placeholder>span{background:#edf3fc;color:#7e9ac3;border-radius:12px;font-size:30px;width:60px;height:60px;line-height:60px;margin-bottom:20px}
+.teach-review-placeholder h2{font-size:16px}
+.teach-review-placeholder p{max-width:280px;font-size:12px}
+.teach-review-person{margin-top:20px}
+.teach-review-person strong{font-size:16px}
+.teach-review-person .teach-avatar{width:40px;height:40px}
+.teach-student-summary{display:grid;gap:14px;border-top:1px solid #e5eaf2;border-bottom:1px solid #e5eaf2;margin:20px 0;padding:19px 0}
+.teach-student-summary small{font-size:10px;display:block;color:#8a96a7}
+.teach-student-summary strong{font-size:12px;font-weight:500;color:#3e526e;display:block;line-height:1.6;margin-top:3px}
+.teach-review-tabs{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:15px;border-bottom:1px solid #e5eaf2;margin-bottom:19px}
+.teach-review-tabs button{font:inherit;font-size:10px;padding:7px 8px;background:#fff;color:#6d7a91;border:1px solid #dce3ee;border-radius:6px;cursor:pointer;white-space:normal;text-align:left;margin:0}
+.teach-review-tabs button.on{color:#2861aa;background:#edf3fe;border-color:#ccdff7}
+.teach-submissions p{font-size:12px}
+.teach-submission{border:1px solid #e1e7f0;border-radius:8px;padding:12px;margin:12px 0!important}
+.teach-submission>summary{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:11px;list-style:none}
+.teach-submission>summary:before{content:'›';color:#6080ac}
+.teach-submission[open]>summary:before{content:'⌄'}
+.teach-submission summary>span:first-child{flex:1}
+.teach-submission summary small{display:block;font-weight:400;color:#8490a3;font-size:10px;margin-top:5px}
+.teach-submission .teach-pill{font-size:9px;max-width:100px}
+.teach-submission .teach-paper{padding:10px}
+.teach-submission .doc{padding:15px;font-size:11px}
+.teach-review-panel .teach-panel{padding:0;border:0;box-shadow:none}
+.teach-review-panel .teach-panel h2{font-size:15px}
+.teach-review-panel .teach-panel p{font-size:12px}
+.teach-student-admin{border-top:1px solid #e6eaf1;padding-top:15px;margin:22px 0 0!important}
+.teach-student-admin summary{font-size:11px!important;color:#8691a2!important}
+.teach-student-admin button{margin-top:14px!important;color:#a44d4d!important}
+.teach-invite{display:flex;align-items:center;justify-content:space-between;gap:26px}
+.teach-invite h2{font-size:16px;margin:0}
+.teach-invite p{font-size:12px;max-width:450px;margin-bottom:0}
+.teach-invite .app-inline{flex:1;margin:0;flex-wrap:nowrap}
+.teach-invite input{width:100%}
+.teach-page-tabs{display:flex;gap:26px;margin:0 0 26px;border-bottom:1px solid #dce4f0}
+.teach-page-tabs button{padding:12px 2px;background:none;border:0;border-bottom:3px solid transparent;color:#788499;font-size:12px;line-height:1.6;font-weight:600;border-radius:0;cursor:pointer;margin:0;white-space:normal}
+.teach-page-tabs button[aria-pressed=true]{color:#275da6;border-bottom-color:#356ab4}
+.teach-page-tabs span{background:#e9eef6;color:#59718f;border-radius:4px;padding:2px 6px;font-size:10px;margin-left:7px}
+.teach-assignment-group{margin:0 0 28px}
+.teach-assignment-group>h2{font-size:15px;color:#314866;margin-bottom:14px}
+.teach-assignment-group>h2 small{font-size:11px;color:#8b96a7;font-weight:400;margin-left:8px}
+.teach-assignment-card{background:#fff;border:1px solid #e0e7f1;border-radius:11px;display:flex;align-items:center;justify-content:space-between;padding:23px;gap:20px;margin:12px 0}
+.teach-assignment-card>div:first-child{flex:1;min-width:0}
+.teach-assignment-card h2{font-size:16px;font-weight:600;letter-spacing:-.015em;color:#263f62;margin:12px 0 8px;overflow-wrap:anywhere}
+.teach-assignment-card p{font-size:12px;color:#8190a4;margin:0}
+.teach-assignment-card .teach-actions{gap:18px;font-size:12px;justify-content:flex-end;margin:0}
+.teach-assignment-card .app-link{font-size:12px}
+.teach-assignment-card .app-btn{font-size:11px;padding:7px 10px}
+.teach-progress{height:4px;border-radius:3px;background:#edf1f7;max-width:260px;margin-top:15px;overflow:hidden}
+.teach-progress>span{display:block;height:100%;background:#4f85c8}
+.teach-draft-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;border:1px dashed #bbcae2;background:#eef3fb;border-radius:10px;padding:18px 22px;margin-bottom:25px}
+.teach-draft-banner strong{font-size:12px;color:#34557f}
+.teach-draft-banner small{display:block;font-size:11px;color:#788ca6;margin-top:5px}
+.teach-empty-state{padding:55px 25px;text-align:center;border:1px dashed #d7e1ee;border-radius:12px;background:#fff;margin-bottom:20px}
+.teach-empty-state h2{font-size:19px;color:#304a70;margin:0 0 10px}
+.teach-empty-state p{font-size:13px;line-height:1.8;color:#7b899d;max-width:460px;margin:0 auto 23px}
+.teach-empty-state .app-btn{margin:5px}
+.teach-dialog{width:490px;max-width:calc(100vw - 38px);box-sizing:border-box;border:1px solid #dbe3f0;border-radius:15px;padding:30px;box-shadow:0 20px 90px #15294d30;color:#273e60;background:#fff}
+.teach-dialog::backdrop{background:#12244070;backdrop-filter:blur(3px)}
+.teach-dialog h2{font-size:24px;margin:16px 0 10px;line-height:1.4;letter-spacing:-.03em}
+.teach-dialog p{font-size:13px;line-height:1.8;color:#8190a3;margin-bottom:24px}
+.teach-dialog-close{float:right;font-size:11px!important;padding:5px 8px!important}
+.teach-option{position:relative;display:block;box-sizing:border-box;text-align:left;width:100%;background:#fff;border:1px solid #dce4f0;border-radius:9px;padding:18px 32px 18px 17px;margin:12px 0;color:#2f4c75;cursor:pointer;white-space:normal}
+.teach-option:hover{background:#f4f7fd;border-color:#96b4de}
+.teach-option strong{display:block;font-size:14px;font-weight:600}
+.teach-option span{display:block;font-size:11px;line-height:1.8;color:#8996a8;margin-top:8px}
+.teach-option b{position:absolute;right:13px;top:18px;color:#7b97be}
+.teach-grade-panel{overflow:hidden;min-width:0}
+.teach-grade-panel .app-scroll{border:1px solid #e5eaf2;border-radius:8px}
+.instructor-app .teach-grade-panel .app-table th{font-size:11px;vertical-align:top;background:#f8fafd;padding:12px;min-width:110px}
+.instructor-app .teach-grade-panel .app-table td{font-size:12px;padding:15px 12px}
+.teach-grade-panel th:first-child{position:sticky;left:0;z-index:1;border-right:1px solid #e2e8f2;min-width:165px!important}
+.teach-grade-panel .app-table th small{font-size:10px;margin-top:6px}
+.teach-grade-panel .app-table td small .app-link{font-size:10px}
+.teach-grade-student{font-weight:600!important;font-size:12px!important;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.instructor-app .teach-steps{background:#fff;border:1px solid #dfe6f0;border-radius:10px;padding:0 22px;gap:30px}
+.instructor-app .teach-steps li{font-size:12px;padding:17px 0}
+.teach-builder-footer{position:sticky;bottom:0;background:#f6f8fcf5;border-top:1px solid #dbe4f1;padding:16px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.teach-builder-footer p{font-size:11px;color:#7688a3;max-width:270px;margin:0;line-height:1.7}
+.teach-builder-footer .teach-actions{margin:0}
+.teach-update-notice{font-size:11px!important;background:#edf4ff;border:1px solid #cfdef4;color:#4773a9!important;padding:12px;border-radius:7px}
+.instructor-app .teach-review-list{max-height:75vh;overflow:auto;overscroll-behavior:contain;border-block:1px solid #e2e8f2}
+.instructor-app .teach-review-event{padding-inline:8px}
+.instructor-app .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.instructor-app [hidden]{display:none!important}
+@media(min-width:1600px){body[data-screen=app] .instructor-app .app-main{padding-inline:50px}}
+@media(max-width:1250px){.teach-review-layout{grid-template-columns:minmax(0,1fr) minmax(300px,.9fr)}.teach-metrics{gap:10px}.teach-metrics>div{padding:16px}.teach-activity-work{max-width:44%}.teach-invite{display:block}.teach-invite .app-inline{margin-top:18px}.teach-assignment-card{align-items:flex-start}.teach-assignment-card .teach-actions{max-width:140px;justify-content:flex-start;gap:12px}.teach-grade-layout{grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr)}}
+@media(max-width:1050px){.instructor-app{grid-template-columns:190px minmax(0,1fr)}body[data-screen=app] .instructor-app .app-main{padding:24px}.teach-review-layout{grid-template-columns:1fr}.teach-review-panel{position:static;max-height:none}.teach-review-placeholder{min-height:150px}.teach-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.teach-current-strip{padding:18px}.teach-grade-layout{grid-template-columns:1fr}}
+@media(max-width:780px){.instructor-app{grid-template-columns:minmax(0,1fr)}.instructor-app .app-side{padding:16px;gap:12px}.teach-area-label{display:none}.instructor-app .app-logo{font-size:21px}.instructor-app .app-class{margin-left:auto;flex:0 1 auto;font-size:0;padding:0;max-width:60%}.instructor-app .app-class select{max-width:100%;font-size:12px;padding:8px}.instructor-app .app-nav{flex-wrap:nowrap;gap:3px;width:100%;overflow:auto}.instructor-app .app-nav button{padding:9px;font-size:11px;white-space:nowrap}.teach-side-tools{border:0;padding:0;order:3;display:flex;width:100%}.teach-side-tools .app-nav{width:auto}.instructor-app .app-who{order:3;font-size:10px;padding:0}.instructor-app .app-try{display:none}body[data-screen=app] .instructor-app .app-main{padding:18px 16px 40px}.instructor-app .app-sync{margin-bottom:22px;justify-content:flex-start;gap:8px}.instructor-app .app-head{flex-direction:row;align-items:center;gap:12px;margin-bottom:24px}.instructor-app .app-head h1{font-size:23px}.instructor-app .app-head .app-btn{font-size:11px;padding:9px 11px}.instructor-app .app-head p{font-size:11px}.teach-metrics strong{font-size:28px}.teach-metrics span{font-size:10px}.teach-metrics>div{padding:16px}.teach-current-strip{display:block}.teach-current-strip .app-btn{margin-top:16px;font-size:11px}.teach-activity-work{font-size:10px}.teach-person strong{font-size:11px}.teach-person small{font-size:10px}.teach-avatar{width:28px;height:28px;font-size:10px}.teach-person{gap:8px}.teach-activity{gap:8px}.teach-row-arrow{display:none}.teach-activity-panel{padding:18px}.teach-page-tabs{gap:18px}.teach-page-tabs button{font-size:11px}.teach-assignment-card{display:block;padding:20px}.teach-assignment-card .teach-actions{max-width:none;margin-top:20px;gap:18px}.teach-draft-banner{align-items:flex-start;padding:17px}.teach-draft-banner .app-btn{font-size:11px}.teach-dialog{padding:22px}.teach-invite .app-inline{flex-wrap:wrap}.instructor-app .teach-steps{padding:0 14px;gap:17px}.instructor-app .teach-steps li{font-size:10px}.teach-review-placeholder{min-height:160px}.instructor-app .app-who{overflow-wrap:anywhere;word-break:break-word}}
+@media(prefers-reduced-motion:no-preference){.teach-review-panel{animation:teach-appear .16s ease-out}@keyframes teach-appear{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:none}}}
+@media print{.instructor-app .app-side,.instructor-app .app-sync,.instructor-app .app-btn,.teach-list-tools,.teach-review-tabs,.teach-student-admin,.teach-dialog{display:none!important}.instructor-app{display:block!important;background:white}.teach-review-layout{display:block}.teach-review-panel{max-height:none;overflow:visible;position:static}.teach-metrics{break-inside:avoid}.teach-panel{break-inside:avoid}.instructor-app .teach-review-list{max-height:none;overflow:visible}}
 .teach-panel{background:#fff;border:1px solid #dfe5ee;border-radius:12px;padding:26px;margin:0 0 22px;min-width:0;box-shadow:0 2px 5px #13294b05}
 .teach-panel h2{font-size:20px;letter-spacing:-.025em;margin:0 0 16px;color:#13294b}
 .teach-panel h3{font-size:16px;margin:0 0 14px;color:#13294b}
@@ -2746,13 +2903,14 @@ function submissionDetails(attempt,state){const p=attempt.submitted;if(attempt.a
 let dashPage = (location.hash.match(/^#dash=(\w+)/) || [])[1] || '';
 
 function dashNav(items) {
-  return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
+  return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k || k === 'plan' && dashPage === 'builder' ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
 }
 
 function appFrame(side, main) {
   const msg = cloudMessage ? `<div class="app-msg" role="status">${safe(cloudMessage)}</div>` : '';
   const sync = typeof dashboardRefreshLabel === 'function' ? `<div class="app-sync"><span id="class-sync-status" role="status">${safe(dashboardRefreshLabel())}</span><button id="refresh-class" class="app-link">Refresh class</button></div>` : '';
-  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
+  const instructor = cloudAccount.role !== 'student';
+  return `<div class="app ${instructor ? 'instructor-app' : ''}"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${instructor ? '<span class="teach-area-label">Instructor workspace</span>' : ''}${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
 }
 
 function pageHead(title, sub, action = '') {
@@ -2770,8 +2928,8 @@ function professorHome() {
   const lessons = book?.lessons || cloudLessons.filter((l) => l.class_id === cloudClass);
   const owner = cloudAccount.role === 'owner';
   if (!dashPage || !['overview', 'plan', 'builder', 'gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'overview' : 'classes';
-  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Overview'], ['plan', 'Course plan'], ['gradebook', 'Gradebook'], ['students', 'Students'], ['builder', 'Create from notes'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2">Preview the student office</a>`;
-  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder'].includes(dashPage)) return instructorPage(side, cls, book);
+  const side = `${cloudClasses.length ? `<label class="app-class">Your class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Class activity'], ['plan', 'Assignments'], ['gradebook', 'Gradebook'], ['students', 'Students']])}<div class="teach-side-tools">${dashNav([['classes', 'Manage classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2" target="_blank" rel="noopener">Preview student office ↗</a></div>`;
+  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder', 'students'].includes(dashPage)) return instructorPage(side, cls, book);
   if (typeof instructorGradebook === 'function' && dashPage === 'gradebook') return instructorGradebook(side, cls, book);
   const steps = [[cloudClasses.length > 0, 'Create a class', 'classes'], [students.length > 0, 'Add your students', 'students'], [lessons.length > 0, 'Assign a lesson from the library', 'lessons']];
   const setup = steps.every((s) => s[0]) ? '' : `<div class="app-setup"><b>Get your class ready</b><ol>${steps.map(([done, t, k]) => `<li class="${done ? 'done' : ''}">${done ? t : k === 'lessons' ? `<a href="lessons.html#library">${t}</a>` : `<button class="app-link" data-dash="${k}">${t}</button>`}</li>`).join('')}</ol></div>`;
@@ -2826,11 +2984,13 @@ function studentHome() {
 
 function renderDashboard() {
   const student = cloudAccount.role === 'student';
+  if (!student && typeof captureInstructorView === 'function') captureInstructorView();
   document.body.dataset.screen = 'app';
   Q('#classroom').innerHTML = student ? studentHome() : professorHome();
   const on = (sel, ev, fn) => { const el = Q(sel); if (el) el[ev] = fn; };
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
   if (typeof wireInstructor === 'function' && !student) wireInstructor();
+  if (!student && typeof restoreInstructorView === 'function') restoreInstructorView();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
   if (typeof startDashboardRefresh === 'function') {
     startDashboardRefresh();
@@ -2851,6 +3011,64 @@ function renderDashboard() {
 const instructorDrafts = new Map();
 let instructorBusy = false, instructorStatus = '';
 let studentWork = null, gradeFilter = '';
+let rosterFilter = '', rosterScope = 'all', selectedStudent = null, workRequest = 0, assignmentTab = 'assigned';
+const instructorReviewViews = new Map();
+function captureInstructorView() {
+  const panel=Q('[data-review-key]');if(!panel)return;
+  instructorReviewViews.set(panel.dataset.reviewKey,{scroll:panel.scrollTop,expanded:[...panel.querySelectorAll('[data-work-detail][open]')].map(d=>d.dataset.workDetail)});
+}
+function restoreInstructorView() {
+  const panel=Q('[data-review-key]'),saved=panel&&instructorReviewViews.get(panel.dataset.reviewKey);if(!saved)return;
+  panel.querySelectorAll('[data-work-detail]').forEach(d=>d.open=saved.expanded.includes(d.dataset.workDetail));panel.scrollTop=saved.scroll;
+}
+function newAssignmentButton() {
+  return `<button class="app-btn" data-new-assignment ${!cloudClass?'disabled':''}>+ New assignment</button>`;
+}
+function assignmentDialog() {
+  return `<dialog id="new-assignment" class="teach-dialog" aria-labelledby="assignment-heading"><form method="dialog"><button class="teach-dialog-close app-btn alt" aria-label="Close assignment dialog">Close</button></form><small class="teach-eyebrow">Add to this class</small><h2 id="assignment-heading">New assignment</h2><p>Choose work from the course or create an additional case.</p><button class="teach-option" data-studio="choose-course"><strong>Standard course period</strong><span>Assign one of the 14 periods. Students continue their business and books.</span><b aria-hidden="true">→</b></button><button class="teach-option" data-studio="choose-notes"><strong>Supplemental case from notes</strong><span>Upload or paste your notes. Review the documents and accounting before assigning separate practice.</span><b aria-hidden="true">→</b></button></dialog>`;
+}
+function classStudents(book) { return book?.students || []; }
+function studentNeedsReview(s) { return !s.accountCreated || !s.office || s.office.unavailable || s.office.graded > s.office.first; }
+function reviewSelection() { return selectedStudent?.key === cloudAccount.id + ':' + cloudClass ? selectedStudent.email : ''; }
+function studentIdentity(s) {
+  return `<span class="teach-avatar" aria-hidden="true">${safe((s.business?.founder || s.email).slice(0,1).toUpperCase())}</span><span><strong>${safe(s.business?.founder || s.email)}</strong><small>${safe(s.business?.name || (s.accountCreated?'Company not created yet':'Invitation added'))}</small></span>`;
+}
+function workStatus(s) {
+  return `<span class="teach-pill ${s.office?.completed?'complete':s.office&&!s.office.unavailable?'working':'pending'}">${s.office?.unavailable?'Check saved work':s.office?.completed?'Period completed':s.office?'Working':s.accountCreated?'Not started':'Invited'}</span>`;
+}
+function activityRows(book) {
+  return [...classStudents(book)].sort((a,b)=>String(b.office?.updatedAt||'').localeCompare(String(a.office?.updatedAt||''))).map(s=>`<button class="teach-activity" data-review-student="${safe(s.email)}" data-roster-student="${safe(s.email+' '+(s.business?.name||'')+' '+(s.business?.founder||''))}" data-needs-review="${studentNeedsReview(s)}" ${reviewSelection()===s.email?'aria-current="true"':''}><span class="teach-person">${studentIdentity(s)}</span><span class="teach-activity-work">${workStatus(s)}<span>${rosterProgress(s)}</span><small>Saved ${rosterSaved(s)}</small></span><span class="teach-row-arrow" aria-hidden="true">→</span></button>`).join('');
+}
+function rosterTools() {
+  return `<div class="teach-list-tools"><label class="teach-search"><span class="sr-only">Find a student</span><input id="roster-filter" type="search" value="${safe(rosterFilter)}" placeholder="Find a student or business"></label><div class="teach-segments" aria-label="Student filter"><button data-roster-scope="all" aria-pressed="${rosterScope==='all'}">All students</button><button data-roster-scope="review" aria-pressed="${rosterScope==='review'}">To review</button></div></div>`;
+}
+function classEmpty(cls,book) {
+  return !cls?'<div class="teach-empty-state"><h2>Create your first class</h2><p>Add students, assign the opening month and follow their work here.</p><button class="app-btn" data-dash="classes">Create a class</button></div>':!book?'<p class="teach-empty" role="status">Loading class data…</p>':book.error?`<p class="teach-empty" role="alert">${safe(book.error)} Use Refresh class to try again.</p>`:!classStudents(book).length?'<div class="teach-empty-state"><h2>No students yet</h2><p>Add students by email. They join this class when they create their account.</p><button class="app-btn" data-dash="students">Add students</button></div>':'';
+}
+function classActivity(cls,book) {
+  const students=classStudents(book),working=students.filter(s=>s.office&&!s.office.unavailable),assigned=cloudLessons.filter(l=>l.class_id===cloudClass),cases=courseCases().filter(c=>!c.deleted);
+  const newest=[...assigned].sort((a,b)=>(SIM.findLesson(b.lessonId)?.index||0)-(SIM.findLesson(a.lessonId)?.index||0))[0];
+  const completed=newest?students.filter(s=>s.lessonScores?.some(x=>x.assignment_id===newest.id&&x.completed!==false)).length:0;
+  return pageHead('Class activity',safe(cls?.name||'Your classes'),newAssignmentButton())
+    + `<div class="teach-metrics"><div><small>Students</small><strong>${students.length}</strong><span>${students.filter(s=>!s.accountCreated).length} awaiting an account</span></div><div><small>Office started</small><strong>${working.length}<em> / ${students.length}</em></strong><span>Saved student businesses</span></div><div><small>Accounting to review</small><strong>${students.filter(s=>s.office?.graded>s.office?.first).length}</strong><span>At least one missed first attempt</span></div><div><small>Assigned work</small><strong>${assigned.length+cases.length}</strong><span>${assigned.length} standard · ${cases.length} supplemental</span></div></div>`
+    + `<section class="teach-current-strip"><div><small>Latest course period</small><h2>${safe(newest?.title||'No period assigned')}</h2><p>${newest?`${completed} of ${students.length} completed · ${dueText(newest.dueDate)}`:'Start with the opening month. The same company continues through the course.'}</p></div><button class="app-btn alt" data-dash="plan">View assignments</button></section>`
+    + `<div class="teach-review-layout"><section class="teach-panel teach-activity-panel"><div class="teach-section-head"><div><h2>Student activity</h2><p>Latest saved work first. Select a student to review beside this list.</p></div></div>${rosterTools()}${classEmpty(cls,book)||`<div class="teach-activity-list">${activityRows(book)}</div><p id="roster-no-results" class="teach-empty" hidden>No matching students.</p>`}</section>${studentReviewPanel(book)}</div>`;
+}
+function studentsWorkspace(cls,book) {
+  const students=classStudents(book);
+  return pageHead('Students',safe(cls?.name||'Create a class first.'))
+    + `<section class="teach-panel teach-invite"><div><h2>Add a student</h2><p>No invitation email is sent. Share the site link and ask them to sign up with this address.</p></div><form id="invite-student" class="app-inline"><input name="email" type="email" required maxlength="254" placeholder="student@school.edu" aria-label="Student email" ${!cls?'disabled':''}><button class="app-btn" data-cloud-submit ${!cls?'disabled':''}>Add student</button></form></section>`
+    + `<div class="teach-review-layout"><section class="teach-panel teach-activity-panel"><div class="teach-section-head"><h2>Class roster <small>${students.length}</small></h2></div>${rosterTools()}${!cls||!book||book.error?classEmpty(cls,book):!students.length?'<p class="teach-empty">No students in this class yet. Add an email above.</p>':`<div class="teach-activity-list">${activityRows(book)}</div><p id="roster-no-results" class="teach-empty" hidden>No matching students.</p>`}</section>${studentReviewPanel(book)}</div>`;
+}
+function studentReviewPanel(book) {
+  const email=reviewSelection(),s=classStudents(book).find(s=>s.email===email),work=studentWork?.classId===cloudClass&&studentWork?.accountId===cloudAccount.id&&studentWork.email===email?studentWork:null;
+  if(!s)return '<aside class="teach-review-panel teach-panel"><div class="teach-review-placeholder"><span aria-hidden="true">≡</span><h2>Review student work here</h2><p>Select a student to see their company, course progress and saved accounting submissions without leaving this page.</p></div></aside>';
+  return `<aside class="teach-review-panel teach-panel" data-review-key="${safe(cloudAccount.id+':'+cloudClass+':'+email+':'+(work?.assignmentId||'office'))}" aria-label="Student work review"><header class="teach-section-head"><small class="teach-eyebrow">Student work</small><button class="app-link" data-close-review aria-label="Close student review">Close</button></header><div class="teach-review-person teach-person">${studentIdentity(s)}</div><p class="teach-muted">${safe(s.email)}</p>${workStatus(s)}<div class="teach-student-summary"><div><small>Current work</small><strong>${rosterProgress(s)}</strong></div><div><small>Last saved</small><strong>${rosterSaved(s)}</strong></div><div><small>Completed accounting average</small><strong>${avg([...(s.lessonScores||[]),...(s.caseScores||[])].filter(x=>x.completed!==false))}</strong></div></div><div class="teach-review-tabs"><button class="${work?.type!=='case'?'on':''}" data-review-student="${safe(email)}">Course submissions</button>${(s.caseScores||[]).map(c=>`<button class="${work?.assignmentId===c.assignment_id?'on':''}" data-case-work="${safe(c.assignment_id)}" data-student="${safe(email)}">${safe((book.cases||courseCases()).find(a=>a.id===c.assignment_id)?.title||'Supplemental case')}</button>`).join('')}</div>${work?.type==='office'&&!work.loading&&!work.error&&work.office?.updatedAt!==s.office?.updatedAt?'<p class="teach-update-notice">Newer student work is saved. Select Course submissions to reload.</p>':''}${work?.loading?'<p class="teach-empty" role="status">Loading saved submissions…</p>':work?.error?`<p class="teach-empty" role="alert">${safe(work.error)}</p><button class="app-btn alt" data-review-student="${safe(email)}">Retry course review</button>`:work?.type==='case'?workReview(work):work?officeWorkReview(work):'<p class="teach-muted">Select Course submissions to load the saved work.</p>'}<details class="teach-student-admin" data-work-detail="membership"><summary>Class membership</summary><button class="app-link" data-remove="${safe(email)}">Remove student from this class</button></details></aside>`;
+}
+function officeWorkReview(work) {
+  const submissions=work.submissions||[];
+  return `<div class="teach-submissions"><div class="teach-section-head"><h3>Saved course submissions</h3><button class="app-link" data-review-student="${safe(work.email)}">Reload work</button></div><p class="teach-muted">First accounting attempts determine the grade. Business replies are not graded.</p>${work.truncated?'<p class="teach-muted">Showing the latest 100 submissions.</p>':''}${submissions.length?[...submissions].reverse().map(s=>`<details class="teach-submission" data-work-detail="${safe(s.lessonId+':'+s.sequence)}"><summary><span>${safe(s.subject||s.id)}<small>${safe(s.period)} · Day ${safe(s.day)}</small></span><span class="teach-pill ${!s.graded?'pending':s.correct?'complete':'attention'}">${!s.graded?'Business reply':s.correct?'Correct':'Needs review'}${s.graded&&s.firstAttempt?' · First try':''}</span></summary><p>${safe(s.feedback)}</p>${s.document?`<details data-work-detail="${safe(s.lessonId+':'+s.sequence+':document')}"><summary>Source document</summary><div class="teach-paper">${SIMDOCS.render(s.document)}</div></details>`:''}${s.rows?.length?keyTable(s.rows.map(r=>({account:LL.ACC[r.a]?.[0]||r.a,debit:r.d,credit:r.c}))):s.noEntry?'<p>Student submitted: No entry needed.</p>':Object.keys(s.values||{}).length?`<dl>${Object.entries(s.values).map(([k,v])=>`<dt>${safe(s.fields?.find(f=>f.id===k)?.label||k)}</dt><dd>${safe(v)}</dd>`).join('')}</dl>`:''}</details>`).join(''):'<p class="teach-empty">No saved submissions yet. Work appears after the student saves to their account.</p>'}</div>`;
+}
 function draftKey() { return 'ledger-notes-workspace-' + cloudAccount.id + '-' + cloudClass; }
 function notesWorkspace() {
   const key = draftKey();
@@ -2873,37 +3091,48 @@ function topicSupport(t) {
   return (!t.practice || t.practice === 'transactions') && !/consolidat|derivative|foreign currency|hedg(?:e|ing)|pension|lease liability/i.test(t.name + ' ' + t.method);
 }
 function instructorPage(side, cls, book) {
-  const students = book?.students || [], assigned = cloudLessons.filter(l => l.class_id === cloudClass), cases = courseCases();
-  const go = (text, page) => `<button class="app-btn alt" data-dash="${page}">${text}</button>`;
+  const assigned = cloudLessons.filter(l => l.class_id === cloudClass), cases = courseCases();
   let main;
-  if (dashPage === 'overview') {
-    const latest = [...assigned].sort((a, b) => String(b.dueDate || '').localeCompare(String(a.dueDate || '')))[0];
-    const done = latest ? students.filter(s => s.lessonScores?.some(x => x.assignment_id === latest.id)).length : 0;
-    main = pageHead(cls?.name || 'Your classes', 'Plan the course, review student work and create supplemental cases.', go('Create from notes', 'builder'))
-      + `<section class="teach-panel teach-current"><div><span class="teach-muted">${latest ? 'Most recent assigned period' : 'Course setup'}</span><h2>${safe(latest?.title || 'Assign the opening month')}</h2><p>${latest ? `${done} of ${students.length} students finished · ${dueText(latest.dueDate)}` : 'Create a class, add students and assign the opening month. The same business continues through all 14 periods.'}</p></div>${go(latest ? 'Open gradebook' : 'Open course plan', latest ? 'gradebook' : 'plan')}</section>`
-      + `<div class="teach-columns"><section class="teach-panel"><h2>Course work</h2><ul class="teach-list"><li><div><strong>${assigned.length} standard periods assigned</strong><small>The continuing business and books stay together.</small></div>${go('Course plan', 'plan')}</li><li><div><strong>${cases.filter(c => !c.deleted).length} supplemental cases</strong><small>Additional practice, with separate books and grades.</small></div>${go('Create a case', 'builder')}</li></ul></section><section class="teach-panel"><h2>Class roster</h2><p>${students.length} students${!book ? ' · Loading class data…' : ''}</p><p>First-attempt accounting scores are in the gradebook. Business choices are not graded.</p>${go('Manage students', 'students')}${book?.error ? `<p role="alert">${safe(book.error)}</p>` : ''}</section></div>`;
+  if (dashPage === 'overview' || dashPage === 'students') {
+    main = dashPage === 'overview' ? classActivity(cls,book) : studentsWorkspace(cls,book);
   } else if (dashPage === 'plan') {
-    main = pageHead('Course plan', 'Standard periods keep one continuing business. Notes-based cases are additional practice.', go('Create from notes', 'builder'))
-      + `<section class="teach-panel"><h2>Standard course · 14 periods</h2><div class="app-scroll"><table class="app-table"><thead><tr><th>Period</th><th>Accounting work</th><th>Assignment</th><th>Actions</th></tr></thead><tbody>${SIM.catalog.map((p, i) => {
+    main = pageHead('Assignments', 'Manage course periods and additional cases for this class.', newAssignmentButton())
+      + `<div class="teach-page-tabs" aria-label="Assignment views"><button data-assignment-tab="assigned" aria-pressed="${assignmentTab==='assigned'}">Assigned work <span>${assigned.length+cases.filter(c=>!c.deleted).length}</span></button><button data-assignment-tab="course" aria-pressed="${assignmentTab==='course'}">Standard course · 14 periods</button></div>`;
+    if(assignmentTab==='assigned')main+=assignedWork(cls,book);
+    else main+=
+      `<section class="teach-panel"><h2>Standard course · 14 periods</h2><div class="app-scroll"><table class="app-table"><thead><tr><th>Period</th><th>Accounting work</th><th>Assignment</th><th>Actions</th></tr></thead><tbody>${SIM.catalog.map((p, i) => {
         const a = assigned.find(a => a.lessonId === p.id || p.id === 'ch2' && a.lessonId === 'ch1');
         return `<tr><td><small>Period ${i + 1}</small><strong>${safe(p.n)} · ${safe(p.title)}</strong></td><td>${safe(p.topics.join(', '))}</td><td>${a ? dueText(a.dueDate) : 'Not assigned'}</td><td><div class="teach-actions"><a class="app-link" href="office.html?preview=${p.id}" target="_blank" rel="noopener">Preview</a>${studioButton(a ? 'Edit due date' : 'Assign', 'assign-' + p.id, false, !cloudClass ? 'disabled' : '')}</div><form class="teach-assign" data-period="${p.id}" hidden><label>Due date<input name="dueDate" type="date" value="${safe(a?.dueDate || '')}"></label><button class="app-btn" ${!cloudClass ? 'disabled' : ''}>${a ? 'Save date' : 'Assign period'}</button></form></td></tr>`;
       }).join('')}</tbody></table></div></section><section class="teach-panel"><h2>Supplemental cases</h2><p>These never replace a course period or change the student’s continuing books.</p>${cases.length ? `<ul class="teach-list">${cases.map(c => `<li><div><strong>${safe(c.title)}</strong><small>${c.deleted ? 'Hidden · student work retained' : dueText(c.dueDate)}</small></div><div class="teach-actions">${c.assignment ? studioButton('Review copy', 'copy-' + c.id) : ''}${studioButton(c.deleted ? 'Restore' : 'Hide', 'visibility-' + c.id)}</div></li>`).join('')}</ul>` : '<p class="teach-muted">No supplemental cases assigned.</p>'}</section>`;
   } else main = notesBuilder(cls);
-  return appFrame(side, `<div class="instructor-workspace">${main}</div>`);
+  return appFrame(side, `<div class="instructor-workspace">${main}</div>${assignmentDialog()}`);
+}
+function assignedWork(cls,book) {
+  const periods=cloudLessons.filter(l=>l.class_id===cloudClass),cases=courseCases(),students=classStudents(book),draft=notesWorkspace();
+  const cards=(items,supplement)=>items.map(a=>{
+    const finished=students.filter(s=>(supplement?s.caseScores:s.lessonScores)?.some(x=>x.assignment_id===a.id&&x.completed!==false)).length;
+    return `<article class="teach-assignment-card"><div><span class="teach-pill ${supplement?'supplement':'pending'}">${supplement?'Supplemental case':'Standard period'}</span>${a.deleted?'<span class="teach-pill pending">Hidden</span>':''}<h2>${safe(a.title)}</h2><p>${dueText(a.dueDate)} · ${finished} of ${students.length} completed</p><div class="teach-progress" role="progressbar" aria-label="Completed students" aria-valuemin="0" aria-valuemax="${students.length||1}" aria-valuenow="${finished}"><span style="width:${students.length?finished/students.length*100:0}%"></span></div></div><div class="teach-actions">${supplement?`${a.assignment?studioButton('Review a copy','copy-'+a.id):''}${studioButton(a.deleted?'Restore':'Hide','visibility-'+a.id)}`:`<a class="app-link" href="office.html?preview=${safe(a.lessonId)}" target="_blank" rel="noopener">Preview</a><button class="app-link" data-assignment-tab="course">Edit due date</button>`}<button class="app-link" data-dash="gradebook">View grades</button></div></article>`;
+  }).join('');
+  return `${draft.notes?`<aside class="teach-draft-banner"><div><strong>Private notes draft</strong><small>${draft.assignment?'Ready for your review':draft.topics?'Topics extracted':safe(draft.source||'Notes saved in this tab')}. Not assigned to students.</small></div><button class="app-btn alt" data-dash="builder">Resume draft</button></aside>`:''}${!cls?'<p class="teach-empty">Create a class before assigning work.</p>':!periods.length&&!cases.length?'<section class="teach-empty-state"><h2>Assign the first period</h2><p>The standard course has 14 periods. Notes-based cases are additional and use separate books.</p><button class="app-btn" data-assignment-tab="course">Browse standard course</button><button class="app-btn alt" data-dash="builder">Create from notes</button></section>':`<section class="teach-assignment-group"><h2>Standard course <small>${periods.length} assigned</small></h2>${cards(periods,false)||'<p class="teach-muted">No standard periods assigned.</p>'}</section><section class="teach-assignment-group"><h2>Supplemental cases <small>Separate books and grades</small></h2>${cards(cases,true)||'<p class="teach-muted">No additional cases. Use New assignment to create one from your notes.</p>'}</section>`}`;
 }
 function notesBuilder(cls) {
-  const d = notesWorkspace(), step = d.assignment ? 2 : d.topics ? 1 : 0;
+  const d = notesWorkspace(), step = d.editStep ?? (d.assignment ? d.publishStep ? 3 : 2 : d.topics ? 1 : 0);
   let body;
-  if (step === 0) body = `<div class="teach-columns"><section class="teach-panel"><h2>Source notes</h2><label class="teach-field">Upload PDF, DOCX, TXT or Markdown<input id="notes-file" type="file" accept=".pdf,.docx,.txt,.md"></label><p class="teach-muted">Text is extracted in this browser. Only the text you review below is sent for generation. Max 10 MB; text-based PDFs only.</p><label class="teach-field">Notes<textarea id="case-notes" minlength="40" maxlength="30000" rows="12" placeholder="Paste the accounting notes students have already covered…">${safe(d.notes)}</textarea></label><p class="teach-muted"><span id="notes-count">${d.notes.length}</span> / 30,000 characters${d.source ? ' · ' + safe(d.source) : ''}</p><label class="teach-field">Instructor focus (optional)<textarea id="case-request" maxlength="2000" rows="2">${safe(d.request)}</textarea></label><div class="teach-actions"><label class="teach-field">Practice year<input id="case-year" type="number" min="2020" max="2100" value="${d.year}"></label><label class="teach-field">Starting month<select id="case-month">${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${d.month===i+1?'selected':''}>${new Date(2026,i,1).toLocaleString('en-US',{month:'long'})}</option>`).join('')}</select></label></div>${studioButton('Read topics from notes', 'topics', true)}</section><aside class="teach-panel teach-explainer"><h2>What this creates</h2><p>A supplemental case in the student’s office: business requests, reply-button decisions, source documents and journal entries.</p><p>The continuing 14-period course stays unchanged. Case balances are separate practice books for the same company.</p><p>You’ll review the scope, paperwork and accounting key before assigning it to <strong>${safe(cls?.name || 'a class')}</strong>.</p><small>The draft is saved privately in this browser tab and can be resumed after reloading. Nothing is assigned automatically.</small></aside></div>`;
-  else if (step === 1) body = `<section class="teach-panel"><h2>Choose the taught accounting work</h2><p>Only transaction topics can become graded journal work. Other material stays visible as context; this builder does not create quiz questions or grade standalone statement preparation.</p>${d.topics.topics.map((t,i) => `<label class="teach-topic"><input type="checkbox" data-topic="${i}" ${d.selected.includes(i)?'checked':''} ${topicSupport(t)?'':'disabled'}><span><strong>${safe(t.name)}</strong><small>${safe(t.principle)} ${safe(t.method)}</small><em>${topicSupport(t)?'Journal-entry practice supported':'Context only · not separately graded in this builder'}</em></span></label>`).join('')}<details><summary>Review the source text</summary><pre class="teach-source">${safe(d.notes)}</pre></details><div class="teach-actions">${studioButton('Back to notes','notes')}${studioButton('Generate case draft','generate',true)}</div></section>`;
-  else body = `<section class="teach-panel"><label class="teach-field">Student instructions<textarea id="case-instructions" maxlength="2000" rows="3">${safe(d.assignment.instructions)}</textarea></label><small class="teach-muted">Edit the wording here, or request changes to the documents and accounting below.</small></section>` + draftReview(d, cls);
+  if (step === 0) body = `<div class="teach-columns"><section class="teach-panel"><h2>Source notes</h2><label class="teach-field">Upload PDF, DOCX, TXT or Markdown<input id="notes-file" type="file" accept=".pdf,.docx,.txt,.md"></label><p class="teach-muted">Text is extracted in this browser. Only the text you review below is sent for generation. Max 10 MB; text-based PDFs only.</p><label class="teach-field">Notes<textarea id="case-notes" minlength="40" maxlength="30000" rows="12" placeholder="Paste the accounting notes students have already covered…">${safe(d.notes)}</textarea></label><p class="teach-muted"><span id="notes-count">${d.notes.length}</span> / 30,000 characters${d.source ? ' · ' + safe(d.source) : ''}</p><label class="teach-field">Instructor focus (optional)<textarea id="case-request" maxlength="2000" rows="2">${safe(d.request)}</textarea></label><div class="teach-actions"><label class="teach-field">Practice year<input id="case-year" type="number" min="2020" max="2100" value="${d.year}"></label><label class="teach-field">Starting month<select id="case-month">${Array.from({length:12}, (_,i) => `<option value="${i+1}" ${d.month===i+1?'selected':''}>${new Date(2026,i,1).toLocaleString('en-US',{month:'long'})}</option>`).join('')}</select></label></div>${studioButton('Read topics from notes', 'topics', true)}${d.assignment?studioButton('Return to existing draft','review',false,d.sourceChanged?'disabled':''):''}</section><aside class="teach-panel teach-explainer"><h2>What this creates</h2><p>A supplemental case in the student’s office: business requests, reply-button decisions, source documents and journal entries.</p><p>The continuing 14-period course stays unchanged. Case balances are separate practice books for the same company.</p><p>You’ll review the scope, paperwork and accounting key before assigning it to <strong>${safe(cls?.name || 'a class')}</strong>.</p><small>The draft is saved privately in this browser tab and can be resumed after reloading. Nothing is assigned automatically.</small></aside></div>`;
+  else if (step === 1) body = `<section class="teach-panel"><h2>Choose the taught accounting work</h2><p>Only transaction topics can become graded journal work. Other material stays visible as context; this builder does not create quiz questions or grade standalone statement preparation.</p>${d.topics.topics.map((t,i) => `<label class="teach-topic"><input type="checkbox" data-topic="${i}" ${d.selected.includes(i)?'checked':''} ${topicSupport(t)?'':'disabled'}><span><strong>${safe(t.name)}</strong><small>${safe(t.principle)} ${safe(t.method)}</small><em>${topicSupport(t)?'Journal-entry practice supported':'Context only · not separately graded in this builder'}</em></span></label>`).join('')}<details><summary>Review the source text</summary><pre class="teach-source">${safe(d.notes)}</pre></details><div class="teach-actions">${studioButton('Back to notes','notes')}${studioButton(d.assignment?'Regenerate case draft':'Generate case draft','generate',true)}${d.assignment?studioButton('Return to existing draft','review',false,d.sourceChanged?'disabled':''):''}</div></section>`;
+  else if(step === 2) body = `<section class="teach-panel"><label class="teach-field">Student instructions<textarea id="case-instructions" maxlength="2000" rows="3">${safe(d.assignment.instructions)}</textarea></label><small class="teach-muted">Edit the wording here, or request changes to the documents and accounting below.</small></section>` + draftReview(d, cls);
+  else body = casePublishDetails(d,cls);
   return pageHead('Create from your notes', 'Additional cases only. Your standard course and existing student work are unchanged.')
-    + `<ol class="teach-steps" aria-label="Assignment creation steps">${['Source notes','Set the scope','Review and assign'].map((s,i)=>`<li ${step===i?'aria-current="step"':''}>${i+1}. ${s}</li>`).join('')}</ol><div id="instructor-status" class="teach-status" role="status" aria-live="polite">${safe(instructorStatus)}</div>${body}`;
+    + `<ol class="teach-steps" aria-label="Assignment creation steps">${['Source notes','Set the scope','Review the case','Assign'].map((s,i)=>`<li ${step===i?'aria-current="step"':''}>${i+1}. ${s}</li>`).join('')}</ol><div id="instructor-status" class="teach-status" role="status" aria-live="polite">${safe(instructorStatus)}</div>${body}`;
 }
 function draftReview(d, cls) {
   const b = {name:'Review Cycle',type:d.business || 'Bike repair'}, raw=d.assignment;
   const a = {...raw,instructions:Lessons.personalize(raw.instructions,b),interactive:{...raw.interactive,controls:raw.interactive.controls.map(c=>({...c,label:Lessons.personalize(c.label,b),purpose:Lessons.personalize(c.purpose,b)}))}}, choice = reviewChoice(d, b), scenario = Lessons.expected(a,choice,b);
-  return `<section class="teach-panel"><div class="teach-review-heading"><h2>Review the student’s case</h2><a class="app-btn alt" id="preview-case" href="office.html?casePreview=1" target="_blank" rel="noopener">Open office preview</a></div><p>${safe(a.instructions)}</p><p class="teach-muted">Preview uses example company balances, not a real student’s books. Review the opening balances, documents and key below. Business replies are not graded.</p><label class="teach-field">Example business<select id="review-business">${['Bike repair','Fitness studio','Landscaping company','Photography studio'].map(x=>`<option ${b.type===x?'selected':''}>${x}</option>`).join('')}</select></label><div class="teach-actions">${studioButton('Review smaller choices','low')}${studioButton('Review default choices','default')}${studioButton('Review larger choices','high')}</div><details open><summary>Business replies to review</summary>${a.interactive.controls.map(c=>`<label class="teach-field">${safe(c.label)}<select data-review-choice="${c.id}"><option value="low" ${d.paths?.[c.id]==='low'?'selected':''}>Smaller / earliest</option><option value="default" ${!d.paths?.[c.id]||d.paths[c.id]==='default'?'selected':''}>Default</option><option value="high" ${d.paths?.[c.id]==='high'?'selected':''}>Larger / latest</option></select><small>${safe(c.purpose)}</small></label>`).join('')}</details><details><summary>Opening balances (separate practice books)</summary>${keyTable(a.blueprint.opening)}</details><div class="teach-review-list">${scenario.events.filter(e=>!e.autoPosted&&!Lessons.decisions.isReportEvent(e)).map(e=>`<article class="teach-review-event"><div class="teach-paper">${SIMDOCS.render({type:'record',title:e.title,no:e.id.toUpperCase(),date:e.date,...e.document})}</div><section><h3>Accounting key · ${safe(e.date)}</h3>${e.lines.length?keyTable(e.lines):'<p>No entry. This document is not a transaction.</p>'}</section></article>`).join('')}</div><details><summary>Notes and topic coverage</summary><ul>${a.teachingTopics.map((t,i)=>`<li>${safe(t.name)} · ${a.topicCoverage.some(c=>c.topicIndex===i)?'Covered by source records':'Context only'}</li>`).join('')}</ul><pre class="teach-source">${safe(d.notes)}</pre></details></section><section class="teach-panel"><h2>Request a revision</h2><label class="teach-field">Changes to this private draft<textarea id="case-revision" maxlength="2000" rows="3" placeholder="For example, use a 30-day supplier invoice and a later payment confirmation."></textarea></label>${studioButton('Revise draft','revise')}<p class="teach-muted">A revision requires a fresh review. Published copies and student work are never changed.</p></section><section class="teach-panel"><h2>Assign to ${safe(cls?.name||'a class')}</h2><label class="teach-field">Title<input id="case-title" maxlength="120" value="${safe(d.title || a.title)}"></label><label class="teach-field">Due date (optional)<input id="case-due" type="date" value="${safe(d.dueDate||'')}"></label><label class="teach-topic"><input id="review-documents" type="checkbox" ${d.reviewed.documents?'checked':''}><span>I reviewed the source documents and business replies.</span></label><label class="teach-topic"><input id="review-accounting" type="checkbox" ${d.reviewed.accounting?'checked':''}><span>I checked the opening balances and accounting key across the relevant reply paths.</span></label><p class="teach-muted">A separate gradebook column is added. No standard period is replaced.</p><div class="teach-actions">${studioButton('Back to scope','scope')}${studioButton('Assign supplemental case','publish',true,!cls?'disabled':'')}</div></section>`;
+  return `<section class="teach-panel"><div class="teach-review-heading"><h2>Review the student’s case</h2><a class="app-btn alt" id="preview-case" href="office.html?casePreview=1" target="_blank" rel="noopener">Open office preview</a></div><p>${safe(a.instructions)}</p><p class="teach-muted">Preview uses example company balances, not a real student’s books. Review the opening balances, documents and key below. Business replies are not graded.</p><label class="teach-field">Example business<select id="review-business">${['Bike repair','Fitness studio','Landscaping company','Photography studio'].map(x=>`<option ${b.type===x?'selected':''}>${x}</option>`).join('')}</select></label><div class="teach-actions">${studioButton('Review smaller choices','low')}${studioButton('Review default choices','default')}${studioButton('Review larger choices','high')}</div><details open><summary>Business replies to review</summary>${a.interactive.controls.map(c=>`<label class="teach-field">${safe(c.label)}<select data-review-choice="${c.id}"><option value="low" ${d.paths?.[c.id]==='low'?'selected':''}>Smaller / earliest</option><option value="default" ${!d.paths?.[c.id]||d.paths[c.id]==='default'?'selected':''}>Default</option><option value="high" ${d.paths?.[c.id]==='high'?'selected':''}>Larger / latest</option></select><small>${safe(c.purpose)}</small></label>`).join('')}</details><details><summary>Opening balances (separate practice books)</summary>${keyTable(a.blueprint.opening)}</details><div class="teach-review-list">${scenario.events.filter(e=>!e.autoPosted&&!Lessons.decisions.isReportEvent(e)).map(e=>`<article class="teach-review-event"><div class="teach-paper">${SIMDOCS.render({type:'record',title:e.title,no:e.id.toUpperCase(),date:e.date,...e.document})}</div><section><h3>Accounting key · ${safe(e.date)}</h3>${e.lines.length?keyTable(e.lines):'<p>No entry. This document is not a transaction.</p>'}</section></article>`).join('')}</div><details><summary>Notes and topic coverage</summary><ul>${a.teachingTopics.map((t,i)=>`<li>${safe(t.name)} · ${a.topicCoverage.some(c=>c.topicIndex===i)?'Covered by source records':'Context only'}</li>`).join('')}</ul><pre class="teach-source">${safe(d.notes)}</pre></details></section><section class="teach-panel"><h2>Request a revision</h2><label class="teach-field">Changes to this private draft<textarea id="case-revision" maxlength="2000" rows="3" placeholder="For example, use a 30-day supplier invoice and a later payment confirmation."></textarea></label>${studioButton('Revise draft','revise')}<p class="teach-muted">A revision requires a fresh review. Published copies and student work are never changed.</p></section><div class="teach-builder-footer"><p>Documents and accounting keys are visible to instructors only.</p><div class="teach-actions">${studioButton('Back to scope','scope')}${studioButton('Continue to assignment','assignment-details',true)}</div></div>`;
+}
+function casePublishDetails(d,cls) {
+  const a=d.assignment;
+  return `<section class="teach-panel"><h2>Assign to ${safe(cls?.name||'a class')}</h2><label class="teach-field">Title<input id="case-title" maxlength="120" value="${safe(d.title || a.title)}"></label><label class="teach-field">Due date (optional)<input id="case-due" type="date" value="${safe(d.dueDate||'')}"></label><label class="teach-topic"><input id="review-documents" type="checkbox" ${d.reviewed.documents?'checked':''}><span>I reviewed the source documents and business replies.</span></label><label class="teach-topic"><input id="review-accounting" type="checkbox" ${d.reviewed.accounting?'checked':''}><span>I checked the opening balances and accounting key across the relevant reply paths.</span></label><p class="teach-muted">A separate gradebook column is added. No standard period is replaced.</p><div class="teach-actions">${studioButton('Back to case review','review')}${studioButton('Assign supplemental case','publish',true,!cls?'disabled':'')}</div></section>`;
 }
 function keyTable(rows) {
   return `<div class="app-scroll"><table class="app-table"><thead><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${safe(r.account)}</td><td class="num">${r.debit?cash(r.debit):'—'}</td><td class="num">${r.credit?cash(r.credit):'—'}</td></tr>`).join('')}</tbody></table></div>`;
@@ -2920,43 +3149,79 @@ async function studioTask(label, fn) {
   const key=draftKey();
   try{await fn();}catch(e){instructorStatus=e.message;}finally{instructorBusy=false;if(key===draftKey())saveNotesDraft();render();}
 }
+function revealStudentReview() {
+  const panel=Q('[data-review-key]');
+  if(panel&&typeof matchMedia==='function'&&matchMedia('(max-width:1050px)').matches){panel.tabIndex=-1;panel.focus({preventScroll:true});panel.scrollIntoView({block:'start',behavior:'instant'});}
+}
+async function loadStudentWork(email, assignmentId) {
+  const key=cloudAccount.id+':'+cloudClass,classId=cloudClass,accountId=cloudAccount.id,request=++workRequest;
+  selectedStudent={key,email};
+  studentWork={email,classId,accountId,assignmentId,type:assignmentId?'case':'office',loading:true};
+  render();
+  revealStudentReview();
+  try {
+    const result=await cloud.call(assignmentId?'case-work':'office-work',assignmentId?{assignmentId,email}:{classId,email});
+    if(request!==workRequest||key!==cloudAccount.id+':'+cloudClass||reviewSelection()!==email)return;
+    studentWork={...studentWork,...result,loading:false};
+  } catch(e) {
+    if(request!==workRequest||key!==cloudAccount.id+':'+cloudClass||reviewSelection()!==email)return;
+    studentWork={...studentWork,error:e.message,loading:false};
+  }
+  if(['overview','students','gradebook'].includes(dashPage)){render();revealStudentReview();}
+}
+function applyRosterFilter() {
+  const term=rosterFilter.toLowerCase();let count=0;
+  document.querySelectorAll('[data-roster-student]').forEach(el=>{el.hidden=!el.dataset.rosterStudent.toLowerCase().includes(term)||rosterScope==='review'&&el.dataset.needsReview!=='true';if(!el.hidden)count++;});
+  const empty=Q('#roster-no-results');if(empty)empty.hidden=count>0;
+}
 function wireInstructor() {
   const on=(s,e,fn)=>{const el=Q(s);if(el)el[e]=fn;};
+  document.querySelectorAll('[data-new-assignment]').forEach(el=>el.onclick=()=>Q('#new-assignment')?.showModal());
+  document.querySelectorAll('[data-assignment-tab]').forEach(el=>el.onclick=()=>{assignmentTab=el.dataset.assignmentTab;render();});
+  document.querySelectorAll('[data-review-student]').forEach(el=>el.onclick=()=>loadStudentWork(el.dataset.reviewStudent));
+  document.querySelectorAll('[data-close-review]').forEach(el=>el.onclick=()=>{workRequest++;selectedStudent=null;studentWork=null;render();if(typeof matchMedia==='function'&&matchMedia('(max-width:1050px)').matches)Q('.teach-review-layout > .teach-panel')?.scrollIntoView({block:'start',behavior:'instant'});});
+  on('#roster-filter','oninput',e=>{rosterFilter=e.target.value;applyRosterFilter();});
+  document.querySelectorAll('[data-roster-scope]').forEach(el=>el.onclick=()=>{rosterScope=el.dataset.rosterScope;document.querySelectorAll('[data-roster-scope]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.rosterScope===rosterScope));applyRosterFilter();});
+  applyRosterFilter();
   if(instructorBusy)document.querySelectorAll('.app-main input,.app-main textarea,.app-main select,.app-main button,.app-side button,.app-side select').forEach(el=>el.disabled=true);
   on('#grade-filter','oninput',e=>{gradeFilter=e.target.value;const term=gradeFilter.toLowerCase();document.querySelectorAll('[data-grade-student]').forEach(row=>row.hidden=!row.dataset.gradeStudent.toLowerCase().includes(term));});
-  document.querySelectorAll('[data-case-work]').forEach(el=>el.onclick=()=>studioTask('Loading accounting submissions…',async()=>{const result=await cloud.call('case-work',{assignmentId:el.dataset.caseWork,email:el.dataset.student});studentWork={...result,email:el.dataset.student,classId:cloudClass};}));
+  document.querySelectorAll('[data-case-work]').forEach(el=>el.onclick=()=>loadStudentWork(el.dataset.student,el.dataset.caseWork));
   document.querySelectorAll('[data-studio]').forEach(el=>el.onclick=()=>{
     const action=el.dataset.studio,d=notesWorkspace();instructorStatus='';
+    if(['review','assignment-details','publish'].includes(action)&&d.sourceChanged){instructorStatus='Source notes changed. Read the topics and generate a new draft before assigning.';render();return;}
+    if(action==='choose-course'||action==='choose-notes'){Q('#new-assignment')?.close();dashPage=action==='choose-course'?'plan':'builder';assignmentTab='course';render();return;}
     if(action.startsWith('assign-')){const form=Q(`[data-period="${action.slice(7)}"]`);form.hidden=!form.hidden;return;}
     if(action.startsWith('visibility-')){const c=courseCases().find(c=>c.id===action.slice(11));if(!c||!confirm(c.deleted?'Restore this case with the saved student work?':'Hide this case? Saved student work will be retained.'))return;return studioTask('Updating assignment…',async()=>{await cloud.call(c.deleted?'restore-assignment':'delete-assignment',{assignmentId:c.id});await loadCloud();instructorStatus='Assignment updated.';});}
-    if(action.startsWith('copy-')){const c=courseCases().find(c=>c.id===action.slice(5));d.assignment=structuredClone(c.assignment);d.assignment.id=crypto.randomUUID();d.notes=c.assignment.notes;d.title=c.title;d.dueDate='';d.year=c.assignment.year;d.month=c.assignment.month;d.topics={topics:c.assignment.teachingTopics,sourceParagraphs:[0]};d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));d.reviewed={documents:false,accounting:false};dashPage='builder';saveNotesDraft();render();return;}
-    if(action==='notes'){delete d.topics;delete d.assignment;}
-    else if(action==='scope'){delete d.assignment;d.reviewed={documents:false,accounting:false};}
+    if(action.startsWith('copy-')){const c=courseCases().find(c=>c.id===action.slice(5));d.editStep=null;d.publishStep=false;d.sourceChanged=false;d.assignment=structuredClone(c.assignment);d.assignment.id=crypto.randomUUID();d.notes=c.assignment.notes;d.title=c.title;d.dueDate='';d.year=c.assignment.year;d.month=c.assignment.month;d.topics={topics:c.assignment.teachingTopics,sourceParagraphs:[0]};d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));d.reviewed={documents:false,accounting:false};dashPage='builder';saveNotesDraft();render();return;}
+    if(action==='notes'){d.editStep=0;}
+    else if(action==='scope'){d.editStep=1;}
+    else if(action==='review'){d.editStep=null;d.publishStep=false;}
+    else if(action==='assignment-details'){d.editStep=null;d.publishStep=true;}
     else if(['low','default','high'].includes(action)){d.paths=Object.fromEntries(d.assignment.interactive.controls.map(c=>[c.id,action]));}
     else if(action==='topics')return studioTask('Reading accounting topics. Your notes stay saved while this runs…',async()=>{
       if(d.notes.trim().length<40||d.notes.length>30000)throw Error('Paste or upload 40–30,000 characters of notes.');
-      const r=await cloud.call('generate',{notes:d.notes,phase:'draft',year:d.year,month:d.month,timelineMode:'manual',depth:'focused',request:d.request});d.topics=r.draft;d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));instructorStatus='Review the extracted topics before generating a case.';
+      const r=await cloud.call('generate',{notes:d.notes,phase:'draft',year:d.year,month:d.month,timelineMode:'manual',depth:'focused',request:d.request});d.topics=r.draft;d.sourceChanged=false;delete d.assignment;d.editStep=null;d.publishStep=false;d.selected=d.topics.topics.map((t,i)=>i).filter(i=>topicSupport(d.topics.topics[i]));instructorStatus='Review the extracted topics before generating a case.';
     });
     else if(action==='generate'||action==='revise'){
       const revision=Q('#case-revision')?.value.trim();return studioTask(action==='revise'?'Revising and checking the draft…':'Generating source documents and checking the accounting…',async()=>{
         if(!d.selected?.length)throw Error('Select at least one supported transaction topic.');
         if(action==='revise'&&!revision)throw Error('Describe the changes to the draft.');
         const input={notes:d.notes,year:d.year,month:d.month,timelineMode:'manual',depth:'focused',request:d.request,phase:action==='revise'?'revise':'review',...(action==='revise'?{currentDraft:d.assignment,request:revision}:{draft:{...d.topics,topics:d.topics.topics.filter((_,i)=>d.selected.includes(i))}})};
-        const a=await cloud.call('generate',input);SIMCases.validate(a);d.assignment=a;d.title=a.title.slice(0,120);d.paths={};d.reviewed={documents:false,accounting:false};instructorStatus='Draft ready. Nothing has been assigned.';
+        const a=await cloud.call('generate',input);SIMCases.validate(a);d.assignment=a;d.sourceChanged=false;d.editStep=null;d.publishStep=false;d.title=a.title.slice(0,120);d.paths={};d.reviewed={documents:false,accounting:false};instructorStatus='Draft ready. Nothing has been assigned.';
       });
     }else if(action==='publish')return studioTask('Assigning the reviewed supplemental case…',async()=>{
       if(!cloudClass)throw Error('Create or select a class first.');if(!d.reviewed.documents||!d.reviewed.accounting)throw Error('Confirm both document and accounting reviews before assigning.');
       await cloud.call('case-publish',{classId:cloudClass,title:d.title||d.assignment.title,dueDate:d.dueDate||null,assignment:d.assignment,reviewed:d.reviewed});
-      instructorDrafts.delete(draftKey());sessionStorage.removeItem(draftKey());await loadCloud();dashPage='plan';instructorStatus='Supplemental case assigned. The standard course is unchanged.';cloudMessage=instructorStatus;
+      instructorDrafts.delete(draftKey());sessionStorage.removeItem(draftKey());await loadCloud();assignmentTab='assigned';dashPage='plan';instructorStatus='Supplemental case assigned. The standard course is unchanged.';cloudMessage=instructorStatus;
     });
     saveNotesDraft();render();
   });
   document.querySelectorAll('.teach-assign').forEach(f=>f.onsubmit=e=>{e.preventDefault();const p=SIM.catalog.find(p=>p.id===f.dataset.period),dueDate=new FormData(f).get('dueDate');studioTask('Saving the course assignment…',async()=>{await cloud.call('lesson-assign',{classId:cloudClass,lessonId:p.id,title:p.n+' · '+p.title,dueDate});await loadCloud();instructorStatus='Period assigned.';cloudMessage=instructorStatus;});});
   if(dashPage!=='builder')return;
   const d=notesWorkspace();
-  for(const [id,key] of [['case-notes','notes'],['case-request','request'],['case-title','title'],['case-due','dueDate'],['case-year','year'],['case-month','month']])on('#'+id,'oninput',e=>{d[key]=['year','month'].includes(key)?Number(e.target.value):e.target.value;saveNotesDraft();if(key==='notes'&&Q('#notes-count'))Q('#notes-count').textContent=d.notes.length;});
+  for(const [id,key] of [['case-notes','notes'],['case-request','request'],['case-title','title'],['case-due','dueDate'],['case-year','year'],['case-month','month']])on('#'+id,'oninput',e=>{d[key]=['year','month'].includes(key)?Number(e.target.value):e.target.value;if(['notes','request','year','month'].includes(key)&&d.assignment){d.sourceChanged=true;d.reviewed={documents:false,accounting:false};instructorStatus='Source notes changed. Read the topics and generate a new draft before assigning.';if(Q('#instructor-status'))Q('#instructor-status').textContent=instructorStatus;if(Q('[data-studio="review"]'))Q('[data-studio="review"]').disabled=true;}saveNotesDraft();if(key==='notes'&&Q('#notes-count'))Q('#notes-count').textContent=d.notes.length;});
   on('#case-instructions','oninput',e=>{d.assignment.instructions=e.target.value;d.reviewed={documents:false,accounting:false};for(const key of ['documents','accounting'])if(Q('#review-'+key))Q('#review-'+key).checked=false;if(Q('[data-studio="publish"]'))Q('[data-studio="publish"]').disabled=true;saveNotesDraft();});
-  on('#notes-file','onchange',e=>{const file=e.target.files[0];if(!file)return;studioTask('Extracting the file text in your browser…',async()=>{const text=await readCourseNotes(file);if(text.length>30000)throw Error('This file contains more than 30,000 characters. Upload a shorter section or paste an excerpt.');d.notes=text;d.source=file.name;instructorStatus='Text loaded. Review it before reading topics.';});});
+  on('#notes-file','onchange',e=>{const file=e.target.files[0];if(!file)return;studioTask('Extracting the file text in your browser…',async()=>{const text=await readCourseNotes(file);if(text.length>30000)throw Error('This file contains more than 30,000 characters. Upload a shorter section or paste an excerpt.');d.notes=text;d.source=file.name;if(d.assignment){d.sourceChanged=true;d.reviewed={documents:false,accounting:false};}instructorStatus='Text loaded. Review it before reading topics.';});});
   document.querySelectorAll('[data-topic]').forEach(el=>el.onchange=()=>{d.selected=[...document.querySelectorAll('[data-topic]:checked')].map(x=>Number(x.dataset.topic));saveNotesDraft();});
   for(const key of ['documents','accounting'])on('#review-'+key,'onchange',e=>{d.reviewed[key]=e.target.checked;if(Q('[data-studio="publish"]'))Q('[data-studio="publish"]').disabled=!d.reviewed.documents||!d.reviewed.accounting;saveNotesDraft();});
   on('#review-business','onchange',e=>{d.business=e.target.value;saveNotesDraft();render();});
@@ -2968,16 +3233,15 @@ function instructorGradebook(side, cls, book) {
   const columns=[...periods,...cases.map(c=>({...c,kind:'supplement'}))],students=book?.students||[];
   let body=!cls?'<p class="teach-empty">Create or select a class first.</p>':!book?'<p class="teach-empty">Loading the gradebook…</p>':book.error?`<p role="alert">${safe(book.error)}</p>`:!columns.length?'<p class="teach-empty">Assign a course period or a supplemental case to begin.</p>':!students.length?'<p class="teach-empty">Add your students on the Students page.</p>':`<label class="teach-field teach-filter">Find a student<input id="grade-filter" type="search" value="${safe(gradeFilter)}" placeholder="Email or business name"></label><div class="app-scroll"><table class="app-table"><thead><tr><th scope="col">Student</th>${columns.map(c=>`<th scope="col" class="num">${safe(c.title)}<small>${c.kind==='supplement'?'Supplemental case · ':''}${dueText(c.dueDate)}</small></th>`).join('')}<th scope="col" class="num">Average</th></tr></thead><tbody>${students.map(s=>{
     const scores=columns.map(c=>(c.kind==='supplement'?s.caseScores:s.lessonScores)?.find(x=>x.assignment_id===c.id));
-    return `<tr data-grade-student="${safe(s.email+' '+(s.business?.name||''))}" ${!(s.email+' '+(s.business?.name||'')).toLowerCase().includes(gradeFilter.toLowerCase())?'hidden':''}><th scope="row"><strong>${safe(s.email)}</strong><small>${safe(s.business?.name||'Not signed in yet')}</small></th>${columns.map((c,i)=>`<td class="num">${scores[i]?.completed===false?'In progress':scores[i]?scoreBadge(scores[i]):'—'}${c.kind==='supplement'&&scores[i]?`<small><button class="app-link" data-case-work="${c.id}" data-student="${safe(s.email)}">View attempts</button></small>`:''}</td>`).join('')}<td class="num">${avg(scores.filter(x=>x&&x.completed!==false))}</td></tr>`;
+    return `<tr data-grade-student="${safe(s.email+' '+(s.business?.name||''))}" ${!(s.email+' '+(s.business?.name||'')).toLowerCase().includes(gradeFilter.toLowerCase())?'hidden':''}><th scope="row"><button class="app-link teach-grade-student" data-review-student="${safe(s.email)}">${safe(s.business?.founder||s.email)}</button><small>${safe(s.business?.name||s.email)}</small></th>${columns.map((c,i)=>`<td class="num">${scores[i]?.completed===false?'In progress':scores[i]?scoreBadge(scores[i]):'—'}${c.kind==='supplement'&&scores[i]?`<small><button class="app-link" data-case-work="${c.id}" data-student="${safe(s.email)}">View attempts</button></small>`:''}</td>`).join('')}<td class="num">${avg(scores.filter(x=>x&&x.completed!==false))}</td></tr>`;
   }).join('')}</tbody></table></div><p class="app-note">Only completed work enters the average. Scores use the first accounting attempt; business replies are not graded.</p>`;
-  if(studentWork?.classId===cloudClass)body+=workReview(studentWork);
-  return appFrame(side,`<div class="instructor-workspace">${pageHead('Gradebook',safe(cls?.name||''),'<button class="app-btn alt" data-dash="plan">Open course plan</button>')}<div class="teach-status" role="status">${safe(instructorStatus)}</div><section class="teach-panel">${body}</section></div>`);
+  return appFrame(side,`<div class="instructor-workspace">${pageHead('Gradebook',safe(cls?.name||''),newAssignmentButton())}<div class="teach-status" role="status">${safe(instructorStatus)}</div><div class="teach-review-layout teach-grade-layout"><section class="teach-panel teach-grade-panel">${body}</section>${studentReviewPanel(book)}</div></div>${assignmentDialog()}`);
 }
 function workReview(work) {
   const st=work.state;
   return `<section class="teach-panel"><h2>${safe(work.email)} · Supplemental work</h2>${!st?'<p>This student has not opened the case.</p>':`<p>${st.ended?'Completed':'In progress'} · ${st.first} of ${st.graded} correct on the first try.</p>${work.attempts.filter(a=>a.submitted.event?.kind==='handle').map(a=>{
     const e=a.submitted.event,it=st.casePeriod.items.find(x=>x.id===e.id);
-    return `<details><summary>${safe(it?.subject||e.id)} · Submission ${a.revision}</summary>${e.action.rows?keyTable(e.action.rows.map(r=>({account:LL.ACC[r.a]?.[0]||r.a,debit:r.d,credit:r.c}))):`<p>${e.action.noEntry?'No entry needed':e.action.choice?'Business instructions sent (not graded).':'No journal lines.'}</p>`}</details>`;
+    return `<details data-work-detail="case:${safe(work.assignmentId)}:${a.revision}"><summary>${safe(it?.subject||e.id)} · Submission ${a.revision}</summary>${e.action.rows?keyTable(e.action.rows.map(r=>({account:LL.ACC[r.a]?.[0]||r.a,debit:r.d,credit:r.c}))):`<p>${e.action.noEntry?'No entry needed':e.action.choice?'Business instructions sent (not graded).':'No journal lines.'}</p>`}</details>`;
   }).join('')}`}</section>`;
 }
 function studentCasesPanel(grades) {

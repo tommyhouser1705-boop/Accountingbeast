@@ -2,13 +2,14 @@
 let dashPage = (location.hash.match(/^#dash=(\w+)/) || [])[1] || '';
 
 function dashNav(items) {
-  return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
+  return `<nav class="app-nav">${items.map(([k, t, href]) => href ? `<a href="${href}">${t}</a>` : `<button data-dash="${k}" class="${dashPage === k || k === 'plan' && dashPage === 'builder' ? 'on' : ''}">${t}</button>`).join('')}</nav>`;
 }
 
 function appFrame(side, main) {
   const msg = cloudMessage ? `<div class="app-msg" role="status">${safe(cloudMessage)}</div>` : '';
   const sync = typeof dashboardRefreshLabel === 'function' ? `<div class="app-sync"><span id="class-sync-status" role="status">${safe(dashboardRefreshLabel())}</span><button id="refresh-class" class="app-link">Refresh class</button></div>` : '';
-  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
+  const instructor = cloudAccount.role !== 'student';
+  return `<div class="app ${instructor ? 'instructor-app' : ''}"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${instructor ? '<span class="teach-area-label">Instructor workspace</span>' : ''}${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
 }
 
 function pageHead(title, sub, action = '') {
@@ -26,8 +27,8 @@ function professorHome() {
   const lessons = book?.lessons || cloudLessons.filter((l) => l.class_id === cloudClass);
   const owner = cloudAccount.role === 'owner';
   if (!dashPage || !['overview', 'plan', 'builder', 'gradebook', 'students', 'classes', 'access'].includes(dashPage)) dashPage = cloudClasses.length ? 'overview' : 'classes';
-  const side = `${cloudClasses.length ? `<label class="app-class">Class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Overview'], ['plan', 'Course plan'], ['gradebook', 'Gradebook'], ['students', 'Students'], ['builder', 'Create from notes'], ['classes', 'Classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2">Preview the student office</a>`;
-  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder'].includes(dashPage)) return instructorPage(side, cls, book);
+  const side = `${cloudClasses.length ? `<label class="app-class">Your class<select id="cloud-class">${classOptions()}</select></label>` : ''}${dashNav([['overview', 'Class activity'], ['plan', 'Assignments'], ['gradebook', 'Gradebook'], ['students', 'Students']])}<div class="teach-side-tools">${dashNav([['classes', 'Manage classes'], ...(owner ? [['access', 'Instructor access']] : [])])}<a class="app-try" href="office.html?preview=ch2" target="_blank" rel="noopener">Preview student office ↗</a></div>`;
+  if (typeof instructorPage === 'function' && ['overview', 'plan', 'builder', 'students'].includes(dashPage)) return instructorPage(side, cls, book);
   if (typeof instructorGradebook === 'function' && dashPage === 'gradebook') return instructorGradebook(side, cls, book);
   const steps = [[cloudClasses.length > 0, 'Create a class', 'classes'], [students.length > 0, 'Add your students', 'students'], [lessons.length > 0, 'Assign a lesson from the library', 'lessons']];
   const setup = steps.every((s) => s[0]) ? '' : `<div class="app-setup"><b>Get your class ready</b><ol>${steps.map(([done, t, k]) => `<li class="${done ? 'done' : ''}">${done ? t : k === 'lessons' ? `<a href="lessons.html#library">${t}</a>` : `<button class="app-link" data-dash="${k}">${t}</button>`}</li>`).join('')}</ol></div>`;
@@ -82,11 +83,13 @@ function studentHome() {
 
 function renderDashboard() {
   const student = cloudAccount.role === 'student';
+  if (!student && typeof captureInstructorView === 'function') captureInstructorView();
   document.body.dataset.screen = 'app';
   Q('#classroom').innerHTML = student ? studentHome() : professorHome();
   const on = (sel, ev, fn) => { const el = Q(sel); if (el) el[ev] = fn; };
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
   if (typeof wireInstructor === 'function' && !student) wireInstructor();
+  if (!student && typeof restoreInstructorView === 'function') restoreInstructorView();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
   if (typeof startDashboardRefresh === 'function') {
     startDashboardRefresh();

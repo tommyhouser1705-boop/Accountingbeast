@@ -21,9 +21,9 @@ async function generated() {
   assignment=await generateCourseAssignment(Lessons,{notes:'Supplies bought on account, supplier payments and month-end supplies counts.',year:2026,month:9,depth:'focused'},{key:'test',fetcher:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(++n===1?topicDraft():scenarioDraft())}}]})})});return structuredClone(assignment);
 }
 test('one instructor workspace shows all standard periods, class-scoped cases and escaped private notes',()=>{
-  const c=view();assert.match(c.show('overview'),/Plan the course/);
+  const c=view();assert.match(c.show('overview'),/Class activity/);
   c.cloudCases=[{id:'case-a',class_id:'class-a',title:'A case'},{id:'case-b',class_id:'class-b',title:'B case'}];
-  const plan=c.show('plan');for(const p of global.SIM.catalog)assert.ok(plan.includes(safe(p.title)));
+  vm.runInContext("assignmentTab='course'",c);const plan=c.show('plan');for(const p of global.SIM.catalog)assert.ok(plan.includes(safe(p.title)));
   assert.match(plan,/A case/);assert.doesNotMatch(plan,/B case|undefined/);
   assert.equal((plan.match(/data-period=/g)||[]).length,14);
   const d=c.notesWorkspace();d.notes='<img src=x onerror=alert(1)>';c.saveNotesDraft();
@@ -62,4 +62,45 @@ test('gradebook only averages finished cases and shows accounting attempt review
 test('roster shows office progress and distinguishes invited accounts from an unstarted office',()=>{
  const c=view();c.cloudBook['class-a']={students:[{email:'alex@example.edu',business:{name:'River Cycle'},accountCreated:true,office:{period:'First month',day:7,updatedAt:'2026-10-27T15:00:00Z'}},{email:'new@example.edu',accountCreated:true},{email:'invited@example.edu',accountCreated:false}]};
  const html=c.show('students');assert.match(html,/River Cycle/);assert.match(html,/First month · Day 7/);assert.match(html,/datetime="2026-10-27T15:00:00Z"/);assert.match(html,/Office not started/);assert.match(html,/Invited · no account yet/);
+});
+test('class activity sorts saved businesses, separates missed first attempts from account setup and escapes identities',()=>{
+ const c=view();c.cloudBook['class-a']={students:[{email:'new@example.edu',accountCreated:false},{email:'saved@example.edu',business:{name:'<img src=x>',founder:'A & B'},accountCreated:true,office:{period:'Opening month',day:4,graded:3,first:2,updatedAt:'2026-11-01T12:00:00Z'}}]};
+ const html=c.show('overview');assert.ok(html.indexOf('data-review-student="saved@')<html.indexOf('data-review-student="new@'));
+ assert.match(html,/&lt;img src=x&gt;/);assert.doesNotMatch(html,/<img src=x>/);assert.match(html,/At least one missed first attempt/);assert.match(html,/data-new-assignment/);
+ assert.equal(c.studentNeedsReview(c.cloudBook['class-a'].students[0]),true);
+});
+test('student review ignores superseded requests and class or account changes',async()=>{
+ const c=view(),pending=[];c.show('overview');c.cloud.call=()=>new Promise(resolve=>pending.push(resolve));
+ const first=c.loadStudentWork('a@example.edu'),second=c.loadStudentWork('b@example.edu');
+ pending[1]({submissions:[{id:'new'}]});await second;pending[0]({submissions:[{id:'stale'}]});await first;
+ assert.equal(vm.runInContext('studentWork.submissions[0].id',c),'new');
+ const third=c.loadStudentWork('b@example.edu');c.cloudClass='class-b';pending[2]({submissions:[{id:'other-class'}]});await third;
+ assert.equal(c.reviewSelection(),'');assert.equal(vm.runInContext('studentWork.submissions',c),undefined);
+ c.cloudClass='class-a';const fourth=c.loadStudentWork('b@example.edu');c.cloudAccount={id:'other-account',role:'professor'};pending[3]({submissions:[{id:'other-account'}]});await fourth;
+ assert.equal(c.reviewSelection(),'');assert.equal(vm.runInContext('studentWork.submissions',c),undefined);
+});
+test('student review failures remain retryable and do not replace the roster',async()=>{
+ const c=view();c.cloudBook['class-a']={students:[{email:'a@example.edu',accountCreated:true,business:{name:'River Cycle'}}]};
+ c.cloud.call=async()=>{throw Error('Connection unavailable');};await c.loadStudentWork('a@example.edu');
+ assert.match(c.show('students'),/Connection unavailable/);assert.match(c.html,/Retry course review/);assert.match(c.html,/River Cycle/);
+ c.cloud.call=async()=>({submissions:[]});await c.loadStudentWork('a@example.edu');assert.match(c.show('students'),/No saved submissions yet/);
+});
+test('a delayed student review does not interrupt assignment editing after navigating away',async()=>{
+ const c=view();c.show('overview');let finish,renders=0;c.cloud.call=()=>new Promise(resolve=>finish=resolve);c.render=()=>renders++;
+ const pending=c.loadStudentWork('a@example.edu');assert.equal(renders,1);vm.runInContext("dashPage='builder'",c);finish({submissions:[]});await pending;assert.equal(renders,1);
+});
+test('builder separates review from assignment and going back preserves the draft without another generation call',async()=>{
+ const c=view(),a=await generated();c.show('builder');const d=c.notesWorkspace();d.assignment=a;d.notes=a.notes;d.topics={topics:a.teachingTopics};d.selected=[0];d.reviewed={documents:false,accounting:false};
+ assert.match(c.show('builder'),/Continue to assignment/);assert.doesNotMatch(c.html,/id="case-title"/);
+ await c.click('assignment-details');assert.match(c.html,/id="case-title"/);assert.match(c.html,/data-studio="publish" disabled/);
+ await c.click('scope');assert.equal(d.assignment,a);await c.click('review');assert.match(c.html,/Accounting key/);
+ await c.click('notes');assert.equal(d.assignment,a);assert.match(c.html,/Return to existing draft/);
+ d.sourceChanged=true;await c.click('publish');assert.match(c.html,/Source notes changed/);assert.equal(d.assignment,a);
+});
+test('assigned work and supplemental cases stay distinct and student review cannot cross account boundaries',async()=>{
+ const c=view();c.cloudLessons=[{id:'l-a',lessonId:'ch2',title:'Opening month',class_id:'class-a'}];c.cloudCases=[{id:'c-a',class_id:'class-a',title:'Extra supplies',dueDate:'2026-11-12'}];
+ c.cloudBook['class-a']={students:[{email:'a@example.edu',accountCreated:true,lessonScores:[{assignment_id:'l-a',completed:true,score:90}],caseScores:[{assignment_id:'c-a',completed:false,score:40}]}]};
+ let html=c.show('plan');assert.match(html,/Standard period/);assert.match(html,/Supplemental case/);assert.match(html,/1 of 1 completed/);assert.match(html,/0 of 1 completed/);
+ c.cloud.call=async()=>({submissions:[{subject:'Private review',kind:'entry',period:'Opening',rows:[],values:{},graded:true,correct:false}]});await c.loadStudentWork('a@example.edu');assert.match(c.show('gradebook'),/Private review/);
+ c.cloudAccount={id:'another-teacher',role:'professor'};assert.doesNotMatch(c.show('gradebook'),/Private review/);
 });
