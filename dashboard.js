@@ -7,7 +7,8 @@ function dashNav(items) {
 
 function appFrame(side, main) {
   const msg = cloudMessage ? `<div class="app-msg" role="status">${safe(cloudMessage)}</div>` : '';
-  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${msg}${main}</main></div>`;
+  const sync = typeof dashboardRefreshLabel === 'function' ? `<div class="app-sync"><span id="class-sync-status" role="status">${safe(dashboardRefreshLabel())}</span><button id="refresh-class" class="app-link">Refresh class</button></div>` : '';
+  return `<div class="app"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
 }
 
 function pageHead(title, sub, action = '') {
@@ -37,7 +38,7 @@ function professorHome() {
     main = pageHead('Gradebook', cls ? safe(cls.name) : '', '<a class="app-btn" href="lessons.html#library">Assign a period</a>') + setup + body + officeHomeGuide(false);
   } else if (dashPage === 'students') {
     main = pageHead('Students', cls ? safe(cls.name) : 'Create a class first.') + `<form id="invite-student" class="app-inline"><input name="email" type="email" required maxlength="254" placeholder="student@school.edu" aria-label="Student email" ${!cloudClass ? 'disabled' : ''}><button class="app-btn" data-cloud-submit ${!cloudClass ? 'disabled' : ''}>Add student</button></form><p class="app-note">Adding an email doesn’t send a message. Share the site link; students create an account with that email and join automatically.</p>`
-      + (students.length ? `<div class="app-scroll"><table class="app-table"><thead><tr><th>Email</th><th>Business</th><th class="num">Average</th><th></th></tr></thead><tbody>${students.map((s) => `<tr><td>${safe(s.email)}</td><td>${s.business ? safe(s.business.name) : '<span class="app-mut">Not signed in yet</span>'}</td><td class="num">${avg(s.lessonScores || [])}</td><td class="num"><button class="app-link" data-remove="${safe(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="app-empty">${cloudClass && !book ? 'Loading…' : 'No students in this class yet.'}</p>`);
+      + (students.length ? `<div class="app-scroll"><table class="app-table"><thead><tr><th>Email</th><th>Business</th><th>Current work</th><th>Last saved</th><th class="num">Average</th><th></th></tr></thead><tbody>${students.map((s) => `<tr><td>${safe(s.email)}</td><td>${s.business ? safe(s.business.name) : '<span class="app-mut">Not created yet</span>'}</td><td>${rosterProgress(s)}</td><td>${rosterSaved(s)}</td><td class="num">${avg(s.lessonScores || [])}</td><td class="num"><button class="app-link" data-remove="${safe(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="app-empty">${cloudClass && !book ? 'Loading…' : 'No students in this class yet.'}</p>`);
   } else if (dashPage === 'classes') {
     main = pageHead('Classes', 'Each class has its own roster, assignments and gradebook.') + `<form id="create-class" class="app-inline"><input name="name" required maxlength="120" placeholder="e.g. ACCT 203 · Section 01" aria-label="New class name"><button class="app-btn" data-cloud-submit>Create class</button></form>`
       + (cloudClasses.length ? `<table class="app-table"><thead><tr><th>Class</th><th class="num">Lessons assigned</th><th></th></tr></thead><tbody>${cloudClasses.map((c) => `<tr><td><strong>${safe(c.name)}</strong></td><td class="num">${cloudLessons.filter((l) => l.class_id === c.id).length}</td><td class="num"><button class="app-link" data-open-class="${safe(c.id)}">Open gradebook</button></td></tr>`).join('')}</tbody></table>` : '<p class="app-empty">You don’t have a class yet. Create one to get started.</p>');
@@ -48,6 +49,15 @@ function professorHome() {
   return appFrame(side, main);
 }
 
+function rosterProgress(s) {
+  if (s.office?.unavailable) return 'Progress unavailable';
+  if (s.office) return `${safe(s.office.period)} · Day ${safe(s.office.day)}${s.office.completed ? ' · Completed' : ''}`;
+  return s.accountCreated || s.business ? 'Office not started' : 'Invited · no account yet';
+}
+function rosterSaved(s) {
+  const saved = s.office?.updatedAt;
+  return saved ? `<time datetime="${safe(saved)}">${safe(new Date(saved).toLocaleString('en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}))}</time>` : '—';
+}
 function studentHome() {
   if (!['assignments', 'grades'].includes(dashPage)) dashPage = 'assignments';
   const side = dashNav([['assignments', 'Assignments'], ['grades', 'Grades'], ['business', 'My business', 'office.html']]);
@@ -78,13 +88,18 @@ function renderDashboard() {
   document.querySelectorAll('[data-dash]').forEach((b) => (b.onclick = () => { dashPage = b.dataset.dash; cloudMessage = ''; render(); }));
   if (typeof wireInstructor === 'function' && !student) wireInstructor();
   on('#cloud-logout', 'onclick', () => cloudTask(async () => { try { await cloud.logout(); } finally { location.reload(); } }));
+  if (typeof startDashboardRefresh === 'function') {
+    startDashboardRefresh();
+    updateDashboardStatus();
+    on('#refresh-class', 'onclick', () => refreshDashboardData(true));
+  }
   if (student) return;
   loadBook();
   on('#cloud-class', 'onchange', (e) => { cloudClass = e.target.value; cloudMessage = ''; render(); });
   document.querySelectorAll('[data-open-class]').forEach((b) => (b.onclick = () => { cloudClass = b.dataset.openClass; dashPage = 'gradebook'; render(); }));
   on('#create-class', 'onsubmit', (e) => { e.preventDefault(); const name = new FormData(e.target).get('name'); cloudTask(async () => { const c = await cloud.call('create-class', {name}); await loadCloud(); cloudClass = c.id; dashPage = 'students'; cloudMessage = 'Class created. Next, add your students.'; render(); }); });
-  on('#invite-student', 'onsubmit', (e) => { e.preventDefault(); const email = new FormData(e.target).get('email'); cloudTask(async () => { await cloud.call('invite', {classId: cloudClass, email}); delete cloudBook[cloudClass]; cloudMessage = 'Student added. Share the site link and ask them to create an account with that email.'; render(); }); });
-  document.querySelectorAll('[data-remove]').forEach((el) => (el.onclick = () => { if (!confirm('Remove ' + el.dataset.remove + ' from this class?')) return; cloudTask(async () => { await cloud.call('remove-student', {classId: cloudClass, email: el.dataset.remove}); delete cloudBook[cloudClass]; render(); }); }));
+  on('#invite-student', 'onsubmit', (e) => { e.preventDefault(); const email = new FormData(e.target).get('email'); cloudTask(async () => { await cloud.call('invite', {classId: cloudClass, email}); invalidateClassBook(cloudClass); cloudMessage = 'Student added. Share the site link and ask them to create an account with that email.'; render(); }); });
+  document.querySelectorAll('[data-remove]').forEach((el) => (el.onclick = () => { if (!confirm('Remove ' + el.dataset.remove + ' from this class?')) return; cloudTask(async () => { await cloud.call('remove-student', {classId: cloudClass, email: el.dataset.remove}); invalidateClassBook(cloudClass); render(); }); }));
   on('#grant-access', 'onsubmit', (e) => { e.preventDefault(); const p = Object.fromEntries(new FormData(e.target)); cloudTask(async () => { await cloud.call('authorize', {...p, active: true}); cloudMessage = 'Account approved. Share the site link; they can create an account with this email.'; render(); }); });
   on('#view-access', 'onclick', () => cloudTask(accessList));
 }

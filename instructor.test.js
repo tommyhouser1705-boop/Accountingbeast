@@ -59,3 +59,7 @@ test('gradebook only averages finished cases and shows accounting attempt review
   assert.match(c.show('gradebook'),/In progress/);assert.match(c.html,/View attempts/);assert.doesNotMatch(c.html,/40%/);
   c.cloudBook['class-a'].students[0].caseScores[0].completed=true;assert.match(c.show('gradebook'),/40%/);
 });
+test('roster shows office progress and distinguishes invited accounts from an unstarted office',()=>{
+ const c=view();c.cloudBook['class-a']={students:[{email:'alex@example.edu',business:{name:'River Cycle'},accountCreated:true,office:{period:'First month',day:7,updatedAt:'2026-10-27T15:00:00Z'}},{email:'new@example.edu',accountCreated:true},{email:'invited@example.edu',accountCreated:false}]};
+ const html=c.show('students');assert.match(html,/River Cycle/);assert.match(html,/First month · Day 7/);assert.match(html,/datetime="2026-10-27T15:00:00Z"/);assert.match(html,/Office not started/);assert.match(html,/Invited · no account yet/);
+});

@@ -50,6 +50,7 @@ const uid=n=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
 class Store{
  constructor(){this.tables={demo_access:[{email:'owner@example.edu',role:'owner',active:true},{email:'prof@example.edu',role:'professor',active:true},{email:'other@example.edu',role:'professor',active:true}],demo_profiles:[],demo_classes:[],demo_invitations:[],demo_assignments:[],demo_runs:[],demo_attempts:[]};}
  async list(t,f){return structuredClone(this.tables[t].filter(x=>Object.entries(f).every(([k,v])=>x[k]===v)));}
+ async listIn(t,column,values){return structuredClone(this.tables[t].filter(x=>values.includes(x[column])));}
  async one(t,f){return (await this.list(t,f))[0]||null;}
  async insert(t,x){this.tables[t].push(structuredClone(x));return structuredClone(x);}
  async upsert(t,x){const keys=t==='demo_access'?['email']:t==='demo_runs'?['student_id','assignment_id']:['class_id','email'];const old=this.tables[t].find(r=>keys.every(k=>r[k]===x[k]));old?Object.assign(old,structuredClone(x)):this.tables[t].push(structuredClone(x));return x;}
@@ -133,4 +134,23 @@ test('office restores business and mistakes, computes grades on server, and reje
  await call(owner,'authorize',{email:outsider.email,role:'student',active:true});
  const stranger=(await call(outsider,'office-load'));assert.equal(stranger.run,null);
  assert.ok(store.tables.demo_profiles.find(x=>x.id===student.id).office.run.events.length);
+});
+test('roster uses the saved office company, current progress and last save without returning the replay or accounting key',async()=>{
+ const {store,call,c}=await fixture();await call(prof,'invite',{classId:c.id,email:'invited@example.edu'});
+ const run={config:{type:'bike',name:'River Cycle',founder:'Alex Rivera',city:'columbus',seed:37},events:[]};
+ await call(student,'office-save',{revision:0,run});const profile=store.tables.demo_profiles.find(x=>x.id===student.id);profile.office.savedAt='2026-10-27T15:00:00Z';
+ let roster=(await call(prof,'gradebook',{classId:c.id})).students,s=roster.find(x=>x.email===student.email);
+ assert.equal(s.business.name,'River Cycle');assert.equal(s.business.type,'Bike repair shop');assert.equal(s.accountCreated,true);assert.equal(s.office.lessonId,'ch2');assert.equal(s.office.day,1);assert.equal(s.office.updatedAt,profile.office.savedAt);
+ assert.deepEqual(Object.keys(s.office).sort(),['completed','day','first','graded','lessonId','period','updatedAt'].sort());assert.equal(s.office.run,undefined);
+ assert.equal(roster.find(x=>x.email==='invited@example.edu').accountCreated,false);
+ const {run:finished}=officeRun();await call(student,'office-save',{revision:1,run:finished});s=(await call(prof,'gradebook',{classId:c.id})).students.find(x=>x.email===student.email);assert.equal(s.office.completed,true);assert.ok(s.office.graded>0);
+});
+test('gradebook batches roster reads, excludes other classes and still rejects unauthorized callers',async()=>{
+ const {store,call,c}=await fixture();for(let n=10;n<40;n++){await call(prof,'invite',{classId:c.id,email:`student${n}@example.edu`});store.tables.demo_profiles.push({id:uid(n),email:`student${n}@example.edu`,business:null});}
+ const otherClass=await call(other,'create-class',{name:'Private class'}),otherLesson=await call(other,'lesson-assign',{classId:otherClass.id,lessonId:'ch2',title:'Private period'});
+ store.tables.demo_runs.push({student_id:student.id,assignment_id:otherLesson.id,state:{kind:'library',score:99,completed:true}});
+ let reads=0,batches=[];const list=store.list.bind(store),listIn=store.listIn.bind(store);store.list=async(...args)=>{reads++;return list(...args);};store.listIn=async(...args)=>{batches.push(args);return listIn(...args);};
+ const result=await call(prof,'gradebook',{classId:c.id});assert.equal(result.students.length,31);assert.ok(reads<10,`Expected bounded reads, saw ${reads}`);assert.equal(batches.length,2);
+ assert.ok(!batches[1][2].includes(otherLesson.id));assert.equal(result.students[0].lessonScores.length,0);
+ await assert.rejects(()=>call(other,'gradebook',{classId:c.id}),e=>e.status===403);await assert.rejects(()=>call(student,'gradebook',{classId:c.id}),e=>e.status===403);
 });
