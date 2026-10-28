@@ -5,6 +5,26 @@ async function supplementalDraft(){
  const {generateCourseAssignment}=await import('./supabase/functions/classroom/generator.mjs'),{topicDraft,scenarioDraft}=require('./test-fixtures/interactive-assignment.cjs');let n=0;
  return generateCourseAssignment(L,{notes:'Supplies bought on account, supplier payments and month-end supplies counts.',year:2026,month:9,depth:'focused'},{key:'test',fetcher:async()=>({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(++n===1?topicDraft():scenarioDraft())}}]})})});
 }
+test('office work review handles all course periods and worksheets, caps history and leaves corrupt saves unchanged',async()=>{
+ const {call,c,store}=await fixture(),S=global.SIM;
+ const run={config:{type:'bike',name:'River Cycle',founder:'Alex',city:'columbus',seed:23},events:[]},st=S.newGame(run.config);
+ for(let n=0;n<2000;n++){
+  const it=S.open(st)[0];let e;
+  if(it){let action;
+   if(it.kind==='decision')action={choice:Object.fromEntries(S.V(it.q,st).map(q=>[q.id,q.opts[0].v]))};
+   else if(it.kind==='work')action={values:Object.fromEntries(S.V(it.fields,st).map(f=>[f.id,f.value]))};
+   else {const w=S.want(st,it);action=w?{rows:w.map(([a,side,v])=>({a,d:side==='dr'?v:0,c:side==='cr'?v:0}))}:{noEntry:true};}
+   e={kind:'handle',id:it.id,action};assert.equal(S.handle(st,it.id,action).ok,true);
+  }else if(!st.ended){e={kind:S.nextDay(st)==null?'complete':'advance'};if(e.kind==='complete')S.complete(st);else S.advance(st);}
+  else if(st.m<S.catalog.length-1){e={kind:'next'};assert.ok(S.nextMonth(st));}else break;
+  run.events.push(e);
+ }
+ assert.equal(st.m,S.catalog.length-1);assert.ok(st.ended);for(const p of S.catalog)await call(prof,'lesson-assign',{classId:c.id,lessonId:p.id,title:p.title});await call(student,'office-save',{revision:0,run});
+ const work=await call(prof,'office-work',{classId:c.id,email:student.email});assert.equal(work.submissions.length,100);assert.equal(work.truncated,true);
+ const worksheet=work.submissions.find(s=>s.kind==='work');assert.ok(worksheet);assert.ok(worksheet.fields.every(f=>f.label&&!('value' in f)));assert.ok(work.submissions.every(s=>!s.lines));
+ const profile=store.tables.demo_profiles.find(p=>p.id===student.id);profile.office.run.events.push({kind:'unknown'});const before=JSON.stringify(profile);
+ await assert.rejects(()=>call(prof,'office-work',{classId:c.id,email:student.email}),e=>e.status===409);assert.equal(JSON.stringify(profile),before);
+});
 test('supplemental cases are authorized, reviewed, independently saved and server graded; standard books stay intact',async()=>{
  const {call,c,store}=await fixture(),a=await supplementalDraft(),S=global.SIM;
  const p={classId:c.id,title:'Extra supplies case',dueDate:'2026-11-12',assignment:a,reviewed:{documents:true,accounting:true}};
@@ -60,6 +80,25 @@ class Store{
  async commit(student,assignment,revision,state,action,p){const row=this.tables.demo_runs.find(r=>r.student_id===student&&r.assignment_id===assignment);if((row?.revision||0)!==revision)throw Error('CONFLICT');const v={student_id:student,assignment_id:assignment,revision:revision+1,state:structuredClone(state)};row?Object.assign(row,v):this.tables.demo_runs.push(v);this.tables.demo_attempts.push({student_id:student,assignment_id:assignment,revision:v.revision,action,created_at:new Date().toISOString(),submitted:structuredClone(p)});return {state:structuredClone(state),revision:v.revision};}
 }
 const owner={id:uid(1),email:'owner@example.edu'},prof={id:uid(2),email:'prof@example.edu'},other={id:uid(3),email:'other@example.edu'},student={id:uid(4),email:'student@example.edu'},outsider={id:uid(5),email:'outsider@example.edu'};
+test('office work review is class authorized, server assessed and exposes submissions, not replay records or answer keys',async()=>{
+ const {call,c,store}=await fixture(),S=global.SIM,config={type:'bike',name:'River Cycle',founder:'Alex',city:'columbus',seed:23};
+ assert.equal((await call(prof,'office-work',{classId:c.id,email:student.email})).office,null);
+ await assert.rejects(()=>call(student,'office-work',{classId:c.id,email:student.email}),e=>e.status===403);
+ await assert.rejects(()=>call(other,'office-work',{classId:c.id,email:student.email}),e=>e.status===403);
+ await assert.rejects(()=>call(prof,'office-work',{classId:c.id,email:outsider.email}),e=>e.status===403);
+ const state=S.newGame(config),events=[];
+ while(events.length<5){const it=S.open(state)[0];if(!it){S.advance(state);events.push({kind:'advance'});continue;}
+  const action=it.kind==='decision'?{choice:Object.fromEntries(S.V(it.q,state).map(q=>[q.id,q.opts[0].v]))}:{rows:[]};
+  S.handle(state,it.id,action);events.push({kind:'handle',id:it.id,action});
+ }
+ await call(student,'office-save',{revision:0,run:{config,events}});
+ const before=JSON.stringify(store.tables.demo_profiles),review=await call(prof,'office-work',{classId:c.id,email:student.email});
+ assert.equal(review.business.name,'River Cycle');assert.ok(review.submissions.some(s=>s.graded&&!s.correct));assert.ok(review.submissions.some(s=>!s.graded));
+ assert.equal(review.run,undefined);assert.equal(review.office.run,undefined);assert.equal(review.submissions[0].lines,undefined);
+ assert.equal(JSON.stringify(store.tables.demo_profiles),before,'review does not change saved work');
+ await call(prof,'remove-student',{classId:c.id,email:student.email});
+ await assert.rejects(()=>call(prof,'office-work',{classId:c.id,email:student.email}),e=>e.status===403);
+});
 async function fixture(topic='prepaid'){
  const {handleAction}=await import('./supabase/functions/classroom/service.mjs'),store=new Store(),call=(u,a,p)=>handleAction(store,L,u,a,p);
  const c=await call(prof,'create-class',{name:'Intro Financial'});await call(prof,'invite',{classId:c.id,email:student.email});

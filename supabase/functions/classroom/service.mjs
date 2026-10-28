@@ -72,6 +72,26 @@ export async function handleAction(store,L,user,action,p={}){
   const id=crypto.randomUUID(),assignment=structuredClone(p.assignment);delete assignment.simulation;
   return await store.insert('demo_assignments',{id,class_id:c.id,definition:{kind:'supplement',title,dueDate,assignment,published:true}});
  }
+ if(action==='office-work'){
+  requireTeacher();await classAccess(p.classId);
+  const address=email(p.email);
+  if(!await store.one('demo_invitations',{class_id:p.classId,email:address}))fail('This student is not in the class.',403);
+  const sp=await store.one('demo_profiles',{email:address}),run=sp?.office?.run;
+  if(!run)return {office:null,business:officeBusiness(sp),submissions:[],truncated:false};
+  const S=globalThis.SIM;try{S.replay(run);}catch{fail('Saved office work could not be read. The student’s saved record is unchanged.',409);}
+  const st=S.newGame(run.config),submissions=[];
+  for(const event of run.events){
+   if(event.kind==='handle'){
+    const it=S.inbox(st).find(x=>x.id===event.id),period=S.catalog[st.m];
+    const submission={id:it.id,lessonId:period.id,period:period.title,day:it.day,subject:S.V(it.subject,st),document:S.V(it.doc,st)||null,kind:it.kind,firstAttempt:!st.tries[it.id],rows:event.action.rows||[],values:event.action.values||{},noEntry:!!event.action.noEntry};
+    const result=S.handle(st,event.id,event.action);
+    submissions.push({...submission,fields:it.kind==='work'?S.V(it.fields,st).map(({id,label})=>({id,label})):[],sequence:submissions.length+1,correct:result.ok,feedback:result.text||'',graded:it.kind!=='decision'});
+   }else if(event.kind==='advance')S.advance(st);
+   else if(event.kind==='complete')S.complete(st);
+   else if(event.kind==='next')S.nextMonth(st);
+  }
+  return {office:officeProgress(sp),business:officeBusiness(sp),submissions:submissions.slice(-100),truncated:submissions.length>100};
+ }
  if(action==='case-work'){
   requireTeacher();const a=await store.one('demo_assignments',{id:uuid(p.assignmentId)});if(!isCase(a))fail('Choose a supplemental case.');await classAccess(a.class_id);
   const address=email(p.email);if(!await store.one('demo_invitations',{class_id:a.class_id,email:address}))fail('This student is not in the class.',403);
