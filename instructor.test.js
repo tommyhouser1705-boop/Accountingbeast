@@ -61,7 +61,12 @@ test('gradebook only averages finished cases and shows accounting attempt review
 });
 test('roster shows office progress and distinguishes invited accounts from an unstarted office',()=>{
  const c=view();c.cloudBook['class-a']={students:[{email:'alex@example.edu',business:{name:'River Cycle'},accountCreated:true,office:{period:'First month',day:7,updatedAt:'2026-10-27T15:00:00Z'}},{email:'new@example.edu',accountCreated:true},{email:'invited@example.edu',accountCreated:false}]};
- const html=c.show('students');assert.match(html,/River Cycle/);assert.match(html,/First month · Day 7/);assert.match(html,/datetime="2026-10-27T15:00:00Z"/);assert.match(html,/Office not started/);assert.match(html,/Invited · no account yet/);
+ const html=c.show('students');assert.match(html,/River Cycle/);assert.match(html,/First month · Day 7/);assert.match(html,/datetime="2026-10-27T15:00:00Z"/);assert.match(html,/Office not started/);assert.match(html,/Invited · not registered/);assert.match(html,/Account registered/);
+});
+test('registration confirmation is separate from whether the office has been started',()=>{
+ const c=view(),s={email:'new@example.edu',accountCreated:true,registration:{createdAt:'2026-10-29',confirmedAt:null}};
+ assert.match(c.workStatus(s),/Email not confirmed/);assert.match(c.rosterProgress(s),/Confirm email to sign in/);
+ s.registration.confirmedAt='2026-10-29';assert.match(c.workStatus(s),/Account registered/);assert.match(c.rosterProgress(s),/Office not started/);
 });
 test('class activity sorts saved businesses, separates missed first attempts from account setup and escapes identities',()=>{
  const c=view();c.cloudBook['class-a']={students:[{email:'new@example.edu',accountCreated:false},{email:'saved@example.edu',business:{name:'<img src=x>',founder:'A & B'},accountCreated:true,office:{period:'Opening month',day:4,graded:3,first:2,updatedAt:'2026-11-01T12:00:00Z'}}]};

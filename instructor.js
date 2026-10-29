@@ -25,7 +25,7 @@ function studentIdentity(s) {
   return `<span class="teach-avatar" aria-hidden="true">${safe((s.business?.founder || s.email).slice(0,1).toUpperCase())}</span><span><strong>${safe(s.business?.founder || s.email)}</strong><small>${safe(s.business?.name || (s.accountCreated?'Company not created yet':'Invitation added'))}</small></span>`;
 }
 function workStatus(s) {
-  return `<span class="teach-pill ${s.office?.completed?'complete':s.office&&!s.office.unavailable?'working':'pending'}">${s.office?.unavailable?'Check saved work':s.office?.completed?'Period completed':s.office?'Working':s.accountCreated?'Not started':'Invited'}</span>`;
+  return `<span class="teach-pill ${s.office?.completed?'complete':s.office&&!s.office.unavailable?'working':'pending'}">${s.office?.unavailable?'Check saved work':s.office?.completed?'Period completed':s.office?'Working':s.accountCreated?'Not started':'Invited'}</span><small class="teach-muted">${!s.accountCreated?'Not registered':s.registration&&!s.registration.confirmedAt?'Email not confirmed':'Account registered'}</small>`;
 }
 function activityRows(book) {
   return [...classStudents(book)].sort((a,b)=>String(b.office?.updatedAt||'').localeCompare(String(a.office?.updatedAt||''))).map(s=>`<button class="teach-activity" data-review-student="${safe(s.email)}" data-roster-student="${safe(s.email+' '+(s.business?.name||'')+' '+(s.business?.founder||''))}" data-needs-review="${studentNeedsReview(s)}" ${reviewSelection()===s.email?'aria-current="true"':''}><span class="teach-person">${studentIdentity(s)}</span><span class="teach-activity-work">${workStatus(s)}<span>${rosterProgress(s)}</span><small>Saved ${rosterSaved(s)}</small></span><span class="teach-row-arrow" aria-hidden="true">→</span></button>`).join('');

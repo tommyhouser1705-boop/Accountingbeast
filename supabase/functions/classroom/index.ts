@@ -17,6 +17,8 @@ const origin=Deno.env.get('APP_ORIGIN');
 function headers(request:Request){return {'Access-Control-Allow-Origin':request.headers.get('origin')===origin?origin!:'null','Access-Control-Allow-Headers':'authorization,apikey,content-type','Access-Control-Allow-Methods':'POST,OPTIONS','Vary':'Origin','Content-Type':'application/json'};}
 const check=(result:any)=>{if(result.error)throw result.error;return result.data;};
 const store={
+ async classAccounts(classId:string){return check(await db.rpc('demo_class_accounts',{p_class:classId}));},
+ async cacheOfficeSummaries(summaries:object[]){check(await db.rpc('demo_cache_office_summaries',{p_summaries:summaries}));},
  async generate(input:any){const previous=generationTimes.get(input.actor+':'+(input.phase||'complete'))||0;if(Date.now()-previous<60000){const error:any=Error('Please wait a minute before creating another AI draft.');error.status=429;throw error;}generationTimes.set(input.actor+':'+(input.phase||'complete'),Date.now());if(generationTimes.size>10000)generationTimes.clear();return await generateCourseAssignment((globalThis as any).Lessons,input,{key:Deno.env.get('LEDGER_AI_API_KEY')});},
  async one(table:string,filter:object){return check(await db.from(table).select('*').match(filter).maybeSingle());},
  async list(table:string,filter:object){return check(await db.from(table).select('*').match(filter).limit(1000));},
@@ -32,7 +34,7 @@ const store={
  async upsert(table:string,row:object){return check(await db.from(table).upsert(row).select().single());},
  async update(table:string,filter:object,row:object){return check(await db.from(table).update(row).match(filter));},
  async remove(table:string,filter:object){return check(await db.from(table).delete().match(filter));},
- async saveOffice(student:string,revision:number,run:object){return check(await db.rpc('demo_save_office',{p_student:student,p_revision:revision,p_run:run}));},
+ async saveOffice(student:string,revision:number,run:object,summary:object){return check(await db.rpc('demo_save_office_summary',{p_student:student,p_revision:revision,p_run:run,p_summary:summary}));},
  async commit(student:string,assignment:string,revision:number,state:object,action:string,submitted:object){return check(await db.rpc('demo_commit_run',{p_student:student,p_assignment:assignment,p_revision:revision,p_state:state,p_action:action,p_submitted:submitted}));}
 };
 Deno.serve(async request=>{
