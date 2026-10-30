@@ -53,7 +53,7 @@ function professorHome() {
 function rosterProgress(s) {
   if (s.office?.unavailable) return 'Progress unavailable';
   if (s.office) return `${safe(s.office.period)} · Day ${safe(s.office.day)}${s.office.completed ? ' · Completed' : ''}`;
-  return s.accountCreated || s.business ? 'Office not started' : 'Invited · no account yet';
+  return s.accountCreated ? (s.registration&&!s.registration.confirmedAt?'Confirm email to sign in':'Office not started') : 'Invited · not registered';
 }
 function rosterSaved(s) {
   const saved = s.office?.updatedAt;

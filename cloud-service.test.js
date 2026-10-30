@@ -76,7 +76,9 @@ class Store{
  async upsert(t,x){const keys=t==='demo_access'?['email']:t==='demo_runs'?['student_id','assignment_id']:['class_id','email'];const old=this.tables[t].find(r=>keys.every(k=>r[k]===x[k]));old?Object.assign(old,structuredClone(x)):this.tables[t].push(structuredClone(x));return x;}
  async update(t,f,x){for(const r of this.tables[t])if(Object.entries(f).every(([k,v])=>r[k]===v))Object.assign(r,structuredClone(x));}
  async remove(t,f){this.tables[t]=this.tables[t].filter(r=>!Object.entries(f).every(([k,v])=>r[k]===v));}
- async saveOffice(id,revision,run){const row=this.tables.demo_profiles.find(r=>r.id===id);if((row.office?.revision||0)!==revision)throw Error('CONFLICT: Office changed in another tab.');row.office={revision:revision+1,run:structuredClone(run)};return row.office;}
+ async classAccounts(classId){return this.tables.demo_invitations.filter(i=>i.class_id===classId).map(i=>{const u=this.authUsers?.find(u=>u.email.trim().toLowerCase()===i.email),p=this.tables.demo_profiles.find(p=>p.id===u?.id);return structuredClone({email:i.email,account_id:u?.id||null,registered_at:u?.created_at||null,confirmed_at:u?.email_confirmed_at||null,last_sign_in_at:u?.last_sign_in_at||null,profile_id:p?.id,business:p?.business,office_revision:p?.office?.revision||0,office_summary:p?.office_summary});});}
+ async cacheOfficeSummaries(summaries){for(const {studentId,revision,summary} of summaries){const row=this.tables.demo_profiles.find(p=>p.id===studentId);if(row?.office?.revision===revision)row.office_summary=structuredClone(summary);}}
+ async saveOffice(id,revision,run,summary){const row=this.tables.demo_profiles.find(r=>r.id===id);if((row.office?.revision||0)!==revision)throw Error('CONFLICT: Office changed in another tab.');row.office={revision:revision+1,run:structuredClone(run),savedAt:new Date().toISOString()};row.office_summary={...structuredClone(summary),revision:row.office.revision,savedAt:row.office.savedAt};return row.office;}
  async commit(student,assignment,revision,state,action,p){const row=this.tables.demo_runs.find(r=>r.student_id===student&&r.assignment_id===assignment);if((row?.revision||0)!==revision)throw Error('CONFLICT');const v={student_id:student,assignment_id:assignment,revision:revision+1,state:structuredClone(state)};row?Object.assign(row,v):this.tables.demo_runs.push(v);this.tables.demo_attempts.push({student_id:student,assignment_id:assignment,revision:v.revision,action,created_at:new Date().toISOString(),submitted:structuredClone(p)});return {state:structuredClone(state),revision:v.revision};}
 }
 const owner={id:uid(1),email:'owner@example.edu'},prof={id:uid(2),email:'prof@example.edu'},other={id:uid(3),email:'other@example.edu'},student={id:uid(4),email:'student@example.edu'},outsider={id:uid(5),email:'outsider@example.edu'};
@@ -100,7 +102,7 @@ test('office work review is class authorized, server assessed and exposes submis
  await assert.rejects(()=>call(prof,'office-work',{classId:c.id,email:student.email}),e=>e.status===403);
 });
 async function fixture(topic='prepaid'){
- const {handleAction}=await import('./supabase/functions/classroom/service.mjs'),store=new Store(),call=(u,a,p)=>handleAction(store,L,u,a,p);
+ const {handleAction}=await import('./supabase/functions/classroom/service.mjs'),store=new Store();store.authUsers=[{...student,created_at:'2026-10-01T12:00:00Z',email_confirmed_at:'2026-10-01T12:01:00Z',last_sign_in_at:'2026-10-29T12:00:00Z'}];const call=(u,a,p)=>handleAction(store,L,u,a,p);
  const c=await call(prof,'create-class',{name:'Intro Financial'});await call(prof,'invite',{classId:c.id,email:student.email});
  await call(student,'business',{business:{name:'Tommy’s Coffee',type:'Coffee shop',color:'sage'}});
  const a=await call(prof,'publish',{classId:c.id,assignment:{version:1,id:'draft',title:'Lesson',topic,course:'Intro',instructions:'Practice',year:2026,month:9,support:'guided',notes:''}});
@@ -177,7 +179,7 @@ test('office restores business and mistakes, computes grades on server, and reje
 test('roster uses the saved office company, current progress and last save without returning the replay or accounting key',async()=>{
  const {store,call,c}=await fixture();await call(prof,'invite',{classId:c.id,email:'invited@example.edu'});
  const run={config:{type:'bike',name:'River Cycle',founder:'Alex Rivera',city:'columbus',seed:37},events:[]};
- await call(student,'office-save',{revision:0,run});const profile=store.tables.demo_profiles.find(x=>x.id===student.id);profile.office.savedAt='2026-10-27T15:00:00Z';
+ await call(student,'office-save',{revision:0,run});const profile=store.tables.demo_profiles.find(x=>x.id===student.id);profile.office.savedAt=profile.office_summary.savedAt='2026-10-27T15:00:00Z';
  let roster=(await call(prof,'gradebook',{classId:c.id})).students,s=roster.find(x=>x.email===student.email);
  assert.equal(s.business.name,'River Cycle');assert.equal(s.business.type,'Bike repair shop');assert.equal(s.accountCreated,true);assert.equal(s.office.lessonId,'ch2');assert.equal(s.office.day,1);assert.equal(s.office.updatedAt,profile.office.savedAt);
  assert.deepEqual(Object.keys(s.office).sort(),['completed','day','first','graded','lessonId','period','updatedAt'].sort());assert.equal(s.office.run,undefined);
@@ -190,6 +192,36 @@ test('gradebook batches roster reads, excludes other classes and still rejects u
  store.tables.demo_runs.push({student_id:student.id,assignment_id:otherLesson.id,state:{kind:'library',score:99,completed:true}});
  let reads=0,batches=[];const list=store.list.bind(store),listIn=store.listIn.bind(store);store.list=async(...args)=>{reads++;return list(...args);};store.listIn=async(...args)=>{batches.push(args);return listIn(...args);};
  const result=await call(prof,'gradebook',{classId:c.id});assert.equal(result.students.length,31);assert.ok(reads<10,`Expected bounded reads, saw ${reads}`);assert.equal(batches.length,2);
- assert.ok(!batches[1][2].includes(otherLesson.id));assert.equal(result.students[0].lessonScores.length,0);
+ assert.ok(!batches.find(b=>b[0]==='demo_runs')[2].includes(otherLesson.id));assert.equal(result.students[0].lessonScores.length,0);
  await assert.rejects(()=>call(other,'gradebook',{classId:c.id}),e=>e.status===403);await assert.rejects(()=>call(student,'gradebook',{classId:c.id}),e=>e.status===403);
+});
+test('registration comes from Auth even before an app profile exists, with distinct confirmation and sign-in state',async()=>{
+ const {store,call,c}=await fixture();
+ for(const address of ['registered@example.edu','pending@example.edu','invited@example.edu'])await call(prof,'invite',{classId:c.id,email:address});
+ store.authUsers.push({id:uid(41),email:'Registered@Example.EDU',created_at:'2026-10-20T12:00:00Z',email_confirmed_at:'2026-10-20T12:01:00Z',last_sign_in_at:'2026-10-29T13:00:00Z'},{id:uid(42),email:'pending@example.edu',created_at:'2026-10-20T12:00:00Z'});
+ const students=(await call(prof,'gradebook',{classId:c.id})).students,registered=students.find(s=>s.email==='registered@example.edu'),pending=students.find(s=>s.email==='pending@example.edu'),invited=students.find(s=>s.email==='invited@example.edu');
+ assert.equal(registered.accountCreated,true);assert.equal(registered.registration.lastSignInAt,'2026-10-29T13:00:00Z');assert.equal(registered.office,null);assert.equal(registered.business,null);
+ assert.equal(pending.accountCreated,true);assert.equal(pending.registration.confirmedAt,null);assert.equal(invited.accountCreated,false);assert.equal(invited.registration,null);
+ assert.equal(store.tables.demo_profiles.some(p=>[uid(41),uid(42)].includes(p.id)),false,'roster must not manufacture app profiles or student work');
+});
+test('roster and reviews bind to Auth ID rather than a stale profile email',async()=>{
+ const {store,call,c}=await fixture(),run={config:{type:'bike',name:'Current Company',founder:'Alex',city:'columbus',seed:23},events:[]};
+ await call(student,'office-save',{revision:0,run});store.tables.demo_profiles.find(p=>p.id===student.id).email='old@example.edu';
+ const s=(await call(prof,'gradebook',{classId:c.id})).students[0];assert.equal(s.business.name,'Current Company');assert.equal(s.accountCreated,true);
+ assert.equal((await call(prof,'office-work',{classId:c.id,email:student.email})).business.name,'Current Company');
+ assert.ok(!JSON.stringify(s).includes('old@example.edu'));assert.equal(s.account_id,undefined);
+});
+test('roster backfills old office summaries once, warm refreshes neither read nor replay history',async()=>{
+ const {store,call,c}=await fixture(),run={config:{type:'bike',name:'River Cycle',founder:'Alex',city:'columbus',seed:23},events:[]};
+ await call(student,'office-save',{revision:0,run});const profile=store.tables.demo_profiles.find(p=>p.id===student.id),before=JSON.stringify(profile.office);delete profile.office_summary;
+ const cold=await call(prof,'gradebook',{classId:c.id});assert.equal(JSON.stringify(profile.office),before);assert.equal(profile.office_summary.revision,1);
+ const replay=global.SIM.replay,listIn=store.listIn.bind(store);global.SIM.replay=()=>{throw Error('Roster must not replay a current summary');};store.listIn=async(t,c,v)=>{if(t==='demo_profiles')assert.deepEqual(v,[]);return listIn(t,c,v);};
+ try{assert.deepEqual(await call(prof,'gradebook',{classId:c.id}),cold);}finally{global.SIM.replay=replay;}
+ const summary=structuredClone(profile.office_summary);await assert.rejects(()=>call(student,'office-save',{revision:0,run}),/CONFLICT/);assert.deepEqual(profile.office_summary,summary);
+});
+test('a late summary backfill cannot overwrite a newer office save',async()=>{
+ const {store,call,c}=await fixture(),run={config:{type:'bike',name:'River Cycle',founder:'Alex',city:'columbus',seed:23},events:[]};await call(student,'office-save',{revision:0,run});
+ const profile=store.tables.demo_profiles.find(p=>p.id===student.id);delete profile.office_summary;const cache=store.cacheOfficeSummaries.bind(store);
+ store.cacheOfficeSummaries=async(summaries)=>{await call(student,'office-save',{revision:1,run});await cache(summaries);};
+ await call(prof,'gradebook',{classId:c.id});assert.equal(profile.office.revision,2);assert.equal(profile.office_summary.revision,2);
 });

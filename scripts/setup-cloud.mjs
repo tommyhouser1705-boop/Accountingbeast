@@ -63,12 +63,15 @@ export async function setup({token,project,owner,ownerHash,fetcher=fetch}){
  if(!Array.isArray(tables))throw Error('Unexpected database response. Setup stopped.');
  const migration=readFileSync(new URL('../supabase/migrations/202610080001_classroom.sql',import.meta.url),'utf8');
  const officeMigration=readFileSync(new URL('../supabase/migrations/202610260001_office.sql',import.meta.url),'utf8');
- const sql=setupQuery(tables.map(t=>t.tablename),seed+'\n'+officeMigration,migration);
+ const rosterMigration=readFileSync(new URL('../supabase/migrations/202610290001_roster.sql',import.meta.url),'utf8');
+ const sql=setupQuery(tables.map(t=>t.tablename),seed+'\n'+officeMigration+'\n'+rosterMigration,migration);
  console.log('Preparing classroom schema and owner approval.');
  await query(sql,'Install database and approve owner',false);
  // Verify the atomic-save RPC required by grading, including existing databases.
  const check=await query("select to_regprocedure('public.demo_commit_run(uuid,uuid,integer,jsonb,text,jsonb)') is not null as ready",'Verify atomic-save function');
  if(check?.[0]?.ready!==true)throw Error('The atomic-save function is missing. Ask for help repairing the database before deploying.');
+ const roster=await query("select to_regprocedure('public.demo_class_accounts(uuid)') is not null and to_regprocedure('public.demo_save_office_summary(uuid,integer,jsonb,jsonb)') is not null and to_regprocedure('public.demo_cache_office_summaries(jsonb)') is not null as ready",'Verify roster functions');
+ if(roster?.[0]?.ready!==true)throw Error('The account roster functions are missing. Deployment stopped.');
  console.log('Classroom database is ready; designated owner email is approved.');
  }finally{await close();}
 }
