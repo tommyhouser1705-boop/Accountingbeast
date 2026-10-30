@@ -9,6 +9,7 @@ function appFrame(side, main) {
   const msg = cloudMessage ? `<div class="app-msg" role="status">${safe(cloudMessage)}</div>` : '';
   const sync = typeof dashboardRefreshLabel === 'function' ? `<div class="app-sync"><span id="class-sync-status" role="status">${safe(dashboardRefreshLabel())}</span><button id="refresh-class" class="app-link">Refresh class</button></div>` : '';
   const instructor = cloudAccount.role !== 'student';
+  if (instructor) return `<div class="app instructor-app"><aside class="app-side"><a class="app-logo" href="index.html"><span class="faculty-mark" aria-hidden="true">L</span> Ledger Lane</a><span class="teach-area-label">Teaching workspace</span>${side}<div class="app-who"><span class="teach-avatar" aria-hidden="true">${safe((cloudAccount.email||'I').slice(0,1).toUpperCase())}</span><span>${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></span></div></aside><main class="app-main"><header class="faculty-topbar"><div><small>CLASS WORKSPACE</small><strong>${safe(cloudClasses.find(c=>c.id===cloudClass)?.name||'Your classes')}</strong></div>${sync}</header>${msg}${main}</main></div>`;
   return `<div class="app ${instructor ? 'instructor-app' : ''}"><aside class="app-side"><a class="app-logo" href="index.html">Ledger Lane</a>${instructor ? '<span class="teach-area-label">Instructor workspace</span>' : ''}${side}<div class="app-who">${safe(cloudAccount.email)}<button id="cloud-logout" class="app-link">Sign out</button></div></aside><main class="app-main">${sync}${msg}${main}</main></div>`;
 }
 
