@@ -214,3 +214,164 @@ body[data-screen=app] .instructor-app .app-main{padding:22px 32px 64px;max-width
 @media(min-width:1000px){body[data-screen=app] .app-main{max-width:1450px}.app-side{background:#fff;padding:26px 18px}.app-nav{gap:5px}.app-nav button{padding:11px 14px}.app-nav .on{background:#eaf1fc;box-shadow:none;color:#174c92}.app-class{padding:0 6px}.app-logo{padding:0 6px}}
 @media(max-width:1050px){.teach-review-event{grid-template-columns:1fr}.teach-panel{padding:20px}.teach-columns{grid-template-columns:1fr}}
 @media(max-width:700px){.teach-panel{padding:18px;border-radius:9px}.teach-current{display:block}.teach-current .app-btn{margin-top:18px}.teach-list li{align-items:start;flex-direction:column}.teach-steps{gap:15px;font-size:12px}.teach-review-heading{align-items:start}.teach-paper{padding:10px}.teach-paper .doc{padding:16px}.teach-paper .inv-top{gap:10px}.teach-paper .inv-logo b{font-size:15px}.teach-panel .app-scroll{max-width:100%}.teach-actions{align-items:flex-start}}
+
+/* Faculty workspace: scoped so the student desktop retains its own UI. */
+.instructor-app{--faculty-ink:#172b49;--faculty-blue:#225bb4;--faculty-muted:#596b83;background:#f7f9fc;grid-template-columns:232px minmax(0,1fr);color:var(--faculty-ink);font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.instructor-app *{box-sizing:border-box}
+.instructor-app .app-side{background:#fff;border-right:1px solid #e2e8f0;padding:28px 18px;gap:24px;position:sticky;top:0;height:100vh}
+.instructor-app .app-logo{display:flex;align-items:center;gap:8px;font:700 21px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.7px;text-decoration:none;color:#162e52;white-space:nowrap}
+.faculty-mark{display:inline-grid;place-items:center;width:31px;height:34px;background:#204f98;border-radius:8px;color:#fff;font:bold 22px/1 Georgia,serif;flex-shrink:0}
+.instructor-app .teach-area-label{margin:-12px 0 5px 0;color:#66768a;font-size:10px;letter-spacing:.1em}
+.instructor-app .app-class{color:#52637c;margin:0 0 5px}
+.instructor-app .app-class select{border:1px solid #dce3ee;background:#f8fafd;color:#243b5e;min-height:44px;font-size:13px}
+.instructor-app .app-nav button{display:flex;align-items:center;gap:12px;min-height:43px;padding:11px 13px;color:#506079;font-size:13px;font-weight:550;border:0}
+.instructor-app .app-nav button::before{content:"";height:14px;width:14px;border:1.5px solid currentColor;border-radius:4px;opacity:.75;flex-shrink:0}
+.instructor-app .app-nav button[data-dash=overview]::before{border-radius:50%}
+.instructor-app .app-nav button[data-dash=gradebook]::before{border-radius:1px;border-top-width:4px}
+.instructor-app .app-nav .on{background:#eaf1fd;color:#1d52a2}
+.instructor-app .app-who{display:flex;gap:9px;align-items:flex-start;border-top:1px solid #e5eaf1;padding-top:20px;margin-top:auto;overflow-wrap:anywhere;color:#52637c;font-size:11px}
+.instructor-app .app-who .app-link{display:block;text-align:left;margin-top:6px;color:#52637c}
+.instructor-app .app-who .teach-avatar{width:29px;height:29px;min-width:29px;background:#eff3fa;color:#315e9d}
+body[data-screen=app] .instructor-app .app-main{padding:0 32px 56px;min-width:0}
+.faculty-topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:91px;border-bottom:1px solid #e2e8f1;margin:0 -32px 32px;padding:18px 32px;background:#fff}
+.faculty-topbar>div:first-child{display:flex;flex-direction:column;gap:4px}
+.faculty-topbar small{font-size:9px;letter-spacing:.11em;font-weight:650;color:#697b94}
+.faculty-topbar strong{font-size:14px;font-weight:600}
+.instructor-app .faculty-topbar .app-sync{margin:0;padding:0;border:0;color:#62738b;font-size:11px;max-width:55%}
+.faculty-topbar .app-sync span::before{content:"";display:inline-block;width:6px;height:6px;background:#667b98;border-radius:50%;margin-right:6px}
+.instructor-app .app-head{margin:0 0 25px;gap:15px}
+.instructor-app .app-head h1{font-size:28px;letter-spacing:-.9px;color:#172d4b}
+.instructor-app .app-head p{font-size:13px;color:#5f7088;line-height:1.7}
+.instructor-app .app-btn{background:#245bab;border:1px solid #245bab;box-shadow:0 1px 2px #132a4812;font-size:12px;font-weight:600;border-radius:7px;min-height:38px;white-space:normal}
+.instructor-app .app-btn.alt{background:#fff;border-color:#d8e1ed;color:#345070}
+.instructor-app .app-btn:disabled{opacity:.5;cursor:not-allowed}
+.instructor-app .app-link{color:#245aa5;font-weight:550;font-size:12px}
+.instructor-app .teach-panel{border:1px solid #dfe6ef;border-radius:10px;background:#fff;padding:24px;box-shadow:0 2px 4px #1d345006;margin-bottom:20px;min-width:0}
+.instructor-app .teach-panel h2{font-size:16px;letter-spacing:-.25px;color:#1b3558;line-height:1.5;margin:0 0 12px}
+.instructor-app .teach-panel h3{font-size:14px;color:#233f65;margin:21px 0 12px;line-height:1.6}
+.instructor-app .teach-muted,.instructor-app .teach-panel p{color:#5d6f87;font-size:12px;line-height:1.75}
+.instructor-app .teach-metrics{display:flex;gap:0;background:#fff;border:1px solid #dfe6ef;border-radius:10px;margin-bottom:22px;overflow:hidden}
+.instructor-app .teach-metrics>div{flex:1;background:transparent;border:0;border-right:1px solid #e8edf4;border-radius:0;padding:19px 23px}
+.instructor-app .teach-metrics>div:last-child{border:0}
+.instructor-app .teach-metrics strong{font-size:27px;letter-spacing:-1px;color:#223f64;margin:5px 0}
+.instructor-app .teach-metrics small{font-size:11px;color:#596b83}
+.instructor-app .teach-metrics span{color:#63758d;font-size:10px;line-height:1.6}
+.instructor-app .teach-current-strip{background:#edf3fd;border:1px solid #d6e3f6;border-radius:8px;padding:18px 22px;margin-bottom:24px}
+.instructor-app .teach-current-strip h2{font-size:15px;margin:5px 0}
+.instructor-app .teach-current-strip p{font-size:12px;color:#536c90}
+.instructor-app .teach-review-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+.instructor-app .teach-review-layout:has([data-review-key]){grid-template-columns:minmax(0,1fr) minmax(350px,38%)}
+.instructor-app .teach-review-panel{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto}
+.instructor-app .teach-list-tools{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding:16px 0 22px}
+.instructor-app .teach-search{flex:1;min-width:180px}
+.instructor-app .teach-search input{width:100%;font-size:12px;padding:11px 13px;border:1px solid #dbe3ee;border-radius:7px;background:#fff;color:#233c61;min-height:40px}
+.instructor-app .teach-segments{background:#f3f6fa;border-radius:7px;padding:3px}
+.instructor-app .teach-segments button{font-size:11px;color:#5b6c84;padding:8px 13px}
+.instructor-app .teach-segments [aria-pressed=true]{color:#2458a2;background:#fff;box-shadow:0 1px 4px #122d5112}
+.instructor-app .teach-activity-list{border:0}
+.instructor-app .app-table{width:100%;border-collapse:collapse;margin:0}
+.instructor-app .app-table th{background:#f6f8fb;color:#5c6f89;text-transform:none;letter-spacing:0;font-size:11px;font-weight:600;border-bottom:1px solid #e3e9f2;padding:12px 14px;text-align:left}
+.instructor-app .app-table td{padding:17px 14px;font-size:12px;line-height:1.7;color:#344a68;border-bottom:1px solid #edf0f5;vertical-align:top}
+.instructor-app .app-table th.num,.instructor-app .app-table td.num{text-align:right}
+.instructor-app .app-table small{display:block;font-size:10px;line-height:1.7;color:#6a7b91;font-weight:400;margin-top:4px}
+.instructor-app .faculty-roster{min-width:730px}
+.instructor-app .faculty-roster tbody th{background:#fff;padding:18px 14px;min-width:210px;vertical-align:top;color:#243b5a;border-bottom:1px solid #edf0f5}
+.instructor-app .faculty-roster tbody tr:hover :is(td,th),.instructor-app .faculty-roster .faculty-selected :is(td,th){background:#f4f8ff}
+.instructor-app .faculty-roster .teach-person{font-size:12px;display:flex;align-items:center;gap:9px}
+.instructor-app .faculty-roster .teach-person strong{color:#243d61;font-size:12px;font-weight:600;overflow-wrap:anywhere}
+.instructor-app .faculty-email{padding-left:38px}
+.instructor-app .teach-avatar{width:29px;height:29px;min-width:29px;font-size:11px;background:#edf3fd;color:#3666ac}
+.instructor-app .teach-pill{font-size:10px;line-height:1.6;border-radius:5px;padding:4px 7px;white-space:normal}
+.instructor-app .teach-pill.complete{color:#22634e;background:#ecf7f0}
+.instructor-app .teach-pill.pending{color:#69768a;background:#f1f4f8}
+.instructor-app .teach-invite{display:flex;align-items:center;gap:25px;justify-content:space-between}
+.instructor-app .app-inline{margin:0;display:flex;flex-wrap:wrap;gap:10px}
+.instructor-app .app-inline input{border:1px solid #d5dfed;background:#fff;border-radius:7px;padding:11px 12px;min-width:180px;color:#243b59}
+.faculty-panel-label{font-size:9px;letter-spacing:.11em;font-weight:650;color:#657c9b;display:block;margin-bottom:8px}
+.faculty-editor{display:grid;grid-template-columns:minmax(260px,310px) minmax(0,1fr);gap:24px;align-items:start}
+.faculty-editor .faculty-source{position:sticky;top:20px;padding:22px}
+.instructor-app .teach-field{display:flex;flex-direction:column;gap:8px;font-size:11px;font-weight:600;color:#415a7d;margin:17px 0}
+.instructor-app .teach-field :is(input,textarea,select){width:100%;max-width:100%;min-width:0;background:#fff;border:1px solid #d6e0ed;border-radius:6px;color:#263e60;padding:10px 11px;font-size:12px;line-height:1.6;font-weight:400;box-shadow:0 1px 2px #18334f04;resize:vertical}
+.instructor-app .teach-field textarea::placeholder{color:#7f8fa4}
+.instructor-app .teach-field small{font-size:10px;line-height:1.65;font-weight:400;color:#5d708b}
+.instructor-app .faculty-upload{border:1px dashed #b9cce6;background:#f7faff;padding:16px;border-radius:8px}
+.instructor-app .faculty-upload input{font-size:10px;padding:0;border:0;background:none}
+.faculty-dates{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.faculty-source>.app-btn{width:100%;margin:8px 0}
+.faculty-preview{min-width:0}
+.instructor-app .faculty-draft-empty{min-height:570px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 45px;background:linear-gradient(160deg,#fff 60%,#f4f8ff)}
+.instructor-app .faculty-draft-empty h2{font-size:23px;max-width:330px;margin:12px 0}
+.instructor-app .faculty-draft-empty p{max-width:380px}
+.faculty-empty-icon{display:grid;place-items:center;border-radius:13px;border:1px solid #c9dbf4;background:#edf4ff;font-size:30px;color:#2c63af;width:58px;height:62px;margin-bottom:20px}
+.faculty-empty-steps{display:grid;gap:15px;text-align:left;border-top:1px solid #e0e7f2;padding:25px 0;margin-top:15px;color:#4e6688;font-size:12px}
+.faculty-review-options{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-bottom:18px}
+.instructor-app .faculty-overview .teach-review-heading{align-items:start;gap:12px;margin-bottom:10px}
+.instructor-app .faculty-overview .teach-review-heading h2{font-size:21px;margin:4px 0}
+.faculty-overview .teach-review-heading>.teach-pill{flex-shrink:0}
+.faculty-counts{display:flex;flex-wrap:wrap;gap:18px;padding:17px 0;border-bottom:1px solid #e5ebf3;color:#566e90;font-size:11px}
+.faculty-counts strong{color:#204a81;font-size:17px;margin-right:4px}
+.instructor-app .faculty-preview-tabs{display:flex;flex-wrap:wrap;margin:15px -24px 0;padding:0 24px;border-bottom:1px solid #dce5f1;gap:20px}
+.instructor-app .faculty-preview-tabs button{border-radius:0;font-size:12px;padding:13px 0;background:none;border:0;border-bottom:2px solid transparent;color:#5a708f;margin:0;box-shadow:none}
+.instructor-app .faculty-preview-tabs [aria-pressed=true]{border-color:#245cab;color:#2057a5}
+.faculty-entry-map{min-width:480px}
+.instructor-app .faculty-entry-map th{min-width:120px;white-space:normal;font-size:10px}
+.instructor-app .faculty-entry-map tbody th{background:white;font-weight:500;font-size:12px;vertical-align:top;color:#39577c}
+.faculty-entry-map a{color:#23579f;text-decoration:none;line-height:1.7}
+.faculty-entry-line{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;padding-bottom:8px;font-size:11px}
+.faculty-entry-line strong{font-variant-numeric:tabular-nums;color:#263e61!important;white-space:nowrap}
+.instructor-app .faculty-overview details{border:1px solid #e2e8f1;border-radius:7px;margin:12px 0;padding:13px 15px;min-width:0}
+.instructor-app .faculty-overview summary,.faculty-scope summary{font-size:12px;font-weight:550;color:#345982;cursor:pointer;overflow-wrap:anywhere}
+.faculty-document{scroll-margin:25px}
+.faculty-document summary span{display:block;margin:5px 0 0 15px;font-size:10px;font-weight:400;color:#6b7f9b}
+.faculty-document .teach-paper{margin:18px 0;overflow:auto;max-width:100%}
+.instructor-app .faculty-readonly{background:#eef4fd;color:#3c6495;border:1px solid #d8e5f8;border-radius:7px;padding:12px 14px;margin:19px 0}
+.faculty-office{border:1px solid #ccd8e8;border-radius:9px;overflow:hidden}
+.faculty-office-bar{background:#233e64;color:#fff;display:flex;justify-content:space-between;gap:10px;padding:12px 16px;font-size:11px}
+.faculty-office-bar span{color:#cad8ed}
+.faculty-mail{display:grid;grid-template-columns:160px minmax(0,1fr);min-height:400px}
+.faculty-mail nav{background:#f6f8fb;border-right:1px solid #e2e8f1;max-height:650px;overflow:auto}
+.faculty-mail nav button{display:block;width:100%;margin:0;border:0;border-bottom:1px solid #e5ebf3;border-radius:0;background:none;padding:16px 12px;text-align:left;box-shadow:none;color:#3f597c;white-space:normal}
+.faculty-mail nav button[aria-pressed=true]{background:#e8f0fd;box-shadow:inset 3px 0 #2b64b4}
+.faculty-mail nav small{display:block;font-size:9px;line-height:1.8;color:#5d7290}
+.faculty-mail nav strong{display:block;font-size:11px;margin:6px 0;color:#294c7c}
+.faculty-mail-content{min-width:0;padding:14px;overflow:auto;max-height:650px;background:#fff}
+.faculty-mail-content .teach-paper{max-width:100%;overflow:auto;font-size:12px}
+.faculty-mail-content fieldset{margin-top:18px;border:0;border-top:1px solid #e0e7f2;padding:14px 0}
+.faculty-mail-content legend{font-size:10px;color:#607c9f}
+.faculty-mail-content .app-btn{font-size:10px;margin:5px 0;display:block;width:100%}
+.faculty-books-placeholder{border:1px dashed #cbd9ec;border-radius:7px;padding:15px;margin-top:18px}
+.faculty-books-placeholder strong{font-size:12px;color:#456386}
+.faculty-publish-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;margin-top:14px;border-top:1px solid #e4ebf4}
+.instructor-app .teach-topic{font-size:12px;color:#415879;align-items:start}
+.instructor-app .teach-topic input[type=checkbox]{accent-color:#245bab;width:16px;height:16px;flex-shrink:0}
+.instructor-app .teach-status:not(:empty){background:#edf4ff;border:1px solid #cddff7;border-radius:7px;padding:13px 16px;margin-bottom:20px;color:#345d94;font-size:12px}
+body:has(.faculty-auth){background:#f4f7fc}
+body:has(.faculty-auth) :is(.app-header,.classroom-foot){display:none}
+body:has(.faculty-auth) #classroom{max-width:none;width:100%;padding:0}
+body:has(.faculty-auth) .classroom-main{max-width:none;padding:0}
+.faculty-auth.account-layout{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;max-width:none;min-height:100vh;padding:60px 20px 35px;margin:0;box-shadow:none;border:0;border-radius:0;background:radial-gradient(ellipse at top,#e7eefb,#f8fafc 60%)}
+.faculty-auth-brand{display:flex;align-items:center;gap:10px;font:700 24px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1b365d;text-decoration:none;letter-spacing:-.8px;margin-bottom:32px}
+.faculty-auth .account-panel{width:100%;max-width:440px;padding:35px 38px 27px;border:1px solid #dde5f0;border-radius:12px;background:#fff;box-shadow:0 8px 32px #1f3c6710;color:#243d60}
+.faculty-auth .account-panel .tag{background:none;color:#6b7c94;font-size:9px;letter-spacing:.11em;padding:0;display:block}
+.faculty-auth h1{font:650 28px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.8px;color:#1a3357;margin:12px 0 10px}
+.faculty-auth .account-intro{font-size:12px;line-height:1.8;color:#61728a;margin-bottom:26px}
+.faculty-auth .field{font-size:12px;color:#3d5578}
+.faculty-auth .field input{border-radius:7px;border:1px solid #d5dfec;min-height:44px;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:white;color:#243c60;padding:12px}
+.faculty-auth .account-submit{border:1px solid #245bab;border-radius:7px;background:#245bab;box-shadow:none;font-size:13px;padding:13px;margin-top:16px}
+.faculty-auth .account-text-button,.faculty-auth .account-switch button{font-size:11px;color:#285fa8;box-shadow:none}
+.faculty-auth .account-switch{font-size:11px;color:#5e718b;text-align:center;margin:23px 0}
+.faculty-auth .account-access{border-top:1px solid #e5ebf3;padding:19px 0 5px}
+.faculty-auth .account-access summary{font-size:11px;color:#5d7493}
+.faculty-auth .account-access p{font-size:11px;line-height:1.8}
+.faculty-auth .account-demo{justify-content:center;border-top:0;margin-top:14px;padding:0}
+.faculty-auth-note{font-size:10px;color:#6c7e98;line-height:1.8;text-align:center;max-width:340px;margin:23px auto}
+@media(min-width:1800px){.instructor-workspace{max-width:1550px}.faculty-editor{grid-template-columns:340px minmax(0,1fr)}}
+@media(max-width:1200px){.instructor-app{grid-template-columns:200px minmax(0,1fr)}.instructor-app .app-logo{font-size:18px}.faculty-editor{grid-template-columns:260px minmax(0,1fr);gap:18px}.faculty-mail{grid-template-columns:1fr}.faculty-mail nav{display:flex;max-height:140px;border-bottom:1px solid #dfe6f0}.faculty-mail nav button{min-width:150px;border-right:1px solid #e1e8f1}.instructor-app .teach-invite{align-items:start;flex-direction:column}}
+@media(max-width:1000px){.instructor-app .teach-review-layout:has([data-review-key]){grid-template-columns:1fr}.instructor-app .teach-review-panel{position:static;max-height:none;order:-1}.faculty-editor{grid-template-columns:1fr}.faculty-editor .faculty-source{position:static}.faculty-source textarea#case-notes{min-height:140px;max-height:230px}.faculty-source .faculty-upload{padding:12px}.instructor-app .faculty-draft-empty{min-height:340px}.faculty-mail{grid-template-columns:180px minmax(0,1fr)}.faculty-mail nav{display:block;max-height:650px}.faculty-mail nav button{min-width:0}}
+@media(max-width:700px){.instructor-app{display:block}.instructor-app .app-side{position:static;height:auto;padding:18px 20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;border-bottom:1px solid #dce5f1}.instructor-app .teach-area-label{display:none}.instructor-app .app-logo{font-size:18px}.instructor-app .app-class{font-size:9px;margin:0}.instructor-app .app-class select{min-height:36px;padding:7px;font-size:11px}.instructor-app .app-side>.app-nav{grid-column:1/-1;display:flex;flex-direction:row;gap:5px;overflow-x:auto}.instructor-app .app-nav button{font-size:11px;padding:9px 11px;white-space:nowrap;min-height:36px}.instructor-app .app-nav button::before{display:none}.instructor-app .teach-side-tools{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:0;border:0}.teach-side-tools .app-nav{flex-direction:row}.instructor-app .app-try{font-size:10px;padding:7px}.instructor-app .app-who{grid-column:1/-1;margin:0;padding:10px 0 0;align-items:center;font-size:10px}.instructor-app .app-who>span:last-child{display:flex;gap:20px;align-items:center}.instructor-app .app-who .app-link{margin:0}body[data-screen=app] .instructor-app .app-main{padding:0 16px 35px}.faculty-topbar{margin:0 -16px 24px;padding:15px 20px;min-height:74px;gap:12px}.faculty-topbar strong{font-size:12px}.faculty-topbar small{font-size:8px}.instructor-app .faculty-topbar .app-sync{font-size:9px;max-width:55%;gap:3px}.faculty-topbar .app-sync button{font-size:10px}.instructor-app .app-head{align-items:flex-start;flex-direction:column;gap:12px}.instructor-app .app-head h1{font-size:25px}.instructor-app .app-head p{font-size:12px}.instructor-app .teach-metrics{display:grid;grid-template-columns:1fr 1fr}.instructor-app .teach-metrics>div{padding:16px;border-bottom:1px solid #e3e9f2}.instructor-app .teach-metrics>div:nth-child(2){border-right:0}.instructor-app .teach-metrics>div:nth-child(3){border-bottom:0}.instructor-app .teach-current-strip{flex-direction:column;align-items:start;padding:16px;gap:14px}.instructor-app .teach-panel{padding:19px}.instructor-app .faculty-preview-tabs{padding:0 19px;margin:15px -19px 0;gap:18px}.instructor-app .faculty-preview-tabs button{font-size:11px}.faculty-mail{grid-template-columns:1fr}.faculty-mail nav{display:flex;max-height:140px}.faculty-mail nav button{min-width:150px}.faculty-mail-content{padding:10px}.faculty-publish-footer{flex-direction:column;align-items:start}.faculty-publish-footer .app-btn{width:100%}.faculty-dates{gap:10px}.instructor-app .teach-list-tools{gap:10px}.instructor-app .teach-search{min-width:100%}.faculty-auth.account-layout{padding:35px 16px 25px}.faculty-auth .account-panel{padding:28px 25px}.faculty-auth-brand{font-size:22px;margin-bottom:25px}.instructor-app .faculty-draft-empty{padding:35px 23px}.instructor-app .app-inline{width:100%}.instructor-app .app-inline input{flex:1;min-width:0;width:100%}}
+
+body .faculty-auth .account-panel h1{font:650 28px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.8px;color:#1a3357;margin:12px 0 10px}
+body .faculty-auth .account-panel .field{font-size:12px;color:#3d5578;font-weight:550}
+body .faculty-auth .account-panel .account-submit{background:#245bab;border:1px solid #245bab;border-radius:7px;font-size:13px;padding:13px}
+body .faculty-auth .account-panel .account-text-button,body .faculty-auth .account-switch button{color:#285fa8;font-size:11px}
+@media(max-width:700px){.instructor-app .app-side{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.instructor-app .app-side>*{min-width:0}.instructor-app .app-class select{min-width:0;max-width:100%}.instructor-app .app-side>.app-nav{max-width:100%}.instructor-app .app-who>span:last-child{min-width:0;flex-wrap:wrap;gap:6px 15px}}

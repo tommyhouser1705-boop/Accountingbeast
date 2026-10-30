@@ -94,13 +94,54 @@ test('a delayed student review does not interrupt assignment editing after navig
  const c=view();c.show('overview');let finish,renders=0;c.cloud.call=()=>new Promise(resolve=>finish=resolve);c.render=()=>renders++;
  const pending=c.loadStudentWork('a@example.edu');assert.equal(renders,1);vm.runInContext("dashPage='builder'",c);finish({submissions:[]});await pending;assert.equal(renders,1);
 });
-test('builder separates review from assignment and going back preserves the draft without another generation call',async()=>{
+test('single-screen editor keeps notes, review and gated assignment together without another generation call',async()=>{
  const c=view(),a=await generated();c.show('builder');const d=c.notesWorkspace();d.assignment=a;d.notes=a.notes;d.topics={topics:a.teachingTopics};d.selected=[0];d.reviewed={documents:false,accounting:false};
- assert.match(c.show('builder'),/Continue to assignment/);assert.doesNotMatch(c.html,/id="case-title"/);
- await c.click('assignment-details');assert.match(c.html,/id="case-title"/);assert.match(c.html,/data-studio="publish" disabled/);
+ const html=c.show('builder');for(const text of ['Assignment overview','id="case-title"','id="case-notes"','Accounting key','Student view · read only'])assert.ok(html.includes(text),text);
+ assert.match(html,/data-studio="publish" disabled/);assert.doesNotMatch(html,/Continue to assignment|teach-steps|id="preview-case"/);
  await c.click('scope');assert.equal(d.assignment,a);await c.click('review');assert.match(c.html,/Accounting key/);
- await c.click('notes');assert.equal(d.assignment,a);assert.match(c.html,/Return to existing draft/);
  d.sourceChanged=true;await c.click('publish');assert.match(c.html,/Source notes changed/);assert.equal(d.assignment,a);
+});
+test('one-click notes generation opens the accounting overview and does not publish',async()=>{
+ const c=view(),a=await generated(),calls=[];c.show('builder');const d=c.notesWorkspace();d.notes=a.notes;
+ c.cloud.call=async(action,p)=>{calls.push([action,p.phase]);return p.phase==='draft'?{draft:{topics:a.teachingTopics}}:a;};
+ await c.click('generate-notes');assert.deepEqual(calls,[['generate','draft'],['generate','review']]);
+ assert.equal(d.previewTab,'overview');assert.match(c.html,/Assignment overview ready/);assert.match(c.html,/Accounting key/);
+ assert.equal(d.reviewed.accounting,false);assert.equal(d.reviewed.documents,false);
+});
+test('read-only student preview uses real office mail and all source records without entry keys or saves',async()=>{
+ const c=view(),a=await generated(),before=JSON.stringify(a);
+ for(const type of ['Bike repair','Fitness studio','Landscaping company','Photography studio']){
+  const d={assignment:a,notes:a.notes,business:type,paths:{}};
+  const b={name:'Review Cycle',type},choice=c.reviewChoice(d,b),scenario=Lessons.expected(a,choice,b);
+  const preview=c.studentCasePreview(d,b,choice);assert.match(preview,/fieldset disabled/);assert.match(preview,/Jordan Pike/);assert.doesNotMatch(preview,/Accounting key|faculty-entry-line|data-studio="publish"/);
+  for(const event of scenario.events.filter(e=>!e.autoPosted&&!Lessons.decisions.isReportEvent(e))){
+   d.previewItem=event.id;const doc=c.studentCasePreview(d,b,choice);assert.ok(doc.includes(safe(event.title)));
+   assert.match(doc,/Post entry · unavailable in preview/);assert.match(doc,/disabled/);
+  }
+ }
+ assert.equal(JSON.stringify(a),before);
+});
+test('overview recalculates exact entries and no-entry states for every business and reply combination',async()=>{
+ const c=view(),a=await generated();
+ for(const business of ['Bike repair','Fitness studio','Landscaping company','Photography studio']){
+  const d={assignment:a,notes:a.notes,business,paths:{},reviewed:{}},b={name:'Review Cycle',type:business};
+  const combos=a.interactive.controls.reduce((list,control)=>list.flatMap(p=>['low','default','high'].map(value=>({...p,[control.id]:value}))),[{}]);
+  for(const paths of combos){
+   d.paths=paths;const scenario=Lessons.expected(a,c.reviewChoice(d,b),b),html=c.draftReview(d,{name:'Class'});
+   for(const event of scenario.events.filter(e=>!e.autoPosted&&!Lessons.decisions.isReportEvent(e))){
+    assert.ok(html.includes(safe(event.title)),event.id);
+    if(!event.lines.length)assert.match(html,/No entry/);
+    for(const line of event.lines)assert.ok(html.includes('$'+Number(line.debit||line.credit).toFixed(2)));
+   }
+  }
+ }
+});
+test('failed generation preserves prior draft and retry resumes extracted topics without duplicate AI calls',async()=>{
+ const c=view(),a=await generated();c.show('builder');const d=c.notesWorkspace();d.notes=a.notes;d.assignment=a;const calls=[];
+ c.cloud.call=async(action,p)=>{calls.push(p.phase);if(p.phase==='draft')return {draft:{topics:a.teachingTopics}};throw Error('Timed out; try again.');};
+ await c.click('generate-notes');assert.equal(d.assignment,a);assert.match(c.html,/Timed out/);
+ c.cloud.call=async(action,p)=>{calls.push(p.phase);return a;};await c.click('generate-notes');
+ assert.deepEqual(calls,['draft','review','review']);assert.equal(d.assignment,a);
 });
 test('assigned work and supplemental cases stay distinct and student review cannot cross account boundaries',async()=>{
  const c=view();c.cloudLessons=[{id:'l-a',lessonId:'ch2',title:'Opening month',class_id:'class-a'}];c.cloudCases=[{id:'c-a',class_id:'class-a',title:'Extra supplies',dueDate:'2026-11-12'}];
