@@ -137,7 +137,7 @@ Give each control a decisionStage: stage 0 means the first choice, stage 1 means
  if(!L.decisions.valid(a)){if(typeof process!=='undefined'&&process.env.GITHUB_ACTIONS==='true')console.log('::notice title=Generated decision diagnostics::'+JSON.stringify({controls:made.controls,issues:L.decisions.issues(a),formulas:made.events.map(e=>({id:e.id,date:e.date,stage:e.stage,dateControl:e.dateControl,lines:e.lines}))}));return repairEconomics(L.decisions.issues(a).map(x=>'Business decision format: '+x),{problem:'Fix control kinds, bounds and stage dependencies. Each dateControl must name a date input; transactions must never depend on choices not yet offered. Keep choices at their actual transaction month.'});}
  const business={name:'Example Coffee',type:'Coffee shop'},defaults=L.decisions.defaultChoice(a,business);let compiled;
  try{compiled=L.decisions.materialize(a,defaults,business);}catch(factError){
-  if(!/Unknown order in document|Unknown payment date|Unknown decision in formula|Invalid accounting formula/.test(factError.message))throw factError;
+  if(!/Unknown order in document|Unknown payment date|Unknown decision in formula|Invalid accounting formula|Malformed document placeholder/.test(factError.message))throw factError;
   const bad=a.interactive.events.filter(e=>{try{L.decisions.materialize({...a,interactive:{...a.interactive,events:[e]}},defaults,business);return false;}catch{return true;}});
   if(!bad.length)throw factError;
   const fieldSchema={type:'object',additionalProperties:false,required:['label','value'],properties:{label:{type:'string',maxLength:100},value:{type:'string',maxLength:500}}};
