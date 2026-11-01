@@ -4,6 +4,9 @@
   const {ACC, money} = LL, S = SIM, D = SIMDOCS;
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+  const loadError = (message, signedIn) => /Create your company/i.test(message)
+    ? '<section class="pad" role="alert"><h2>Set up your company first</h2><p>Supplemental cases use your company’s name and type. Create it in My business, then open this case again from Assignments.</p><p><a class="app-link" href="office.html">Create your company</a> · <a href="index.html">Back to assignments</a></p></section>'
+    : `<p class="pad" role="alert">${esc(message)} ${signedIn ? '<a href="index.html">Back to assignments</a>' : '<a href="index.html#signin">Return to sign in</a>'}</p>`;
   const BASE = 'll-office-v2', root = $('#office');
   const cloud = new CloudClient(window.LEDGER_CLOUD || {}), params = new URLSearchParams(location.search);
   let KEY = BASE, account = null, assignments = [], run = null, revision = 0, syncText = 'Saved in this browser', syncBusy = false, syncAgain = false, cloudBlocked = false;
@@ -345,7 +348,7 @@
           if (local?.run && local.revision === revision && (!run || JSON.stringify(local.run.events.slice(0,run.events.length)) === JSON.stringify(run.events))) run = local.run;
           syncText = 'Saved to account';
         } else run = load()?.run;
-      } catch(e) { root.innerHTML = `<p class="pad" role="alert">${esc(e.message)} <a href="index.html#signin">Return to sign in</a></p>`; return; }
+      } catch(e) { root.innerHTML = loadError(e.message, !!cloud.session); return; }
     } else if (caseId || params.has('casePreview')) { root.innerHTML = '<p class="pad">Sign in to open this case. <a href="index.html#signin">Sign in</a></p>'; return; } else run = load()?.run;
     try { if (!st?.casePeriod) st = run ? S.replay(run) : null; } catch(e) { root.innerHTML = `<p class="pad" role="alert">Your saved office could not be restored. Your record is still saved; please contact your instructor. ${esc(e.message)}</p>`; return; }
     const target = S.findLesson(params.get('lesson'));
