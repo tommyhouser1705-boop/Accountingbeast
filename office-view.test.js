@@ -15,7 +15,7 @@ async function view(run, file = 'office.js', account = null, options = {}) {
   const storage=options.storage||new Map();
   const key='ll-office-v2'+(account?'-'+account.id+(options.search?.includes('preview')||account.role!=='student'?'-preview':''):'');
   if(!storage.has(key))storage.set(key,JSON.stringify({run,revision:0}));
-  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},sessionStorage:{getItem:k=>storage.get(k)||null},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action,payload){options.calls?.push(JSON.parse(JSON.stringify({action,payload})));return options.responses?.[action]||(action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]});}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
+  const ctx=vm.createContext({document,window:{LEDGER_CLOUD:{}},localStorage:{getItem(k){return storage.get(k)||null;},setItem(k,v){storage.set(k,v);}},sessionStorage:{getItem:k=>storage.get(k)||null},CloudClient:class{constructor(){this.configured=!!account;this.session=account;}async call(action,payload){options.calls?.push(JSON.parse(JSON.stringify({action,payload})));if(options.errors?.[action])throw Error(options.errors[action]);return options.responses?.[action]||(action==='office-load'?{revision:0,run}:action==='office-save'?{revision:1}:{user:account,classes:[],lessons:[]});}},URLSearchParams,location:{search:options.search||'',hash:'',replace(){}},innerWidth:options.width||1440,performance:{now:()=>0},requestAnimationFrame(){},setTimeout,console});
   ctx.structuredClone=structuredClone;
   for(const f of ['business-decisions.js','lesson-engine.js','lessons-engine.js','sim-docs.js','sim-engine.js','sim-month1.js','sim-course.js','sim-replay.js','sim-cases.js',file])vm.runInContext(fs.readFileSync(__dirname+'/'+f,'utf8'),ctx,{filename:f});
   await new Promise(resolve=>setImmediate(resolve));
@@ -253,4 +253,10 @@ test('period end offers the report instead of a nonexistent next day, including 
   const saved=JSON.parse(v.storage.get('ll-office-v2')).run;
   assert.equal(saved.events.at(-1).kind,'complete');
   assert.equal(v.ctx.SIM.replay(saved).ended,true);
+});
+test('a new student opening a supplemental case before creating a company is sent to company setup, not sign-in',async()=>{
+  const v=await view(null,'office.js',{id:'new-student',role:'student'},{search:'?case=extra-case',errors:{'case-load':'Create your company in My business before opening a supplemental case.'}});
+  assert.match(v.root.innerHTML,/Set up your company first/);assert.match(v.root.innerHTML,/href="office.html">Create your company/);assert.doesNotMatch(v.root.innerHTML,/Return to sign in/);
+  const other=await view(null,'office.js',{id:'new-student',role:'student'},{search:'?case=extra-case',errors:{'case-load':'Work changed in another tab.'}});
+  assert.match(other.root.innerHTML,/Work changed in another tab\. <a href="index.html">Back to assignments/);
 });
