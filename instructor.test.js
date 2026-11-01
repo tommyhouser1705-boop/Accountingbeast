@@ -150,3 +150,7 @@ test('assigned work and supplemental cases stay distinct and student review cann
  c.cloud.call=async()=>({submissions:[{subject:'Private review',kind:'entry',period:'Opening',rows:[],values:{},graded:true,correct:false}]});await c.loadStudentWork('a@example.edu');assert.match(c.show('gradebook'),/Private review/);
  c.cloudAccount={id:'another-teacher',role:'professor'};assert.doesNotMatch(c.show('gradebook'),/Private review/);
 });
+test('roster accounting includes supplemental case attempts instead of saying No attempts',()=>{
+ const c=view();c.cloudBook['class-a']={students:[{email:'qa@example.edu',business:{name:'QA Supplies'},accountCreated:true,office:{period:'Opening month',day:1,updatedAt:'2026-11-01T19:02:00Z'},caseScores:[{assignment_id:'extra',completed:false,score:100,first:1,graded:1}]},{email:'both@example.edu',accountCreated:true,office:{period:'First month',day:7,first:3,graded:4},caseScores:[{assignment_id:'extra',first:0,graded:1}]},{email:'none@example.edu',accountCreated:true}]};
+ const html=c.show('students');assert.match(html,/100%<small>Supplemental 1 \/ 1 first try/);assert.match(html,/60%<small>Course 3 \/ 4 · Supplemental 0 \/ 1 first try/);assert.equal((html.match(/No attempts/g)||[]).length,1);
+});

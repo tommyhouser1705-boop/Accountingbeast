@@ -56,6 +56,13 @@ function rosterProgress(s) {
   if (s.office) return `${safe(s.office.period)} · Day ${safe(s.office.day)}${s.office.completed ? ' · Completed' : ''}`;
   return s.accountCreated ? (s.registration&&!s.registration.confirmedAt?'Confirm email to sign in':'Office not started') : 'Invited · not registered';
 }
+function rosterAccounting(s) {
+  const cases = (s.caseScores || []).filter(x => x.graded > 0), standard = s.office?.graded ? s.office : null;
+  const first = (standard?.first || 0) + cases.reduce((n, x) => n + (x.first || 0), 0), graded = (standard?.graded || 0) + cases.reduce((n, x) => n + x.graded, 0);
+  if (!graded) return '—<small>No attempts</small>';
+  const parts = [standard ? `Course ${standard.first} / ${standard.graded}` : '', cases.length ? `Supplemental ${cases.reduce((n, x) => n + (x.first || 0), 0)} / ${cases.reduce((n, x) => n + x.graded, 0)}` : ''].filter(Boolean);
+  return `${Math.round(first / graded * 100)}%<small>${parts.join(' · ')} first try</small>`;
+}
 function rosterSaved(s) {
   const saved = s.office?.updatedAt;
   return saved ? `<time datetime="${safe(saved)}">${safe(new Date(saved).toLocaleString('en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}))}</time>` : '—';
