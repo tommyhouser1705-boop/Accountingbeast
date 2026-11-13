@@ -114,7 +114,7 @@ function feature(id, kicker, title, text, points, visual, flip, extra = '') {
 
 function publicWelcome() {
   return `<div class="hp">
-  <nav class="hp-nav" aria-label="Main navigation"><div class="hp-wrap"><a class="hp-logo" href="#">Ledger Lane</a><a class="hp-nl" href="#how">Student workspace</a><a class="hp-nl" href="#contents">Course topics</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try sample</button></div></nav>
+  <nav class="hp-nav" aria-label="Main navigation"><div class="hp-wrap"><a class="hp-logo" href="#" aria-label="Ledger Lane">ledger<b>lane</b></a><a class="hp-nl" href="#how">Student workspace</a><a class="hp-nl" href="#contents">Course topics</a><a class="hp-nl" href="#instructors">For instructors</a><button class="hp-btn ghost sm" data-signin>Sign in</button><button class="hp-btn sm" data-sample>Try sample</button></div></nav>
   <header class="hp-hero hp-office-hero"><div class="hp-wrap"><div class="hp-intro">
     <p class="hp-subject">Introductory financial accounting</p>
     <h1>A business simulation for accounting courses</h1>
