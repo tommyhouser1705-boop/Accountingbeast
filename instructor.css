@@ -376,7 +376,7 @@ body .faculty-auth .account-panel .account-submit{background:#245bab;border:1px 
 body .faculty-auth .account-panel .account-text-button,body .faculty-auth .account-switch button{color:#285fa8;font-size:11px}
 @media(max-width:700px){.instructor-app .app-side{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.instructor-app .app-side>*{min-width:0}.instructor-app .app-class select{min-width:0;max-width:100%}.instructor-app .app-side>.app-nav{max-width:100%}.instructor-app .app-who>span:last-child{min-width:0;flex-wrap:wrap;gap:6px 15px}}
 /* NoRedInk-style instructor layer: top bar, class band with folder tabs, bright blue actions. */
-.app.instructor-app.nri-app{--n-navy:#004e95;--n-azure:#0a64ff;--n-azureD:#004cc9;--n-ink:#202020;--n-g45:#707070;--n-g85:#d4d4d4;--n-g92:#ebebeb;--n-g96:#f5f5f5;--n-frost:#eef9ff;--n-glacier:#d4f0ff;--n-green:#28ab00;--n-greenL:#e7f9e0;--n-ochre:#c46f00;--n-ochreL:#fff2dc;--n-red:#e70d4f;--n-redL:#ffe6ee;display:block;min-height:100vh;background:#fff;color:var(--n-ink);font:16px/1.5 Mulish,Muli,Helvetica,Arial,sans-serif}
+.app.nri-app{--n-navy:#004e95;--n-azure:#0a64ff;--n-azureD:#004cc9;--n-ink:#202020;--n-g45:#707070;--n-g85:#d4d4d4;--n-g92:#ebebeb;--n-g96:#f5f5f5;--n-frost:#eef9ff;--n-glacier:#d4f0ff;--n-green:#28ab00;--n-greenL:#e7f9e0;--n-ochre:#c46f00;--n-ochreL:#fff2dc;--n-red:#e70d4f;--n-redL:#ffe6ee;display:block;min-height:100vh;background:#fff;color:var(--n-ink);font:16px/1.5 Mulish,Muli,Helvetica,Arial,sans-serif}
 .nri-app :not(.teach-paper,.teach-paper *,[class^="doc"],[class^="doc"] *){font-family:Mulish,Muli,Helvetica,Arial,sans-serif!important}
 .nri-app .nri-top{display:flex;align-items:center;gap:22px;height:68px;padding:0 32px;background:#fff;border-bottom:1px solid var(--n-g92)}
 .nri-app .nri-logo{font-size:24px;font-weight:800;color:var(--n-navy);text-decoration:none;letter-spacing:-.02em}
@@ -398,9 +398,9 @@ body .faculty-auth .account-panel .account-text-button,body .faculty-auth .accou
 .nri-app .teach-side-tools .app-nav button,.nri-app .teach-side-tools .app-try{display:inline-block;padding:8px 14px;border-radius:8px;border:1px solid var(--n-g85);box-shadow:0 2px 0 var(--n-g85);background:#fff;color:var(--n-azure);font-size:14px;font-weight:700;line-height:1.3;text-decoration:none}
 .nri-app .teach-side-tools .app-nav button.on{background:var(--n-frost);border-color:var(--n-azure);box-shadow:0 2px 0 var(--n-azure)}
 .nri-app .nri-side>.app-nav{grid-area:nav;display:flex;flex-direction:row;gap:6px;overflow-x:auto;margin-bottom:-1px}
-.nri-app .nri-side>.app-nav button{flex:none;white-space:nowrap;padding:13px 26px;border:1px solid var(--n-g85);border-bottom:0;border-radius:10px 10px 0 0;background:var(--n-frost);color:var(--n-azure);font-size:17px;font-weight:700;box-shadow:none;margin:0}
-.nri-app .nri-side>.app-nav button:hover{background:var(--n-glacier)}
-.nri-app .nri-side>.app-nav button.on{background:#fff;color:var(--n-ink);border-color:var(--n-g85);position:relative;z-index:1}
+.nri-app .nri-side>.app-nav :is(button,a){flex:none;white-space:nowrap;padding:13px 26px;border:1px solid var(--n-g85);border-bottom:0;border-radius:10px 10px 0 0;background:var(--n-frost);color:var(--n-azure);font-size:17px;font-weight:700;box-shadow:none;margin:0}
+.nri-app .nri-side>.app-nav :is(button,a):hover{background:var(--n-glacier)}
+.nri-app .nri-side>.app-nav :is(button,a).on{background:#fff;color:var(--n-ink);border-color:var(--n-g85);position:relative;z-index:1}
 .nri-app .app-main{max-width:1320px;margin:0;padding:30px 32px 64px;width:100%;box-sizing:border-box}
 .nri-app .app-msg{border-radius:8px;background:#fffadc;border:1px solid #f5e6a3;color:#5b4a00;font-weight:700}
 .nri-app .app-head{border:0;padding:0;margin:0 0 20px;align-items:center}
@@ -453,11 +453,11 @@ body .faculty-auth .account-panel .account-text-button,body .faculty-auth .accou
 .nri-app .nri-side>.app-class{flex-wrap:wrap}
 .nri-app .nri-side>.app-class select{min-width:0;flex:1}
 .nri-app .nri-side>.teach-side-tools{flex-wrap:wrap}
-.nri-app .nri-side>.app-nav button{padding:11px 16px;font-size:15px}
+.nri-app .nri-side>.app-nav :is(button,a){padding:11px 16px;font-size:15px}
 .nri-app .app-main{padding:20px 16px 48px}
 }
-body[data-screen=app] .nri-app .nri-side>.app-nav button::before{display:none}
-body[data-screen=app] .nri-app .nri-side>.app-nav button{display:inline-flex;align-items:center}
+body[data-screen=app] .nri-app .app-nav :is(button,a)::before{display:none}
+body[data-screen=app] .nri-app .nri-side>.app-nav :is(button,a){display:inline-flex;align-items:center}
 body[data-screen=app] .nri-app .nri-side>.app-class{display:flex;flex-direction:row;align-items:center;justify-self:start;margin:0;padding:0;max-width:none;font-size:14px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--n-g45)}
 body[data-screen=app] .nri-app .nri-side>.app-class select{padding:8px 34px 8px 12px;font-size:15px;font-weight:700;color:var(--n-navy);border-color:var(--n-g85)}
 body[data-screen=app] .nri-app .app-main{padding:30px 32px 64px;max-width:1440px;margin:0}
@@ -473,3 +473,46 @@ body[data-screen=app] .nri-app .teach-segments{background:#fff;border:1px solid 
 body[data-screen=app] .nri-app .teach-segments button{border-radius:0;font-size:14px;font-weight:700;color:var(--n-azure);padding:9px 14px;box-shadow:none;background:#fff}
 body[data-screen=app] .nri-app .teach-segments button[aria-pressed=true],body[data-screen=app] .nri-app .teach-segments button.on{background:var(--n-azure);color:#fff}
 @media (max-width:760px){body[data-screen=app] .nri-app .app-main{padding:20px 16px 48px}body[data-screen=app] .nri-app .nri-side>.app-class{flex-wrap:wrap;justify-self:stretch}body[data-screen=app] .nri-app .nri-side>.app-class select{flex:1;min-width:0}}
+body[data-screen=app] .nri-app .nri-side>.app-nav a{text-decoration:none;display:inline-flex;align-items:center}
+body[data-screen=app] .nri-app .app-scroll{position:relative}
+body[data-screen=app] .nri-app .app-table tbody tr:nth-child(even)>th{background:#fff}
+body[data-screen=app] .nri-app .app-table tbody tr.faculty-selected>*{background:var(--n-glacier)}
+body[data-screen=app] .nri-app :is(.teach-eyebrow,.faculty-panel-label,.teach-current-strip small){text-transform:none;letter-spacing:0;font-size:14px;font-weight:800;color:var(--n-navy)}
+body[data-screen=app] .nri-app :is(.teach-muted,.app-note,.faculty-email,.teach-person small,.teach-activity-work,.teach-activity-work small,.teach-metrics span,.teach-current-strip p,.teach-student-summary small){font-size:13px;line-height:1.5}
+body[data-screen=app] .nri-app .teach-metrics small{font-size:14px;font-weight:800;color:var(--n-ink)}
+body[data-screen=app] .nri-app .faculty-roster .teach-person strong{font-size:15px;font-weight:700;color:var(--n-ink)}
+body[data-screen=app] .nri-app .app-head p{font-size:16px;color:var(--n-g45)}
+body[data-screen=app] .nri-app .faculty-upload{border:2px dashed #9ccaff;background:var(--n-frost);border-radius:10px}
+body[data-screen=app] .nri-app .faculty-upload input[type=file]{font:14px Mulish,Muli,Helvetica,Arial,sans-serif;color:var(--n-g45);padding:0;border:0;background:none;margin-top:8px;max-width:100%}
+body[data-screen=app] .nri-app .faculty-upload input[type=file]::file-selector-button{font:800 14px Mulish,Muli,Helvetica,Arial,sans-serif;color:var(--n-azure);background:#fff;border:0;border-radius:8px;padding:8px 14px;margin-right:10px;cursor:pointer;box-shadow:0 0 0 1px var(--n-g85),0 3px 0 var(--n-g85)}
+body[data-screen=app] .nri-app .app-next{border:1px solid var(--n-g85);border-left:6px solid var(--n-azure);border-radius:10px;background:var(--n-frost);padding:18px 22px}
+body[data-screen=app] .nri-app .app-next small{font-size:14px;color:var(--n-g45);font-weight:700}
+body[data-screen=app] .nri-app .app-next b{font-size:20px;color:var(--n-navy);font-weight:800}
+body[data-screen=app] .nri-app .app-empty{border:2px dashed var(--n-g85);border-radius:10px;color:var(--n-g45);font-size:16px;background:#fff}
+body[data-screen=app] .nri-app .app-office-intro summary{color:var(--n-azure);font-weight:800}
+.hp-nav .hp-logo{font:800 24px/1 Mulish,Muli,Helvetica,Arial,sans-serif;color:#004e95;letter-spacing:-.02em}
+.hp-nav .hp-logo b{color:#0a64ff;font-weight:900}
+body:has(.faculty-auth){background:#f5f5f5}
+body .faculty-auth.account-layout{background:#f5f5f5;font-family:Mulish,Muli,Helvetica,Arial,sans-serif;padding:56px 20px 40px}
+body .faculty-auth.account-layout .faculty-auth-brand{font:800 32px/1 Mulish,Muli,Helvetica,Arial,sans-serif;color:#004e95;letter-spacing:-.02em;margin-bottom:28px}
+body .faculty-auth.account-layout .faculty-auth-brand b{color:#0a64ff;font-weight:900}
+body .faculty-auth.account-layout .account-panel{max-width:460px;padding:36px 40px 26px;border:1px solid #d4d4d4;border-radius:14px;box-shadow:0 3px 0 #ebebeb;color:#202020;font-family:inherit}
+body .faculty-auth.account-layout .account-panel :is(h1,h2){font:800 32px/1.2 Mulish,Muli,Helvetica,Arial,sans-serif!important;color:#004e95;margin:0 0 8px;letter-spacing:-.01em}
+body .faculty-auth.account-layout .account-intro{font-size:16px;line-height:1.5;color:#505050;margin:0 0 26px}
+body .faculty-auth.account-layout .account-panel .field{font:700 15px/1.4 Mulish,Muli,Helvetica,Arial,sans-serif;color:#202020;margin-bottom:16px}
+body .faculty-auth.account-layout .field input{font:16px Mulish,Muli,Helvetica,Arial,sans-serif;min-height:50px;border:1px solid #bfbfbf;border-radius:8px;padding:12px 14px;color:#202020;margin-top:6px}
+body .faculty-auth.account-layout .field input:focus{outline:3px solid #b3d7ff;outline-offset:0;border-color:#0a64ff}
+body .faculty-auth.account-layout .password-field button{font:800 14px Mulish,Muli,Helvetica,Arial,sans-serif;color:#0a64ff;background:none;box-shadow:none}
+body .faculty-auth.account-layout .password-help{font-size:14px;color:#707070;margin:-8px 0 14px}
+body .faculty-auth.account-layout .account-panel .account-submit{width:100%;background:#0a64ff;border:0;border-radius:8px;box-shadow:0 4px 0 #004cc9;color:#fff;font:800 17px/1.2 Mulish,Muli,Helvetica,Arial,sans-serif;padding:15px;margin:14px 0 6px;transition:transform .08s,box-shadow .08s}
+body .faculty-auth.account-layout .account-panel .account-submit:hover{background:#0057e6}
+body .faculty-auth.account-layout .account-panel .account-submit:active{transform:translateY(3px);box-shadow:0 1px 0 #004cc9}
+body .faculty-auth.account-layout .account-panel :is(.account-text-button,.account-switch button){font:800 15px Mulish,Muli,Helvetica,Arial,sans-serif;color:#0a64ff;background:none;box-shadow:none;padding:0}
+body .faculty-auth.account-layout .account-switch{font-size:15px;color:#505050;margin:22px 0}
+body .faculty-auth.account-layout .account-access summary{font-size:14px;color:#505050;font-weight:700;cursor:pointer}
+body .faculty-auth.account-layout .account-access p{font-size:14px;line-height:1.6;color:#505050}
+body .faculty-auth.account-layout .account-demo button{font-size:14px}
+@media (max-width:520px){body .faculty-auth.account-layout{padding:32px 14px 28px}body .faculty-auth.account-layout .account-panel{padding:28px 22px 22px}body .faculty-auth.account-layout .faculty-auth-brand{font-size:28px}body .faculty-auth.account-layout .account-panel :is(h1,h2){font-size:28px!important}}
+body .faculty-auth.account-layout .faculty-auth-brand{gap:0}
+body .faculty-auth.account-layout .account-panel :is(.message,#account-feedback-slot>*){font-size:14px;line-height:1.5}
+body[data-screen=app] .nri-app :is(.teach-panel p,.teach-section-head p,.teach-panel li,.teach-panel textarea,.teach-panel select,.teach-panel input:not([type=file]),.faculty-empty li,.faculty-empty p){font-size:14px;line-height:1.55}
